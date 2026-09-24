@@ -2,6 +2,7 @@ node_modules
 out
 dist
 .svelte-kit/
+.vercel
 *.local
 
 # dotenv environment variable files
