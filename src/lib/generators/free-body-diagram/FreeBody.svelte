@@ -6,7 +6,8 @@
   import ObjectShape from '$lib/shared/ObjectShape.svelte'
   import VectorArrow from '$lib/shared/VectorArrow.svelte'
   import { palette } from '$lib/shared/figure'
-  import { buildFbd, DOT_R, LABEL_SIZE } from './fbd'
+  import { LABEL_SIZE } from '$lib/shared/layout'
+  import { buildFbd, DOT_R } from './fbd'
   import type { FbdSettings } from './settings'
 
   let { settings, id = 'b' }: { settings: FbdSettings; id?: string } = $props()
