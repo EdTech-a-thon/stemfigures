@@ -240,3 +240,12 @@ export const commands: Record<string, EditorCommand<any>> = {
   _: subscriptCommand,
   [FIELD_SPACE]: spaceCommand,
 }
+
+/** A component's label from its vector's: T → T_x, F_g → F_{gx}, F_{air} → F_{airx}. */
+export function componentLabel(text: string, axis: 'x' | 'y'): string {
+  const braced = /^(.*)_\{(.*)\}$/.exec(text)
+  if (braced) return `${braced[1]}_{${braced[2]}${axis}}`
+  const single = /^(.*)_(.)$/u.exec(text)
+  if (single) return `${single[1]}_{${single[2]}${axis}}`
+  return text ? `${text}_${axis}` : ''
+}
