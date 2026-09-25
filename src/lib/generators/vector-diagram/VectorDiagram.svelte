@@ -6,7 +6,7 @@
   import VectorArrow from '$lib/shared/VectorArrow.svelte'
   import { palette } from '$lib/shared/figure'
   import { LABEL_SIZE } from '$lib/shared/layout'
-  import { arrow } from '$lib/shared/vector'
+  import { arrow, type Segment } from '$lib/shared/vector'
   import type { VectorSettings } from './settings'
   import { buildVectorDiagram } from './vd'
 
@@ -17,7 +17,14 @@
   const baseline = LABEL_SIZE * 0.35
   const GRID = '#d1d5db'
 
-  const axisHeads = $derived(fig.axes ? [arrow(fig.axes.x, 10).head, arrow(fig.axes.y, 10).head] : [])
+  // An axis has a head at each end, and its line stops inside both so each head comes to a sharp point.
+  const AXIS_HEAD = 11
+  function axisArrow(a: Segment) {
+    const ahead = arrow(a, AXIS_HEAD)
+    const back = arrow({ x1: a.x2, y1: a.y2, x2: a.x1, y2: a.y1 }, AXIS_HEAD)
+    return { line: { x1: back.shaft.x2, y1: back.shaft.y2, x2: ahead.shaft.x2, y2: ahead.shaft.y2 }, heads: [ahead.head, back.head] }
+  }
+  const axes = $derived(fig.axes ? [axisArrow(fig.axes.x), axisArrow(fig.axes.y)] : [])
   const points = (head: { x: number; y: number }[]) => head.map((q) => `${q.x},${q.y}`).join(' ')
 
   const description = $derived(
@@ -38,12 +45,10 @@
 
   {#each fig.grid as g}<line x1={g.x1} y1={g.y1} x2={g.x2} y2={g.y2} stroke={GRID} stroke-width="1" />{/each}
 
-  {#if fig.axes}
-    {#each [fig.axes.x, fig.axes.y] as a, i}
-      <line x1={a.x1} y1={a.y1} x2={a.x2} y2={a.y2} stroke={p.ink} stroke-width="1.5" />
-      <polygon points={points(axisHeads[i])} fill={p.ink} />
-    {/each}
-  {/if}
+  {#each axes as a}
+    <line x1={a.line.x1} y1={a.line.y1} x2={a.line.x2} y2={a.line.y2} stroke={p.ink} stroke-width="1.5" />
+    {#each a.heads as head}<polygon points={points(head)} fill={p.ink} />{/each}
+  {/each}
 
   {#each fig.components as c}
     <VectorArrow v={c.x} color={p.component} style="component" halo={false} />

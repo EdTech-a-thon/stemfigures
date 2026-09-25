@@ -1,7 +1,7 @@
 <script lang="ts">
   // The Vector Diagram Generator: the vectors, their resultant and the grid on
   // the left, the figure on the right. Settings live in the page address.
-  import { Grid3x3, MoveUpRight, Plus, Sigma, Trash2 } from '@lucide/svelte'
+  import { ChevronDown, Grid3x3, MoveUpRight, Plus, Sigma, Trash2 } from '@lucide/svelte'
   import Choice from '$lib/shared/Choice.svelte'
   import DirectionField from '$lib/shared/DirectionField.svelte'
   import { createGenerator } from '$lib/shared/generator.svelte'
@@ -33,10 +33,21 @@
   const gridSummary = $derived([s.grid ? 'grid' : '', s.axes ? 'axes' : ''].filter(Boolean).join(' · ') || 'none')
 
   const full = $derived(s.vectors.length >= MAX_VECTORS)
+  // Each vector folds up to a one-line summary. They start folded, except one just added.
+  let added = $state<unknown>(null)
   const add = () => {
-    if (!full) gen.settings.vectors.push(newVector(gen.settings.vectors.length))
+    if (full) return
+    gen.settings.vectors.push(newVector(gen.settings.vectors.length))
+    added = gen.settings.vectors.at(-1)
   }
-  const remove = (i: number) => gen.settings.vectors.splice(i, 1)
+  const remove = (e: Event, i: number) => {
+    // The button is inside the row's summary, so don't let the click fold it too.
+    e.preventDefault()
+    gen.settings.vectors.splice(i, 1)
+  }
+  const styleName = { solid: '', dashed: 'dashed', none: 'left off' } as const
+  const rowSummary = (v: (typeof s.vectors)[number]) =>
+    [shown(v.label), `${squares(v.magnitude)} at ${v.angle}°`, styleName[v.style]].filter(Boolean).join(' · ')
 
   // Turning components on names them after the arrow (B → B_x), unless the teacher already named them.
   function nameComponents(name: Label, labels: Label[], defaults: string[]) {
@@ -52,13 +63,17 @@
     <Section title="Vectors" icon={MoveUpRight} summary={vectorsSummary}>
       <p class="note">Drawn to scale, head to tail, in order. One grid square is a magnitude of 1.</p>
       {#each gen.settings.vectors as vector, i (vector)}
-        <div class="row">
-          <div class="row-head">
-            <span>Vector {i + 1}</span>
-            <button type="button" class="icon-btn" aria-label="Remove vector {i + 1}" data-tip="Remove" onclick={() => remove(i)}>
+        <details class="row" open={added === vector}>
+          <summary class="row-head">
+            <span class="chevron"><ChevronDown size={16} aria-hidden="true" /></span>
+            <span class="row-text">
+              <span class="row-title">Vector {i + 1}</span>
+              {#if s.vectors[i]}<span class="row-summary">{rowSummary(s.vectors[i])}</span>{/if}
+            </span>
+            <button type="button" class="icon-btn" aria-label="Remove vector {i + 1}" data-tip="Remove" onclick={(e) => remove(e, i)}>
               <Trash2 size={17} />
             </button>
-          </div>
+          </summary>
           <label class="field">
             Magnitude
             <span class="slider">
@@ -91,7 +106,7 @@
               <div class="field">Vertical label <LabelField name="Vector {i + 1} vertical component label" bind:label={vector.yLabel} /></div>
             {/if}
           {/if}
-        </div>
+        </details>
       {/each}
 
       <button type="button" class="btn-ghost add" disabled={full} onclick={add}>
@@ -151,8 +166,17 @@
 </GeneratorLayout>
 
 <style>
-  .row { border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 0.75rem; }
-  .row-head { display: flex; align-items: center; justify-content: space-between; font-weight: 800; margin-bottom: 0.25rem; }
+  .row { border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
+  .row[open] { padding-bottom: 0.75rem; }
+  .row-head { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; list-style: none; padding: 0.15rem 0; }
+  .row-head::-webkit-details-marker { display: none; }
+  .row[open] > .row-head { margin-bottom: 0.25rem; }
+  .row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .row-title { font-weight: 800; }
+  .row-summary { font-size: 0.8rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row[open] .row-summary { display: none; }
+  .chevron { display: inline-flex; color: var(--muted); transform: rotate(-90deg); transition: transform 0.15s; }
+  .row[open] .chevron { transform: none; }
   .warning { color: var(--ink); background: #fffbeb; border-left: 3px solid var(--amber); border-radius: 6px; padding: 0.5rem 0.7rem; }
   .add { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.35rem 0.65rem; font-size: 0.85rem; border-radius: 9px; }
 </style>

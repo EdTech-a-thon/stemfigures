@@ -129,7 +129,7 @@ Light squares behind a Vector Diagram, one per unit of magnitude, lined up with 
 _Avoid_: Graph paper (fine as a search word)
 
 **Axes**:
-Plain x and y axes through the first tail of a Vector Diagram, with arrowheads and letters but no tick marks. Off by default.
+Plain x and y axes through the first tail of a Vector Diagram, with an arrowhead at each end and x and y at the positive ends, but no tick marks. Off by default.
 _Avoid_: Coordinate system
 
 On a Vector Diagram, an **angle mark** is drawn at the arrow's tail and a **component** pair runs head to tail from it (along the horizontal, then the vertical to the tip), for any vector or the resultant. Both are off by default.
