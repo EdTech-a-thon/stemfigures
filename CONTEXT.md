@@ -39,7 +39,7 @@ Text drawn beside a part of a figure, such as m₁, 5 kg, 30°, θ, N or S. Each
 _Avoid_: Caption, tag, annotation
 
 **Vector**:
-An arrow drawn on a figure for a force, velocity or acceleration, such as gravity on a block or the motion of a magnet. It is drawn about the right size, not to scale, looks the same in every generator, and has its own label. Forces are solid; velocity and acceleration have a dashed shaft at full weight, so they're never read as forces, even photocopied. On a Free Body Diagram the teacher sets each force's length relative to the others, so equal forces are drawn equal.
+An arrow drawn on a figure for a force, velocity or acceleration, such as gravity on a block or the motion of a magnet. It is drawn about the right size, not to scale, looks the same in every generator, and has its own label. Forces are solid; velocity and acceleration have a dashed shaft at full weight, so they're never read as forces, even photocopied. On a Free Body Diagram the teacher sets each force's length relative to the others, so equal forces are drawn equal. On a Vector Diagram vectors are drawn to scale, and the teacher picks solid or dashed for each one.
 _Avoid_: Arrow (alone), force line
 
 **Chart title**:
@@ -105,6 +105,34 @@ _Avoid_: Angle arc (alone)
 **Component**:
 One of the two thinner, dashed, lighter arrows along the horizontal and vertical that add up to an angled force. Components often give away the answer, so each force's are off unless turned on.
 _Avoid_: Projection, part
+
+### Vector Diagram
+
+**Vector Diagram**:
+A figure of up to three vectors drawn to scale head to tail, each set by its magnitude and direction, with their resultant, for vector addition and components. Its generator is the Vector Diagram Generator. It has no body and says nothing about what the vectors are, so it serves displacement, velocity and force problems alike. Forces on one body drawn from its middle are a Free Body Diagram. There is no vector subtraction: a teacher who wants −B sets B's direction the other way.
+_Avoid_: Vector addition diagram (fine as a search word), head-to-tail diagram
+
+**Magnitude**:
+How long a vector on a Vector Diagram is, in grid squares, from 0.5 to 12.
+_Avoid_: Length, size
+
+**Resultant**:
+The vector from the first vector's tail to the last one's tip: the sum. It is drawn solid, dashed or left off like any other vector, and the generator shows its magnitude and direction for the answer key.
+_Avoid_: Net vector, sum vector, total
+
+**Arrow style**:
+Whether a vector on a Vector Diagram is drawn solid, drawn dashed, or left off. A vector left off still takes its place in the chain, so the gap is there for students to draw it in.
+_Avoid_: Line style, visibility
+
+**Grid**:
+Light squares behind a Vector Diagram, one per unit of magnitude, lined up with the first tail. It has no tick marks or numbers. On by default.
+_Avoid_: Graph paper (fine as a search word)
+
+**Axes**:
+Plain x and y axes through the first tail of a Vector Diagram, with arrowheads and letters but no tick marks. Off by default.
+_Avoid_: Coordinate system
+
+On a Vector Diagram, an **angle mark** is drawn at the arrow's tail and a **component** pair runs head to tail from it (along the horizontal, then the vertical to the tip), for any vector or the resultant. Both are off by default.
 
 ### Circuit Diagram
 

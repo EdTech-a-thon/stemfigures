@@ -7,6 +7,7 @@ import CoilMagnetPreview from './coil-and-magnet/Preview.svelte'
 import FreeBodyPreview from './free-body-diagram/Preview.svelte'
 import InclinedPlanePreview from './inclined-plane/Preview.svelte'
 import PulleyPreview from './pulley/Preview.svelte'
+import VectorDiagramPreview from './vector-diagram/Preview.svelte'
 import CircuitDiagramPreview from './circuit-diagram/Preview.svelte'
 
 export interface Generator {
@@ -53,6 +54,21 @@ export const GENERATORS: Generator[] = [
       'unbalanced', 'components', 'newton', "newton's laws", 'dot', 'particle', 'mechanics', 'printable',
     ],
     Preview: FreeBodyPreview,
+  },
+  {
+    id: 'vector-diagram',
+    name: 'Vector Diagram Generator',
+    path: '/vector-diagram',
+    blurb: 'Up to three vectors head to tail on a grid, with their resultant.',
+    description:
+      'Make a printable vector diagram for your class: up to three vectors drawn to scale head to tail, on a grid or not, with the resultant, angles and components each drawn, dashed or left off for students, then copy it into a worksheet or test.',
+    keywords: [
+      'vector', 'vectors', 'vector diagram', 'vector addition', 'adding vectors', 'head to tail', 'tip to tail',
+      'resultant', 'sum', 'components', 'resolve', 'resolving', 'x component', 'y component', 'magnitude', 'direction',
+      'displacement', 'velocity', 'force', 'net force', 'grid', 'graph paper', 'axes', 'scale drawing', 'trigonometry',
+      'mechanics', 'printable',
+    ],
+    Preview: VectorDiagramPreview,
   },
   {
     id: 'inclined-plane',
