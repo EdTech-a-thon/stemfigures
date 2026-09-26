@@ -201,6 +201,34 @@ export function toText(doc: MathDoc, kind: MathKind = 'number'): string {
   return text.replace(/\s+/g, ' ').trim()
 }
 
+const OPERATORS = new Set([...'+-−×·÷±=<>≤≥≠,('])
+
+/**
+ * Classes for spacing in any math field: a comma has room after it, as in
+ * (1, 2), and a minus that starts a number (−3, (−1, 2)) sits tight against
+ * it instead of being spaced out like the minus in 5 − 3.
+ */
+function punctuation(doc: MathDoc): Map<TokenID, string> {
+  const classes = new Map<TokenID, string>()
+  const walk = (tokens: Token[]) => {
+    let prev: Token | undefined
+    for (const t of tokens) {
+      const c = charOf(t)
+      if (c === ',') classes.set(t.id, 'caret-comma')
+      else if ((c === '-' || c === '−') && (!prev || OPERATORS.has(charOf(prev) ?? ''))) classes.set(t.id, 'caret-unary')
+      for (const child of t.children.values()) walk((child as DocStrand<typeof schema>).tokens)
+      prev = t
+    }
+  }
+  walk(doc.root.tokens)
+  return classes
+}
+
+/** The math field's classes for what it holds: spacing, plus words (inequalities) or function names (equations). */
+export function classifyFor(kind: MathKind): (doc: MathDoc) => Map<TokenID, string> {
+  return (doc) => new Map([...punctuation(doc), ...(kind === 'inequality' ? classify(doc) : kind === 'equation' ? classifyFunctions(doc) : [])])
+}
+
 /** Classes for the math field: keywords like "or" set as words, not variables. */
 export function classify(doc: MathDoc): Map<TokenID, string> {
   const classes = new Map<TokenID, string>()

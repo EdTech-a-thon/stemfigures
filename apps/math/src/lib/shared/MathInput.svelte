@@ -4,7 +4,7 @@
   // for the page address. `kind` is "number" (a range value like 3π/2) or
   // "inequality" (like −2 < x ≤ 5, with "or" and "and" set as words).
   import { MathField } from '@caret-js/svelte'
-  import { classify, classifyFunctions, commands, fromText, schema, toText, typingRules, type MathKind } from './math.js'
+  import { classifyFor, commands, fromText, schema, toText, typingRules, type MathKind } from './math.js'
 
   // The rest (id, aria-label, placeholder…) go to the field's text box.
   let { value = $bindable(''), kind = 'number', ...rest }: { value?: string; kind?: MathKind; [attribute: string]: unknown } = $props()
@@ -17,7 +17,7 @@
   toText={(doc) => toText(doc, kind)}
   {typingRules}
   {commands}
-  classify={kind === 'inequality' ? classify : kind === 'equation' ? classifyFunctions : undefined}
+  classify={classifyFor(kind)}
   {...rest}
 />
 
@@ -30,6 +30,9 @@
     --caret-font-size: 1.1rem;
     --caret-placeholder-font: system-ui, sans-serif;
   }
+  /* Room after a comma, as in (1, 2), and a minus that starts a number (−3) set tight. */
+  :global(.caret-math .caret-comma) { margin-right: 0.3em; }
+  :global(.caret-math .caret-unary) { margin: 0 0.04em 0 0; }
   /* Function names like sin and log: upright, with a little room before what they act on. */
   :global(.caret-math .caret-fn) { font-style: normal; }
   :global(.caret-math .caret-fn-end) { margin-right: 0.15em; }
