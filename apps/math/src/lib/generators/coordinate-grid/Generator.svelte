@@ -5,6 +5,7 @@
   // page address so a bookmark or shared link brings back exactly this grid,
   // and the server renders that same grid on first load.
   import { Grid3x3, Heading, MoveRight, MoveUp, Plus, X } from '@lucide/svelte'
+  import { untrack } from 'svelte'
   import { afterNavigate, replaceState } from '$app/navigation'
   import { page } from '$app/state'
   import CapPicker from '$lib/shared/CapPicker.svelte'
@@ -39,8 +40,19 @@
       y0: axes.y.start, y1: axes.y.start + axes.y.blocks * axes.y.step,
     }, clean.angle),
   )
-  // The angle unit only matters, so only shows, once a row uses trig.
+  // The angle unit only matters, so only shows (with the x-axis, whose values
+  // trig reads), once a row uses trig.
   const usesTrig = $derived(clean.equations.some((r) => /sin|cos|tan|sec|csc|cot/.test(r.text)))
+  // Typing ° into the x-axis range switches trig to degrees, and taking it out
+  // switches back, so the axis and the graph agree. The setting can still be
+  // changed by hand afterwards (degrees on an axis numbered 0, 90, 180…).
+  const xInDegrees = $derived(/°/.test(`${settings.xFrom}${settings.xTo}${settings.xStep}`))
+  let wasInDegrees = untrack(() => xInDegrees)
+  $effect(() => {
+    if (xInDegrees === wasInDegrees) return
+    wasInDegrees = xInDegrees
+    settings.angle = xInDegrees ? 'degrees' : 'radians'
+  })
 
   // A new row, unless the last one is still empty, which gets the focus instead.
   function addRow() {
@@ -108,10 +120,13 @@
     return [
       `${n(start)} to ${n(start + blocks * step)}`,
       `by ${n(step)}`,
+      axis === 'x' && usesTrig ? `trig in ${clean.angle}` : '',
       every ? (every === 1 ? 'numbered' : `numbered every ${every}`) : 'unnumbered',
       clean[`${axis}LabelMode` as const] === 'text' && clean[`${axis}Label` as const].trim() ? `“${clean[`${axis}Label` as const].trim()}”` : 'no label',
       endsSummary(clean[`${axis}StartCap` as const], clean[`${axis}EndCap` as const]),
-    ].join(' · ')
+    ]
+      .filter(Boolean)
+      .join(' · ')
   }
   function endsSummary(start: Cap, end: Cap) {
     if (start === end) return start === 'none' ? 'plain ends' : `${CAPS[start].toLowerCase()}s`
@@ -175,17 +190,7 @@
           </div>
           {#if rows[i]?.problem}<p class="help problem">{rows[i].problem}</p>{/if}
         {/each}
-        <div class="add-row">
-          <button class="add" onclick={addRow}><Plus size={16} aria-hidden="true" /> Add equation</button>
-          {#if usesTrig || clean.angle !== 'radians'}
-            <label class="angle">
-              Trig in
-              <select bind:value={settings.angle}>
-                {#each Object.entries(ANGLE_UNITS) as [v, label]}<option value={v}>{label.toLowerCase()}</option>{/each}
-              </select>
-            </label>
-          {/if}
-        </div>
+        <button class="add" onclick={addRow}><Plus size={16} aria-hidden="true" /> Add equation</button>
       </section>
 
       <section class="card sections">
@@ -211,6 +216,14 @@
             {#each RANGE_FIELDS as [key]}
               {#if axes.problems[`${axis}${key}`]}<p class="help problem">{axes.problems[`${axis}${key}`]}</p>{/if}
             {/each}
+            {#if axis === 'x' && (usesTrig || clean.angle !== 'radians')}
+              <label class="field">
+                <span>Trig reads x in <span class="hint">type ° (or deg) in the range for degrees</span></span>
+                <select bind:value={settings.angle}>
+                  {#each Object.entries(ANGLE_UNITS) as [v, label]}<option value={v}>{label}</option>{/each}
+                </select>
+              </label>
+            {/if}
             <label class="field">
               Numbers
               <select bind:value={settings[`${axis}Every` as const]}>
@@ -299,9 +312,6 @@
     border: 1.5px dashed var(--border); border-radius: 999px; background: none; color: var(--blue-dark); font-weight: 700; font-size: 0.85rem;
   }
   .add:hover { background: var(--blue-soft); }
-  .add-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
-  .angle { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--muted); }
-  .angle select { width: auto; padding-block: 0.2rem; }
 
   .grid-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; margin-bottom: 0.75rem; }
   .range-field { display: flex; flex-direction: column; gap: 0.3rem; font-weight: 600; font-size: 0.88rem; min-width: 0; }

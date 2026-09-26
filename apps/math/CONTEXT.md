@@ -67,7 +67,7 @@ A thin, faint, unnumbered line that splits each block of a coordinate grid into 
 _Avoid_: Subdivision, fine grid, minor tick
 
 **Angle unit**:
-Whether a coordinate grid's trig functions read x in radians or degrees. It's one setting for the whole figure, radians unless the teacher picks degrees.
+Whether a coordinate grid's trig functions read x in radians or degrees. It's one setting for the whole figure, set with the x-axis: radians, until the teacher types ° in the x-axis range (which switches it to degrees) or picks degrees.
 _Avoid_: Angle mode, trig mode
 
 ### Number lines
