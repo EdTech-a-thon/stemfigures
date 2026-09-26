@@ -28,6 +28,7 @@ const GRID = [
   'xFrom=abc&xTo=1&xStep=0&yFrom=5&yTo=1',
   'xFrom=0&xTo=100&xStep=1',
   `${eq('y<2x', 'y=z+1', 'x^2+y^2=4', '0=0', '1=2', 'x^2=4', 'hello')}`,
+  `xFrom=-5&xTo=5&yFrom=-5&yTo=5&${eq('y=(2x+1)/(3x^2-1)', 'y=(x^2-1)/(x-1)|color=blue', 'y=x^(1/3)|color=green', 'y=1/(x+3)^2|color=red')}`,
 ]
 
 const LINE = [

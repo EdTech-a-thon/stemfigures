@@ -59,6 +59,9 @@
     <path d={l.d} fill="none" stroke={l.color} stroke-width={l.width} stroke-dasharray={l.dash} stroke-linecap={l.cap} stroke-linejoin="round" />
     {#each l.heads as d}<path {d} fill={l.color} />{/each}
   {/each}
+  {#each g.circles as c}
+    <circle cx={c.x} cy={c.y} r={g.r} fill={c.closed ? c.color : '#fff'} stroke={c.color} stroke-width="2.5" />
+  {/each}
   {#each g.dots as d}
     {#if d.cross}
       <path d="M{d.x - 5.5},{d.y - 5.5} L{d.x + 5.5},{d.y + 5.5} M{d.x - 5.5},{d.y + 5.5} L{d.x + 5.5},{d.y - 5.5}" stroke={d.color} stroke-width="2.4" stroke-linecap="round" />

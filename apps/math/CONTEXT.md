@@ -55,8 +55,16 @@ The stretch of numbers an axis covers, set as From, To and Step (such as −2 to
 _Avoid_: Domain, interval, window, start and blocks
 
 **Numbering**:
-How the numbers under the ticks are written: decimals, fractions or multiples of π. It isn't a setting; it follows how the teacher typed the range, so a range typed with π is numbered in π.
+How the numbers under the ticks are written: decimals, fractions, multiples of π or degrees. It isn't a setting; it follows how the teacher typed the range, so a range typed with π is numbered in π and one typed with ° is numbered in degrees.
 _Avoid_: Format, label style
+
+**Minor gridline**:
+A thin, faint, unnumbered line that splits each block of a coordinate grid into 2, 4, 5 or 10 parts, like millimetre graph paper. A grid has none unless the teacher picks a number.
+_Avoid_: Subdivision, fine grid, minor tick
+
+**Angle unit**:
+Whether a coordinate grid's trig functions read x in radians or degrees. It's one setting for the whole figure, radians unless the teacher picks degrees.
+_Avoid_: Angle mode, trig mode
 
 ### Number lines
 
@@ -81,7 +89,7 @@ A straight line or curve drawn across a coordinate grid from an equation, with a
 _Avoid_: Plot, function, curve
 
 **Row style**:
-How one equation is drawn, set from the button before it, which shows a miniature of how the row is drawn: a color, a line style (solid, dashed or dotted) and which ends have arrows (both, neither, left or right; for an up-and-down line, left means the bottom). Points take the color and a point mark: a dot, or a cross as French classrooms use.
+How one equation is drawn, set from the button before it, which shows a miniature of how the row is drawn: a color, a line style (solid, dashed or dotted) and which ends have arrows (both, neither, left or right; for an up-and-down line, left means the bottom), whether endpoints show, and whether asymptotes show. Points take the color and a point mark: a dot, or a cross as French classrooms use.
 _Avoid_: Format, appearance, theme
 
 **Point mark**:
@@ -89,8 +97,24 @@ How points are drawn: a dot or a cross. On a coordinate grid it's part of each p
 _Avoid_: Marker, symbol, dot style
 
 **Endpoint**:
-Where an equation's graph stops at a number, drawn as an open circle (not included) or a closed circle (included).
+Where an equation's graph or a graphed line stops at a number, drawn as an open circle (not included) or a closed circle (included). On a coordinate grid, a graphed line's endpoints are at the ends of its domain, and a row style can hide them so the line simply stops.
 _Avoid_: Dot, point, boundary
+
+**Domain**:
+The stretch of x-values a graphed line is drawn over (y-values, for an up-and-down line), typed after its equation as an inequality, such as y = 3x, −5 ≤ x < 7. Using ≤ or < picks a closed or open endpoint. A piecewise function is several rows, each with its own domain. A graphed line with no domain runs across the whole grid. An end cut off by its domain inside the grid never has an arrowhead; an end whose domain runs past the grid's edge follows the row style's arrows.
+_Avoid_: Restriction, bounds, interval, range (an axis's range is different)
+
+**Hole**:
+A single x-value where a graphed line is undefined but the curve continues on both sides, such as x = 1 in y = (x² − 1)/(x − 1). It's found automatically and drawn as an open circle.
+_Avoid_: Gap, removable discontinuity (fine in teaching, not as the name), missing point
+
+**Asymptote**:
+A line that a graphed line approaches but never reaches: vertical, horizontal or slant. Where a graphed line meets a vertical asymptote, the curve breaks and each side runs to the grid's edge with an arrowhead. Asymptotes are found for the whole row and, when its row style shows them, drawn as thin dotted lines in the row's color, without their equations; they're hidden unless the teacher shows them.
+_Avoid_: Discontinuity, break, limit line
+
+**Point name**:
+The letter written beside a point on a coordinate grid, typed in textbook notation such as A(1, 2), primes allowed (A′). A points row shows just the names, or the names with their coordinates.
+_Avoid_: Point label, vertex name (that's a triangle's), tag
 
 ### Triangles
 

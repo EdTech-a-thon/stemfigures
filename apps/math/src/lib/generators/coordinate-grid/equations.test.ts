@@ -60,7 +60,7 @@ describe('parseEquation', () => {
     ['y = x^3 - x', [[2, 6]]],
   ])('%s is a curve', (text, points) => {
     const { curve } = parseEquation(text)!
-    for (const [x, y] of points) expect(curve!(x)).toBeCloseTo(y, 9)
+    for (const [x, y] of points) expect(curve!.f(x)).toBeCloseTo(y, 9)
   })
 })
 
@@ -85,7 +85,7 @@ describe('clipLine', () => {
 
 describe('curveRuns', () => {
   test('a parabola comes in and goes out the top, with arrows at both ends', () => {
-    const runs = curveRuns(parseEquation('y = x^2 - 4')!.curve!, box)
+    const runs = curveRuns(parseEquation('y = x^2 - 4')!.curve!.f, box)
     expect(runs).toHaveLength(1)
     const [run] = runs
     expect(run.edges).toEqual([true, true])
@@ -95,11 +95,108 @@ describe('curveRuns', () => {
     expect(run.points.at(-1)!.x).toBeCloseTo(3, 3)
   })
   test('a curve that stops inside the grid has no arrow there', () => {
-    const [run] = curveRuns(parseEquation('y = x^(1/2)')!.curve!, box)
+    const [run] = curveRuns(parseEquation('y = x^(1/2)')!.curve!.f, box)
     expect(run.edges).toEqual([false, true])
   })
   test('a curve that leaves and comes back is two runs', () => {
-    expect(curveRuns(parseEquation('y = x^3 - 9x')!.curve!, { x0: -4, x1: 4, y0: -5, y1: 5 }).length).toBeGreaterThan(1)
+    expect(curveRuns(parseEquation('y = x^3 - 9x')!.curve!.f, { x0: -4, x1: 4, y0: -5, y1: 5 }).length).toBeGreaterThan(1)
+  })
+  test('a steep curve that stays joined is not broken', () => {
+    expect(curveRuns(parseEquation('y = 40x^3')!.curve!.f, box, [], 20)).toHaveLength(1)
+  })
+})
+
+describe('breaks', () => {
+  const runsOf = (text: string, b = box) => readEquations([text], b)[0]!
+  const edgeOf = (p: { y: number }, b = box) => (Math.abs(p.y - b.y1) < 1e-6 ? 'top' : Math.abs(p.y - b.y0) < 1e-6 ? 'bottom' : 'inside')
+
+  test('each side of an asymptote runs out its own edge, with an arrow', () => {
+    const { runs } = runsOf('y = 1/(x - 2)')
+    expect(runs).toHaveLength(2)
+    const [left, right] = runs!
+    expect(edgeOf(left.points.at(-1)!)).toBe('bottom')
+    expect(edgeOf(right.points[0])).toBe('top')
+    expect(left.edges[1] && right.edges[0]).toBe(true)
+    // Neither side crosses the asymptote.
+    expect(left.points.every((p) => p.x < 2) && right.points.every((p) => p.x > 2)).toBe(true)
+  })
+
+  // The rational function from a teacher's email: asymptotes at x = ±1/√3.
+  test('y = (2x+1)/(3x^2 − 1) is three pieces, none joined across an asymptote', () => {
+    const { runs } = runsOf('y = (2x + 1)/(3x^2 - 1)')
+    const a = 1 / Math.sqrt(3)
+    expect(runs).toHaveLength(3)
+    for (const run of runs!) {
+      const xs = run.points.map((p) => p.x)
+      const side = (x: number) => (x < -a ? 0 : x < a ? 1 : 2)
+      expect(new Set(xs.map(side)).size).toBe(1)
+    }
+    const middle = runs![1]
+    expect(edgeOf(middle.points[0])).toBe('top')
+    expect(edgeOf(middle.points.at(-1)!)).toBe('bottom')
+  })
+
+  test('a pole between two samples that land inside the grid still breaks', () => {
+    expect(runsOf('y = 0.001/(x - 0.013)').runs!.length).toBe(2)
+  })
+
+  test('both sides of a squared asymptote go out the top', () => {
+    const { runs } = runsOf('y = 1/(x - 1)^2')
+    expect(runs).toHaveLength(2)
+    expect(edgeOf(runs![0].points.at(-1)!)).toBe('top')
+    expect(edgeOf(runs![1].points[0])).toBe('top')
+  })
+
+  test('a hole is an open circle where the curve would be, and the curve stops there without arrows', () => {
+    const row = runsOf('y = (x^2 - 1)/(x - 1)')
+    expect(row.circles).toHaveLength(1)
+    expect(row.circles![0].x).toBeCloseTo(1, 6)
+    expect(row.circles![0].y).toBeCloseTo(2, 6)
+    expect(row.circles![0].closed).toBe(false)
+    expect(row.runs).toHaveLength(2)
+    expect(row.runs![0].edges[1]).toBe(false)
+    expect(row.runs![1].edges[0]).toBe(false)
+  })
+
+  test('a hole from dividing through by y’s coefficient', () => {
+    const row = runsOf('y(x - 1) = x^2 - 1')
+    expect(row.circles).toHaveLength(1)
+    expect(row.circles![0].y).toBeCloseTo(2, 6)
+  })
+
+  test('a hole off the grid draws no circle', () => {
+    expect(runsOf('y = (x^2 - 1)/(x - 1)', { x0: -5, x1: 5, y0: 3, y1: 8 }).circles).toEqual([])
+  })
+
+  test('a hole found whether or not a sample lands on it', () => {
+    expect(runsOf('y = (x^2 - 0.7^2)/(x - 0.7)').circles).toHaveLength(1)
+    expect(runsOf('y = (x^2 - 0.7^2)/(x - 0.7)', { x0: 0, x1: 1.4, y0: 0, y1: 3 }).circles).toHaveLength(1)
+  })
+
+  test('a curve with no breaks has no circles', () => {
+    expect(runsOf('y = x^2 - 4').circles).toEqual([])
+  })
+})
+
+describe('odd roots of negative numbers', () => {
+  test.each([
+    ['y = x^(1/3)', -8, -2],
+    ['y = root(3, x)', -27, -3],
+    ['y = x^(2/3)', -8, 4],
+    ['y = x^(-1/3)', -8, -0.5],
+  ])('%s at %d is %d', (text, x, y) => {
+    const read = parseEquation(text)!
+    if (read.error) return // (a notation Caret can't read; covered by the others)
+    expect(read.curve!.f(x)).toBeCloseTo(y, 9)
+  })
+  test('an even root of a negative is still nothing', () => {
+    expect(parseEquation('y = sqrt(x)')!.curve!.f(-4)).toBeNull()
+    expect(parseEquation('y = x^(1/2)')!.curve!.f(-4)).toBeNull()
+  })
+  test('the cube root curve runs across the whole grid', () => {
+    const { runs } = readEquations(['y = x^(1/3)'], box)[0]!
+    expect(runs).toHaveLength(1)
+    expect(runs![0].points[0].x).toBeCloseTo(-5, 6)
   })
 })
 

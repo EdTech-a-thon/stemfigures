@@ -12,6 +12,7 @@ const EXT = 20 // how far an arrowed axis runs past the grid
 const CHAR = FS * 0.6 // rough width of one digit
 const HEAD = 12 // length of an arrowhead where a graphed line leaves the grid
 const HEAD_HALF = 5.5 // half its width
+const CIRCLE_R = 5.5 // a hole's or endpoint's circle
 
 const round = (v: number) => Math.round(v * 100) / 100
 const pathLength = (pts: Point[]) => pts.reduce((sum, p, k) => (k ? sum + Math.hypot(p.x - pts[k - 1].x, p.y - pts[k - 1].y) : 0), 0)
@@ -172,6 +173,8 @@ export function buildGraph(settings: Settings) {
   const box = { x0, x1, y0, y1 }
   const lines: { d: string; heads: string[]; color: string; dash: string | undefined; cap: 'round' | 'butt'; width: number }[] = []
   const dots: (Point & { color: string; cross: boolean })[] = []
+  // Holes and endpoints: open circles (not included) and closed ones (included).
+  const circles: (Point & { color: string; closed: boolean })[] = []
   const rows = settings.equations ?? []
   readEquations(rows.map((r) => r.text), box).forEach((read, i) => {
     const { color, line: style, arrows, point } = rows[i]
@@ -197,6 +200,7 @@ export function buildGraph(settings: Settings) {
         width: style === 'dotted' ? 3.2 : 2.5, // round dots look lighter than a solid stroke
       })
     }
+    for (const c of read?.circles ?? []) circles.push({ ...px(c), color: ink, closed: c.closed })
     for (const pt of read?.points ?? []) dots.push({ ...px(pt), color: ink, cross: point === 'cross' })
   })
 
@@ -214,5 +218,7 @@ export function buildGraph(settings: Settings) {
     blanks,
     lines,
     dots,
+    circles,
+    r: CIRCLE_R,
   }
 }
