@@ -93,7 +93,7 @@ A straight line or curve drawn across a coordinate grid from an equation, with a
 _Avoid_: Plot, function, curve
 
 **Row style**:
-How one equation is drawn, set from the button before it, which shows a miniature of how the row is drawn: a color, a line style (solid, dashed or dotted) and which ends have arrows (both, neither, left or right; for an up-and-down line, left means the bottom), whether endpoints show, and whether asymptotes show. Points take the color and a point mark: a dot, or a cross as French classrooms use. On a number line a row's style is only its color (and a point mark for points and sequences), because a number line's thick line, arrows and circles carry meaning; every row starts black. The color goes on the row's thick line, arrows, circles and points, never on the line, ticks or numbers. Rows of the same color join into one equation graph, as they always have; rows of different colors are drawn separately, each color over the colors that came before it in the list.
+How one equation is drawn, set from the button before it, which shows a miniature of how the row is drawn: a color, a line style (solid, dashed or dotted) and which ends have arrows (both, neither, left or right; for an up-and-down line, left means the bottom), whether endpoints show, and whether asymptotes show. Points take the color and a point mark: a dot, or a cross as French classrooms use. On a number line a row's style is its color, whether values are written, and for points and sequences a point mark and how point labels show; a number line's thick line, arrows and circles carry meaning, so they can't be changed. Every row starts black. Values are written above the line for endpoints and unlabeled points that don't sit on a numbered tick, the way their own row was typed (0.35 as 0.35, 3/8 as a fraction), unless the row style turns them off (for an estimate-this-point question). The color goes on the row's thick line, arrows, circles and points, never on the line, ticks or numbers. Rows of the same color join into one equation graph, as they always have; rows of different colors are drawn separately, each color over the colors that came before it in the list.
 _Avoid_: Format, appearance, theme
 
 **Point mark**:
@@ -124,9 +124,9 @@ _Avoid_: Gap, removable discontinuity (fine in teaching, not as the name), missi
 A line that a graphed line approaches but never reaches: vertical, horizontal or slant. Where a graphed line meets a vertical asymptote, the curve breaks and each side runs to the grid's edge with an arrowhead. Asymptotes are found for the whole row and, when its row style shows them, drawn as dotted lines in the row's color, without their equations; they're hidden unless the teacher shows them.
 _Avoid_: Discontinuity, break, limit line
 
-**Point name**:
-The letter written beside a point on a coordinate grid, typed in textbook notation such as A(1, 2), primes allowed (A′). A points row shows just the names, or the names with their coordinates.
-_Avoid_: Point label, vertex name (that's a triangle's), tag
+**Point label**:
+The letter written at a point, typed before it in textbook notation: A(1, 2) on a coordinate grid, P(0.35) on a number line. It's one letter, with primes or a subscript allowed (A′, A₁), and it belongs to its point, so it stays when the point's numbers change and goes when the point is deleted. A points row's style shows just the labels or the labels with their coordinates or values, A or A(0.35). On a number line a labeled point's value is never written, since it would give the answer away; endpoints and sequence terms aren't labeled.
+_Avoid_: Point name, vertex name (that's a triangle's), letter, tag
 
 ### Triangles
 

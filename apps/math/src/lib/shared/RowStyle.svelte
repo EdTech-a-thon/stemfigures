@@ -5,22 +5,31 @@
   // CapPicker's menu, so the scrolling settings column can't clip it.
   import { tick } from 'svelte'
   import {
-    ARROWS, ASYMPTOTES, COLORS, ENDPOINTS, LINE_STYLES, NAME_STYLES, POINT_STYLES,
-    type Arrows, type AsymptoteStyle, type Color, type Endpoints, type LineStyle, type NameStyle, type PointStyle,
+    ARROWS, ASYMPTOTES, COLORS, ENDPOINTS, LABEL_STYLES, LINE_STYLES, POINT_STYLES, VALUE_STYLES,
+    type Arrows, type AsymptoteStyle, type Color, type Endpoints, type LabelStyle, type LineStyle, type PointStyle, type ValueStyle,
   } from './rowStyle.js'
 
-  // What a row style can hold. A number line row uses only its color and point mark.
-  type Styled = { color: Color; point: PointStyle; line?: LineStyle; arrows?: Arrows; names?: unknown; ends?: Endpoints; asym?: AsymptoteStyle }
+  // What a row style can hold. The grid keeps its label style in `names` (its
+  // links say names=); a number line row keeps it in `labels`, and has `values`.
+  type Styled = {
+    color: Color; point: PointStyle; line?: LineStyle; arrows?: Arrows; ends?: Endpoints; asym?: AsymptoteStyle
+    names?: LabelStyle; labels?: LabelStyle; values?: ValueStyle
+  }
 
-  // row: { color, line, arrows, point, … }, edited in place. isPoints: only color, point and names apply.
+  // row: { color, line, arrows, point, … }, edited in place. isPoints: only color, point and labels apply.
   // hasDomain: the row's line stops at a domain, so it can show endpoints. hasAsymptotes: its curve has some to show.
-  // colorOnly: a number line's row, whose line, arrows and circles carry meaning, so only its color
-  // (and a point mark, for points) can change.
+  // colorOnly: a number line's row, whose line, arrows and circles carry meaning, so they can't change.
+  // canLabel: its points can have labels (a sequence's terms can't). labelExample: a labeled point
+  // with its coordinates, as the label style's second choice shows it.
   let {
-    row, label, id, isPoints = false, hasDomain = false, hasAsymptotes = false, colorOnly = false,
+    row, label, id, isPoints = false, hasDomain = false, hasAsymptotes = false, colorOnly = false, canLabel = true,
+    labelExample = 'A(2, 3)',
   }: {
     row: Styled; label: string; id: string; isPoints?: boolean; hasDomain?: boolean; hasAsymptotes?: boolean; colorOnly?: boolean
+    canLabel?: boolean; labelExample?: string
   } = $props()
+
+  const labelKey = $derived(row.labels !== undefined ? 'labels' : row.names !== undefined ? 'names' : null)
 
   let open = $state(false)
   let root = $state<HTMLElement>()
@@ -195,13 +204,13 @@
           </div>
         </div>
 
-        {#if !colorOnly}
+        {#if labelKey && canLabel}
           <div class="group">
-            <span class="name" id="{id}-names">Point names <span class="hint">like A(2, 3)</span></span>
-            <div class="segmented" role="radiogroup" aria-labelledby="{id}-names">
-              {#each (Object.entries(NAME_STYLES) as [NameStyle, string][]) as [v, name]}
-                <button type="button" role="radio" aria-checked={row.names === v} class="words" class:on={row.names === v} onclick={() => (row.names = v)}>
-                  {v === 'name' ? 'A' : 'A(2, 3)'}<span class="visually-hidden"> ({name})</span>
+            <span class="name" id="{id}-labels">Point labels <span class="hint">like {labelExample}</span></span>
+            <div class="segmented" role="radiogroup" aria-labelledby="{id}-labels">
+              {#each (Object.entries(LABEL_STYLES) as [LabelStyle, string][]) as [v, name]}
+                <button type="button" role="radio" aria-checked={row[labelKey] === v} class="words" class:on={row[labelKey] === v} onclick={() => (row[labelKey] = v)}>
+                  {v === 'name' ? 'A' : labelExample}<span class="visually-hidden"> ({name})</span>
                 </button>
               {/each}
             </div>
@@ -256,6 +265,19 @@
           </div>
         </div>
       {/if}
+
+      {#if row.values !== undefined}
+        <div class="group">
+          <span class="name" id="{id}-values">Values <span class="hint">above the line</span></span>
+          <div class="segmented" role="radiogroup" aria-labelledby="{id}-values">
+            {#each (Object.entries(VALUE_STYLES) as [ValueStyle, string][]) as [v, name]}
+              <button type="button" role="radio" aria-checked={row.values === v} class="text" class:on={row.values === v} onclick={() => (row.values = v)}>
+                {v === 'shown' ? 'Write' : 'None'}<span class="visually-hidden"> ({name})</span>
+              </button>
+            {/each}
+          </div>
+        </div>
+      {/if}
     </div>
   {/if}
 </div>
@@ -295,6 +317,7 @@
   .swatch[aria-checked='true'] { box-shadow: 0 0 0 2px var(--blue); }
   .swatch:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--blue), 0 0 0 4px var(--blue-border); }
   .segmented button { display: inline-grid; place-items: center; padding: 0.3rem 0.45rem; }
+  .segmented button.text { display: inline-block; padding: 0.3rem 0.6rem; font-size: 0.82rem; font-weight: 700; }
   .segmented button.words { display: inline-block; padding: 0.3rem 0.6rem; font: italic 700 0.9rem 'Times New Roman', Times, serif; }
   .name .hint { font-weight: 400; }
 </style>

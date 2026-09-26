@@ -2,7 +2,7 @@
 // line is always LINE units long, whatever its range, so every figure pastes
 // into a worksheet at the same width; the SVG scales to fit wherever it's shown.
 
-import { niceLabel, numberLabel, type Label } from '$lib/shared/numbering.js'
+import { niceLabel, niceText, numberLabel, type Label } from '$lib/shared/numbering.js'
 import { LABEL_SCALE } from '$lib/shared/labelSize.js'
 import { COLORS } from '$lib/shared/rowStyle.js'
 import { readLine, type Settings } from './settings.js'
@@ -34,7 +34,7 @@ export function buildLine(s: Settings) {
   const FS = BASE_FS * LABEL_SCALE[s.labelSize]
   const CHAR = FS * 0.6 // rough width of one digit
   const labelWidth = (l: Label) => (l.text ?? (l.num!.length > l.den!.length ? l.num : l.den) + l.sign!).length * CHAR
-  const { range, numbering, endpointNumbering, groups, problems } = readLine(s)
+  const { range, numbering, groups, written, problems } = readLine(s)
   const { from, to, step } = range
   const x = (v: number) => L + ((v - from) / (to - from)) * LINE
   const same = (a: number, b: number) => Math.abs(a - b) < EPS * Math.max(1, Math.abs(a))
@@ -64,25 +64,30 @@ export function buildLine(s: Settings) {
     const shown = points.filter((p) => onLine(p.v))
     const crosses = shown.filter((p) => p.point === 'cross').map((p) => p.v)
     for (const p of shown) if (p.point !== 'cross') endpoints.set(p.v, true)
-    return { color, set, endpoints, crosses, named: shown.filter((p) => p.name) }
+    return { color, set, endpoints, crosses, labeled: shown.filter((p) => p.label) }
   })
   const crosses = drawn.flatMap((g) => g.crosses)
 
-  // Above the line: each point's name, and the number of any endpoint or point
-  // without a number under it, so the figure is never ambiguous. A named point's
-  // number isn't written, since it would give the answer away. Numbers are
-  // written the way the equations were typed, so x < π/2 is labeled π/2.
-  const names = drawn.flatMap((g) => g.named).filter((p, i, all) => all.findIndex((q) => same(q.v, p.v) && q.name === p.name) === i)
+  // Above the line: each point's label, and the value of any endpoint or
+  // unlabeled point without a number under it, so the figure is never
+  // ambiguous (unless the teacher turned values off for its row). A labeled
+  // point's value isn't written, since it would give the answer away. Values
+  // are written the way their row was typed, so x < π/2 is labeled π/2.
+  const pointLabels = drawn
+    .flatMap((g) => g.labeled.map((p) => ({ v: p.v, text: p.label!, coords: p.labels === 'coords' ? `(${niceText(p.v, p.numbering)})` : '', ink: COLORS[g.color] })))
+    .filter((p, i, all) => all.findIndex((q) => same(q.v, p.v) && q.text === p.text) === i)
   const onNumber = (v: number) => ticks.some((t) => t.label && same(t.v, v))
-  const values = [...drawn.flatMap((g) => [...g.endpoints.keys(), ...g.crosses])].filter((v, i, all) => all.findIndex((w) => same(w, v)) === i)
-  const above: { v: number; label: Label }[] = [
-    ...values.filter((v) => !onNumber(v) && !names.some((p) => same(p.v, v))).map((v) => ({ v, label: niceLabel(v, endpointNumbering) })),
-    ...names.map(({ v, name }) => ({ v, label: { text: name } })),
+  const values = written.filter(({ v }, i, all) => onLine(v) && all.findIndex((w) => same(w.v, v)) === i)
+  type Above = { v: number; label: Label; point?: undefined } | { v: number; point: (typeof pointLabels)[number]; label?: undefined }
+  const above: Above[] = [
+    ...values.filter(({ v }) => !onNumber(v) && !pointLabels.some((p) => same(p.v, v))).map(({ v, numbering }) => ({ v, label: niceLabel(v, numbering) })),
+    ...pointLabels.map((point) => ({ v: point.v, point })),
   ].sort((a, b) => a.v - b.v)
+  const aboveWidth = (a: Above) => (a.label ? labelWidth(a.label) : (a.point.text.length * 1.2 + a.point.coords.length) * CHAR)
 
   const labels = ticks.filter((t): t is { v: number; major: boolean; label: Label } => !!t.label)
   const stacked = labels.some((l) => l.label.den)
-  const aboveStacked = above.some((l) => l.label.den)
+  const aboveStacked = above.some((a) => a.label?.den)
   const numbersH = labels.length ? (stacked ? FS * 2.3 : FS) + 6 : 0
 
   // A part of the graph that runs off an end has its own arrow there, before
@@ -102,14 +107,17 @@ export function buildLine(s: Settings) {
   // Numbers above the line that would overlap sit in rows, each one on the
   // lowest row with room for it, counting up from the line.
   const rowEnds: number[] = []
-  const levels = above.map(({ v, label }) => {
-    const half = labelWidth(label) / 2
+  const levels = above.map((a) => {
+    const { v } = a
+    const half = aboveWidth(a) / 2
     let level = rowEnds.findIndex((end) => x(v) - half >= end + LABEL_GAP)
     if (level === -1) level = rowEnds.push(0) - 1
     rowEnds[level] = x(v) + half
     return level
   })
-  const levelH = aboveStacked ? FS * 2.3 : FS
+  // A point label is drawn a little larger than the numbers, as on the coordinate grid.
+  const LABEL_FS = FS * 1.2
+  const levelH = Math.max(aboveStacked ? FS * 2.3 : FS, pointLabels.length ? LABEL_FS : 0)
   const aboveH = rowEnds.length ? rowEnds.length * levelH + (rowEnds.length - 1) * LEVEL_GAP + 8 : 0
 
   const T = PAD + aboveH + Math.max(TICK, R + 2)
@@ -131,8 +139,13 @@ export function buildLine(s: Settings) {
   const aboveTop = (level: number) => axisY - Math.max(TICK, R + 2) - 6 - (level + 1) * levelH - level * LEVEL_GAP
   const numbers = [
     ...row(labels, axisY + TICK + 6, stacked),
-    ...rowEnds.flatMap((_, level) => row(above.filter((_, i) => levels[i] === level), aboveTop(level), aboveStacked)),
+    ...rowEnds.flatMap((_, level) =>
+      row(above.filter((a, i) => a.label && levels[i] === level) as { v: number; label: Label }[], aboveTop(level), aboveStacked),
+    ),
   ]
+  // A label sits on the middle of its row, like the numbers beside it.
+  const labelY = (level: number) => aboveTop(level) + levelH / 2 + LABEL_FS * 0.35
+  const labelsAbove = above.flatMap((a, i) => (a.point ? [{ x: x(a.v), y: labelY(levels[i]), text: a.point.text, coords: a.point.coords, ink: a.point.ink }] : []))
 
   return {
     width,
@@ -145,6 +158,8 @@ export function buildLine(s: Settings) {
       .filter((t) => !crosses.some((v) => same(t.v, v)))
       .map((t) => ({ x: x(t.v), y1: axisY - (t.major ? TICK : MINOR), y2: axisY + (t.major ? TICK : MINOR) })),
     numbers,
+    labelFs: LABEL_FS,
+    labels: labelsAbove,
     // Each color's graph, later colors drawn over earlier ones.
     groups: drawn.map((g) => {
       const parts = g.set.filter(inView)

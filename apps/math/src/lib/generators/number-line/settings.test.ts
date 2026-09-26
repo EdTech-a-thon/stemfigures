@@ -29,8 +29,8 @@ describe('equations', () => {
 
 describe('row style', () => {
   test('a row carries its style in the page address, after its text', () => {
-    const s = cleanSettings({ equations: [{ text: 'x<3', color: 'red' }, { text: '1, 2', point: 'cross', names: 'A, B' }] })
-    expect(settingsToQuery(s)).toBe('eq=x%3C3%7Ccolor%3Dred&eq=1%2C+2%7Cpoint%3Dcross%7Cnames%3DA%2C+B')
+    const s = cleanSettings({ equations: [{ text: 'x<3', color: 'red', values: 'hidden' }, { text: 'A(1), 2', point: 'cross', labels: 'coords' }] })
+    expect(settingsToQuery(s)).toBe('eq=x%3C3%7Ccolor%3Dred%7Cvalues%3Dhidden&eq=A%281%29%2C+2%7Cpoint%3Dcross%7Clabels%3Dcoords')
     expect(settingsFromParams(new URLSearchParams(settingsToQuery(s))).equations).toEqual(s.equations)
   })
 
@@ -76,16 +76,31 @@ describe('sequences', () => {
     expect(at(1, 500).problem).toMatch(/100 at most/)
     expect(at(0, 3).note).toBe('The rule has no value at n = 0.')
   })
-
-  test('names go to the terms in order', () => {
-    const line = readLine(cleanSettings({ from: '0', to: '1', step: '1/10', equations: [{ text: '1/n', last: 3, names: 'A, , C' }] }))
-    expect(line.rows[0]!.points!.map((p) => p.name)).toEqual(['A', '', 'C'])
-  })
 })
 
-describe('point names', () => {
-  test('go to a points row in the order the points were typed', () => {
-    const line = readLine(cleanSettings({ equations: [{ text: '3, -1, 2', names: 'A, B' }] }))
-    expect(line.rows[0]!.points).toEqual([{ v: 3, name: 'A' }, { v: -1, name: 'B' }, { v: 2, name: '' }])
+describe('point labels', () => {
+  test('are typed before a point, and stay with it', () => {
+    const at = (text: string) => readLine(cleanSettings({ equations: [text] })).rows[0]!.points
+    expect(at('A(3), B(-1), 2')).toEqual([{ v: 3, label: 'A' }, { v: -1, label: 'B' }, { v: 2, label: null }])
+    expect(at("A(3), B(-1.5)")).toEqual([{ v: 3, label: 'A' }, { v: -1.5, label: 'B' }])
+    expect(at('A(3)')).toEqual([{ v: 3, label: 'A' }])
+    expect(at("P_1(1/2), Q'(pi)")).toEqual([{ v: 0.5, label: 'P₁' }, { v: Math.PI, label: 'Q′' }])
+  })
+
+  test('values are written the way their own row was typed', () => {
+    const line = readLine(cleanSettings({ from: '0', to: '1', step: '0.1', equations: ['1/n', '0.35', 'x > 3/8'] }))
+    expect(line.written.find((w) => w.v === 0.35)!.numbering).toBe('decimal')
+    expect(line.written.find((w) => w.v === 3 / 8)!.numbering).toBe('fraction')
+  })
+
+  test('go only on points', () => {
+    const problem = (text: string) => readLine(cleanSettings({ equations: [text] })).rows[0]!.problem
+    expect(problem('A(n)')).toMatch(/Labels go on points/)
+    expect(problem('x < 3')).toBe(null)
+  })
+
+  test('a labeled point’s value isn’t written, and a row can write no values', () => {
+    expect(readLine(cleanSettings({ equations: ['A(0.5), 0.25', 'x > 0.75'] })).written.map((w) => w.v)).toEqual([0.25, 0.75])
+    expect(readLine(cleanSettings({ equations: [{ text: '0.25', values: 'hidden' }, 'x > 0.75'] })).written.map((w) => w.v)).toEqual([0.75])
   })
 })

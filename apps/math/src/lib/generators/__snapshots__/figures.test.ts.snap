@@ -7369,6 +7369,8 @@ exports[`number line >  1`] = `
     "fs": 16,
     "groups": [],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -7632,6 +7634,8 @@ exports[`number line > eq=3&eq=-1%2C%202.5%2C%20pi%2F2 1`] = `
       },
     ],
     "height": 122.8,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -7874,7 +7878,7 @@ exports[`number line > eq=3&eq=-1%2C%202.5%2C%20pi%2F2 1`] = `
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": 3,
         },
       ],
@@ -7897,15 +7901,15 @@ exports[`number line > eq=3&eq=-1%2C%202.5%2C%20pi%2F2 1`] = `
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": -1,
         },
         {
-          "name": "",
+          "label": null,
           "v": 2.5,
         },
         {
-          "name": "",
+          "label": null,
           "v": 1.5707963267948966,
         },
       ],
@@ -7967,6 +7971,8 @@ exports[`number line > eq=a_n%3Da_%7Bn-1%7D%2B3&eq=a_n%3D2k&eq=1%2Fn%7Cfirst%3D4
       },
     ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -8276,6 +8282,8 @@ exports[`number line > eq=x%3C-1%20or%20x%3E%3D3&eq=x!%3D2&eq=x%3D4&eq=all%20rea
       },
     ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -8672,6 +8680,8 @@ exports[`number line > eq=x%3C2%7Ccolor%3Dred&eq=x%3E%3D2%7Ccolor%3Dblue&eq=x%3E
       },
     ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -8944,11 +8954,11 @@ exports[`number line > eq=x%3C2%7Ccolor%3Dred&eq=x%3E%3D2%7Ccolor%3Dblue&eq=x%3E
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": -5,
         },
         {
-          "name": "",
+          "label": null,
           "v": 0,
         },
       ],
@@ -9008,6 +9018,8 @@ exports[`number line > eq=x%3C20&eq=y%3E2%20and%20x%3C3&eq=(1%2C%202)&eq=x%3Cy&e
       },
     ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -9293,6 +9305,8 @@ exports[`number line > every=0 1`] = `
     "fs": 16,
     "groups": [],
     "height": 56,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [],
     "problems": {
       "from": null,
@@ -9425,6 +9439,8 @@ exports[`number line > every=5&from=-20&to=20 1`] = `
     "fs": 16,
     "groups": [],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−20",
@@ -9692,21 +9708,19 @@ exports[`number line > every=5&from=-20&to=20 1`] = `
 }
 `;
 
-exports[`number line > from=-3&to=3&eq=-2.5%2C%201%2C%201.25%7Cnames%3DA%2C%2CC&eq=0.5%7Cpoint%3Dcross%7Cnames%3DP 1`] = `
+exports[`number line > from=-3&to=3&eq=A(-2.5)%2C%201%2C%20C(1.25)&eq=P(0.5)%7Cpoint%3Dcross%7Clabels%3Dcoords%7Ccolor%3Dred&eq=-1.5%7Cvalues%3Dhidden 1`] = `
 {
   "line": {
     "axis": {
       "x1": 16,
       "x2": 660,
-      "y": 49,
+      "y": 52.2,
     },
     "fs": 16,
     "groups": [
       {
         "arrows": [],
-        "crosses": [
-          388,
-        ],
+        "crosses": [],
         "endpoints": [
           {
             "closed": true,
@@ -9720,62 +9734,84 @@ exports[`number line > from=-3&to=3&eq=-2.5%2C%201%2C%201.25%7Cnames%3DA%2C%2CC&
             "closed": true,
             "x": 463,
           },
+          {
+            "closed": true,
+            "x": 188,
+          },
         ],
         "ink": "#111827",
         "segments": [],
       },
+      {
+        "arrows": [],
+        "crosses": [
+          388,
+        ],
+        "endpoints": [],
+        "ink": "#dc2626",
+        "segments": [],
+      },
     ],
-    "height": 102,
+    "height": 105.2,
+    "labelFs": 19.2,
+    "labels": [
+      {
+        "coords": "",
+        "ink": "#111827",
+        "text": "A",
+        "x": 88,
+        "y": 34.32,
+      },
+      {
+        "coords": "(0.5)",
+        "ink": "#dc2626",
+        "text": "P",
+        "x": 388,
+        "y": 34.32,
+      },
+      {
+        "coords": "",
+        "ink": "#111827",
+        "text": "C",
+        "x": 463,
+        "y": 34.32,
+      },
+    ],
     "numbers": [
       {
         "text": "−3",
         "x": 38,
-        "y": 77.6,
+        "y": 80.8,
       },
       {
         "text": "−2",
         "x": 138,
-        "y": 77.6,
+        "y": 80.8,
       },
       {
         "text": "−1",
         "x": 238,
-        "y": 77.6,
+        "y": 80.8,
       },
       {
         "text": "0",
         "x": 338,
-        "y": 77.6,
+        "y": 80.8,
       },
       {
         "text": "1",
         "x": 438,
-        "y": 77.6,
+        "y": 80.8,
       },
       {
         "text": "2",
         "x": 538,
-        "y": 77.6,
+        "y": 80.8,
       },
       {
         "text": "3",
         "x": 638,
-        "y": 77.6,
-      },
-      {
-        "text": "A",
-        "x": 88,
-        "y": 31.6,
-      },
-      {
-        "text": "P",
-        "x": 388,
-        "y": 31.6,
-      },
-      {
-        "text": "C",
-        "x": 463,
-        "y": 31.6,
+        "y": 80.8,
       },
     ],
     "problems": {
@@ -9787,57 +9823,57 @@ exports[`number line > from=-3&to=3&eq=-2.5%2C%201%2C%201.25%7Cnames%3DA%2C%2CC&
     "ticks": [
       {
         "x": 38,
-        "y1": 40,
-        "y2": 58,
+        "y1": 43.2,
+        "y2": 61.2,
       },
       {
         "x": 138,
-        "y1": 40,
-        "y2": 58,
+        "y1": 43.2,
+        "y2": 61.2,
       },
       {
         "x": 238,
-        "y1": 40,
-        "y2": 58,
+        "y1": 43.2,
+        "y2": 61.2,
       },
       {
         "x": 338,
-        "y1": 40,
-        "y2": 58,
+        "y1": 43.2,
+        "y2": 61.2,
       },
       {
         "x": 438,
-        "y1": 40,
-        "y2": 58,
+        "y1": 43.2,
+        "y2": 61.2,
       },
       {
         "x": 538,
-        "y1": 40,
-        "y2": 58,
+        "y1": 43.2,
+        "y2": 61.2,
       },
       {
         "x": 638,
-        "y1": 40,
-        "y2": 58,
+        "y1": 43.2,
+        "y2": 61.2,
       },
     ],
     "width": 676,
   },
-  "query": "from=-3&to=3&eq=-2.5%2C+1%2C+1.25%7Cnames%3DA%2C%2CC&eq=0.5%7Cpoint%3Dcross%7Cnames%3DP",
+  "query": "from=-3&to=3&eq=A%28-2.5%29%2C+1%2C+C%281.25%29&eq=P%280.5%29%7Ccolor%3Dred%7Cpoint%3Dcross%7Clabels%3Dcoords&eq=-1.5%7Cvalues%3Dhidden",
   "rows": [
     {
       "note": null,
       "points": [
         {
-          "name": "A",
+          "label": "A",
           "v": -2.5,
         },
         {
-          "name": "",
+          "label": null,
           "v": 1,
         },
         {
-          "name": "C",
+          "label": "C",
           "v": 1.25,
         },
       ],
@@ -9880,7 +9916,7 @@ exports[`number line > from=-3&to=3&eq=-2.5%2C%201%2C%201.25%7Cnames%3DA%2C%2CC&
       "note": null,
       "points": [
         {
-          "name": "P",
+          "label": "P",
           "v": 0.5,
         },
       ],
@@ -9895,6 +9931,29 @@ exports[`number line > from=-3&to=3&eq=-2.5%2C%201%2C%201.25%7Cnames%3DA%2C%2CC&
           "lo": {
             "closed": true,
             "v": 0.5,
+          },
+        },
+      ],
+    },
+    {
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": -1.5,
+        },
+      ],
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": true,
+            "v": -1.5,
+          },
+          "lo": {
+            "closed": true,
+            "v": -1.5,
           },
         },
       ],
@@ -9927,6 +9986,8 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
       },
     ],
     "height": 122.8,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−3",
@@ -9973,13 +10034,9 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
         "x": 371.33333333333337,
       },
       {
-        "barY": 35.6,
-        "den": "2",
-        "denY": 50.8,
-        "num": "5",
-        "numY": 31.6,
-        "sign": "",
+        "text": "2.5",
         "x": 588,
+        "y": 41.2,
       },
     ],
     "problems": {
@@ -10023,11 +10080,11 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": -1,
         },
         {
-          "name": "",
+          "label": null,
           "v": 2.5,
         },
       ],
@@ -10060,7 +10117,7 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": 0,
         },
       ],
@@ -10083,7 +10140,7 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": 0.3333333333333333,
         },
       ],
@@ -10139,6 +10196,8 @@ exports[`number line > from=-5&to=5&eq=-2%20%3C%20x%20%3C%3D%203 1`] = `
       },
     ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−5",
@@ -10329,6 +10388,8 @@ exports[`number line > from=0&to=1&step=1%2F10&eq=a_n%3D1%2Fn%7Clast%3D6 1`] = `
       },
     ],
     "height": 143.6,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "0",
@@ -10520,27 +10581,27 @@ exports[`number line > from=0&to=1&step=1%2F10&eq=a_n%3D1%2Fn%7Clast%3D6 1`] = `
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": 1,
         },
         {
-          "name": "",
+          "label": null,
           "v": 0.5,
         },
         {
-          "name": "",
+          "label": null,
           "v": 0.3333333333333333,
         },
         {
-          "name": "",
+          "label": null,
           "v": 0.25,
         },
         {
-          "name": "",
+          "label": null,
           "v": 0.2,
         },
         {
-          "name": "",
+          "label": null,
           "v": 0.16666666666666666,
         },
       ],
@@ -10583,6 +10644,8 @@ exports[`number line > from=0&to=2&step=1%2F4&every=2&eq=x%3E3%2F4 1`] = `
       },
     ],
     "height": 143.6,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "0",
@@ -10739,6 +10802,8 @@ exports[`number line > from=0&to=2pi&step=pi%2F4&eq=pi%2F2%3Cx%3C%3D3pi%2F2 1`] 
       },
     ],
     "height": 98.8,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "0",
@@ -10889,7 +10954,7 @@ exports[`number line > from=0&to=2pi&step=pi%2F4&eq=pi%2F2%3Cx%3C%3D3pi%2F2 1`] 
 }
 `;
 
-exports[`number line > from=0&to=10&eq=1%2F3%2C%201%2F2%2C%202%2F3%2C%204.5%7Cnames%3D%2C%2C%2CQ 1`] = `
+exports[`number line > from=0&to=10&eq=1%2F3%2C%201%2F2%2C%202%2F3%2C%20Q_1(4.5) 1`] = `
 {
   "line": {
     "axis": {
@@ -10925,6 +10990,16 @@ exports[`number line > from=0&to=10&eq=1%2F3%2C%201%2F2%2C%202%2F3%2C%204.5%7Cna
       },
     ],
     "height": 163.6,
+    "labelFs": 19.2,
+    "labels": [
+      {
+        "coords": "",
+        "ink": "#111827",
+        "text": "Q₁",
+        "x": 308,
+        "y": 83.91999999999999,
+      },
+    ],
     "numbers": [
       {
         "text": "0",
@@ -10998,11 +11073,6 @@ exports[`number line > from=0&to=10&eq=1%2F3%2C%201%2F2%2C%202%2F3%2C%204.5%7Cna
         "numY": 72.39999999999999,
         "sign": "",
         "x": 78,
-      },
-      {
-        "text": "Q",
-        "x": 308,
-        "y": 82,
       },
       {
         "barY": 35.6,
@@ -11079,25 +11149,25 @@ exports[`number line > from=0&to=10&eq=1%2F3%2C%201%2F2%2C%202%2F3%2C%204.5%7Cna
     ],
     "width": 676,
   },
-  "query": "from=0&eq=1%2F3%2C+1%2F2%2C+2%2F3%2C+4.5%7Cnames%3D%2C%2C%2CQ",
+  "query": "from=0&eq=1%2F3%2C+1%2F2%2C+2%2F3%2C+Q_1%284.5%29",
   "rows": [
     {
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": 0.3333333333333333,
         },
         {
-          "name": "",
+          "label": null,
           "v": 0.5,
         },
         {
-          "name": "",
+          "label": null,
           "v": 0.6666666666666666,
         },
         {
-          "name": "Q",
+          "label": "Q₁",
           "v": 4.5,
         },
       ],
@@ -11150,13 +11220,13 @@ exports[`number line > from=0&to=10&eq=1%2F3%2C%201%2F2%2C%202%2F3%2C%204.5%7Cna
 }
 `;
 
-exports[`number line > from=0&to=10&eq=u_n%3D2n%2B1%7Cfirst%3D0%7Clast%3D8%7Cnames%3DA%2CB%2CC%7Ccolor%3Dpurple 1`] = `
+exports[`number line > from=0&to=10&eq=u_n%3D2n%2B1%7Cfirst%3D0%7Clast%3D8%7Ccolor%3Dpurple%7Cvalues%3Dhidden 1`] = `
 {
   "line": {
     "axis": {
       "x1": 16,
       "x2": 660,
-      "y": 49,
+      "y": 25,
     },
     "fs": 16,
     "groups": [
@@ -11189,77 +11259,64 @@ exports[`number line > from=0&to=10&eq=u_n%3D2n%2B1%7Cfirst%3D0%7Clast%3D8%7Cnam
         "segments": [],
       },
     ],
-    "height": 102,
+    "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "0",
         "x": 38,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "1",
         "x": 98,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "2",
         "x": 158,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "3",
         "x": 218,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "4",
         "x": 278,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "5",
         "x": 338,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "6",
         "x": 398,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "7",
         "x": 458,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "8",
         "x": 518,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "9",
         "x": 578,
-        "y": 77.6,
+        "y": 53.6,
       },
       {
         "text": "10",
         "x": 638,
-        "y": 77.6,
-      },
-      {
-        "text": "A",
-        "x": 98,
-        "y": 31.6,
-      },
-      {
-        "text": "B",
-        "x": 218,
-        "y": 31.6,
-      },
-      {
-        "text": "C",
-        "x": 338,
-        "y": 31.6,
+        "y": 53.6,
       },
     ],
     "problems": {
@@ -11271,85 +11328,85 @@ exports[`number line > from=0&to=10&eq=u_n%3D2n%2B1%7Cfirst%3D0%7Clast%3D8%7Cnam
     "ticks": [
       {
         "x": 38,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 98,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 158,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 218,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 278,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 338,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 398,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 458,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 518,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 578,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
       {
         "x": 638,
-        "y1": 40,
-        "y2": 58,
+        "y1": 16,
+        "y2": 34,
       },
     ],
     "width": 676,
   },
-  "query": "from=0&eq=u_n%3D2n%2B1%7Ccolor%3Dpurple%7Cfirst%3D0%7Clast%3D8%7Cnames%3DA%2CB%2CC",
+  "query": "from=0&eq=u_n%3D2n%2B1%7Ccolor%3Dpurple%7Cvalues%3Dhidden%7Cfirst%3D0%7Clast%3D8",
   "rows": [
     {
       "note": "Terms for n = 5 to 8 are past the end of the line.",
       "points": [
         {
-          "name": "A",
+          "label": null,
           "v": 1,
         },
         {
-          "name": "B",
+          "label": null,
           "v": 3,
         },
         {
-          "name": "C",
+          "label": null,
           "v": 5,
         },
         {
-          "name": "",
+          "label": null,
           "v": 7,
         },
         {
-          "name": "",
+          "label": null,
           "v": 9,
         },
       ],
@@ -11372,6 +11429,8 @@ exports[`number line > from=0&to=1000&step=1 1`] = `
     "fs": 16,
     "groups": [],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -11610,6 +11669,8 @@ exports[`number line > from=x&to=-20&step=-1 1`] = `
     "fs": 16,
     "groups": [],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -11868,6 +11929,8 @@ exports[`number line > inequality=x%3E%3D2 1`] = `
       },
     ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -12145,6 +12208,8 @@ exports[`number line > labelSize=large&from=0&to=2&step=1%2F4&eq=x%3E3%2F4 1`] =
       },
     ],
     "height": 113.52,
+    "labelFs": 26.88,
+    "labels": [],
     "numbers": [
       {
         "text": "0",
@@ -12328,6 +12393,8 @@ exports[`number line > points=cross&eq=3&eq=x%3C1 1`] = `
       },
     ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -12551,7 +12618,7 @@ exports[`number line > points=cross&eq=3&eq=x%3C1 1`] = `
       "note": null,
       "points": [
         {
-          "name": "",
+          "label": null,
           "v": 3,
         },
       ],

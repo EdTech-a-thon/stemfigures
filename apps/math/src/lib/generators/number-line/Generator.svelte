@@ -14,6 +14,7 @@
   import Section from '$lib/shared/Section.svelte'
   import { createHistory } from '$lib/shared/history.svelte.js'
   import { niceText } from '$lib/shared/numbering.js'
+  import NRange from './NRange.svelte'
   import NumberLine from './NumberLine.svelte'
   import { presetStore } from './presets.js'
   import { ROW_DEFAULTS, cleanSettings, readLine, sameFigure, settingsFromParams, settingsToQuery, type Row, type Settings } from './settings.js'
@@ -100,14 +101,18 @@
         <div class="head-row">
           <h2 class="card-head flush">Equations</h2>
           <HelpTip id="equation-tip" label="How to type an equation">
-            Try x &lt; −1 or x ≥ 3, x ≠ 2, all real numbers or no solution, points like 3 or −1, 2.5, π/2, or a sequence like
-            aₙ = 1/n. Type &lt;= for ≤, != for ≠, pi for π, / for a fraction and a_n for aₙ. Leave it empty for a blank line.
+            Try x &lt; −1 or x ≥ 3, x ≠ 2, all real numbers or no solution, points like 3 or −1, 2.5, π/2, labeled points like
+            P(0.35), Q(−2), or a sequence like aₙ = 1/n. Type &lt;= for ≤, != for ≠, pi for π, / for a fraction and _ for a
+            subscript. Leave it empty for a blank line.
           </HelpTip>
         </div>
         {#each settings.equations as row, i}
           {@const read = line.rows[i]}
           <div class="row">
-            <RowStyle {row} id="eq-{i}-style" label="equation {i + 1}" isPoints={!!read?.points || !!read?.sequence} colorOnly />
+            <RowStyle
+              {row} id="eq-{i}-style" label="equation {i + 1}" colorOnly
+              isPoints={!!read?.points || !!read?.sequence} canLabel={!read?.sequence} labelExample="A(0.35)"
+            />
             <MathInput
               kind="inequality"
               id="eq-{i}"
@@ -119,21 +124,8 @@
             />
             <button class="icon-btn" aria-label="Remove equation {i + 1}" data-tip="Remove" onclick={() => removeRow(i)}><X size={17} /></button>
           </div>
-          {#if read?.sequence || read?.points}
-            <div class="row-extra">
-              {#if read.sequence}
-                <span class="terms">
-                  n from
-                  <input type="number" step="1" aria-label="Equation {i + 1}: first n" bind:value={row.first} />
-                  to
-                  <input type="number" step="1" aria-label="Equation {i + 1}: last n" bind:value={row.last} />
-                </span>
-              {/if}
-              <label class="names">
-                Names
-                <input type="text" placeholder="A, B, C" aria-label="Equation {i + 1}: point names" bind:value={row.names} />
-              </label>
-            </div>
+          {#if read?.sequence}
+            <div class="row-extra"><NRange bind:first={row.first} bind:last={row.last} label="Equation {i + 1}" /></div>
           {/if}
           {#if read?.problem}<p id="eq-{i}-problem" class="help problem">{read.problem}</p>{/if}
           {#if read?.note}<p class="help">{read.note}</p>{/if}
@@ -206,14 +198,7 @@
   .row > :global(.caret-field) { flex: 1; min-width: 0; margin-right: 0.2rem; }
   .equations .help { margin: -0.2rem 0 0; }
   /* Under a points or sequence row, lined up with its math field. */
-  .row-extra {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.9rem; margin: -0.15rem 0 0 calc(2.86rem + 0.25rem);
-    font-size: 0.85rem; font-weight: 600; color: var(--muted);
-  }
-  .terms, .names { display: inline-flex; align-items: center; gap: 0.35rem; }
-  .terms input { width: 3.6rem; }
-  .names { flex: 1; min-width: 9rem; }
-  .names input { flex: 1; min-width: 0; }
+  .row-extra { display: flex; margin: -0.15rem 2.2rem 0 calc(2.86rem + 0.25rem); }
   .add {
     align-self: flex-start; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.6rem;
     border: 1.5px dashed var(--border); border-radius: 999px; background: none; color: var(--blue-dark); font-weight: 700; font-size: 0.85rem;

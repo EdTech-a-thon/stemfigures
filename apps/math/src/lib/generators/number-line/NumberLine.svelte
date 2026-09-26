@@ -8,6 +8,7 @@
 
   const g = $derived(buildLine(settings))
   const SANS = 'Arial, Helvetica, sans-serif'
+  const SERIF = "'Times New Roman', Times, serif"
 </script>
 
 <svg
@@ -65,6 +66,15 @@
     {/each}
   </g>
 
+  <!-- Point labels, as on the coordinate grid: the letter in italic serif, a value after it upright. -->
+  <g font-size={g.labelFs} font-weight="bold" text-anchor="middle" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
+    {#each g.labels as l}
+      <text x={l.x} y={l.y} fill={l.ink}
+        ><tspan font-family={SERIF} font-style="italic">{l.text}</tspan
+        >{#if l.coords}<tspan font-family={SANS} font-size={g.fs}>{l.coords}</tspan>{/if}</text
+      >
+    {/each}
+  </g>
 </svg>
 
 <style>
