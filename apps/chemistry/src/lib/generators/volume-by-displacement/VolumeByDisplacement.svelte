@@ -8,7 +8,7 @@
   import MagnifierSettings from '$lib/shared/MagnifierSettings.svelte'
   import ReadingField from '$lib/shared/ReadingField.svelte'
   import Section from '$lib/shared/Section.svelte'
-  import { generatorState } from '$lib/shared/generatorState.svelte'
+  import { generatorState } from '$shared/generatorState.svelte'
   import { massSettings } from '../mass-reading/settings'
   import { LIQUID_TINTS, LIQUID_TINT_NAMES } from '../volume-reading/liquid'
   import { formatReading, type CylinderSize } from '../volume-reading/scale'

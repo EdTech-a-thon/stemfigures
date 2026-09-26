@@ -7,7 +7,7 @@
   import MagnifierSettings from '$lib/shared/MagnifierSettings.svelte'
   import ReadingField from '$lib/shared/ReadingField.svelte'
   import Section from '$lib/shared/Section.svelte'
-  import { generatorState } from '$lib/shared/generatorState.svelte'
+  import { generatorState } from '$shared/generatorState.svelte'
   import { MAGNIFIER_VIEW_NAMES } from '$lib/shared/magnify'
   import PhFigure from './PhFigure.svelte'
   import { DIGITAL_DECIMALS, PH_INSTRUMENTS, PH_MAX, PH_MIN, phRules, type PhInstrument } from './readings'

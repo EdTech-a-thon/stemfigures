@@ -4,9 +4,9 @@
   // wrong one on purpose (CONTEXT.md "Bohr model").
   import { Atom, CircleDot, Dices, List, Palette, Type, WandSparkles } from '@lucide/svelte'
   import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
-  import LabelField from '$lib/shared/LabelField.svelte'
+  import LabelField from '$shared/LabelField.svelte'
   import Section from '$lib/shared/Section.svelte'
-  import { generatorState } from '$lib/shared/generatorState.svelte'
+  import { generatorState } from '$shared/generatorState.svelte'
   import BohrFigure from './BohrFigure.svelte'
   import LookSettings from './LookSettings.svelte'
   import { MAX_Z, element, groundStateShells } from './elements'

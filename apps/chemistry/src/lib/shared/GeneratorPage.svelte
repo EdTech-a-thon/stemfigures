@@ -4,8 +4,8 @@
   // filling the rest of the window. Phones stack them, figure first.
   import type { Snippet } from 'svelte'
   import FigureCanvas from './FigureCanvas.svelte'
-  import Presets from './Presets.svelte'
-  import type { generatorState } from './generatorState.svelte'
+  import Presets from '$shared/Presets.svelte'
+  import type { generatorState } from '$shared/generatorState.svelte'
 
   interface Props {
     name: string

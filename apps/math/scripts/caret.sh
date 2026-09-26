@@ -1,10 +1,10 @@
 #!/bin/sh
 # Rebuild Caret from a local clone and pack it into vendor/, where package.json
 # points. See docs/adr/0002-caret-for-math-input.md.
-#   npm run caret                  # uses ../caret
+#   npm run caret                  # uses a caret clone beside the stemfigures repo
 #   CARET=~/src/caret npm run caret
 set -e
-CARET="${CARET:-$(dirname "$0")/../../caret}"
+CARET="${CARET:-$(dirname "$0")/../../../../caret}"
 VENDOR="$(cd "$(dirname "$0")/../vendor" && pwd)"
 cd "$CARET"
 pnpm install --frozen-lockfile

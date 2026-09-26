@@ -3,7 +3,7 @@
   // the two look alike: a short message, the address with a copy button (many
   // school computers have no email app), and a button that opens an email.
   import { Check, Copy, Mail } from '@lucide/svelte'
-  import Modal from '$lib/shared/Modal.svelte'
+  import Modal from '$shared/Modal.svelte'
   import type { Snippet } from 'svelte'
   import { SUPPORT_EMAIL } from './config'
 

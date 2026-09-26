@@ -5,7 +5,8 @@ figures that teachers paste into tests, worksheets and slides. Live at
 **https://stemfigures.com**, a teacher.dev project. See `CONTEXT.md` for the
 vocabulary and `docs/adr/` for decisions.
 
-The family's figure sites, each its own repo and domain:
+The family's figure sites, each its own app in this monorepo (`apps/`) and
+its own domain:
 
 - [Math Figures](https://mathfigures.com)
 - [Physics Figures](https://physicsfigures.com)
@@ -27,18 +28,18 @@ Searching every generator across the family from here is planned; see
 src/routes/            SvelteKit pages
 src/lib/sites.ts       every figure site in the family
 src/lib/site/          top bar, footer, SEO, site config
-static/sites/          each figure site's favicon, copied from its repo
+static/sites/          each figure site's favicon, copied from its app
 ```
 
-To add a figure site: copy its `static/favicon.svg` to `static/sites/`, add
+To add a figure site: copy its `apps/<site>/static/favicon.svg` to `static/sites/`, add
 one entry to `src/lib/sites.ts`, and add STEM Figures' link to that site's
 `SISTER_SITES`.
 
 ## Development
 
 ```bash
-npm install
-../scripts/agent-dev.mjs stemfigures --no-pocketbase   # from the workspace, never npm run dev directly
+npm install   # once, from the stemfigures repo root (npm workspaces)
+../../../scripts/agent-dev.mjs stemfigures/apps/stem --no-pocketbase   # from the workspace, never npm run dev directly
 npm run check   # svelte-check
 npm run build
 ```

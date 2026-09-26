@@ -6,7 +6,7 @@
   import { Copy, FileDown, ImageDown, Redo2, Share, Undo2 } from '@lucide/svelte'
   import type { Snippet } from 'svelte'
   import { copyPng, downloadPng, downloadSvg } from './exporting'
-  import type { createHistory } from './history.svelte'
+  import type { createHistory } from '$shared/history.svelte'
 
   interface Props {
     svg: SVGSVGElement | undefined

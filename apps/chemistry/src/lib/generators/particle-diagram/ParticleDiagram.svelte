@@ -4,9 +4,9 @@
   // or pick one or two atoms or ions and get them packed in a lattice.
   import { Atom, Dices, Grid3x3, LayoutGrid, List, Plus, Square, Trash2, Type } from '@lucide/svelte'
   import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
-  import LabelField from '$lib/shared/LabelField.svelte'
+  import LabelField from '$shared/LabelField.svelte'
   import Section from '$lib/shared/Section.svelte'
-  import { generatorState } from '$lib/shared/generatorState.svelte'
+  import { generatorState } from '$shared/generatorState.svelte'
   import LookSettings from './LookSettings.svelte'
   import ParticleFigure from './ParticleFigure.svelte'
   import ShapePicker from './ShapePicker.svelte'

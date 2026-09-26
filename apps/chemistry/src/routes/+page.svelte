@@ -5,7 +5,7 @@
   import { Plus, Search } from '@lucide/svelte'
   import { searchGenerators } from '$lib/generators/index'
   import Seo from '$lib/site/Seo.svelte'
-  import { openRequest } from '$lib/site/request.svelte'
+  import { openRequest } from '$shared/request.svelte'
 
   let query = $state('')
   const results = $derived(searchGenerators(query))

@@ -2,7 +2,7 @@
   // Request a generator: the same dialog as Help, with its own wording. Opened
   // from the search box or the directory through openRequest().
   import EmailDialog from './EmailDialog.svelte'
-  import { request } from './request.svelte'
+  import { request } from '$shared/request.svelte'
 
   const subject = $derived(request.topic ? `Generator request: ${request.topic}` : 'Generator request')
   const body = $derived(request.topic ? `I'd like a generator for: ${request.topic}\n\n` : '')

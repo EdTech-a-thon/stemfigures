@@ -1,7 +1,7 @@
 <script lang="ts">
   // Settings for the chart title and the answer key line. `answer` is the
   // line as it would print, e.g. "Reading: 23.47 mL".
-  import LabelField from './LabelField.svelte'
+  import LabelField from '$shared/LabelField.svelte'
 
   interface Props {
     titleMode: 'none' | 'text'

@@ -7,7 +7,7 @@
   import MagnifierSettings from '$lib/shared/MagnifierSettings.svelte'
   import ReadingField from '$lib/shared/ReadingField.svelte'
   import Section from '$lib/shared/Section.svelte'
-  import { generatorState } from '$lib/shared/generatorState.svelte'
+  import { generatorState } from '$shared/generatorState.svelte'
   import MassFigure from './MassFigure.svelte'
   import { MARBLE_COUNTS, OBJECTS, OBJECT_NAMES, objectName } from '../volume-by-displacement/objects'
   import { DECIMAL_PLACES, PAN_CONTENTS, type PanContents } from './digital'

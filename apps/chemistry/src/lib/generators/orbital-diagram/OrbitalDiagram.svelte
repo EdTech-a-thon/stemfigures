@@ -7,7 +7,7 @@
   import FigureTextSettings from '$lib/shared/FigureTextSettings.svelte'
   import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
   import Section from '$lib/shared/Section.svelte'
-  import { generatorState } from '$lib/shared/generatorState.svelte'
+  import { generatorState } from '$shared/generatorState.svelte'
   import OrbitalEditor from './OrbitalEditor.svelte'
   import OrbitalFigure from './OrbitalFigure.svelte'
   import { VERDICT_NAMES } from './check'

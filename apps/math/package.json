@@ -27,6 +27,7 @@
     "@caret-js/core": "file:vendor/caret-js-core-0.0.0.tgz",
     "@caret-js/math": "file:vendor/caret-js-math-0.0.0.tgz",
     "@caret-js/svelte": "file:vendor/caret-js-svelte-0.0.0.tgz",
-    "@lucide/svelte": "^1.47.0"
+    "@lucide/svelte": "^1.47.0",
+    "@stemfigures/shared": "*"
   }
 }

@@ -1,9 +1,15 @@
 node_modules
 out
 dist
+dist-ssr
 .svelte-kit/
 .vercel
 *.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
 
 # dotenv environment variable files
 .env
@@ -14,3 +20,11 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.sw?
+
+.scratch

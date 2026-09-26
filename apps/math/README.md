@@ -38,6 +38,7 @@ src/routes/            SvelteKit pages
 src/lib/site/          top bar, directory dialogs, Help, footer, SEO
 src/lib/shared/        pieces every generator uses: figure card and toolbar,
                        undo history, presets, dialogs, fields, end-cap picker
+$shared/               ../../packages/shared: pieces shared with the other sites
 src/lib/generators/    index.ts lists every generator; one folder each
 ```
 
@@ -48,8 +49,8 @@ under `src/routes/`. The directory, search and sitemap pick it up from the list.
 ## Development
 
 ```bash
-npm install
-npm run dev
+npm install   # once, from the stemfigures repo root (npm workspaces)
+../../../scripts/agent-dev.mjs stemfigures/apps/math   # from the workspace, never npm run dev directly
 npm run check   # svelte-check: strict TypeScript across .ts and .svelte files
 npm test        # unit tests and figure snapshots
 npm run build

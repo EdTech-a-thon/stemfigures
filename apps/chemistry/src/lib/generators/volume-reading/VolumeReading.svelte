@@ -7,7 +7,7 @@
   import MagnifierSettings from '$lib/shared/MagnifierSettings.svelte'
   import ReadingField from '$lib/shared/ReadingField.svelte'
   import Section from '$lib/shared/Section.svelte'
-  import { generatorState } from '$lib/shared/generatorState.svelte'
+  import { generatorState } from '$shared/generatorState.svelte'
   import { MAGNIFIER_VIEW_NAMES } from '$lib/shared/magnify'
   import VolumeFigure from './VolumeFigure.svelte'
   import { LIQUID_TINTS, LIQUID_TINT_NAMES } from './liquid'

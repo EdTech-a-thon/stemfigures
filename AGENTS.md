@@ -15,3 +15,10 @@ This project was created as a prototype during the 3-day "EdTech-a-thon" event b
 - UI / Styling: Tailwind CSS
 - UI Rendering Method: Prefer DOM elements over canvas when possible for the sake of accessibility, using canvas only when it is unreasonable not to
 - Data & Persistence: Follow this hierarchy — no data, then `localStorage`, then Supabase only if real accounts or shared persistence are strictly necessary
+
+### STEM Figures monorepo
+
+- Every site is an app under `apps/`, each deployed as its own Vercel project with that folder as its Root Directory. Keep each site's behavior independent: a change to one app must not change another site.
+- Install once at the repo root (`npm install`); npm workspaces link `apps/*` and `packages/*`. Don't add per-app lockfiles.
+- Code used by more than one site lives in `packages/shared` and is imported as `$shared/...`. Changing a file there changes every site that imports it, so check and build each of those apps. A site that needs a different version keeps its own copy in its `src/lib/`.
+- Start an app with `./scripts/agent-dev.mjs stemfigures/apps/<app>` from the workspace root.
