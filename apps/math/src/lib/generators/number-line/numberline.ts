@@ -3,11 +3,12 @@
 // into a worksheet at the same width; the SVG scales to fit wherever it's shown.
 
 import { niceLabel, numberLabel, type Label } from '$lib/shared/numbering.js'
+import { LABEL_SCALE } from '$lib/shared/labelSize.js'
 import { COLORS } from '$lib/shared/rowStyle.js'
 import { readLine, type Settings } from './settings.js'
 
 export const LINE = 600
-const FS = 16 // number font size
+const BASE_FS = 16 // number font size, at medium labels
 const PAD = 16
 const EXT = 22 // how far the line runs past its last tick, to its arrow
 const RAY_EXT = 46 // the same where the graph runs off that end, to fit its arrow too
@@ -17,12 +18,9 @@ const RAY_HALF = 9 // half its width
 const TICK = 9 // half height of a numbered tick
 const MINOR = 5 // half height of the ticks between numbers
 const R = 6.5 // endpoint circle radius
-const CHAR = FS * 0.6 // rough width of one digit
 const LEVEL_GAP = 4 // between two rows of numbers above the line
 const LABEL_GAP = 6 // the least room between two numbers side by side
 const EPS = 1e-9
-
-const labelWidth = (l: Label) => (l.text ?? (l.num!.length > l.den!.length ? l.num : l.den) + l.sign!).length * CHAR
 
 /** A number line laid out for NumberLine.svelte to draw. */
 export type LineLayout = ReturnType<typeof buildLine>
@@ -33,6 +31,9 @@ type LineNumber =
   | { x: number; sign: string; num: string; den: string; numY: number; barY: number; denY: number; text?: undefined; y?: undefined }
 
 export function buildLine(s: Settings) {
+  const FS = BASE_FS * LABEL_SCALE[s.labelSize]
+  const CHAR = FS * 0.6 // rough width of one digit
+  const labelWidth = (l: Label) => (l.text ?? (l.num!.length > l.den!.length ? l.num : l.den) + l.sign!).length * CHAR
   const { range, numbering, endpointNumbering, groups, problems } = readLine(s)
   const { from, to, step } = range
   const x = (v: number) => L + ((v - from) / (to - from)) * LINE

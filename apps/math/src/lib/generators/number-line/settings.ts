@@ -5,6 +5,7 @@
 // "-2 < x <= 5", "3, -1", "aₙ = 1/n"); readLine() works out what they mean.
 
 import { niceText, numberingOf, type Numbering } from '$lib/shared/numbering.js'
+import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
 import { COLORS, POINT_STYLES, type Color, type PointStyle } from '$lib/shared/rowStyle.js'
 import { parseInequality, parseNumber, parseSequence, type Interval } from './inequality.js'
 
@@ -28,6 +29,7 @@ export type Settings = {
   to: string
   step: string
   every: number
+  labelSize: LabelSize
   equations: Row[]
 }
 /** Settings as they may arrive: from a form, a link, or a preset stored by an older version. */
@@ -38,6 +40,7 @@ export const DEFAULT_SETTINGS: Settings = {
   to: '10',
   step: '1',
   every: 1,
+  labelSize: 'medium', // how big the numbers are (see labelSize.ts)
   equations: [], // what's graphed, one row each: an equation or inequality, points, or a sequence
 }
 
@@ -98,6 +101,7 @@ export function cleanSettings(s: RawSettings): Settings {
     to: text(s.to, d.to),
     step: text(s.step, d.step),
     every: oneOf(EVERY, Number(s.every), d.every),
+    labelSize: cleanLabelSize(s.labelSize),
     equations: equations.map((e) => cleanRow(e, s.points)),
   }
 }

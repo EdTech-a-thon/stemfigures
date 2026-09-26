@@ -4,16 +4,23 @@
   // its own line on the figure. It opens a small popup to change those. Fixed-position like
   // CapPicker's menu, so the scrolling settings column can't clip it.
   import { tick } from 'svelte'
-  import { ARROWS, COLORS, LINE_STYLES, POINT_STYLES, type Arrows, type Color, type LineStyle, type PointStyle } from './rowStyle.js'
+  import {
+    ARROWS, ASYMPTOTES, COLORS, ENDPOINTS, LINE_STYLES, NAME_STYLES, POINT_STYLES,
+    type Arrows, type AsymptoteStyle, type Color, type Endpoints, type LineStyle, type NameStyle, type PointStyle,
+  } from './rowStyle.js'
 
-  type Styled = { color: Color; point: PointStyle; line?: LineStyle; arrows?: Arrows }
+  // What a row style can hold. A number line row uses only its color and point mark.
+  type Styled = { color: Color; point: PointStyle; line?: LineStyle; arrows?: Arrows; names?: unknown; ends?: Endpoints; asym?: AsymptoteStyle }
 
-  // row: { color, point, and line and arrows unless colorOnly }, edited in place.
-  // isPoints: only color and point apply. colorOnly: a number line's equation,
-  // whose line and arrows carry meaning, so only its color can change.
+  // row: { color, line, arrows, point, … }, edited in place. isPoints: only color, point and names apply.
+  // hasDomain: the row's line stops at a domain, so it can show endpoints. hasAsymptotes: its curve has some to show.
+  // colorOnly: a number line's row, whose line, arrows and circles carry meaning, so only its color
+  // (and a point mark, for points) can change.
   let {
-    row, label, id, isPoints = false, colorOnly = false,
-  }: { row: Styled; label: string; id: string; isPoints?: boolean; colorOnly?: boolean } = $props()
+    row, label, id, isPoints = false, hasDomain = false, hasAsymptotes = false, colorOnly = false,
+  }: {
+    row: Styled; label: string; id: string; isPoints?: boolean; hasDomain?: boolean; hasAsymptotes?: boolean; colorOnly?: boolean
+  } = $props()
 
   let open = $state(false)
   let root = $state<HTMLElement>()
@@ -106,6 +113,26 @@
   </svg>
 {/snippet}
 
+{#snippet endsIcon(style: Endpoints)}
+  <svg viewBox="0 0 28 12" width="28" height="12" aria-hidden="true" stroke="currentColor" stroke-width="2">
+    {#if style === 'shown'}
+      <line x1="7" y1="6" x2="21" y2="6" />
+      <circle cx="5" cy="6" r="3" fill="currentColor" />
+      <circle cx="23" cy="6" r="3" fill="#fff" />
+    {:else}
+      <line x1="3" y1="6" x2="25" y2="6" />
+    {/if}
+  </svg>
+{/snippet}
+
+{#snippet asymIcon(style: AsymptoteStyle)}
+  <svg viewBox="0 0 28 12" width="28" height="12" aria-hidden="true" fill="none" stroke="currentColor">
+    <path d="M4,11 Q9,10 11,1" stroke-width="2" />
+    <path d="M17,1 Q19,10 24,11" stroke-width="2" />
+    {#if style === 'shown'}<line x1="14" y1="0" x2="14" y2="12" stroke-width="1.6" stroke-dasharray="0.01 3" stroke-linecap="round" />{/if}
+  </svg>
+{/snippet}
+
 {#snippet arrowIcon(ends: Arrows)}
   <svg viewBox="0 0 28 12" width="28" height="12" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="2">
     <line x1={ends === 'both' || ends === 'left' ? 8 : 3} y1="6" x2={ends === 'both' || ends === 'right' ? 20 : 25} y2="6" />
@@ -167,6 +194,19 @@
             {/each}
           </div>
         </div>
+
+        {#if !colorOnly}
+          <div class="group">
+            <span class="name" id="{id}-names">Point names <span class="hint">like A(2, 3)</span></span>
+            <div class="segmented" role="radiogroup" aria-labelledby="{id}-names">
+              {#each (Object.entries(NAME_STYLES) as [NameStyle, string][]) as [v, name]}
+                <button type="button" role="radio" aria-checked={row.names === v} class="words" class:on={row.names === v} onclick={() => (row.names = v)}>
+                  {v === 'name' ? 'A' : 'A(2, 3)'}<span class="visually-hidden"> ({name})</span>
+                </button>
+              {/each}
+            </div>
+          </div>
+        {/if}
       {:else if !colorOnly}
         <div class="group">
           <span class="name" id="{id}-line">Line</span>
@@ -178,6 +218,32 @@
             {/each}
           </div>
         </div>
+
+        {#if hasDomain}
+          <div class="group">
+            <span class="name" id="{id}-ends">Endpoints</span>
+            <div class="segmented" role="radiogroup" aria-labelledby="{id}-ends">
+              {#each (Object.entries(ENDPOINTS) as [Endpoints, string][]) as [v, name]}
+                <button type="button" role="radio" aria-checked={row.ends === v} aria-label={name} title={name} class:on={row.ends === v} onclick={() => (row.ends = v)}>
+                  {@render endsIcon(v)}
+                </button>
+              {/each}
+            </div>
+          </div>
+        {/if}
+
+        {#if hasAsymptotes}
+          <div class="group">
+            <span class="name" id="{id}-asym">Asymptotes</span>
+            <div class="segmented" role="radiogroup" aria-labelledby="{id}-asym">
+              {#each (Object.entries(ASYMPTOTES) as [AsymptoteStyle, string][]) as [v, name]}
+                <button type="button" role="radio" aria-checked={row.asym === v} aria-label={name} title={name} class:on={row.asym === v} onclick={() => (row.asym = v)}>
+                  {@render asymIcon(v)}
+                </button>
+              {/each}
+            </div>
+          </div>
+        {/if}
 
         <div class="group">
           <span class="name" id="{id}-arrows">Arrows</span>
@@ -229,4 +295,6 @@
   .swatch[aria-checked='true'] { box-shadow: 0 0 0 2px var(--blue); }
   .swatch:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--blue), 0 0 0 4px var(--blue-border); }
   .segmented button { display: inline-grid; place-items: center; padding: 0.3rem 0.45rem; }
+  .segmented button.words { display: inline-block; padding: 0.3rem 0.6rem; font: italic 700 0.9rem 'Times New Roman', Times, serif; }
+  .name .hint { font-weight: 400; }
 </style>

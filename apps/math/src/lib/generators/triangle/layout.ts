@@ -8,12 +8,13 @@
 // directions (along and across a side, say), so it follows the part when the
 // triangle is turned, flipped or reshaped.
 
+import { LABEL_SCALE } from '$lib/shared/labelSize.js'
 import { layoutMath, type MathBox } from '$lib/shared/mathSvg.js'
 import { ANGLES, OPPOSITE, sideOf, type Part, type Side, type Solved, type Vertex } from './solve.js'
 import { readMoved, type LineStyle, type Offset, type Settings } from './settings.js'
 
-export const FS = 20 // label font size
-const NAME_FS = 21
+const BASE_FS = 20 // label font size, at medium labels
+const BASE_NAME_FS = 21
 const FIT_W = 440
 const FIT_H = 320
 const PAD = 12
@@ -51,6 +52,8 @@ export type TriangleLayout = ReturnType<typeof buildTriangle>
  * @param given    the measures as typed numbers, null where solved
  */
 export function buildTriangle(s: Settings, triangle: Pick<Solved, 'angles' | 'sides' | 'sized'>, given: Record<Part, number | null>) {
+  const FS = BASE_FS * LABEL_SCALE[s.labelSize]
+  const NAME_FS = BASE_NAME_FS * LABEL_SCALE[s.labelSize]
   const { angles, sides, sized } = triangle
   const name = (v: Vertex) => s[`name${v}`].trim()
 

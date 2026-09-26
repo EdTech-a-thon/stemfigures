@@ -39,6 +39,14 @@
 
   <rect width={g.width} height={g.height} fill="#fff" />
 
+  <!-- Minor gridlines: thin and faint, under the block lines. -->
+  {#if g.minorV.length}
+    <g stroke="#9ca3af" stroke-width="0.5">
+      {#each g.minorV as x}<line x1={x} y1={g.grid.y} x2={x} y2={g.grid.y + g.grid.h} />{/each}
+      {#each g.minorH as y}<line x1={g.grid.x} y1={y} x2={g.grid.x + g.grid.w} y2={y} />{/each}
+    </g>
+  {/if}
+
   <g stroke={INK} stroke-width="1" shape-rendering="crispEdges">
     {#each g.vLines as x}<line x1={x} y1={g.grid.y} x2={x} y2={g.grid.y + g.grid.h} />{/each}
     {#each g.hLines as y}<line x1={g.grid.x} y1={y} x2={g.grid.x + g.grid.w} y2={y} />{/each}
@@ -55,9 +63,17 @@
     />
   </g>
 
+  <!-- Asymptotes: dots on a white band, so one lying along a gridline doesn't disappear into it. -->
+  {#each g.asymptotes as a}
+    <path d={a.d} fill="none" stroke="#fff" stroke-width="3.2" />
+    <path d={a.d} fill="none" stroke={a.color} stroke-width="2.8" stroke-dasharray="0.01 7" stroke-linecap="round" />
+  {/each}
   {#each g.lines as l}
     <path d={l.d} fill="none" stroke={l.color} stroke-width={l.width} stroke-dasharray={l.dash} stroke-linecap={l.cap} stroke-linejoin="round" />
     {#each l.heads as d}<path {d} fill={l.color} />{/each}
+  {/each}
+  {#each g.circles as c}
+    <circle cx={c.x} cy={c.y} r={g.r} fill={c.closed ? c.color : '#fff'} stroke={c.color} stroke-width="2.5" />
   {/each}
   {#each g.dots as d}
     {#if d.cross}
@@ -66,6 +82,16 @@
       <circle cx={d.x} cy={d.y} r="4.5" fill={d.color} />
     {/if}
   {/each}
+
+  <!-- Point names: the letter in italic serif, like the axis labels; coordinates upright. -->
+  <g font-size={g.fs * 1.2} font-weight="bold" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
+    {#each g.pointNames as p}
+      <text x={p.x} y={p.y} fill={p.color}
+        ><tspan font-family={SERIF} font-style="italic">{p.name}</tspan
+        >{#if p.coords}<tspan font-family={SANS} font-size={g.fs}>{p.coords}</tspan>{/if}</text
+      >
+    {/each}
+  </g>
 
   <g font-family={SANS} font-size={g.fs} font-weight="bold" fill={INK} stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
     {#each g.numbers as n}<text x={n.x} y={n.y} text-anchor={n.anchor}>{n.text}</text>{/each}
