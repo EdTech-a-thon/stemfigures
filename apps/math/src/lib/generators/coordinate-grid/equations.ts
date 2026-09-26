@@ -35,6 +35,8 @@ export const POINT_STYLES = { dot: 'Dot', cross: 'Cross' }
 export const NAME_STYLES = { name: 'Name', coords: 'Name and coordinates' }
 // Whether a line with a domain shows open and closed circles at its ends, or just stops.
 export const ENDPOINTS = { shown: 'Show endpoints', hidden: 'No endpoints' }
+// Whether a curve's asymptotes are drawn as dotted lines. Hidden unless asked, so a test can ask for them.
+export const ASYMPTOTES = { hidden: 'No asymptotes', shown: 'Show asymptotes' }
 
 export type Color = keyof typeof COLORS
 export type LineStyle = keyof typeof LINE_STYLES
@@ -42,12 +44,13 @@ export type Arrows = keyof typeof ARROWS
 export type PointStyle = keyof typeof POINT_STYLES
 export type NameStyle = keyof typeof NAME_STYLES
 export type Endpoints = keyof typeof ENDPOINTS
+export type AsymptoteStyle = keyof typeof ASYMPTOTES
 /** One equation row: what's typed, and how it's drawn. */
-export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle; names: NameStyle; ends: Endpoints }
+export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle; names: NameStyle; ends: Endpoints; asym: AsymptoteStyle }
 
-export const ROW_DEFAULTS: Row = { text: '', color: 'black', line: 'solid', arrows: 'both', point: 'dot', names: 'name', ends: 'shown' }
+export const ROW_DEFAULTS: Row = { text: '', color: 'black', line: 'solid', arrows: 'both', point: 'dot', names: 'name', ends: 'shown', asym: 'hidden' }
 
-const STYLE_KEYS = { color: COLORS, line: LINE_STYLES, arrows: ARROWS, point: POINT_STYLES, names: NAME_STYLES, ends: ENDPOINTS }
+const STYLE_KEYS = { color: COLORS, line: LINE_STYLES, arrows: ARROWS, point: POINT_STYLES, names: NAME_STYLES, ends: ENDPOINTS, asym: ASYMPTOTES }
 type StyleKey = keyof typeof STYLE_KEYS
 
 /** A point, in the grid's own values, and its point name if it has one (A, B′). */
@@ -64,9 +67,9 @@ export type Circle = Point & { closed: boolean; end?: boolean }
 export type Curve = { f: (x: number) => number | null; divisors: ((x: number) => number | null)[] }
 /** One row, read: what it draws, or a problem for the settings panel. */
 export type ReadRow =
-  | { problem: string; runs?: undefined; points?: undefined; circles?: undefined }
-  | { runs: Run[]; circles: Circle[]; problem?: undefined; points?: undefined }
-  | { points: Point[]; problem: string | null; runs?: undefined; circles?: undefined }
+  | { problem: string; runs?: undefined; points?: undefined; circles?: undefined; asymptotes?: undefined }
+  | { runs: Run[]; circles: Circle[]; asymptotes: Line[]; problem?: undefined; points?: undefined }
+  | { points: Point[]; problem: string | null; runs?: undefined; circles?: undefined; asymptotes?: undefined }
 
 /** A row from a form, a stored preset or an older link (just its text). */
 export function cleanRow(r: any): Row {
@@ -360,10 +363,11 @@ function zerosOf(g: (x: number) => number | null, a: number, b: number, n = 960)
 
 /**
  * Where y = f(x) breaks inside the box's x-values, found where something it
- * divides by is 0: holes, where the curve carries on across one missing
- * point (drawn as an open circle), and asymptotes and jumps, where it doesn't.
+ * divides by (or takes the log of) is 0: holes, where the curve carries on
+ * across one missing point (drawn as an open circle), vertical asymptotes
+ * (poles), and jumps.
  */
-export function breaksOf(curve: Curve, box: Box): { holes: Point[]; at: number[] } {
+export function breaksOf(curve: Curve, box: Box): { holes: Point[]; at: number[]; poles: number[] } {
   const { f } = curve
   const w = box.x1 - box.x0
   const h = box.y1 - box.y0
@@ -373,20 +377,66 @@ export function breaksOf(curve: Curve, box: Box): { holes: Point[]; at: number[]
   }
   const holes: Point[] = []
   const at: number[] = []
+  const poles: number[] = []
   const d = w * 1e-7
-  // Blows up toward r from one side: an asymptote.
-  const blows = (v: number | null, farther: number | null) => v !== null && farther !== null && Math.abs(v) > h && Math.abs(v) > 3 * Math.abs(farther)
+  // Still heading away as it nears r from one side, as 1/x and ln x do: an
+  // asymptote. (A curve that carries on settles down that close to r.)
+  const blows = (v: number | null, farther: number | null) => v !== null && farther !== null && Math.abs(v) > Math.abs(farther) && Math.abs(v - farther) > h * 1e-3
   for (const r of found.sort((p, q) => p - q)) {
     const [l, rt] = [f(r - d), f(r + d)]
-    if (blows(l, f(r - 10 * d)) || blows(rt, f(r + 10 * d))) at.push(r)
+    if (blows(l, f(r - 10 * d)) || blows(rt, f(r + 10 * d))) {
+      at.push(r)
+      poles.push(r)
+    }
     // Dividing by 0 leaves it undefined at r, even where the curve carries on
     // across (and r is only found to within rounding, so f(r) may not say so).
     else if (l !== null && rt !== null && Math.abs(l - rt) < h * 1e-4) {
       at.push(r)
       holes.push({ x: r, y: (l + rt) / 2 })
-    } else if (l !== null || rt !== null) at.push(r)
+    } else if (l !== null && rt !== null) at.push(r)
   }
-  return { holes: holes.filter((p) => inBox(p, box)), at }
+  return { holes: holes.filter((p) => inBox(p, box)), at, poles }
+}
+
+/**
+ * The lines y = f(x) settles toward far off to the left and to the right:
+ * horizontal (y = 0 for y = 2^x) or slant (y = x for y = (x² + 1)/x). Found
+ * by looking further and further out and seeing that f keeps to one line.
+ * A curve that is a line has none.
+ */
+export function endAsymptotes(f: (x: number) => number | null, box: Box, sides: { left: boolean; right: boolean }): Line[] {
+  const h = box.y1 - box.y0
+  const X = 1e4 * Math.max(1, box.x1 - box.x0, Math.abs(box.x0), Math.abs(box.x1))
+  const out: Line[] = []
+  for (const [side, on] of [[-1, sides.left], [1, sides.right]] as const) {
+    if (!on) continue
+    const at = (k: number) => f(side * k * X)
+    const [f1, f2, f4, f8, f16] = [at(1), at(2), at(4), at(8), at(16)]
+    if (f1 === null || f2 === null || f4 === null || f8 === null || f16 === null) continue
+    // The line through f at kX and 2kX, then with the part that shrinks like
+    // 1/x taken out (Richardson), since f is still closing in on it out there.
+    const through = (fa: number, fb: number, k: number) => {
+      const m = (fb - fa) / (side * k * X)
+      return { m, b: fa - m * side * k * X }
+    }
+    const [p, q] = [through(f2, f4, 2), through(f4, f8, 4)]
+    const m = 2 * q.m - p.m
+    const b = 2 * q.b - p.b
+    const fits = (v: number, k: number) => Math.abs(v - (m * side * k * X + b)) < h * 1e-3
+    if (!fits(f8, 8) || !fits(f16, 16) || !fits(f1, 1)) continue
+    // Tidy rounding, so y = 0.0000001 reads as y = 0.
+    const tidy = (v: number) => (Math.abs(v) < 1e-9 ? 0 : v)
+    const line = { a: tidy(m), b: -1, c: tidy(b) } // y = m·x + b
+    // A curve that is its own line (y = 2x + 1) has no asymptote.
+    const mid = (box.x0 + box.x1) / 2
+    const own = [box.x0, mid, box.x1, mid + (box.x1 - box.x0) / 7].every((x) => {
+      const y = f(x)
+      return y !== null && Math.abs(y - (line.a * x + line.c)) < h * 1e-6
+    })
+    if (own) continue
+    if (!out.some((l) => Math.abs(l.a - line.a) < 1e-6 && Math.abs(l.c - line.c) < h * 1e-4)) out.push(line)
+  }
+  return out
 }
 
 /**
@@ -505,6 +555,7 @@ export function readEquations(texts: string[], box: Box, angle: AngleUnit = 'rad
 
       let runs: Run[] = []
       let circles: Circle[] = []
+      let asymptotes: Line[] = []
       if (read.line) {
         const ends = clipLine(read.line, sub)
         if (ends) {
@@ -517,8 +568,13 @@ export function readEquations(texts: string[], box: Box, angle: AngleUnit = 'rad
         }
       } else {
         const { f } = read.curve!
-        const { holes, at } = breaksOf(read.curve!, sub)
+        const { holes, at, poles } = breaksOf(read.curve!, sub)
         runs = curveRuns(f, sub, at)
+        // Asymptotes: vertical ones inside the domain, and the lines it settles toward where its domain runs on.
+        asymptotes = [
+          ...poles.filter((r) => r > box.x0 + EPS && r < box.x1 - EPS).map((r) => ({ a: 1, b: 0, c: -r })),
+          ...endAsymptotes(f, box, { left: !d?.lo, right: !d?.hi }).filter((l) => clipLine(l, box)),
+        ]
         for (const run of runs) {
           if (atLo(run.points[0]) || atHi(run.points[0])) run.edges[0] = false
           if (atLo(run.points.at(-1)!) || atHi(run.points.at(-1)!)) run.edges[1] = false
@@ -533,7 +589,7 @@ export function readEquations(texts: string[], box: Box, angle: AngleUnit = 'rad
           if (y !== null && inBox({ x, y }, box)) circles.push({ x, y, closed: bound.closed && own !== null, end: true })
         }
       }
-      return runs.length ? { runs, circles } : { problem: 'That graph misses the grid. Widen the axes to show it.' }
+      return runs.length ? { runs, circles, asymptotes } : { problem: 'That graph misses the grid. Widen the axes to show it.' }
     }
     const off = read.points!.find((pt) => !inBox(pt, box))
     return {

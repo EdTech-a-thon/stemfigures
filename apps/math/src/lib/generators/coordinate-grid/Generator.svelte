@@ -161,7 +161,9 @@
         </div>
         {#each settings.equations as row, i}
           <div class="row">
-            <RowStyle {row} id="eq-{i}-style" label="equation {i + 1}" isPoints={!!rows[i]?.points} hasDomain={!!rows[i]?.circles?.some((c) => c.end)} />
+            <RowStyle {row} id="eq-{i}-style" label="equation {i + 1}" isPoints={!!rows[i]?.points} hasDomain={!!rows[i]?.circles?.some((c) => c.end)}
+              hasAsymptotes={!!rows[i]?.asymptotes?.length}
+            />
             <MathInput
               kind="equation"
               id="eq-{i}"

@@ -63,6 +63,9 @@
     />
   </g>
 
+  {#each g.asymptotes as a}
+    <path d={a.d} fill="none" stroke={a.color} stroke-width="1.6" stroke-dasharray="0.01 5" stroke-linecap="round" />
+  {/each}
   {#each g.lines as l}
     <path d={l.d} fill="none" stroke={l.color} stroke-width={l.width} stroke-dasharray={l.dash} stroke-linecap={l.cap} stroke-linejoin="round" />
     {#each l.heads as d}<path {d} fill={l.color} />{/each}

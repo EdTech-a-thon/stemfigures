@@ -131,8 +131,8 @@ const hasVar = (n: TreeNode, name: string) => [...n.traverse()].some((m) => m in
 /**
  * The parts of a side that divide by something with x in it, as functions of
  * x: where one is 0, a graph has a hole or an asymptote. That's what's under
- * a fraction or a negative power, and the sin or cos inside tan, sec, csc and
- * cot. Parts with y in them are left out.
+ * a fraction or a negative power, the sin or cos inside tan, sec, csc and
+ * cot, and what ln or log is taken of. Parts with y in them are left out.
  */
 export function divisors(node: TreeNode, angle: AngleUnit = 'radians'): ((x: number) => number | null)[] {
   const out: ((x: number) => number | null)[] = []
@@ -145,6 +145,9 @@ export function divisors(node: TreeNode, angle: AngleUnit = 'radians'): ((x: num
     else if (n instanceof ExponentNode && !hasVar(n.power, 'x') && !hasVar(n.power, 'y')) {
       const p = evaluate(n.power, {}, angle)
       if (p !== null && p < 0) from = n.base
+    } else if (n instanceof FunctionNode && (n.name === 'ln' || n.name === 'log')) {
+      // Not a divisor, but ln x has an asymptote where x is 0 too.
+      from = n.arg
     } else if (n instanceof FunctionNode && ['tan', 'sec', 'csc', 'cot'].includes(n.name)) {
       const arg = n.arg
       const trig = n.name === 'tan' || n.name === 'sec' ? Math.cos : Math.sin

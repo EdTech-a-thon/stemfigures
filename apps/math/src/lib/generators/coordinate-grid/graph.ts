@@ -2,7 +2,7 @@
 // block is a square of CELL units; the SVG scales to fit wherever it's shown.
 
 import { niceText, numberText, type Numbering } from '$lib/shared/numbering.js'
-import { COLORS, readEquations, type Point } from './equations.js'
+import { COLORS, clipLine, readEquations, type Point } from './equations.js'
 import { readAxes, type Settings } from './settings.js'
 
 export const CELL = 32
@@ -181,10 +181,18 @@ export function buildGraph(settings: Settings) {
   // Holes and endpoints: open circles (not included) and closed ones (included).
   const circles: (Point & { color: string; closed: boolean })[] = []
   const pointNames: (Point & { name: string; coords: string; color: string })[] = []
+  // Asymptotes, when a row shows them: thin dotted lines in the row's color, under the curves.
+  const asymptotes: { d: string; color: string }[] = []
   const rows = settings.equations ?? []
   readEquations(rows.map((r) => r.text), box, s.angle).forEach((read, i) => {
-    const { color, line: style, arrows, point, names, ends } = rows[i]
+    const { color, line: style, arrows, point, names, ends, asym } = rows[i]
     const ink = COLORS[color]
+    if (asym === 'shown') {
+      for (const a of read?.asymptotes ?? []) {
+        const seg = clipLine(a, box)
+        if (seg) asymptotes.push({ d: `M${seg.map(px).map((p) => `${round(p.x)},${round(p.y)}`).join(' L')}`, color: ink })
+      }
+    }
     for (const run of read?.runs ?? []) {
       let pts = run.points.map(px)
       const heads: string[] = []
@@ -236,5 +244,6 @@ export function buildGraph(settings: Settings) {
     circles,
     r: CIRCLE_R,
     pointNames,
+    asymptotes,
   }
 }

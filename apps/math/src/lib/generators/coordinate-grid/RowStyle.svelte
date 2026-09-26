@@ -5,13 +5,15 @@
   // CapPicker's menu, so the scrolling settings column can't clip it.
   import { tick } from 'svelte'
   import {
-    ARROWS, COLORS, ENDPOINTS, LINE_STYLES, NAME_STYLES, POINT_STYLES,
-    type Arrows, type Color, type Endpoints, type LineStyle, type NameStyle, type PointStyle, type Row,
+    ARROWS, ASYMPTOTES, COLORS, ENDPOINTS, LINE_STYLES, NAME_STYLES, POINT_STYLES,
+    type Arrows, type AsymptoteStyle, type Color, type Endpoints, type LineStyle, type NameStyle, type PointStyle, type Row,
   } from './equations.js'
 
   // row: { color, line, arrows, point, … }, edited in place. isPoints: only color, point and names apply.
-  // hasDomain: the row's line stops at a domain, so it can show endpoints.
-  let { row, label, id, isPoints = false, hasDomain = false }: { row: Row; label: string; id: string; isPoints?: boolean; hasDomain?: boolean } = $props()
+  // hasDomain: the row's line stops at a domain, so it can show endpoints. hasAsymptotes: its curve has some to show.
+  let {
+    row, label, id, isPoints = false, hasDomain = false, hasAsymptotes = false,
+  }: { row: Row; label: string; id: string; isPoints?: boolean; hasDomain?: boolean; hasAsymptotes?: boolean } = $props()
 
   let open = $state(false)
   let root = $state<HTMLElement>()
@@ -111,6 +113,14 @@
   </svg>
 {/snippet}
 
+{#snippet asymIcon(style: AsymptoteStyle)}
+  <svg viewBox="0 0 28 12" width="28" height="12" aria-hidden="true" fill="none" stroke="currentColor">
+    <path d="M4,11 Q9,10 11,1" stroke-width="2" />
+    <path d="M17,1 Q19,10 24,11" stroke-width="2" />
+    {#if style === 'shown'}<line x1="14" y1="0" x2="14" y2="12" stroke-width="1.6" stroke-dasharray="0.01 3" stroke-linecap="round" />{/if}
+  </svg>
+{/snippet}
+
 {#snippet arrowIcon(ends: Arrows)}
   <svg viewBox="0 0 28 12" width="28" height="12" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="2">
     <line x1={ends === 'both' || ends === 'left' ? 8 : 3} y1="6" x2={ends === 'both' || ends === 'right' ? 20 : 25} y2="6" />
@@ -202,6 +212,19 @@
               {#each (Object.entries(ENDPOINTS) as [Endpoints, string][]) as [v, name]}
                 <button type="button" role="radio" aria-checked={row.ends === v} aria-label={name} title={name} class:on={row.ends === v} onclick={() => (row.ends = v)}>
                   {@render endsIcon(v)}
+                </button>
+              {/each}
+            </div>
+          </div>
+        {/if}
+
+        {#if hasAsymptotes}
+          <div class="group">
+            <span class="name" id="{id}-asym">Asymptotes</span>
+            <div class="segmented" role="radiogroup" aria-labelledby="{id}-asym">
+              {#each (Object.entries(ASYMPTOTES) as [AsymptoteStyle, string][]) as [v, name]}
+                <button type="button" role="radio" aria-checked={row.asym === v} aria-label={name} title={name} class:on={row.asym === v} onclick={() => (row.asym = v)}>
+                  {@render asymIcon(v)}
                 </button>
               {/each}
             </div>

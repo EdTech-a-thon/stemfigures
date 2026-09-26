@@ -200,6 +200,47 @@ describe('odd roots of negative numbers', () => {
   })
 })
 
+describe('asymptotes', () => {
+  const asym = (text: string, b = box) =>
+    readEquations([text], b)[0]!.asymptotes!.map(({ a, b: bb, c }) =>
+      bb === 0 ? `x = ${+(-c / a).toFixed(6)}` : `y = ${+a.toFixed(6)}x + ${+c.toFixed(6)}`,
+    )
+
+  test.each([
+    ['y = 1/(x - 2)', ['x = 2', 'y = 0x + 0']],
+    ['y = (2x + 1)/(3x^2 - 1)', [`x = ${+(-1 / Math.sqrt(3)).toFixed(6)}`, `x = ${+(1 / Math.sqrt(3)).toFixed(6)}`, 'y = 0x + 0']],
+    ['y = (x^2 + 1)/x', ['x = 0', 'y = 1x + 0']],
+    ['y = (3x - 1)/(x + 1)', ['x = -1', 'y = 0x + 3']],
+    ['y = 2^x + 1', ['y = 0x + 1']],
+    ['y = e^(-x)', ['y = 0x + 0']],
+    ['y = ln(x)', ['x = 0']],
+    ['y = log_2(x - 1)', ['x = 1']],
+    ['y = arctan(x)', [`y = 0x + ${+(-Math.PI / 2).toFixed(6)}`, `y = 0x + ${+(Math.PI / 2).toFixed(6)}`]],
+  ])('%s', (text, expected) => expect(asym(text)).toEqual(expected))
+
+  test('tan x has one at each odd multiple of π/2', () => {
+    expect(asym('y = tan(x)', { x0: -5, x1: 5, y0: -5, y1: 5 })).toEqual(['x = -4.712389', 'x = -1.570796', 'x = 1.570796', 'x = 4.712389'])
+  })
+
+  test('curves and lines without any have none', () => {
+    for (const text of ['y = x^2', 'y = 2x + 1', 'y = sin(x)', 'y = x^3 - x', 'y = (x^2 - 1)/(x - 1)', 'y = sqrt(x)']) expect(asym(text)).toEqual([])
+  })
+
+  test('only where the domain runs on', () => {
+    expect(asym('y = 1/x, x > 0.5')).toEqual(['y = 0x + 0'])
+    expect(asym('y = 1/x, 0.5 < x < 3')).toEqual([])
+  })
+
+  test('one off the grid isn’t listed', () => {
+    expect(asym('y = 1/x + 9')).toEqual(['x = 0'])
+  })
+
+  test('hidden unless the row shows them', () => {
+    expect(rowFromParam('y=1/x').asym).toBe('hidden')
+    expect(rowFromParam('y=1/x|asym=shown').asym).toBe('shown')
+  })
+})
+
 describe('domains', () => {
   const row = (text: string, b = box) => readEquations([text], b)[0]!
   const ends = (text: string) => row(text).circles!.filter((c) => c.end).map(({ x, y, closed }) => ({ x: +x.toFixed(6), y: +y.toFixed(6), closed }))
@@ -315,7 +356,7 @@ describe('equations in the page address', () => {
     expect(settingsFromParams(new URLSearchParams(q)).equations.map((r) => r.text)).toEqual(['y=2x+1', '(1,2),(3,4)'])
   })
   test('a row keeps its style, and only what differs from the default is written', () => {
-    const row = { text: 'y=2x+1', color: 'red', line: 'dashed', arrows: 'both', point: 'dot', names: 'name', ends: 'shown' }
+    const row = { text: 'y=2x+1', color: 'red', line: 'dashed', arrows: 'both', point: 'dot', names: 'name', ends: 'shown', asym: 'hidden' }
     const q = settingsToQuery(cleanSettings({ ...DEFAULT_SETTINGS, equations: [row] }))
     expect(new URLSearchParams(q).get('eq')).toBe('y=2x+1|color=red|line=dashed')
     expect(settingsFromParams(new URLSearchParams(q)).equations).toEqual([row])

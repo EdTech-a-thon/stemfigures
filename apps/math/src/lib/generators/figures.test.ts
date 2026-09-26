@@ -32,6 +32,7 @@ const GRID = [
   `xFrom=0%C2%B0&xTo=360%C2%B0&xStep=90%C2%B0&yFrom=-2&yTo=2&angle=degrees&${eq('y=sin(x)', 'y=cos(2x)|color=blue')}`,
   `xFrom=-2&xTo=8&yFrom=-4&yTo=6&${eq('y=ln(x)', 'y=log_2(x)|color=blue', 'y=e^x|color=red', 'y=|x-3|-2|color=green', 'y=sin')}`,
   `xFrom=-5&xTo=5&yFrom=-5&yTo=5&${eq('y=-x-1, x<0', 'y=x^2, 0≤x≤2|color=blue', 'y=4, x>2|color=red|arrows=right', 'x=-3, -4≤y<-1|color=green', 'y=x, -4≤x≤-2|ends=hidden|line=dashed')}`,
+  `xFrom=-6&xTo=6&yFrom=-6&yTo=6&${eq('y=(x^2+1)/(x-1)|asym=shown', 'y=2^x-3|asym=shown|color=blue', 'y=ln(x+4)|asym=shown|color=green', 'y=1/x|color=red')}`,
   'xFrom=0&xTo=4&yFrom=0&yTo=3&minor=10',
   'xFrom=-2&xTo=2&yFrom=-2&yTo=2&minor=4',
   'minor=3',
