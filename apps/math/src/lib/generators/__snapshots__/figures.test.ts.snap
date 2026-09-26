@@ -7361,16 +7361,16 @@ exports[`coordinate grid > xStartCap=circle&xEndCap=line&yStartCap=none&yEndCap=
 exports[`number line >  1`] = `
 {
   "line": {
-    "arrows": [],
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [],
     "fs": 16,
+    "groups": [],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -7484,7 +7484,6 @@ exports[`number line >  1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [],
     "ticks": [
       {
         "x": 38,
@@ -7602,33 +7601,41 @@ exports[`number line >  1`] = `
 exports[`number line > eq=3&eq=-1%2C%202.5%2C%20pi%2F2 1`] = `
 {
   "line": {
-    "arrows": [],
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 69.8,
     },
-    "crosses": [],
-    "endpoints": [
+    "fs": 16,
+    "groups": [
       {
-        "closed": true,
-        "x": 428,
-      },
-      {
-        "closed": true,
-        "x": 308,
-      },
-      {
-        "closed": true,
-        "x": 385.1238898038469,
-      },
-      {
-        "closed": true,
-        "x": 413,
+        "arrows": [],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": true,
+            "x": 428,
+          },
+          {
+            "closed": true,
+            "x": 308,
+          },
+          {
+            "closed": true,
+            "x": 413,
+          },
+          {
+            "closed": true,
+            "x": 385.1238898038469,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [],
       },
     ],
-    "fs": 16,
     "height": 122.8,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -7756,7 +7763,6 @@ exports[`number line > eq=3&eq=-1%2C%202.5%2C%20pi%2F2 1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [],
     "ticks": [
       {
         "x": 38,
@@ -7869,8 +7875,15 @@ exports[`number line > eq=3&eq=-1%2C%202.5%2C%20pi%2F2 1`] = `
   "query": "eq=3&eq=-1%2C+2.5%2C+pi%2F2",
   "rows": [
     {
-      "points": true,
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": 3,
+        },
+      ],
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -7885,8 +7898,23 @@ exports[`number line > eq=3&eq=-1%2C%202.5%2C%20pi%2F2 1`] = `
       ],
     },
     {
-      "points": true,
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": -1,
+        },
+        {
+          "label": null,
+          "v": 2.5,
+        },
+        {
+          "label": null,
+          "v": 1.5707963267948966,
+        },
+      ],
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -7924,39 +7952,338 @@ exports[`number line > eq=3&eq=-1%2C%202.5%2C%20pi%2F2 1`] = `
 }
 `;
 
+exports[`number line > eq=a_n%3Da_%7Bn-1%7D%2B3&eq=a_n%3D2k&eq=1%2Fn%7Cfirst%3D4%7Clast%3D2 1`] = `
+{
+  "line": {
+    "axis": {
+      "x1": 16,
+      "x2": 660,
+      "y": 25,
+    },
+    "fs": 16,
+    "groups": [
+      {
+        "arrows": [],
+        "crosses": [],
+        "endpoints": [],
+        "ink": "#111827",
+        "segments": [],
+      },
+    ],
+    "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
+    "numbers": [
+      {
+        "text": "−10",
+        "x": 38,
+        "y": 53.6,
+      },
+      {
+        "text": "−9",
+        "x": 68,
+        "y": 53.6,
+      },
+      {
+        "text": "−8",
+        "x": 98,
+        "y": 53.6,
+      },
+      {
+        "text": "−7",
+        "x": 128,
+        "y": 53.6,
+      },
+      {
+        "text": "−6",
+        "x": 158,
+        "y": 53.6,
+      },
+      {
+        "text": "−5",
+        "x": 188,
+        "y": 53.6,
+      },
+      {
+        "text": "−4",
+        "x": 218,
+        "y": 53.6,
+      },
+      {
+        "text": "−3",
+        "x": 248,
+        "y": 53.6,
+      },
+      {
+        "text": "−2",
+        "x": 278,
+        "y": 53.6,
+      },
+      {
+        "text": "−1",
+        "x": 308,
+        "y": 53.6,
+      },
+      {
+        "text": "0",
+        "x": 338,
+        "y": 53.6,
+      },
+      {
+        "text": "1",
+        "x": 368,
+        "y": 53.6,
+      },
+      {
+        "text": "2",
+        "x": 398,
+        "y": 53.6,
+      },
+      {
+        "text": "3",
+        "x": 428,
+        "y": 53.6,
+      },
+      {
+        "text": "4",
+        "x": 458,
+        "y": 53.6,
+      },
+      {
+        "text": "5",
+        "x": 488,
+        "y": 53.6,
+      },
+      {
+        "text": "6",
+        "x": 518,
+        "y": 53.6,
+      },
+      {
+        "text": "7",
+        "x": 548,
+        "y": 53.6,
+      },
+      {
+        "text": "8",
+        "x": 578,
+        "y": 53.6,
+      },
+      {
+        "text": "9",
+        "x": 608,
+        "y": 53.6,
+      },
+      {
+        "text": "10",
+        "x": 638,
+        "y": 53.6,
+      },
+    ],
+    "problems": {
+      "from": null,
+      "step": null,
+      "to": null,
+    },
+    "r": 6.5,
+    "ticks": [
+      {
+        "x": 38,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 68,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 98,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 128,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 158,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 188,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 218,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 248,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 278,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 308,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 338,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 368,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 398,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 428,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 458,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 488,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 518,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 548,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 578,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 608,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 638,
+        "y1": 16,
+        "y2": 34,
+      },
+    ],
+    "width": 676,
+  },
+  "query": "eq=a_n%3Da_%7Bn-1%7D%2B3&eq=a_n%3D2k&eq=1%2Fn%7Cfirst%3D4%7Clast%3D2",
+  "rows": [
+    {
+      "note": null,
+      "points": null,
+      "problem": "Rules built from earlier terms, like aₙ = aₙ₋₁ + 3, aren’t here yet. Write the rule in n, like aₙ = 3n + 1.",
+      "sequence": true,
+      "set": null,
+    },
+    {
+      "note": null,
+      "points": null,
+      "problem": "Write the rule in n, not k, like aₙ = 1/n.",
+      "sequence": true,
+      "set": null,
+    },
+    {
+      "note": null,
+      "points": [],
+      "problem": "Make the last n at least 4.",
+      "sequence": true,
+      "set": null,
+    },
+  ],
+}
+`;
+
 exports[`number line > eq=x%3C-1%20or%20x%3E%3D3&eq=x!%3D2&eq=x%3D4&eq=all%20real%20numbers&eq=no%20solution 1`] = `
 {
   "line": {
-    "arrows": [
-      "M31,25 L48,16 L48,34 z",
-      "M693,25 L676,16 L676,34 z",
-    ],
     "axis": {
       "x1": 16,
       "x2": 708,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [
+    "fs": 16,
+    "groups": [
       {
-        "closed": false,
-        "x": 332,
-      },
-      {
-        "closed": true,
-        "x": 452,
-      },
-      {
-        "closed": false,
-        "x": 422,
-      },
-      {
-        "closed": true,
-        "x": 482,
+        "arrows": [
+          "M31,25 L48,16 L48,34 z",
+          "M693,25 L676,16 L676,34 z",
+        ],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": false,
+            "x": 332,
+          },
+          {
+            "closed": true,
+            "x": 452,
+          },
+          {
+            "closed": false,
+            "x": 422,
+          },
+          {
+            "closed": true,
+            "x": 482,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [
+          {
+            "x1": 47,
+            "x2": 332,
+          },
+          {
+            "x1": 452,
+            "x2": 677,
+          },
+          {
+            "x1": 47,
+            "x2": 422,
+          },
+          {
+            "x1": 422,
+            "x2": 677,
+          },
+          {
+            "x1": 47,
+            "x2": 677,
+          },
+        ],
       },
     ],
-    "fs": 16,
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -8070,28 +8397,6 @@ exports[`number line > eq=x%3C-1%20or%20x%3E%3D3&eq=x!%3D2&eq=x%3D4&eq=all%20rea
       "to": null,
     },
     "r": 6.5,
-    "segments": [
-      {
-        "x1": 47,
-        "x2": 332,
-      },
-      {
-        "x1": 452,
-        "x2": 677,
-      },
-      {
-        "x1": 47,
-        "x2": 422,
-      },
-      {
-        "x1": 422,
-        "x2": 677,
-      },
-      {
-        "x1": 47,
-        "x2": 677,
-      },
-    ],
     "ticks": [
       {
         "x": 62,
@@ -8204,8 +8509,10 @@ exports[`number line > eq=x%3C-1%20or%20x%3E%3D3&eq=x!%3D2&eq=x%3D4&eq=all%20rea
   "query": "eq=x%3C-1+or+x%3E%3D3&eq=x%21%3D2&eq=x%3D4&eq=all+real+numbers&eq=no+solution",
   "rows": [
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -8230,8 +8537,10 @@ exports[`number line > eq=x%3C-1%20or%20x%3E%3D3&eq=x!%3D2&eq=x%3D4&eq=all%20rea
       ],
     },
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -8256,8 +8565,10 @@ exports[`number line > eq=x%3C-1%20or%20x%3E%3D3&eq=x!%3D2&eq=x%3D4&eq=all%20rea
       ],
     },
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -8272,8 +8583,10 @@ exports[`number line > eq=x%3C-1%20or%20x%3E%3D3&eq=x!%3D2&eq=x%3D4&eq=all%20rea
       ],
     },
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -8288,30 +8601,87 @@ exports[`number line > eq=x%3C-1%20or%20x%3E%3D3&eq=x!%3D2&eq=x%3D4&eq=all%20rea
       ],
     },
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [],
     },
   ],
 }
 `;
 
-exports[`number line > eq=x%3C20&eq=y%3E2%20and%20x%3C3&eq=(1%2C%202)&eq=x%3Cy&eq=x%2B 1`] = `
+exports[`number line > eq=x%3C2%7Ccolor%3Dred&eq=x%3E%3D2%7Ccolor%3Dblue&eq=x%3E6%7Ccolor%3Dred&eq=-5%2C%200%7Ccolor%3Dgreen%7Cpoint%3Dcross 1`] = `
 {
   "line": {
-    "arrows": [
-      "M31,25 L48,16 L48,34 z",
-      "M693,25 L676,16 L676,34 z",
-    ],
     "axis": {
       "x1": 16,
       "x2": 708,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [],
     "fs": 16,
+    "groups": [
+      {
+        "arrows": [
+          "M31,25 L48,16 L48,34 z",
+          "M693,25 L676,16 L676,34 z",
+        ],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": false,
+            "x": 422,
+          },
+          {
+            "closed": false,
+            "x": 542,
+          },
+        ],
+        "ink": "#dc2626",
+        "segments": [
+          {
+            "x1": 47,
+            "x2": 422,
+          },
+          {
+            "x1": 542,
+            "x2": 677,
+          },
+        ],
+      },
+      {
+        "arrows": [
+          "M693,25 L676,16 L676,34 z",
+        ],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": true,
+            "x": 422,
+          },
+        ],
+        "ink": "#2563eb",
+        "segments": [
+          {
+            "x1": 422,
+            "x2": 677,
+          },
+        ],
+      },
+      {
+        "arrows": [],
+        "crosses": [
+          212,
+          362,
+        ],
+        "endpoints": [],
+        "ink": "#15803d",
+        "segments": [],
+      },
+    ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -8425,12 +8795,344 @@ exports[`number line > eq=x%3C20&eq=y%3E2%20and%20x%3C3&eq=(1%2C%202)&eq=x%3Cy&e
       "to": null,
     },
     "r": 6.5,
-    "segments": [
+    "ticks": [
       {
-        "x1": 47,
-        "x2": 677,
+        "x": 62,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 92,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 122,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 152,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 182,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 242,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 272,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 302,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 332,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 392,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 422,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 452,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 482,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 512,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 542,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 572,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 602,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 632,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 662,
+        "y1": 16,
+        "y2": 34,
       },
     ],
+    "width": 724,
+  },
+  "query": "eq=x%3C2%7Ccolor%3Dred&eq=x%3E%3D2%7Ccolor%3Dblue&eq=x%3E6%7Ccolor%3Dred&eq=-5%2C+0%7Ccolor%3Dgreen%7Cpoint%3Dcross",
+  "rows": [
+    {
+      "note": null,
+      "points": null,
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": false,
+            "v": 2,
+          },
+          "lo": {
+            "closed": false,
+            "v": -Infinity,
+          },
+        },
+      ],
+    },
+    {
+      "note": null,
+      "points": null,
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": false,
+            "v": Infinity,
+          },
+          "lo": {
+            "closed": true,
+            "v": 2,
+          },
+        },
+      ],
+    },
+    {
+      "note": null,
+      "points": null,
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": false,
+            "v": Infinity,
+          },
+          "lo": {
+            "closed": false,
+            "v": 6,
+          },
+        },
+      ],
+    },
+    {
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": -5,
+        },
+        {
+          "label": null,
+          "v": 0,
+        },
+      ],
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": true,
+            "v": -5,
+          },
+          "lo": {
+            "closed": true,
+            "v": -5,
+          },
+        },
+        {
+          "hi": {
+            "closed": true,
+            "v": 0,
+          },
+          "lo": {
+            "closed": true,
+            "v": 0,
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`number line > eq=x%3C20&eq=y%3E2%20and%20x%3C3&eq=(1%2C%202)&eq=x%3Cy&eq=x%2B 1`] = `
+{
+  "line": {
+    "axis": {
+      "x1": 16,
+      "x2": 708,
+      "y": 25,
+    },
+    "fs": 16,
+    "groups": [
+      {
+        "arrows": [
+          "M31,25 L48,16 L48,34 z",
+          "M693,25 L676,16 L676,34 z",
+        ],
+        "crosses": [],
+        "endpoints": [],
+        "ink": "#111827",
+        "segments": [
+          {
+            "x1": 47,
+            "x2": 677,
+          },
+        ],
+      },
+    ],
+    "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
+    "numbers": [
+      {
+        "text": "−10",
+        "x": 62,
+        "y": 53.6,
+      },
+      {
+        "text": "−9",
+        "x": 92,
+        "y": 53.6,
+      },
+      {
+        "text": "−8",
+        "x": 122,
+        "y": 53.6,
+      },
+      {
+        "text": "−7",
+        "x": 152,
+        "y": 53.6,
+      },
+      {
+        "text": "−6",
+        "x": 182,
+        "y": 53.6,
+      },
+      {
+        "text": "−5",
+        "x": 212,
+        "y": 53.6,
+      },
+      {
+        "text": "−4",
+        "x": 242,
+        "y": 53.6,
+      },
+      {
+        "text": "−3",
+        "x": 272,
+        "y": 53.6,
+      },
+      {
+        "text": "−2",
+        "x": 302,
+        "y": 53.6,
+      },
+      {
+        "text": "−1",
+        "x": 332,
+        "y": 53.6,
+      },
+      {
+        "text": "0",
+        "x": 362,
+        "y": 53.6,
+      },
+      {
+        "text": "1",
+        "x": 392,
+        "y": 53.6,
+      },
+      {
+        "text": "2",
+        "x": 422,
+        "y": 53.6,
+      },
+      {
+        "text": "3",
+        "x": 452,
+        "y": 53.6,
+      },
+      {
+        "text": "4",
+        "x": 482,
+        "y": 53.6,
+      },
+      {
+        "text": "5",
+        "x": 512,
+        "y": 53.6,
+      },
+      {
+        "text": "6",
+        "x": 542,
+        "y": 53.6,
+      },
+      {
+        "text": "7",
+        "x": 572,
+        "y": 53.6,
+      },
+      {
+        "text": "8",
+        "x": 602,
+        "y": 53.6,
+      },
+      {
+        "text": "9",
+        "x": 632,
+        "y": 53.6,
+      },
+      {
+        "text": "10",
+        "x": 662,
+        "y": 53.6,
+      },
+    ],
+    "problems": {
+      "from": null,
+      "step": null,
+      "to": null,
+    },
+    "r": 6.5,
     "ticks": [
       {
         "x": 62,
@@ -8543,8 +9245,10 @@ exports[`number line > eq=x%3C20&eq=y%3E2%20and%20x%3C3&eq=(1%2C%202)&eq=x%3Cy&e
   "query": "eq=x%3C20&eq=y%3E2+and+x%3C3&eq=%281%2C+2%29&eq=x%3Cy&eq=x%2B",
   "rows": [
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": "20 is past the end of the line. Widen the range to show it.",
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -8559,23 +9263,31 @@ exports[`number line > eq=x%3C20&eq=y%3E2%20and%20x%3C3&eq=(1%2C%202)&eq=x%3Cy&e
       ],
     },
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": "Use one letter throughout, not y and x.",
+      "sequence": false,
       "set": null,
     },
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": "A point on a number line is one number, like 3 or −1/2. For more than one: 3, −1, 5/2.",
+      "sequence": false,
       "set": null,
     },
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": "Put the letter on one side and a number on the other, like x < 3.",
+      "sequence": false,
       "set": null,
     },
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": "Try an equation like −2 < x ≤ 5 or x < −1 or x ≥ 3, or points like 3 or −1, 2.5.",
+      "sequence": false,
       "set": null,
     },
   ],
@@ -8585,16 +9297,16 @@ exports[`number line > eq=x%3C20&eq=y%3E2%20and%20x%3C3&eq=(1%2C%202)&eq=x%3Cy&e
 exports[`number line > every=0 1`] = `
 {
   "line": {
-    "arrows": [],
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [],
     "fs": 16,
+    "groups": [],
     "height": 56,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [],
     "problems": {
       "from": null,
@@ -8602,7 +9314,6 @@ exports[`number line > every=0 1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [],
     "ticks": [
       {
         "x": 38,
@@ -8720,16 +9431,16 @@ exports[`number line > every=0 1`] = `
 exports[`number line > every=5&from=-20&to=20 1`] = `
 {
   "line": {
-    "arrows": [],
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [],
     "fs": 16,
+    "groups": [],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−20",
@@ -8783,7 +9494,6 @@ exports[`number line > every=5&from=-20&to=20 1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [],
     "ticks": [
       {
         "x": 38,
@@ -8998,24 +9708,286 @@ exports[`number line > every=5&from=-20&to=20 1`] = `
 }
 `;
 
+exports[`number line > from=-3&to=3&eq=A(-2.5)%2C%201%2C%20C(1.25)&eq=P(0.5)%7Cpoint%3Dcross%7Clabels%3Dcoords%7Ccolor%3Dred&eq=-1.5%7Cvalues%3Dhidden 1`] = `
+{
+  "line": {
+    "axis": {
+      "x1": 16,
+      "x2": 660,
+      "y": 52.2,
+    },
+    "fs": 16,
+    "groups": [
+      {
+        "arrows": [],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": true,
+            "x": 88,
+          },
+          {
+            "closed": true,
+            "x": 438,
+          },
+          {
+            "closed": true,
+            "x": 463,
+          },
+          {
+            "closed": true,
+            "x": 188,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [],
+      },
+      {
+        "arrows": [],
+        "crosses": [
+          388,
+        ],
+        "endpoints": [],
+        "ink": "#dc2626",
+        "segments": [],
+      },
+    ],
+    "height": 105.2,
+    "labelFs": 19.2,
+    "labels": [
+      {
+        "coords": "",
+        "ink": "#111827",
+        "text": "A",
+        "x": 88,
+        "y": 34.32,
+      },
+      {
+        "coords": "(0.5)",
+        "ink": "#dc2626",
+        "text": "P",
+        "x": 388,
+        "y": 34.32,
+      },
+      {
+        "coords": "",
+        "ink": "#111827",
+        "text": "C",
+        "x": 463,
+        "y": 34.32,
+      },
+    ],
+    "numbers": [
+      {
+        "text": "−3",
+        "x": 38,
+        "y": 80.8,
+      },
+      {
+        "text": "−2",
+        "x": 138,
+        "y": 80.8,
+      },
+      {
+        "text": "−1",
+        "x": 238,
+        "y": 80.8,
+      },
+      {
+        "text": "0",
+        "x": 338,
+        "y": 80.8,
+      },
+      {
+        "text": "1",
+        "x": 438,
+        "y": 80.8,
+      },
+      {
+        "text": "2",
+        "x": 538,
+        "y": 80.8,
+      },
+      {
+        "text": "3",
+        "x": 638,
+        "y": 80.8,
+      },
+    ],
+    "problems": {
+      "from": null,
+      "step": null,
+      "to": null,
+    },
+    "r": 6.5,
+    "ticks": [
+      {
+        "x": 38,
+        "y1": 43.2,
+        "y2": 61.2,
+      },
+      {
+        "x": 138,
+        "y1": 43.2,
+        "y2": 61.2,
+      },
+      {
+        "x": 238,
+        "y1": 43.2,
+        "y2": 61.2,
+      },
+      {
+        "x": 338,
+        "y1": 43.2,
+        "y2": 61.2,
+      },
+      {
+        "x": 438,
+        "y1": 43.2,
+        "y2": 61.2,
+      },
+      {
+        "x": 538,
+        "y1": 43.2,
+        "y2": 61.2,
+      },
+      {
+        "x": 638,
+        "y1": 43.2,
+        "y2": 61.2,
+      },
+    ],
+    "width": 676,
+  },
+  "query": "from=-3&to=3&eq=A%28-2.5%29%2C+1%2C+C%281.25%29&eq=P%280.5%29%7Ccolor%3Dred%7Cpoint%3Dcross%7Clabels%3Dcoords&eq=-1.5%7Cvalues%3Dhidden",
+  "rows": [
+    {
+      "note": null,
+      "points": [
+        {
+          "label": "A",
+          "v": -2.5,
+        },
+        {
+          "label": null,
+          "v": 1,
+        },
+        {
+          "label": "C",
+          "v": 1.25,
+        },
+      ],
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": true,
+            "v": -2.5,
+          },
+          "lo": {
+            "closed": true,
+            "v": -2.5,
+          },
+        },
+        {
+          "hi": {
+            "closed": true,
+            "v": 1,
+          },
+          "lo": {
+            "closed": true,
+            "v": 1,
+          },
+        },
+        {
+          "hi": {
+            "closed": true,
+            "v": 1.25,
+          },
+          "lo": {
+            "closed": true,
+            "v": 1.25,
+          },
+        },
+      ],
+    },
+    {
+      "note": null,
+      "points": [
+        {
+          "label": "P",
+          "v": 0.5,
+        },
+      ],
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": true,
+            "v": 0.5,
+          },
+          "lo": {
+            "closed": true,
+            "v": 0.5,
+          },
+        },
+      ],
+    },
+    {
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": -1.5,
+        },
+      ],
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": true,
+            "v": -1.5,
+          },
+          "lo": {
+            "closed": true,
+            "v": -1.5,
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
 exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`] = `
 {
   "line": {
-    "arrows": [],
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 69.8,
     },
-    "crosses": [
-      238,
-      588,
-      338,
-      371.33333333333337,
-    ],
-    "endpoints": [],
     "fs": 16,
+    "groups": [
+      {
+        "arrows": [],
+        "crosses": [
+          238,
+          588,
+          338,
+          371.33333333333337,
+        ],
+        "endpoints": [],
+        "ink": "#111827",
+        "segments": [],
+      },
+    ],
     "height": 122.8,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−3",
@@ -9054,21 +10026,17 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
       },
       {
         "barY": 35.6,
-        "den": "2",
-        "denY": 50.8,
-        "num": "5",
-        "numY": 31.6,
-        "sign": "",
-        "x": 588,
-      },
-      {
-        "barY": 35.6,
         "den": "3",
         "denY": 50.8,
         "num": "1",
         "numY": 31.6,
         "sign": "",
         "x": 371.33333333333337,
+      },
+      {
+        "text": "2.5",
+        "x": 588,
+        "y": 41.2,
       },
     ],
     "problems": {
@@ -9077,7 +10045,6 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
       "to": null,
     },
     "r": 6.5,
-    "segments": [],
     "ticks": [
       {
         "x": 38,
@@ -9107,11 +10074,22 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
     ],
     "width": 676,
   },
-  "query": "from=-3&to=3&points=cross&eq=-1%2C+2.5&eq=0&eq=1%2F3",
+  "query": "from=-3&to=3&eq=-1%2C+2.5%7Cpoint%3Dcross&eq=0%7Cpoint%3Dcross&eq=1%2F3%7Cpoint%3Dcross",
   "rows": [
     {
-      "points": true,
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": -1,
+        },
+        {
+          "label": null,
+          "v": 2.5,
+        },
+      ],
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -9136,8 +10114,15 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
       ],
     },
     {
-      "points": true,
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": 0,
+        },
+      ],
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -9152,8 +10137,15 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
       ],
     },
     {
-      "points": true,
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": 0.3333333333333333,
+        },
+      ],
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -9174,25 +10166,38 @@ exports[`number line > from=-3&to=3&points=cross&eq=-1%2C%202.5&eq=0&eq=1%2F3 1`
 exports[`number line > from=-5&to=5&eq=-2%20%3C%20x%20%3C%3D%203 1`] = `
 {
   "line": {
-    "arrows": [],
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [
+    "fs": 16,
+    "groups": [
       {
-        "closed": false,
-        "x": 218,
-      },
-      {
-        "closed": true,
-        "x": 518,
+        "arrows": [],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": false,
+            "x": 218,
+          },
+          {
+            "closed": true,
+            "x": 518,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [
+          {
+            "x1": 218,
+            "x2": 518,
+          },
+        ],
       },
     ],
-    "fs": 16,
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−5",
@@ -9256,12 +10261,6 @@ exports[`number line > from=-5&to=5&eq=-2%20%3C%20x%20%3C%3D%203 1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [
-      {
-        "x1": 218,
-        "x2": 518,
-      },
-    ],
     "ticks": [
       {
         "x": 38,
@@ -9324,8 +10323,10 @@ exports[`number line > from=-5&to=5&eq=-2%20%3C%20x%20%3C%3D%203 1`] = `
   "query": "from=-5&to=5&eq=-2+%3C+x+%3C%3D+3",
   "rows": [
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -9343,26 +10344,308 @@ exports[`number line > from=-5&to=5&eq=-2%20%3C%20x%20%3C%3D%203 1`] = `
 }
 `;
 
+exports[`number line > from=0&to=1&step=1%2F10&eq=a_n%3D1%2Fn%7Clast%3D6 1`] = `
+{
+  "line": {
+    "axis": {
+      "x1": 16,
+      "x2": 660,
+      "y": 69.8,
+    },
+    "fs": 16,
+    "groups": [
+      {
+        "arrows": [],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": true,
+            "x": 638,
+          },
+          {
+            "closed": true,
+            "x": 338,
+          },
+          {
+            "closed": true,
+            "x": 238,
+          },
+          {
+            "closed": true,
+            "x": 188,
+          },
+          {
+            "closed": true,
+            "x": 158,
+          },
+          {
+            "closed": true,
+            "x": 138,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [],
+      },
+    ],
+    "height": 143.6,
+    "labelFs": 19.2,
+    "labels": [],
+    "numbers": [
+      {
+        "text": "0",
+        "x": 38,
+        "y": 108,
+      },
+      {
+        "barY": 102.4,
+        "den": "10",
+        "denY": 117.6,
+        "num": "1",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 98,
+      },
+      {
+        "barY": 102.4,
+        "den": "5",
+        "denY": 117.6,
+        "num": "1",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 158,
+      },
+      {
+        "barY": 102.4,
+        "den": "10",
+        "denY": 117.6,
+        "num": "3",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 218.00000000000003,
+      },
+      {
+        "barY": 102.4,
+        "den": "5",
+        "denY": 117.6,
+        "num": "2",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 278,
+      },
+      {
+        "barY": 102.4,
+        "den": "2",
+        "denY": 117.6,
+        "num": "1",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 338,
+      },
+      {
+        "barY": 102.4,
+        "den": "5",
+        "denY": 117.6,
+        "num": "3",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 398.00000000000006,
+      },
+      {
+        "barY": 102.4,
+        "den": "10",
+        "denY": 117.6,
+        "num": "7",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 458.00000000000006,
+      },
+      {
+        "barY": 102.4,
+        "den": "5",
+        "denY": 117.6,
+        "num": "4",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 518,
+      },
+      {
+        "barY": 102.4,
+        "den": "10",
+        "denY": 117.6,
+        "num": "9",
+        "numY": 98.39999999999999,
+        "sign": "",
+        "x": 578,
+      },
+      {
+        "text": "1",
+        "x": 638,
+        "y": 108,
+      },
+      {
+        "barY": 35.6,
+        "den": "6",
+        "denY": 50.8,
+        "num": "1",
+        "numY": 31.6,
+        "sign": "",
+        "x": 138,
+      },
+      {
+        "barY": 35.6,
+        "den": "4",
+        "denY": 50.8,
+        "num": "1",
+        "numY": 31.6,
+        "sign": "",
+        "x": 188,
+      },
+      {
+        "barY": 35.6,
+        "den": "3",
+        "denY": 50.8,
+        "num": "1",
+        "numY": 31.6,
+        "sign": "",
+        "x": 238,
+      },
+    ],
+    "problems": {
+      "from": null,
+      "step": null,
+      "to": null,
+    },
+    "r": 6.5,
+    "ticks": [
+      {
+        "x": 38,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 98,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 158,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 218.00000000000003,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 278,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 338,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 398.00000000000006,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 458.00000000000006,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 518,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 578,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+      {
+        "x": 638,
+        "y1": 60.8,
+        "y2": 78.8,
+      },
+    ],
+    "width": 676,
+  },
+  "query": "from=0&to=1&step=1%2F10&eq=a_n%3D1%2Fn%7Clast%3D6",
+  "rows": [
+    {
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": 1,
+        },
+        {
+          "label": null,
+          "v": 0.5,
+        },
+        {
+          "label": null,
+          "v": 0.3333333333333333,
+        },
+        {
+          "label": null,
+          "v": 0.25,
+        },
+        {
+          "label": null,
+          "v": 0.2,
+        },
+        {
+          "label": null,
+          "v": 0.16666666666666666,
+        },
+      ],
+      "problem": null,
+      "sequence": true,
+      "set": null,
+    },
+  ],
+}
+`;
+
 exports[`number line > from=0&to=2&step=1%2F4&every=2&eq=x%3E3%2F4 1`] = `
 {
   "line": {
-    "arrows": [
-      "M669,69.8 L652,60.8 L652,78.8 z",
-    ],
     "axis": {
       "x1": 16,
       "x2": 684,
       "y": 69.8,
     },
-    "crosses": [],
-    "endpoints": [
+    "fs": 16,
+    "groups": [
       {
-        "closed": false,
-        "x": 263,
+        "arrows": [
+          "M669,69.8 L652,60.8 L652,78.8 z",
+        ],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": false,
+            "x": 263,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [
+          {
+            "x1": 263,
+            "x2": 653,
+          },
+        ],
       },
     ],
-    "fs": 16,
     "height": 143.6,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "0",
@@ -9413,12 +10696,6 @@ exports[`number line > from=0&to=2&step=1%2F4&every=2&eq=x%3E3%2F4 1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [
-      {
-        "x1": 263,
-        "x2": 653,
-      },
-    ],
     "ticks": [
       {
         "x": 38,
@@ -9471,8 +10748,10 @@ exports[`number line > from=0&to=2&step=1%2F4&every=2&eq=x%3E3%2F4 1`] = `
   "query": "from=0&to=2&step=1%2F4&every=2&eq=x%3E3%2F4",
   "rows": [
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -9493,25 +10772,38 @@ exports[`number line > from=0&to=2&step=1%2F4&every=2&eq=x%3E3%2F4 1`] = `
 exports[`number line > from=0&to=2pi&step=pi%2F4&eq=pi%2F2%3Cx%3C%3D3pi%2F2 1`] = `
 {
   "line": {
-    "arrows": [],
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [
+    "fs": 16,
+    "groups": [
       {
-        "closed": false,
-        "x": 188,
-      },
-      {
-        "closed": true,
-        "x": 488,
+        "arrows": [],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": false,
+            "x": 188,
+          },
+          {
+            "closed": true,
+            "x": 488,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [
+          {
+            "x1": 188,
+            "x2": 488,
+          },
+        ],
       },
     ],
-    "fs": 16,
     "height": 98.8,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "0",
@@ -9589,12 +10881,6 @@ exports[`number line > from=0&to=2pi&step=pi%2F4&eq=pi%2F2%3Cx%3C%3D3pi%2F2 1`] 
       "to": null,
     },
     "r": 6.5,
-    "segments": [
-      {
-        "x1": 188,
-        "x2": 488,
-      },
-    ],
     "ticks": [
       {
         "x": 38,
@@ -9647,8 +10933,10 @@ exports[`number line > from=0&to=2pi&step=pi%2F4&eq=pi%2F2%3Cx%3C%3D3pi%2F2 1`] 
   "query": "from=0&to=2pi&step=pi%2F4&eq=pi%2F2%3Cx%3C%3D3pi%2F2",
   "rows": [
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -9666,19 +10954,483 @@ exports[`number line > from=0&to=2pi&step=pi%2F4&eq=pi%2F2%3Cx%3C%3D3pi%2F2 1`] 
 }
 `;
 
-exports[`number line > from=0&to=1000&step=1 1`] = `
+exports[`number line > from=0&to=10&eq=1%2F3%2C%201%2F2%2C%202%2F3%2C%20Q_1(4.5) 1`] = `
 {
   "line": {
-    "arrows": [],
+    "axis": {
+      "x1": 16,
+      "x2": 660,
+      "y": 110.6,
+    },
+    "fs": 16,
+    "groups": [
+      {
+        "arrows": [],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": true,
+            "x": 58,
+          },
+          {
+            "closed": true,
+            "x": 68,
+          },
+          {
+            "closed": true,
+            "x": 78,
+          },
+          {
+            "closed": true,
+            "x": 308,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [],
+      },
+    ],
+    "height": 163.6,
+    "labelFs": 19.2,
+    "labels": [
+      {
+        "coords": "",
+        "ink": "#111827",
+        "text": "Q₁",
+        "x": 308,
+        "y": 83.91999999999999,
+      },
+    ],
+    "numbers": [
+      {
+        "text": "0",
+        "x": 38,
+        "y": 139.2,
+      },
+      {
+        "text": "1",
+        "x": 98,
+        "y": 139.2,
+      },
+      {
+        "text": "2",
+        "x": 158,
+        "y": 139.2,
+      },
+      {
+        "text": "3",
+        "x": 218,
+        "y": 139.2,
+      },
+      {
+        "text": "4",
+        "x": 278,
+        "y": 139.2,
+      },
+      {
+        "text": "5",
+        "x": 338,
+        "y": 139.2,
+      },
+      {
+        "text": "6",
+        "x": 398,
+        "y": 139.2,
+      },
+      {
+        "text": "7",
+        "x": 458,
+        "y": 139.2,
+      },
+      {
+        "text": "8",
+        "x": 518,
+        "y": 139.2,
+      },
+      {
+        "text": "9",
+        "x": 578,
+        "y": 139.2,
+      },
+      {
+        "text": "10",
+        "x": 638,
+        "y": 139.2,
+      },
+      {
+        "barY": 76.4,
+        "den": "3",
+        "denY": 91.6,
+        "num": "1",
+        "numY": 72.39999999999999,
+        "sign": "",
+        "x": 58,
+      },
+      {
+        "barY": 76.4,
+        "den": "3",
+        "denY": 91.6,
+        "num": "2",
+        "numY": 72.39999999999999,
+        "sign": "",
+        "x": 78,
+      },
+      {
+        "barY": 35.6,
+        "den": "2",
+        "denY": 50.8,
+        "num": "1",
+        "numY": 31.6,
+        "sign": "",
+        "x": 68,
+      },
+    ],
+    "problems": {
+      "from": null,
+      "step": null,
+      "to": null,
+    },
+    "r": 6.5,
+    "ticks": [
+      {
+        "x": 38,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 98,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 158,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 218,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 278,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 338,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 398,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 458,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 518,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 578,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+      {
+        "x": 638,
+        "y1": 101.6,
+        "y2": 119.6,
+      },
+    ],
+    "width": 676,
+  },
+  "query": "from=0&eq=1%2F3%2C+1%2F2%2C+2%2F3%2C+Q_1%284.5%29",
+  "rows": [
+    {
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": 0.3333333333333333,
+        },
+        {
+          "label": null,
+          "v": 0.5,
+        },
+        {
+          "label": null,
+          "v": 0.6666666666666666,
+        },
+        {
+          "label": "Q₁",
+          "v": 4.5,
+        },
+      ],
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": true,
+            "v": 0.3333333333333333,
+          },
+          "lo": {
+            "closed": true,
+            "v": 0.3333333333333333,
+          },
+        },
+        {
+          "hi": {
+            "closed": true,
+            "v": 0.5,
+          },
+          "lo": {
+            "closed": true,
+            "v": 0.5,
+          },
+        },
+        {
+          "hi": {
+            "closed": true,
+            "v": 0.6666666666666666,
+          },
+          "lo": {
+            "closed": true,
+            "v": 0.6666666666666666,
+          },
+        },
+        {
+          "hi": {
+            "closed": true,
+            "v": 4.5,
+          },
+          "lo": {
+            "closed": true,
+            "v": 4.5,
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`number line > from=0&to=10&eq=u_n%3D2n%2B1%7Cfirst%3D0%7Clast%3D8%7Ccolor%3Dpurple%7Cvalues%3Dhidden 1`] = `
+{
+  "line": {
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [],
     "fs": 16,
+    "groups": [
+      {
+        "arrows": [],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": true,
+            "x": 98,
+          },
+          {
+            "closed": true,
+            "x": 218,
+          },
+          {
+            "closed": true,
+            "x": 338,
+          },
+          {
+            "closed": true,
+            "x": 458,
+          },
+          {
+            "closed": true,
+            "x": 578,
+          },
+        ],
+        "ink": "#7c3aed",
+        "segments": [],
+      },
+    ],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
+    "numbers": [
+      {
+        "text": "0",
+        "x": 38,
+        "y": 53.6,
+      },
+      {
+        "text": "1",
+        "x": 98,
+        "y": 53.6,
+      },
+      {
+        "text": "2",
+        "x": 158,
+        "y": 53.6,
+      },
+      {
+        "text": "3",
+        "x": 218,
+        "y": 53.6,
+      },
+      {
+        "text": "4",
+        "x": 278,
+        "y": 53.6,
+      },
+      {
+        "text": "5",
+        "x": 338,
+        "y": 53.6,
+      },
+      {
+        "text": "6",
+        "x": 398,
+        "y": 53.6,
+      },
+      {
+        "text": "7",
+        "x": 458,
+        "y": 53.6,
+      },
+      {
+        "text": "8",
+        "x": 518,
+        "y": 53.6,
+      },
+      {
+        "text": "9",
+        "x": 578,
+        "y": 53.6,
+      },
+      {
+        "text": "10",
+        "x": 638,
+        "y": 53.6,
+      },
+    ],
+    "problems": {
+      "from": null,
+      "step": null,
+      "to": null,
+    },
+    "r": 6.5,
+    "ticks": [
+      {
+        "x": 38,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 98,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 158,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 218,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 278,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 338,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 398,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 458,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 518,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 578,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 638,
+        "y1": 16,
+        "y2": 34,
+      },
+    ],
+    "width": 676,
+  },
+  "query": "from=0&eq=u_n%3D2n%2B1%7Ccolor%3Dpurple%7Cvalues%3Dhidden%7Cfirst%3D0%7Clast%3D8",
+  "rows": [
+    {
+      "note": "Terms for n = 5 to 8 are past the end of the line.",
+      "points": [
+        {
+          "label": null,
+          "v": 1,
+        },
+        {
+          "label": null,
+          "v": 3,
+        },
+        {
+          "label": null,
+          "v": 5,
+        },
+        {
+          "label": null,
+          "v": 7,
+        },
+        {
+          "label": null,
+          "v": 9,
+        },
+      ],
+      "problem": null,
+      "sequence": true,
+      "set": null,
+    },
+  ],
+}
+`;
+
+exports[`number line > from=0&to=1000&step=1 1`] = `
+{
+  "line": {
+    "axis": {
+      "x1": 16,
+      "x2": 660,
+      "y": 25,
+    },
+    "fs": 16,
+    "groups": [],
+    "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -9792,7 +11544,6 @@ exports[`number line > from=0&to=1000&step=1 1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [],
     "ticks": [
       {
         "x": 38,
@@ -9910,16 +11661,16 @@ exports[`number line > from=0&to=1000&step=1 1`] = `
 exports[`number line > from=x&to=-20&step=-1 1`] = `
 {
   "line": {
-    "arrows": [],
     "axis": {
       "x1": 16,
       "x2": 660,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [],
     "fs": 16,
+    "groups": [],
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -10033,7 +11784,6 @@ exports[`number line > from=x&to=-20&step=-1 1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [],
     "ticks": [
       {
         "x": 38,
@@ -10151,23 +11901,36 @@ exports[`number line > from=x&to=-20&step=-1 1`] = `
 exports[`number line > inequality=x%3E%3D2 1`] = `
 {
   "line": {
-    "arrows": [
-      "M669,25 L652,16 L652,34 z",
-    ],
     "axis": {
       "x1": 16,
       "x2": 684,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [
+    "fs": 16,
+    "groups": [
       {
-        "closed": true,
-        "x": 398,
+        "arrows": [
+          "M669,25 L652,16 L652,34 z",
+        ],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": true,
+            "x": 398,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [
+          {
+            "x1": 398,
+            "x2": 653,
+          },
+        ],
       },
     ],
-    "fs": 16,
     "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
     "numbers": [
       {
         "text": "−10",
@@ -10281,12 +12044,6 @@ exports[`number line > inequality=x%3E%3D2 1`] = `
       "to": null,
     },
     "r": 6.5,
-    "segments": [
-      {
-        "x1": 398,
-        "x2": 653,
-      },
-    ],
     "ticks": [
       {
         "x": 38,
@@ -10399,8 +12156,10 @@ exports[`number line > inequality=x%3E%3D2 1`] = `
   "query": "eq=x%3E%3D2",
   "rows": [
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -10421,23 +12180,36 @@ exports[`number line > inequality=x%3E%3D2 1`] = `
 exports[`number line > labelSize=large&from=0&to=2&step=1%2F4&eq=x%3E3%2F4 1`] = `
 {
   "line": {
-    "arrows": [
-      "M669,25 L652,16 L652,34 z",
-    ],
     "axis": {
       "x1": 16,
       "x2": 684,
       "y": 25,
     },
-    "crosses": [],
-    "endpoints": [
+    "fs": 22.4,
+    "groups": [
       {
-        "closed": false,
-        "x": 263,
+        "arrows": [
+          "M669,25 L652,16 L652,34 z",
+        ],
+        "crosses": [],
+        "endpoints": [
+          {
+            "closed": false,
+            "x": 263,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [
+          {
+            "x1": 263,
+            "x2": 653,
+          },
+        ],
       },
     ],
-    "fs": 22.4,
     "height": 113.52,
+    "labelFs": 26.88,
+    "labels": [],
     "numbers": [
       {
         "text": "0",
@@ -10515,12 +12287,6 @@ exports[`number line > labelSize=large&from=0&to=2&step=1%2F4&eq=x%3E3%2F4 1`] =
       "to": null,
     },
     "r": 6.5,
-    "segments": [
-      {
-        "x1": 263,
-        "x2": 653,
-      },
-    ],
     "ticks": [
       {
         "x": 38,
@@ -10573,8 +12339,10 @@ exports[`number line > labelSize=large&from=0&to=2&step=1%2F4&eq=x%3E3%2F4 1`] =
   "query": "from=0&to=2&step=1%2F4&labelSize=large&eq=x%3E3%2F4",
   "rows": [
     {
-      "points": false,
+      "note": null,
+      "points": null,
       "problem": null,
+      "sequence": false,
       "set": [
         {
           "hi": {
@@ -10584,6 +12352,305 @@ exports[`number line > labelSize=large&from=0&to=2&step=1%2F4&eq=x%3E3%2F4 1`] =
           "lo": {
             "closed": false,
             "v": 0.75,
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`number line > points=cross&eq=3&eq=x%3C1 1`] = `
+{
+  "line": {
+    "axis": {
+      "x1": 16,
+      "x2": 684,
+      "y": 25,
+    },
+    "fs": 16,
+    "groups": [
+      {
+        "arrows": [
+          "M31,25 L48,16 L48,34 z",
+        ],
+        "crosses": [
+          452,
+        ],
+        "endpoints": [
+          {
+            "closed": false,
+            "x": 392,
+          },
+        ],
+        "ink": "#111827",
+        "segments": [
+          {
+            "x1": 47,
+            "x2": 392,
+          },
+        ],
+      },
+    ],
+    "height": 78,
+    "labelFs": 19.2,
+    "labels": [],
+    "numbers": [
+      {
+        "text": "−10",
+        "x": 62,
+        "y": 53.6,
+      },
+      {
+        "text": "−9",
+        "x": 92,
+        "y": 53.6,
+      },
+      {
+        "text": "−8",
+        "x": 122,
+        "y": 53.6,
+      },
+      {
+        "text": "−7",
+        "x": 152,
+        "y": 53.6,
+      },
+      {
+        "text": "−6",
+        "x": 182,
+        "y": 53.6,
+      },
+      {
+        "text": "−5",
+        "x": 212,
+        "y": 53.6,
+      },
+      {
+        "text": "−4",
+        "x": 242,
+        "y": 53.6,
+      },
+      {
+        "text": "−3",
+        "x": 272,
+        "y": 53.6,
+      },
+      {
+        "text": "−2",
+        "x": 302,
+        "y": 53.6,
+      },
+      {
+        "text": "−1",
+        "x": 332,
+        "y": 53.6,
+      },
+      {
+        "text": "0",
+        "x": 362,
+        "y": 53.6,
+      },
+      {
+        "text": "1",
+        "x": 392,
+        "y": 53.6,
+      },
+      {
+        "text": "2",
+        "x": 422,
+        "y": 53.6,
+      },
+      {
+        "text": "3",
+        "x": 452,
+        "y": 53.6,
+      },
+      {
+        "text": "4",
+        "x": 482,
+        "y": 53.6,
+      },
+      {
+        "text": "5",
+        "x": 512,
+        "y": 53.6,
+      },
+      {
+        "text": "6",
+        "x": 542,
+        "y": 53.6,
+      },
+      {
+        "text": "7",
+        "x": 572,
+        "y": 53.6,
+      },
+      {
+        "text": "8",
+        "x": 602,
+        "y": 53.6,
+      },
+      {
+        "text": "9",
+        "x": 632,
+        "y": 53.6,
+      },
+      {
+        "text": "10",
+        "x": 662,
+        "y": 53.6,
+      },
+    ],
+    "problems": {
+      "from": null,
+      "step": null,
+      "to": null,
+    },
+    "r": 6.5,
+    "ticks": [
+      {
+        "x": 62,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 92,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 122,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 152,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 182,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 212,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 242,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 272,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 302,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 332,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 362,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 392,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 422,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 482,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 512,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 542,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 572,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 602,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 632,
+        "y1": 16,
+        "y2": 34,
+      },
+      {
+        "x": 662,
+        "y1": 16,
+        "y2": 34,
+      },
+    ],
+    "width": 700,
+  },
+  "query": "eq=3%7Cpoint%3Dcross&eq=x%3C1%7Cpoint%3Dcross",
+  "rows": [
+    {
+      "note": null,
+      "points": [
+        {
+          "label": null,
+          "v": 3,
+        },
+      ],
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": true,
+            "v": 3,
+          },
+          "lo": {
+            "closed": true,
+            "v": 3,
+          },
+        },
+      ],
+    },
+    {
+      "note": null,
+      "points": null,
+      "problem": null,
+      "sequence": false,
+      "set": [
+        {
+          "hi": {
+            "closed": false,
+            "v": 1,
+          },
+          "lo": {
+            "closed": false,
+            "v": -Infinity,
           },
         },
       ],

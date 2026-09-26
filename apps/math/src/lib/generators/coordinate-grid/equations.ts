@@ -9,48 +9,28 @@ import { CommaListNode, ComparisonNode, ParenthesesChildTag, VariableNode } from
 import { fromText, parsers } from '$lib/shared/math.js'
 import { fmt } from '$lib/shared/numbering.js'
 import { FunctionNameNode } from '$lib/shared/functions.js'
+import { splitLabels } from '$lib/shared/pointLabels.js'
 import { divisors, evaluate, type AngleUnit } from './evaluate.js'
+import {
+  ARROWS, ASYMPTOTES, COLORS, ENDPOINTS, LINE_STYLES, LABEL_STYLES, POINT_STYLES,
+  type Arrows, type AsymptoteStyle, type Color, type Endpoints, type LineStyle, type LabelStyle, type PointStyle,
+} from '$lib/shared/rowStyle.js'
 
 const EXAMPLE = 'Try a line like y = 2x + 1, a curve like y = x^2 − 4, a point like (2, 3), or a list of points like (2, 3), (1, 4).'
 const EPS = 1e-9
 
 class ReadError extends Error {}
 
-/** How a row is drawn. Colors print well in color and read as distinct in gray. */
-export const COLORS = {
-  black: '#111827',
-  blue: '#2563eb',
-  red: '#dc2626',
-  green: '#15803d',
-  orange: '#ea580c',
-  purple: '#7c3aed',
-}
-export const LINE_STYLES = { solid: 'Solid', dashed: 'Dashed', dotted: 'Dotted' }
-// Which ends of a line get an arrowhead. "left" is the end with the smaller x
-// (the bottom, for an up-and-down line).
-export const ARROWS = { both: 'Both ends', none: 'No arrows', left: 'Left end', right: 'Right end' }
-// How points are marked: a dot, or a cross as in France.
-export const POINT_STYLES = { dot: 'Dot', cross: 'Cross' }
-// What's written beside a named point: its name (A), or its name and coordinates (A(1, 2)).
-export const NAME_STYLES = { name: 'Name', coords: 'Name and coordinates' }
-// Whether a line with a domain shows open and closed circles at its ends, or just stops.
-export const ENDPOINTS = { shown: 'Show endpoints', hidden: 'No endpoints' }
-// Whether a curve's asymptotes are drawn as dotted lines. Hidden unless asked, so a test can ask for them.
-export const ASYMPTOTES = { hidden: 'No asymptotes', shown: 'Show asymptotes' }
+export { splitLabels }
+export { ARROWS, ASYMPTOTES, COLORS, ENDPOINTS, LINE_STYLES, LABEL_STYLES, POINT_STYLES }
+export type { Arrows, AsymptoteStyle, Color, Endpoints, LineStyle, LabelStyle, PointStyle }
 
-export type Color = keyof typeof COLORS
-export type LineStyle = keyof typeof LINE_STYLES
-export type Arrows = keyof typeof ARROWS
-export type PointStyle = keyof typeof POINT_STYLES
-export type NameStyle = keyof typeof NAME_STYLES
-export type Endpoints = keyof typeof ENDPOINTS
-export type AsymptoteStyle = keyof typeof ASYMPTOTES
 /** One equation row: what's typed, and how it's drawn. */
-export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle; names: NameStyle; ends: Endpoints; asym: AsymptoteStyle }
+export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle; names: LabelStyle; ends: Endpoints; asym: AsymptoteStyle }
 
 export const ROW_DEFAULTS: Row = { text: '', color: 'black', line: 'solid', arrows: 'both', point: 'dot', names: 'name', ends: 'shown', asym: 'hidden' }
 
-const STYLE_KEYS = { color: COLORS, line: LINE_STYLES, arrows: ARROWS, point: POINT_STYLES, names: NAME_STYLES, ends: ENDPOINTS, asym: ASYMPTOTES }
+const STYLE_KEYS = { color: COLORS, line: LINE_STYLES, arrows: ARROWS, point: POINT_STYLES, names: LABEL_STYLES, ends: ENDPOINTS, asym: ASYMPTOTES }
 type StyleKey = keyof typeof STYLE_KEYS
 
 /** A point, in the grid's own values, and its point name if it has one (A, B′). */
@@ -108,32 +88,6 @@ function point(node: TreeNode, angle: AngleUnit): Point {
     throw new ReadError('Each point needs two numbers, like (2, 3) or (−1/2, 4). For more than one: (2, 3), (1, 4).')
   }
   return { x, y }
-}
-
-/**
- * Points typed with point names, A(1, 2), B′(3, 4), as the same text without
- * the names, and each point's name (or null), in order. A name is one letter
- * and any primes, just before a point's opening bracket. Null when nothing
- * is named, or the text isn't a list of points.
- */
-export function splitNames(text: string): { text: string; names: (string | null)[] } | null {
-  if (/[=<>≤≥≠]/.test(text)) return null
-  let out = ''
-  let depth = 0
-  const names: (string | null)[] = []
-  for (const ch of text) {
-    if (ch === '(' && depth === 0) {
-      const m = /(^|[\s,])([A-Za-z])(['′″]*)\s*$/.exec(out)
-      if (m) {
-        out = out.slice(0, m.index + m[1].length)
-        names.push(m[2] + m[3].replace(/''/g, '″').replace(/'/g, '′'))
-      } else names.push(null)
-    }
-    if ('([{'.includes(ch)) depth++
-    if (')]}'.includes(ch)) depth--
-    out += ch
-  }
-  return names.some(Boolean) ? { text: out, names } : null
 }
 
 /** Is v close enough to w, relative to their size? */
@@ -269,8 +223,8 @@ export function parseEquation(
 ): { line?: Line; curve?: Curve; domain?: Domain; points?: Point[]; error?: string } | null {
   if (!String(text ?? '').trim()) return null
   try {
-    const named = splitNames(text)
-    const node = parsers.equation.parse(fromText(named?.text ?? text))
+    const labeled = splitLabels(text)
+    const node = parsers.equation.parse(fromText(labeled?.text ?? text))
     if (node instanceof ComparisonNode) return graphOf(node, angle)
     // An equation and its domain after a comma: y = 3x, −5 ≤ x < 7.
     if (node instanceof CommaListNode && !node.hasTag(ParenthesesChildTag) && node.expressions[0] instanceof ComparisonNode) {
@@ -285,7 +239,7 @@ export function parseEquation(
       return {
         points: items.map((item, i) => {
           const p = point(item, angle)
-          const name = named?.names[i]
+          const name = labeled?.labels[i]
           return name ? { ...p, name } : p
         }),
       }

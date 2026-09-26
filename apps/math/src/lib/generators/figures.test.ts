@@ -59,6 +59,13 @@ const LINE = [
   'from=0&to=1000&step=1',
   `${eq('x<20', 'y>2 and x<3', '(1, 2)', 'x<y', 'x+')}`,
   'inequality=x%3E%3D2',
+  `${eq('x<2|color=red', 'x>=2|color=blue', 'x>6|color=red', '-5, 0|color=green|point=cross')}`,
+  `from=0&to=1&step=1%2F10&${eq('a_n=1/n|last=6')}`,
+  `from=0&to=10&${eq('u_n=2n+1|first=0|last=8|color=purple|values=hidden')}`,
+  `from=-3&to=3&${eq('A(-2.5), 1, C(1.25)', 'P(0.5)|point=cross|labels=coords|color=red', '-1.5|values=hidden')}`,
+  `${eq('a_n=a_{n-1}+3', 'a_n=2k', '1/n|first=4|last=2')}`,
+  'points=cross&eq=3&eq=x%3C1',
+  `from=0&to=10&${eq('1/3, 1/2, 2/3, Q_1(4.5)')}`,
   `labelSize=large&from=0&to=2&step=1%2F4&${eq('x>3/4')}`,
 ]
 

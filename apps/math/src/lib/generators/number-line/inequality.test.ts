@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { parseInequality, parseNumber, type Interval } from './inequality.js'
+import { parseInequality, parseNumber, parseSequence, type Interval } from './inequality.js'
 
 // Intervals written the way a teacher would: [ and ] closed, ( and ) open.
 const show = ({ set, error }: { set: Interval[] | null; error: string | null }) =>
@@ -76,5 +76,37 @@ describe('parseNumber', () => {
     ['1/0', null],
   ])('%s', (text, expected) => {
     expect(parseNumber(text)).toBe(expected)
+  })
+})
+
+describe('parseSequence', () => {
+  const terms = (text: string) => {
+    const read = parseSequence(text)
+    return read === null ? 'not a sequence' : read.error ?? [1, 2, 3].map((n) => read.term!(n))
+  }
+  test.each([
+    ['a_n = 1/n', [1, 1 / 2, 1 / 3]],
+    ['a_{n}=2n+1', [3, 5, 7]],
+    ['uₙ = n^2', [1, 4, 9]],
+    ['f(n) = (-1)^n', [-1, 1, -1]],
+    ['1/n', [1, 1 / 2, 1 / 3]],
+    ['n', [1, 2, 3]],
+    ['a_n = 4', [4, 4, 4]],
+  ])('%s', (text, expected) => {
+    expect(terms(text)).toEqual(expected)
+  })
+
+  test.each(['3', '-1, 2.5', 'x < 3', 'n < 3', 'n = 2', '2k', ''])('%s is not a sequence', (text) => {
+    expect(terms(text)).toBe('not a sequence')
+  })
+
+  test.each([
+    ['a_n = a_{n-1} + 3', /earlier terms/],
+    ['a_n = 2k', /in n, not k/],
+    ['a_n =', /after the = sign/],
+    ['u_n', /Add = and the rule/],
+    ['a_n = n < 3', /one rule/],
+  ])('%s', (text, message) => {
+    expect(terms(text)).toMatch(message)
   })
 })

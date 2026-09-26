@@ -77,7 +77,7 @@ A figure of one horizontal axis with evenly spaced ticks, for placing numbers an
 _Avoid_: Line graph, ruler
 
 **Equation**:
-What the teacher types to graph, one per row. On a number line it's an inequality or equation in one letter, such as −2 < x ≤ 5, x < −1 or x ≥ 3, or x = 2, or a list of points, each one number, such as 3 or −1, 2.5, π/2; every row is drawn over the same line, and a number line with no equation is blank. On a coordinate grid it's a line or curve that can be written as y = …, such as y = 2x + 1, 2x + 3y = 6, x = 4 or y = x² − 4, or a list of points, such as (1, 2), (3, 4). Points aren't equations, but they're typed in the same rows and called the same thing. (Both generators' rows are `eq` in the page address; the number line's reading code still calls an equation `inequality`, and older number line links with `inequality=` still open.)
+What the teacher types to graph, one per row. On a number line it's an inequality or equation in one letter, such as −2 < x ≤ 5, x < −1 or x ≥ 3, or x = 2, or a list of points, each one number, such as 3 or −1, 2.5, π/2, or a sequence; every row is drawn over the same line, and a number line with no equation is blank. On a coordinate grid it's a line or curve that can be written as y = …, such as y = 2x + 1, 2x + 3y = 6, x = 4 or y = x² − 4, or a list of points, such as (1, 2), (3, 4). Points aren't equations, but they're typed in the same rows and called the same thing. (Both generators' rows are `eq` in the page address; the number line's reading code still calls an equation `inequality`, and older number line links with `inequality=` still open.)
 _Avoid_: Solution set, interval, expression
 
 **Tick**:
@@ -93,12 +93,20 @@ A straight line or curve drawn across a coordinate grid from an equation, with a
 _Avoid_: Plot, function, curve
 
 **Row style**:
-How one equation is drawn, set from the button before it, which shows a miniature of how the row is drawn: a color, a line style (solid, dashed or dotted) and which ends have arrows (both, neither, left or right; for an up-and-down line, left means the bottom), whether endpoints show, and whether asymptotes show. Points take the color and a point mark: a dot, or a cross as French classrooms use.
+How one equation is drawn, set from the button before it, which shows a miniature of how the row is drawn: a color, a line style (solid, dashed or dotted) and which ends have arrows (both, neither, left or right; for an up-and-down line, left means the bottom), whether endpoints show, and whether asymptotes show. Points take the color and a point mark: a dot, or a cross as French classrooms use. On a number line a row's style is its color, whether values are written, and for points and sequences a point mark and how point labels show; a number line's thick line, arrows and circles carry meaning, so they can't be changed. Every row starts black. Values are written above the line for endpoints and unlabeled points that don't sit on a numbered tick, the way their own row was typed (0.35 as 0.35, 3/8 as a fraction), unless the row style turns them off (for an estimate-this-point question). The color goes on the row's thick line, arrows, circles and points, never on the line, ticks or numbers. Rows of the same color join into one equation graph, as they always have; rows of different colors are drawn separately, each color over the colors that came before it in the list.
 _Avoid_: Format, appearance, theme
 
 **Point mark**:
-How points are drawn: a dot or a cross. On a coordinate grid it's part of each points row's row style; on a number line it's one setting for every point on the line. It never changes an endpoint, whose open or closed circle has a meaning.
+How points are drawn: a dot or a cross. It's part of each points row's row style, on both the coordinate grid and the number line. It never changes an endpoint, whose open or closed circle has a meaning.
 _Avoid_: Marker, symbol, dot style
+
+**Sequence**:
+A number line row typed as a rule in n, such as aₙ = 1/n, uₙ = 1/n or just 1/n, shown for n from one whole number to another (1 to 5 unless the teacher changes it). Its terms are drawn as points, so 1/n from 1 to 5 marks 1, 1/2, 1/3, 1/4 and 1/5. Terms past the end of the line are left off with a note, not treated as a mistake. Rules built from earlier terms, such as aₙ = aₙ₋₁ + 3, aren't read yet.
+_Avoid_: Series, pattern, list
+
+**Term**:
+One number a sequence makes, drawn as a point on the line.
+_Avoid_: Element, value
 
 **Endpoint**:
 Where an equation's graph or a graphed line stops at a number, drawn as an open circle (not included) or a closed circle (included). On a coordinate grid, a graphed line's endpoints are at the ends of its domain, and a row style can hide them so the line simply stops.
@@ -116,9 +124,9 @@ _Avoid_: Gap, removable discontinuity (fine in teaching, not as the name), missi
 A line that a graphed line approaches but never reaches: vertical, horizontal or slant. Where a graphed line meets a vertical asymptote, the curve breaks and each side runs to the grid's edge with an arrowhead. Asymptotes are found for the whole row and, when its row style shows them, drawn as dotted lines in the row's color, without their equations; they're hidden unless the teacher shows them.
 _Avoid_: Discontinuity, break, limit line
 
-**Point name**:
-The letter written beside a point on a coordinate grid, typed in textbook notation such as A(1, 2), primes allowed (A′). A points row shows just the names, or the names with their coordinates.
-_Avoid_: Point label, vertex name (that's a triangle's), tag
+**Point label**:
+The letter written at a point, typed before it in textbook notation: A(1, 2) on a coordinate grid, P(0.35) on a number line. It's one letter, with primes or a subscript allowed (A′, A₁), and it belongs to its point, so it stays when the point's numbers change and goes when the point is deleted. A points row's style shows just the labels or the labels with their coordinates or values, A or A(0.35). On a number line a labeled point's value is never written, since it would give the answer away; endpoints and sequence terms aren't labeled.
+_Avoid_: Point name, vertex name (that's a triangle's), letter, tag
 
 ### Triangles
 
