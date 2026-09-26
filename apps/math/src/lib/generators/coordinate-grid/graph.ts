@@ -63,6 +63,10 @@ function ticks(blocks: number, step: number, start: number, every: number, numbe
   return out
 }
 
+/** Where minor gridlines go, in blocks: each block split into `parts`. */
+const minorLines = (blocks: number, parts: number) =>
+  parts > 1 ? Array.from({ length: blocks * parts }, (_, k) => k / parts).filter((_, k) => k % parts) : []
+
 /** A coordinate grid laid out for Graph.svelte to draw. */
 export type GraphLayout = ReturnType<typeof buildGraph>
 
@@ -219,6 +223,9 @@ export function buildGraph(settings: Settings) {
     grid: { x: L, y: T, w: gridW, h: gridH },
     vLines: Array.from({ length: s.xBlocks + 1 }, (_, i) => L + i * CELL),
     hLines: Array.from({ length: s.yBlocks + 1 }, (_, j) => T + j * CELL),
+    // Minor gridlines: the lines inside each block, never on a block's own line.
+    minorV: minorLines(s.xBlocks, s.minor).map((i) => round(L + i * CELL)),
+    minorH: minorLines(s.yBlocks, s.minor).map((j) => round(T + j * CELL)),
     xAxis: { x1: L - extL, x2: L + gridW + extR, y: axisY },
     yAxis: { y1: T + gridH + extB, y2: T - extT, x: axisX },
     numbers,

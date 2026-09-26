@@ -39,6 +39,14 @@
 
   <rect width={g.width} height={g.height} fill="#fff" />
 
+  <!-- Minor gridlines: thin and faint, under the block lines. -->
+  {#if g.minorV.length}
+    <g stroke="#9ca3af" stroke-width="0.5">
+      {#each g.minorV as x}<line x1={x} y1={g.grid.y} x2={x} y2={g.grid.y + g.grid.h} />{/each}
+      {#each g.minorH as y}<line x1={g.grid.x} y1={y} x2={g.grid.x + g.grid.w} y2={y} />{/each}
+    </g>
+  {/if}
+
   <g stroke={INK} stroke-width="1" shape-rendering="crispEdges">
     {#each g.vLines as x}<line x1={x} y1={g.grid.y} x2={x} y2={g.grid.y + g.grid.h} />{/each}
     {#each g.hLines as y}<line x1={g.grid.x} y1={y} x2={g.grid.x + g.grid.w} y2={y} />{/each}

@@ -4,7 +4,7 @@
   // scrolls; only the settings column does. Settings are mirrored into the
   // page address so a bookmark or shared link brings back exactly this grid,
   // and the server renders that same grid on first load.
-  import { Heading, MoveRight, MoveUp, Plus, X } from '@lucide/svelte'
+  import { Grid3x3, Heading, MoveRight, MoveUp, Plus, X } from '@lucide/svelte'
   import { afterNavigate, replaceState } from '$app/navigation'
   import { page } from '$app/state'
   import CapPicker from '$lib/shared/CapPicker.svelte'
@@ -75,6 +75,14 @@
     [10, 'Every 10th line'],
     [0, 'No numbers'],
   ]
+  const MINOR_OPTIONS: [number, string][] = [
+    [0, 'None'],
+    [2, '2 per block'],
+    [4, '4 per block'],
+    [5, '5 per block'],
+    [10, '10 per block, like millimetre paper'],
+  ]
+  const gridSummary = $derived(clean.minor ? `${clean.minor} minor gridlines per block` : 'No minor gridlines')
   // Each axis runs from its start end (left/bottom) to its end end (right/top).
   const AXES = [
     { axis: 'x', heading: 'x-axis', icon: MoveRight, ends: [['Start', 'Left end', 'left'], ['End', 'Right end', 'right']] },
@@ -213,6 +221,15 @@
             </div>
           </Section>
         {/each}
+
+        <Section title="Grid" icon={Grid3x3} summary={gridSummary}>
+          <label class="field">
+            Minor gridlines
+            <select bind:value={settings.minor}>
+              {#each MINOR_OPTIONS as [v, label]}<option value={v}>{label}</option>{/each}
+            </select>
+          </label>
+        </Section>
       </section>
     </div>
 

@@ -49,6 +49,8 @@ exports[`coordinate grid >  1`] = `
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -330,6 +332,8 @@ exports[`coordinate grid > eq=y%3C2x&eq=y%3Dz%2B1&eq=x%5E2%2By%5E2%3D4&eq=0%3D0&
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -562,6 +566,289 @@ exports[`coordinate grid > eq=y%3C2x&eq=y%3Dz%2B1&eq=x%5E2%2By%5E2%3D4&eq=0%3D0&
 }
 `;
 
+exports[`coordinate grid > minor=3 1`] = `
+{
+  "graph": {
+    "blanks": [],
+    "circles": [],
+    "dots": [],
+    "fs": 14,
+    "grid": {
+      "h": 480,
+      "w": 480,
+      "x": 38.8,
+      "y": 56.2,
+    },
+    "hLines": [
+      56.2,
+      88.2,
+      120.2,
+      152.2,
+      184.2,
+      216.2,
+      248.2,
+      280.2,
+      312.2,
+      344.2,
+      376.2,
+      408.2,
+      440.2,
+      472.2,
+      504.2,
+      536.2,
+    ],
+    "height": 572.2,
+    "labels": [
+      {
+        "anchor": "start",
+        "kind": "tip",
+        "text": "x",
+        "x": 544.8,
+        "y": 541.8000000000001,
+      },
+      {
+        "anchor": "middle",
+        "kind": "tip",
+        "text": "y",
+        "x": 38.8,
+        "y": 30.200000000000003,
+      },
+    ],
+    "lines": [],
+    "minorH": [],
+    "minorV": [],
+    "numbers": [
+      {
+        "anchor": "end",
+        "text": "0",
+        "x": 30.799999999999997,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "1",
+        "x": 70.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "2",
+        "x": 102.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "3",
+        "x": 134.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "4",
+        "x": 166.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "5",
+        "x": 198.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "6",
+        "x": 230.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "7",
+        "x": 262.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "8",
+        "x": 294.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "9",
+        "x": 326.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "10",
+        "x": 358.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "11",
+        "x": 390.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "12",
+        "x": 422.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "13",
+        "x": 454.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "14",
+        "x": 486.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "15",
+        "x": 518.8,
+        "y": 556.2,
+      },
+      {
+        "anchor": "end",
+        "text": "1",
+        "x": 32.8,
+        "y": 509.1,
+      },
+      {
+        "anchor": "end",
+        "text": "2",
+        "x": 32.8,
+        "y": 477.1,
+      },
+      {
+        "anchor": "end",
+        "text": "3",
+        "x": 32.8,
+        "y": 445.1,
+      },
+      {
+        "anchor": "end",
+        "text": "4",
+        "x": 32.8,
+        "y": 413.1,
+      },
+      {
+        "anchor": "end",
+        "text": "5",
+        "x": 32.8,
+        "y": 381.1,
+      },
+      {
+        "anchor": "end",
+        "text": "6",
+        "x": 32.8,
+        "y": 349.1,
+      },
+      {
+        "anchor": "end",
+        "text": "7",
+        "x": 32.8,
+        "y": 317.1,
+      },
+      {
+        "anchor": "end",
+        "text": "8",
+        "x": 32.8,
+        "y": 285.1,
+      },
+      {
+        "anchor": "end",
+        "text": "9",
+        "x": 32.8,
+        "y": 253.10000000000005,
+      },
+      {
+        "anchor": "end",
+        "text": "10",
+        "x": 32.8,
+        "y": 221.10000000000005,
+      },
+      {
+        "anchor": "end",
+        "text": "11",
+        "x": 32.8,
+        "y": 189.10000000000005,
+      },
+      {
+        "anchor": "end",
+        "text": "12",
+        "x": 32.8,
+        "y": 157.10000000000005,
+      },
+      {
+        "anchor": "end",
+        "text": "13",
+        "x": 32.8,
+        "y": 125.10000000000005,
+      },
+      {
+        "anchor": "end",
+        "text": "14",
+        "x": 32.8,
+        "y": 93.10000000000005,
+      },
+      {
+        "anchor": "end",
+        "text": "15",
+        "x": 32.8,
+        "y": 61.100000000000044,
+      },
+    ],
+    "pointNames": [],
+    "r": 5.5,
+    "vLines": [
+      38.8,
+      70.8,
+      102.8,
+      134.8,
+      166.8,
+      198.8,
+      230.8,
+      262.8,
+      294.8,
+      326.8,
+      358.8,
+      390.8,
+      422.8,
+      454.8,
+      486.8,
+      518.8,
+    ],
+    "width": 571.3,
+    "xAxis": {
+      "x1": 18.799999999999997,
+      "x2": 538.8,
+      "y": 536.2,
+    },
+    "yAxis": {
+      "x": 38.8,
+      "y1": 556.2,
+      "y2": 36.2,
+    },
+  },
+  "problems": {
+    "xFrom": null,
+    "xStep": null,
+    "xTo": null,
+    "yFrom": null,
+    "yStep": null,
+    "yTo": null,
+  },
+  "query": "",
+}
+`;
+
 exports[`coordinate grid > title=Distance%20over%20time&titleMode=text&xTitle=Time%20(hours)&xTitleMode=text&yTitle=Distance%20(km)&yTitleMode=text 1`] = `
 {
   "graph": {
@@ -630,6 +917,8 @@ exports[`coordinate grid > title=Distance%20over%20time&titleMode=text&xTitle=Ti
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -923,6 +1212,8 @@ exports[`coordinate grid > titleMode=blank&xTitleMode=blank&yTitleMode=blank&xLa
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -1155,6 +1446,161 @@ exports[`coordinate grid > titleMode=blank&xTitleMode=blank&yTitleMode=blank&xLa
 }
 `;
 
+exports[`coordinate grid > xFrom=-2&xTo=2&yFrom=-2&yTo=2&minor=4 1`] = `
+{
+  "graph": {
+    "blanks": [],
+    "circles": [],
+    "dots": [],
+    "fs": 14,
+    "grid": {
+      "h": 128,
+      "w": 128,
+      "x": 34,
+      "y": 56.2,
+    },
+    "hLines": [
+      56.2,
+      88.2,
+      120.2,
+      152.2,
+      184.2,
+    ],
+    "height": 218.2,
+    "labels": [
+      {
+        "anchor": "start",
+        "kind": "tip",
+        "text": "x",
+        "x": 188,
+        "y": 125.79999999999998,
+      },
+      {
+        "anchor": "middle",
+        "kind": "tip",
+        "text": "y",
+        "x": 98,
+        "y": 30.200000000000003,
+      },
+    ],
+    "lines": [],
+    "minorH": [
+      64.2,
+      72.2,
+      80.2,
+      96.2,
+      104.2,
+      112.2,
+      128.2,
+      136.2,
+      144.2,
+      160.2,
+      168.2,
+      176.2,
+    ],
+    "minorV": [
+      42,
+      50,
+      58,
+      74,
+      82,
+      90,
+      106,
+      114,
+      122,
+      138,
+      146,
+      154,
+    ],
+    "numbers": [
+      {
+        "anchor": "middle",
+        "text": "−2",
+        "x": 34,
+        "y": 140.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "−1",
+        "x": 66,
+        "y": 140.2,
+      },
+      {
+        "anchor": "end",
+        "text": "0",
+        "x": 90,
+        "y": 140.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "1",
+        "x": 130,
+        "y": 140.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "2",
+        "x": 162,
+        "y": 140.2,
+      },
+      {
+        "anchor": "end",
+        "text": "−2",
+        "x": 92,
+        "y": 189.1,
+      },
+      {
+        "anchor": "end",
+        "text": "−1",
+        "x": 92,
+        "y": 157.1,
+      },
+      {
+        "anchor": "end",
+        "text": "1",
+        "x": 92,
+        "y": 93.1,
+      },
+      {
+        "anchor": "end",
+        "text": "2",
+        "x": 92,
+        "y": 61.09999999999999,
+      },
+    ],
+    "pointNames": [],
+    "r": 5.5,
+    "vLines": [
+      34,
+      66,
+      98,
+      130,
+      162,
+    ],
+    "width": 214.5,
+    "xAxis": {
+      "x1": 14,
+      "x2": 182,
+      "y": 120.19999999999999,
+    },
+    "yAxis": {
+      "x": 98,
+      "y1": 204.2,
+      "y2": 36.2,
+    },
+  },
+  "problems": {
+    "xFrom": null,
+    "xStep": null,
+    "xTo": null,
+    "yFrom": null,
+    "yStep": null,
+    "yTo": null,
+  },
+  "query": "xFrom=-2&xTo=2&yFrom=-2&yTo=2&minor=4",
+}
+`;
+
 exports[`coordinate grid > xFrom=-3&xTo=4.5&yFrom=2&yTo=7&yStep=0.5&xEvery=10 1`] = `
 {
   "graph": {
@@ -1199,6 +1645,8 @@ exports[`coordinate grid > xFrom=-3&xTo=4.5&yFrom=2&yTo=7&yStep=0.5&xEvery=10 1`
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -1373,6 +1821,8 @@ exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=(1%2C%202)%2C%20(3%2
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "middle",
@@ -1609,6 +2059,8 @@ exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=A(1%2C%202)%2C%20B'(
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "middle",
@@ -1936,6 +2388,8 @@ exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=y%3D(2x%2B1)%2F(3x%5
         "width": 2.5,
       },
     ],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "middle",
@@ -2201,6 +2655,8 @@ exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=y%3Dx%5E2-4%7Ccolor%
         "width": 2.5,
       },
     ],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "middle",
@@ -2414,6 +2870,8 @@ exports[`coordinate grid > xFrom=-6&xTo=6&yFrom=-6&yTo=6&xEvery=2&yEvery=2 1`] =
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "middle",
@@ -2630,6 +3088,8 @@ exports[`coordinate grid > xFrom=-10&xTo=10&yFrom=-10&yTo=10&eq=y%3D2x%2B1&eq=2x
         "width": 3.2,
       },
     ],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "middle",
@@ -2969,6 +3429,8 @@ exports[`coordinate grid > xFrom=0&xTo=1&xStep=1%2F4&yFrom=-1&yTo=1&yStep=0.25 1
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -3127,6 +3589,8 @@ exports[`coordinate grid > xFrom=0&xTo=2pi&xStep=pi%2F2&yFrom=-2&yTo=2&eq=Q(pi%2
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -3266,6 +3730,8 @@ exports[`coordinate grid > xFrom=0&xTo=2pi&xStep=pi%2F4&yFrom=-2&yTo=2&yStep=1%2
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -3407,6 +3873,193 @@ exports[`coordinate grid > xFrom=0&xTo=2pi&xStep=pi%2F4&yFrom=-2&yTo=2&yStep=1%2
 }
 `;
 
+exports[`coordinate grid > xFrom=0&xTo=4&yFrom=0&yTo=3&minor=10 1`] = `
+{
+  "graph": {
+    "blanks": [],
+    "circles": [],
+    "dots": [],
+    "fs": 14,
+    "grid": {
+      "h": 96,
+      "w": 128,
+      "x": 34,
+      "y": 56.2,
+    },
+    "hLines": [
+      56.2,
+      88.2,
+      120.2,
+      152.2,
+    ],
+    "height": 188.2,
+    "labels": [
+      {
+        "anchor": "start",
+        "kind": "tip",
+        "text": "x",
+        "x": 188,
+        "y": 157.79999999999998,
+      },
+      {
+        "anchor": "middle",
+        "kind": "tip",
+        "text": "y",
+        "x": 34,
+        "y": 30.200000000000003,
+      },
+    ],
+    "lines": [],
+    "minorH": [
+      59.4,
+      62.6,
+      65.8,
+      69,
+      72.2,
+      75.4,
+      78.6,
+      81.8,
+      85,
+      91.4,
+      94.6,
+      97.8,
+      101,
+      104.2,
+      107.4,
+      110.6,
+      113.8,
+      117,
+      123.4,
+      126.6,
+      129.8,
+      133,
+      136.2,
+      139.4,
+      142.6,
+      145.8,
+      149,
+    ],
+    "minorV": [
+      37.2,
+      40.4,
+      43.6,
+      46.8,
+      50,
+      53.2,
+      56.4,
+      59.6,
+      62.8,
+      69.2,
+      72.4,
+      75.6,
+      78.8,
+      82,
+      85.2,
+      88.4,
+      91.6,
+      94.8,
+      101.2,
+      104.4,
+      107.6,
+      110.8,
+      114,
+      117.2,
+      120.4,
+      123.6,
+      126.8,
+      133.2,
+      136.4,
+      139.6,
+      142.8,
+      146,
+      149.2,
+      152.4,
+      155.6,
+      158.8,
+    ],
+    "numbers": [
+      {
+        "anchor": "end",
+        "text": "0",
+        "x": 26,
+        "y": 172.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "1",
+        "x": 66,
+        "y": 172.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "2",
+        "x": 98,
+        "y": 172.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "3",
+        "x": 130,
+        "y": 172.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "4",
+        "x": 162,
+        "y": 172.2,
+      },
+      {
+        "anchor": "end",
+        "text": "1",
+        "x": 28,
+        "y": 125.1,
+      },
+      {
+        "anchor": "end",
+        "text": "2",
+        "x": 28,
+        "y": 93.1,
+      },
+      {
+        "anchor": "end",
+        "text": "3",
+        "x": 28,
+        "y": 61.09999999999999,
+      },
+    ],
+    "pointNames": [],
+    "r": 5.5,
+    "vLines": [
+      34,
+      66,
+      98,
+      130,
+      162,
+    ],
+    "width": 214.5,
+    "xAxis": {
+      "x1": 14,
+      "x2": 182,
+      "y": 152.2,
+    },
+    "yAxis": {
+      "x": 34,
+      "y1": 172.2,
+      "y2": 36.2,
+    },
+  },
+  "problems": {
+    "xFrom": null,
+    "xStep": null,
+    "xTo": null,
+    "yFrom": null,
+    "yStep": null,
+    "yTo": null,
+  },
+  "query": "xTo=4&yTo=3&minor=10",
+}
+`;
+
 exports[`coordinate grid > xFrom=0&xTo=100&xStep=1 1`] = `
 {
   "graph": {
@@ -3456,6 +4109,8 @@ exports[`coordinate grid > xFrom=0&xTo=100&xStep=1 1`] = `
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -3737,6 +4392,8 @@ exports[`coordinate grid > xFrom=abc&xTo=1&xStep=0&yFrom=5&yTo=1 1`] = `
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
@@ -4017,6 +4674,8 @@ exports[`coordinate grid > xStart=-2&xBlocks=7&yStart=-1&yBlocks=14&yStep=0.5&ar
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "middle",
@@ -4236,6 +4895,8 @@ exports[`coordinate grid > xStartCap=circle&xEndCap=line&yStartCap=none&yEndCap=
       },
     ],
     "lines": [],
+    "minorH": [],
+    "minorV": [],
     "numbers": [
       {
         "anchor": "end",
