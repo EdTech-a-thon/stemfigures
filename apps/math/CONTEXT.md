@@ -113,7 +113,7 @@ A single x-value where a graphed line is undefined but the curve continues on bo
 _Avoid_: Gap, removable discontinuity (fine in teaching, not as the name), missing point
 
 **Asymptote**:
-A line that a graphed line approaches but never reaches: vertical, horizontal or slant. Where a graphed line meets a vertical asymptote, the curve breaks and each side runs to the grid's edge with an arrowhead. Asymptotes are found for the whole row and, when its row style shows them, drawn as thin dotted lines in the row's color, without their equations; they're hidden unless the teacher shows them.
+A line that a graphed line approaches but never reaches: vertical, horizontal or slant. Where a graphed line meets a vertical asymptote, the curve breaks and each side runs to the grid's edge with an arrowhead. Asymptotes are found for the whole row and, when its row style shows them, drawn as dotted lines in the row's color, without their equations; they're hidden unless the teacher shows them.
 _Avoid_: Discontinuity, break, limit line
 
 **Point name**:

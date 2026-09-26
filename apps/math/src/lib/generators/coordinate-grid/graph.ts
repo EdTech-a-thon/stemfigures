@@ -183,7 +183,7 @@ export function buildGraph(settings: Settings) {
   // Holes and endpoints: open circles (not included) and closed ones (included).
   const circles: (Point & { color: string; closed: boolean })[] = []
   const pointNames: (Point & { name: string; coords: string; color: string })[] = []
-  // Asymptotes, when a row shows them: thin dotted lines in the row's color, under the curves.
+  // Asymptotes, when a row shows them: dotted lines in the row's color, under the curves.
   const asymptotes: { d: string; color: string }[] = []
   const rows = settings.equations ?? []
   readEquations(rows.map((r) => r.text), box, s.angle).forEach((read, i) => {
