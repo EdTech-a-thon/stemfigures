@@ -15,10 +15,10 @@
   import MathInput from '$lib/shared/MathInput.svelte'
   import { niceText } from '$lib/shared/numbering.js'
   import Presets from '$lib/shared/Presets.svelte'
+  import RowStyle from '$lib/shared/RowStyle.svelte'
   import Section from '$lib/shared/Section.svelte'
   import { createHistory } from '$lib/shared/history.svelte.js'
   import { ROW_DEFAULTS, readEquations, type Row } from './equations.js'
-  import RowStyle from './RowStyle.svelte'
   import Graph from './Graph.svelte'
   import { presetStore } from './presets.js'
   import {

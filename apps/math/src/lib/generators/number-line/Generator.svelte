@@ -10,15 +10,17 @@
   import HelpTip from '$lib/shared/HelpTip.svelte'
   import MathInput from '$lib/shared/MathInput.svelte'
   import Presets from '$lib/shared/Presets.svelte'
+  import RowStyle from '$lib/shared/RowStyle.svelte'
   import Section from '$lib/shared/Section.svelte'
   import { createHistory } from '$lib/shared/history.svelte.js'
   import { niceText } from '$lib/shared/numbering.js'
   import NumberLine from './NumberLine.svelte'
   import { presetStore } from './presets.js'
-  import { cleanSettings, readLine, sameFigure, settingsFromParams, settingsToQuery, type Settings } from './settings.js'
+  import { ROW_DEFAULTS, cleanSettings, readLine, sameFigure, settingsFromParams, settingsToQuery, type Row, type Settings } from './settings.js'
 
   // There's always a row to type the next equation in.
-  const withRow = (s: Settings): Settings => (s.equations.length ? s : { ...s, equations: [''] })
+  const blankRow = (): Row => ({ ...ROW_DEFAULTS })
+  const withRow = (s: Settings): Settings => (s.equations.length ? s : { ...s, equations: [blankRow()] })
 
   let settings = $state(withRow(settingsFromParams(page.url.searchParams)))
   const clean = $derived(cleanSettings(settings))
@@ -27,13 +29,13 @@
 
   // A new row, unless the last one is still empty, which gets the focus instead.
   function addRow() {
-    if (settings.equations.at(-1)?.trim() !== '') settings.equations.push('')
+    if (settings.equations.at(-1)?.text.trim() !== '') settings.equations.push(blankRow())
     const i = settings.equations.length - 1
     requestAnimationFrame(() => document.getElementById(`eq-${i}`)?.focus())
   }
   function removeRow(i: number) {
     settings.equations.splice(i, 1)
-    if (!settings.equations.length) settings.equations.push('')
+    if (!settings.equations.length) settings.equations.push(blankRow())
   }
 
   // The router can't replace the address until the page has hydrated, which
@@ -74,8 +76,7 @@
       `${n(from)} to ${n(to)}`,
       `by ${n(step)}`,
       clean.every ? (clean.every === 1 ? 'numbered' : `numbered every ${clean.every}`) : 'unnumbered',
-      clean.points === 'cross' && line.points.length && 'points as crosses',
-    ].filter(Boolean).join(' · ')
+    ].join(' · ')
   })
 
   function applyPreset(preset: Settings) {
@@ -99,24 +100,43 @@
         <div class="head-row">
           <h2 class="card-head flush">Equations</h2>
           <HelpTip id="equation-tip" label="How to type an equation">
-            Try x &lt; −1 or x ≥ 3, x ≠ 2, all real numbers or no solution, or points like 3 or −1, 2.5, π/2. Type &lt;= for ≤,
-            != for ≠, pi for π and / for a fraction. Leave it empty for a blank line.
+            Try x &lt; −1 or x ≥ 3, x ≠ 2, all real numbers or no solution, points like 3 or −1, 2.5, π/2, or a sequence like
+            aₙ = 1/n. Type &lt;= for ≤, != for ≠, pi for π, / for a fraction and a_n for aₙ. Leave it empty for a blank line.
           </HelpTip>
         </div>
-        {#each settings.equations as _, i}
+        {#each settings.equations as row, i}
+          {@const read = line.rows[i]}
           <div class="row">
+            <RowStyle {row} id="eq-{i}-style" label="equation {i + 1}" isPoints={!!read?.points || !!read?.sequence} colorOnly />
             <MathInput
               kind="inequality"
               id="eq-{i}"
               aria-label="Equation {i + 1}"
               placeholder={i === 0 ? '−2 < x ≤ 5' : ''}
-              aria-invalid={!!line.rows[i]?.problem}
-              aria-describedby={line.rows[i]?.problem ? `eq-${i}-problem` : undefined}
-              bind:value={settings.equations[i]}
+              aria-invalid={!!read?.problem}
+              aria-describedby={read?.problem ? `eq-${i}-problem` : undefined}
+              bind:value={row.text}
             />
             <button class="icon-btn" aria-label="Remove equation {i + 1}" data-tip="Remove" onclick={() => removeRow(i)}><X size={17} /></button>
           </div>
-          {#if line.rows[i]?.problem}<p id="eq-{i}-problem" class="help problem">{line.rows[i].problem}</p>{/if}
+          {#if read?.sequence || read?.points}
+            <div class="row-extra">
+              {#if read.sequence}
+                <span class="terms">
+                  n from
+                  <input type="number" step="1" aria-label="Equation {i + 1}: first n" bind:value={row.first} />
+                  to
+                  <input type="number" step="1" aria-label="Equation {i + 1}: last n" bind:value={row.last} />
+                </span>
+              {/if}
+              <label class="names">
+                Names
+                <input type="text" placeholder="A, B, C" aria-label="Equation {i + 1}: point names" bind:value={row.names} />
+              </label>
+            </div>
+          {/if}
+          {#if read?.problem}<p id="eq-{i}-problem" class="help problem">{read.problem}</p>{/if}
+          {#if read?.note}<p class="help">{read.note}</p>{/if}
         {/each}
         <button class="add" onclick={addRow}><Plus size={16} aria-hidden="true" /> Add equation</button>
       </section>
@@ -138,13 +158,6 @@
             Numbers
             <select bind:value={settings.every}>
               {#each EVERY_OPTIONS as [v, label]}<option value={v}>{label}</option>{/each}
-            </select>
-          </label>
-          <label class="field">
-            Points
-            <select bind:value={settings.points}>
-              <option value="dot">Dots</option>
-              <option value="cross">Crosses</option>
             </select>
           </label>
         </Section>
@@ -192,6 +205,15 @@
   .row { display: flex; align-items: center; gap: 0.25rem; }
   .row > :global(.caret-field) { flex: 1; min-width: 0; margin-right: 0.2rem; }
   .equations .help { margin: -0.2rem 0 0; }
+  /* Under a points or sequence row, lined up with its math field. */
+  .row-extra {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.9rem; margin: -0.15rem 0 0 calc(2.86rem + 0.25rem);
+    font-size: 0.85rem; font-weight: 600; color: var(--muted);
+  }
+  .terms, .names { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .terms input { width: 3.6rem; }
+  .names { flex: 1; min-width: 9rem; }
+  .names input { flex: 1; min-width: 0; }
   .add {
     align-self: flex-start; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.6rem;
     border: 1.5px dashed var(--border); border-radius: 999px; background: none; color: var(--blue-dark); font-weight: 700; font-size: 0.85rem;

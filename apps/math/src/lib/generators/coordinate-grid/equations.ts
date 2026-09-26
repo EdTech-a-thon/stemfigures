@@ -8,32 +8,16 @@ import type { TreeNode } from '@caret-js/core'
 import { CommaListNode, ComparisonNode, ParenthesesChildTag, VariableNode, evaluate } from '@caret-js/math'
 import { fromText, parsers } from '$lib/shared/math.js'
 import { fmt } from '$lib/shared/numbering.js'
+import { ARROWS, COLORS, LINE_STYLES, POINT_STYLES, type Arrows, type Color, type LineStyle, type PointStyle } from '$lib/shared/rowStyle.js'
 
 const EXAMPLE = 'Try a line like y = 2x + 1, a curve like y = x^2 − 4, a point like (2, 3), or a list of points like (2, 3), (1, 4).'
 const EPS = 1e-9
 
 class ReadError extends Error {}
 
-/** How a row is drawn. Colors print well in color and read as distinct in gray. */
-export const COLORS = {
-  black: '#111827',
-  blue: '#2563eb',
-  red: '#dc2626',
-  green: '#15803d',
-  orange: '#ea580c',
-  purple: '#7c3aed',
-}
-export const LINE_STYLES = { solid: 'Solid', dashed: 'Dashed', dotted: 'Dotted' }
-// Which ends of a line get an arrowhead. "left" is the end with the smaller x
-// (the bottom, for an up-and-down line).
-export const ARROWS = { both: 'Both ends', none: 'No arrows', left: 'Left end', right: 'Right end' }
-// How points are marked: a dot, or a cross as in France.
-export const POINT_STYLES = { dot: 'Dot', cross: 'Cross' }
+export { ARROWS, COLORS, LINE_STYLES, POINT_STYLES }
+export type { Arrows, Color, LineStyle, PointStyle }
 
-export type Color = keyof typeof COLORS
-export type LineStyle = keyof typeof LINE_STYLES
-export type Arrows = keyof typeof ARROWS
-export type PointStyle = keyof typeof POINT_STYLES
 /** One equation row: what's typed, and how it's drawn. */
 export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle }
 

@@ -1,7 +1,8 @@
 // Reading what a teacher types, with Caret (see docs/adr/0002-caret-for-math-input.md):
 // an inequality becomes the set of numbers it's true for, as a list of intervals,
-// points like "3" or "−1, 2.5" become that set too (one closed dot each), and a
-// range value like "3π/2" becomes a number. Runs on the server too.
+// points like "3" or "−1, 2.5" become that set too (one closed dot each), a
+// sequence like "aₙ = 1/n" becomes its rule, and a range value like "3π/2"
+// becomes a number. Runs on the server too.
 
 import type { TreeNode } from '@caret-js/core'
 import { CommaListNode, ComparisonNode, KeywordNode, LogicNode, ParenthesesChildTag, VariableNode, evaluate } from '@caret-js/math'
@@ -113,18 +114,62 @@ function pointsOf(text: string): number[] | null {
 
 /**
  * Read an inequality, or points. Blank text is a blank number line (set: null).
+ * Points also come back as `values`, in the order they were typed, which is
+ * the order their point names go to them.
  */
-export function parseInequality(text: string): { set: Interval[] | null; variable: string | null; points: boolean; error: string | null } {
-  if (!String(text ?? '').trim()) return { set: null, variable: null, points: false, error: null }
+export function parseInequality(text: string): {
+  set: Interval[] | null
+  variable: string | null
+  points: boolean
+  values: number[] | null
+  error: string | null
+} {
+  const none = { set: null, variable: null, points: false, values: null }
+  if (!String(text ?? '').trim()) return { ...none, error: null }
   const vars = new Set<string>()
   try {
     const points = pointsOf(text)
-    if (points) return { set: union(points.map((v) => ({ lo: { v, closed: true }, hi: { v, closed: true } })), []), variable: null, points: true, error: null }
+    if (points) return { set: union(points.map((v) => ({ lo: { v, closed: true }, hi: { v, closed: true } })), []), variable: null, points: true, values: points, error: null }
     const set = setOf(parsers.inequality.parse(fromText(text)), vars)
-    if (vars.size > 1) return { set: null, variable: null, points: false, error: `Use one letter throughout, not ${[...vars].join(' and ')}.` }
-    return { set, variable: [...vars][0] ?? null, points: false, error: null }
+    if (vars.size > 1) return { ...none, error: `Use one letter throughout, not ${[...vars].join(' and ')}.` }
+    return { set, variable: [...vars][0] ?? null, points: false, values: null, error: null }
   } catch (e) {
-    if (e instanceof ReadError) return { set: null, variable: null, points: false, error: e.message }
+    if (e instanceof ReadError) return { ...none, error: e.message }
     throw e
   }
+}
+
+// The "aₙ =" a sequence's rule may start with, in any letter: aₙ, a_n, a_{n} or a(n).
+const SEQUENCE_NAME = /^\s*[a-zA-Z]\s*(?:ₙ|_\s*n|_\s*\{\s*n\s*\}|_\s*\(\s*n\s*\)|\(\s*n\s*\))\s*=\s*/
+// Just the aₙ, before the rest is typed.
+const SEQUENCE_ALONE = /^\s*[a-zA-Z]\s*(?:ₙ|_\s*n|_\s*\{\s*n\s*\}|_\s*\(\s*n\s*\))\s*$/
+
+/**
+ * Read a sequence: a rule in n, such as "aₙ = 1/n", "uₙ = 2n + 1" or just "1/n",
+ * as the function giving its nth term (null where the rule has no value, like
+ * 1/n at n = 0). Anything that isn't a sequence, such as an inequality in n or a
+ * list of numbers, gives null, so it can be read as an equation or points instead.
+ */
+export function parseSequence(text: string): { term: (n: number) => number | null; error: null } | { term: null; error: string } | null {
+  if (SEQUENCE_ALONE.test(text)) return { term: null, error: 'Add = and the rule in n, like aₙ = 1/n.' }
+  const named = SEQUENCE_NAME.test(text)
+  const rule = String(text ?? '').replace(SEQUENCE_NAME, '')
+  if (!rule.trim()) return named ? { term: null, error: 'Write the rule after the = sign, like aₙ = 1/n.' } : null
+  if (named && /ₙ|_/.test(rule)) {
+    return { term: null, error: 'Rules built from earlier terms, like aₙ = aₙ₋₁ + 3, aren’t here yet. Write the rule in n, like aₙ = 3n + 1.' }
+  }
+  const node = parsers.equation.parse(fromText(rule))
+  if (node instanceof ComparisonNode || node instanceof CommaListNode) return named ? { term: null, error: 'Write one rule in n after the = sign, like aₙ = 1/n.' } : null
+  const letters = new Set<string>()
+  for (const n of node.traverse()) if (n instanceof VariableNode) letters.add(n.name)
+  const other = [...letters].find((l) => l !== 'n')
+  if (other) return named ? { term: null, error: `Write the rule in n, not ${other}, like aₙ = 1/n.` } : null
+  if (!named && !letters.size) return null // just numbers: points
+  const term = (n: number) => {
+    const v = evaluate(node, { n })
+    return v !== null && Number.isFinite(v) ? v : null
+  }
+  // A rule that can't be worked out anywhere isn't math Caret could read.
+  if ([1, 2, 3, 0.5].every((n) => term(n) === null)) return named ? { term: null, error: 'Try a rule in n, like aₙ = 1/n or aₙ = 2n + 1.' } : null
+  return { term, error: null }
 }

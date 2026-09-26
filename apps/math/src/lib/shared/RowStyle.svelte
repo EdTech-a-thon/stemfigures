@@ -1,13 +1,19 @@
 <script lang="ts">
   // The button before an equation, drawn the way that equation is graphed (its
   // color, line style and arrows, or dots or crosses for points), so each row reads as
-  // its own line on the grid. It opens a small popup to change those. Fixed-position like
+  // its own line on the figure. It opens a small popup to change those. Fixed-position like
   // CapPicker's menu, so the scrolling settings column can't clip it.
   import { tick } from 'svelte'
-  import { ARROWS, COLORS, LINE_STYLES, POINT_STYLES, type Arrows, type Color, type LineStyle, type PointStyle, type Row } from './equations.js'
+  import { ARROWS, COLORS, LINE_STYLES, POINT_STYLES, type Arrows, type Color, type LineStyle, type PointStyle } from './rowStyle.js'
 
-  // row: { color, line, arrows, point }, edited in place. isPoints: only color and point apply.
-  let { row, label, id, isPoints = false }: { row: Row; label: string; id: string; isPoints?: boolean } = $props()
+  type Styled = { color: Color; point: PointStyle; line?: LineStyle; arrows?: Arrows }
+
+  // row: { color, point, and line and arrows unless colorOnly }, edited in place.
+  // isPoints: only color and point apply. colorOnly: a number line's equation,
+  // whose line and arrows carry meaning, so only its color can change.
+  let {
+    row, label, id, isPoints = false, colorOnly = false,
+  }: { row: Styled; label: string; id: string; isPoints?: boolean; colorOnly?: boolean } = $props()
 
   let open = $state(false)
   let root = $state<HTMLElement>()
@@ -48,7 +54,7 @@
 
 <svelte:window {onpointerdown} onresize={() => open && hide(false)} onscrollcapture={(e) => open && !panel?.contains(e.target as Node) && hide(false)} />
 
-<!-- How this row looks on the grid, in miniature. -->
+<!-- How this row looks on the figure, in miniature. -->
 {#snippet preview()}
   {@const ink = COLORS[row.color]}
   <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
@@ -60,6 +66,11 @@
           <circle cx={x} cy={y} r="3" fill={ink} />
         {/if}
       {/each}
+    {:else if colorOnly}
+      <!-- A number line's equation graph: a thick line from a closed circle, running off in an arrow. -->
+      <line x1="6" y1="12" x2="15" y2="12" stroke={ink} stroke-width="3.2" />
+      <path d="M22,12 L15,7.5 L15,16.5 z" fill={ink} />
+      <circle cx="6" cy="12" r="3.4" fill={ink} />
     {:else}
       {@const left = row.arrows === 'both' || row.arrows === 'left'}
       {@const right = row.arrows === 'both' || row.arrows === 'right'}
@@ -156,7 +167,7 @@
             {/each}
           </div>
         </div>
-      {:else}
+      {:else if !colorOnly}
         <div class="group">
           <span class="name" id="{id}-line">Line</span>
           <div class="segmented" role="radiogroup" aria-labelledby="{id}-line">
