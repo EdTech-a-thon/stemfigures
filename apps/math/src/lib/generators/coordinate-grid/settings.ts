@@ -15,7 +15,7 @@ export { CAPS, fmt }
 
 export const MAX_BLOCKS = 50
 export const EVERY = [1, 2, 5, 10, 0] // number every nth line; 0 = no numbers
-export const MINOR = [0, 2, 4, 5, 10] // minor gridlines: how many parts each block splits into; 0 = none
+export const MINOR = [0, 2, 4, 5] // minor gridlines: how many parts each block splits into; 0 = none
 export const ANGLE_UNITS = { radians: 'Radians', degrees: 'Degrees' } // what trig functions read x in
 export const TITLE_MODES = ['text', 'blank', 'none'] as const // written title, write-on line for students, nothing
 export const LABEL_MODES = ['text', 'none'] as const // the letter at an axis arrow, like x or y
@@ -82,7 +82,7 @@ export const DEFAULT_SETTINGS: Settings = {
   xEndCap: 'triangle', // right end
   yStartCap: 'triangle', // bottom end
   yEndCap: 'triangle', // top end
-  minor: 0, // minor gridlines per block, like millimetre graph paper's 10
+  minor: 0, // minor gridlines per block
   angle: 'radians', // the angle unit: whether sin x reads x in radians or degrees
   labelSize: 'medium', // how big the text is (see labelSize.ts)
   equations: [], // what's graphed, one row each: { text: "y=2x+1", color, line, arrows }

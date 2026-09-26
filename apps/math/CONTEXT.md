@@ -63,7 +63,7 @@ How the numbers under the ticks are written: decimals, fractions, multiples of Ï
 _Avoid_: Format, label style
 
 **Minor gridline**:
-A thin, faint, unnumbered line that splits each block of a coordinate grid into 2, 4, 5 or 10 parts, like millimetre graph paper. A grid has none unless the teacher picks a number.
+A thin, faint, unnumbered line that splits each block of a coordinate grid into 2, 4 or 5 parts. A grid has none unless the teacher picks a number.
 _Avoid_: Subdivision, fine grid, minor tick
 
 **Angle unit**:

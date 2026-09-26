@@ -82,7 +82,6 @@
     [2, '2 per block'],
     [4, '4 per block'],
     [5, '5 per block'],
-    [10, '10 per block, like millimetre paper'],
   ]
   const gridSummary = $derived(clean.minor ? `${clean.minor} minor gridlines per block` : 'No minor gridlines')
   // Each axis runs from its start end (left/bottom) to its end end (right/top).
