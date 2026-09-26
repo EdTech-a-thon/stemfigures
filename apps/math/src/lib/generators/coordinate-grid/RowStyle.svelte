@@ -4,7 +4,9 @@
   // its own line on the grid. It opens a small popup to change those. Fixed-position like
   // CapPicker's menu, so the scrolling settings column can't clip it.
   import { tick } from 'svelte'
-  import { ARROWS, COLORS, LINE_STYLES, POINT_STYLES, type Arrows, type Color, type LineStyle, type PointStyle, type Row } from './equations.js'
+  import {
+    ARROWS, COLORS, LINE_STYLES, NAME_STYLES, POINT_STYLES, type Arrows, type Color, type LineStyle, type NameStyle, type PointStyle, type Row,
+  } from './equations.js'
 
   // row: { color, line, arrows, point }, edited in place. isPoints: only color and point apply.
   let { row, label, id, isPoints = false }: { row: Row; label: string; id: string; isPoints?: boolean } = $props()
@@ -156,6 +158,17 @@
             {/each}
           </div>
         </div>
+
+        <div class="group">
+          <span class="name" id="{id}-names">Point names <span class="hint">like A(2, 3)</span></span>
+          <div class="segmented" role="radiogroup" aria-labelledby="{id}-names">
+            {#each (Object.entries(NAME_STYLES) as [NameStyle, string][]) as [v, name]}
+              <button type="button" role="radio" aria-checked={row.names === v} class="words" class:on={row.names === v} onclick={() => (row.names = v)}>
+                {v === 'name' ? 'A' : 'A(2, 3)'}<span class="visually-hidden"> ({name})</span>
+              </button>
+            {/each}
+          </div>
+        </div>
       {:else}
         <div class="group">
           <span class="name" id="{id}-line">Line</span>
@@ -218,4 +231,6 @@
   .swatch[aria-checked='true'] { box-shadow: 0 0 0 2px var(--blue); }
   .swatch:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--blue), 0 0 0 4px var(--blue-border); }
   .segmented button { display: inline-grid; place-items: center; padding: 0.3rem 0.45rem; }
+  .segmented button.words { display: inline-block; padding: 0.3rem 0.6rem; font: italic 700 0.9rem 'Times New Roman', Times, serif; }
+  .name .hint { font-weight: 400; }
 </style>

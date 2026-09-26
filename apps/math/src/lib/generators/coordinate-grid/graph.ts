@@ -1,7 +1,7 @@
 // Lays out a coordinate grid as plain numbers for Graph.svelte to draw. Every
 // block is a square of CELL units; the SVG scales to fit wherever it's shown.
 
-import { numberText, type Numbering } from '$lib/shared/numbering.js'
+import { niceText, numberText, type Numbering } from '$lib/shared/numbering.js'
 import { COLORS, readEquations, type Point } from './equations.js'
 import { readAxes, type Settings } from './settings.js'
 
@@ -13,6 +13,7 @@ const CHAR = FS * 0.6 // rough width of one digit
 const HEAD = 12 // length of an arrowhead where a graphed line leaves the grid
 const HEAD_HALF = 5.5 // half its width
 const CIRCLE_R = 5.5 // a hole's or endpoint's circle
+const NAME_GAP = 7 // how far a point name sits up and right of its point
 
 const round = (v: number) => Math.round(v * 100) / 100
 const pathLength = (pts: Point[]) => pts.reduce((sum, p, k) => (k ? sum + Math.hypot(p.x - pts[k - 1].x, p.y - pts[k - 1].y) : 0), 0)
@@ -175,9 +176,10 @@ export function buildGraph(settings: Settings) {
   const dots: (Point & { color: string; cross: boolean })[] = []
   // Holes and endpoints: open circles (not included) and closed ones (included).
   const circles: (Point & { color: string; closed: boolean })[] = []
+  const pointNames: (Point & { name: string; coords: string; color: string })[] = []
   const rows = settings.equations ?? []
   readEquations(rows.map((r) => r.text), box).forEach((read, i) => {
-    const { color, line: style, arrows, point } = rows[i]
+    const { color, line: style, arrows, point, names } = rows[i]
     const ink = COLORS[color]
     for (const run of read?.runs ?? []) {
       let pts = run.points.map(px)
@@ -201,7 +203,13 @@ export function buildGraph(settings: Settings) {
       })
     }
     for (const c of read?.circles ?? []) circles.push({ ...px(c), color: ink, closed: c.closed })
-    for (const pt of read?.points ?? []) dots.push({ ...px(pt), color: ink, cross: point === 'cross' })
+    for (const pt of read?.points ?? []) {
+      const at = px(pt)
+      dots.push({ ...at, color: ink, cross: point === 'cross' })
+      // Point names sit up and to the right of their point.
+      const coords = names === 'coords' ? `(${niceText(pt.x, x.numbering)}, ${niceText(pt.y, y.numbering)})` : ''
+      if (pt.name || coords) pointNames.push({ x: at.x + NAME_GAP, y: at.y - NAME_GAP, name: pt.name ?? '', coords, color: ink })
+    }
   })
 
   return {
@@ -220,5 +228,6 @@ export function buildGraph(settings: Settings) {
     dots,
     circles,
     r: CIRCLE_R,
+    pointNames,
   }
 }

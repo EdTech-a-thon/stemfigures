@@ -70,6 +70,16 @@
     {/if}
   {/each}
 
+  <!-- Point names: the letter in italic serif, like the axis labels; coordinates upright. -->
+  <g font-size={g.fs * 1.2} font-weight="bold" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
+    {#each g.pointNames as p}
+      <text x={p.x} y={p.y} fill={p.color}
+        ><tspan font-family={SERIF} font-style="italic">{p.name}</tspan
+        >{#if p.coords}<tspan font-family={SANS} font-size={g.fs}>{p.coords}</tspan>{/if}</text
+      >
+    {/each}
+  </g>
+
   <g font-family={SANS} font-size={g.fs} font-weight="bold" fill={INK} stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
     {#each g.numbers as n}<text x={n.x} y={n.y} text-anchor={n.anchor}>{n.text}</text>{/each}
   </g>

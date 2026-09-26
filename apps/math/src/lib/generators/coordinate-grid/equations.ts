@@ -30,21 +30,24 @@ export const LINE_STYLES = { solid: 'Solid', dashed: 'Dashed', dotted: 'Dotted' 
 export const ARROWS = { both: 'Both ends', none: 'No arrows', left: 'Left end', right: 'Right end' }
 // How points are marked: a dot, or a cross as in France.
 export const POINT_STYLES = { dot: 'Dot', cross: 'Cross' }
+// What's written beside a named point: its name (A), or its name and coordinates (A(1, 2)).
+export const NAME_STYLES = { name: 'Name', coords: 'Name and coordinates' }
 
 export type Color = keyof typeof COLORS
 export type LineStyle = keyof typeof LINE_STYLES
 export type Arrows = keyof typeof ARROWS
 export type PointStyle = keyof typeof POINT_STYLES
+export type NameStyle = keyof typeof NAME_STYLES
 /** One equation row: what's typed, and how it's drawn. */
-export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle }
+export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle; names: NameStyle }
 
-export const ROW_DEFAULTS: Row = { text: '', color: 'black', line: 'solid', arrows: 'both', point: 'dot' }
+export const ROW_DEFAULTS: Row = { text: '', color: 'black', line: 'solid', arrows: 'both', point: 'dot', names: 'name' }
 
-const STYLE_KEYS = { color: COLORS, line: LINE_STYLES, arrows: ARROWS, point: POINT_STYLES }
+const STYLE_KEYS = { color: COLORS, line: LINE_STYLES, arrows: ARROWS, point: POINT_STYLES, names: NAME_STYLES }
 type StyleKey = keyof typeof STYLE_KEYS
 
-/** A point, in the grid's own values. */
-export type Point = { x: number; y: number }
+/** A point, in the grid's own values, and its point name if it has one (A, B′). */
+export type Point = { x: number; y: number; name?: string }
 /** The line a·x + b·y + c = 0. */
 export type Line = { a: number; b: number; c: number }
 /** The stretch of values a grid covers. */
@@ -90,6 +93,32 @@ function point(node: TreeNode): Point {
     throw new ReadError('Each point needs two numbers, like (2, 3) or (−1/2, 4). For more than one: (2, 3), (1, 4).')
   }
   return { x, y }
+}
+
+/**
+ * Points typed with point names, A(1, 2), B′(3, 4), as the same text without
+ * the names, and each point's name (or null), in order. A name is one letter
+ * and any primes, just before a point's opening bracket. Null when nothing
+ * is named, or the text isn't a list of points.
+ */
+export function splitNames(text: string): { text: string; names: (string | null)[] } | null {
+  if (/[=<>≤≥≠]/.test(text)) return null
+  let out = ''
+  let depth = 0
+  const names: (string | null)[] = []
+  for (const ch of text) {
+    if (ch === '(' && depth === 0) {
+      const m = /(^|[\s,])([A-Za-z])(['′″]*)\s*$/.exec(out)
+      if (m) {
+        out = out.slice(0, m.index + m[1].length)
+        names.push(m[2] + m[3].replace(/''/g, '″').replace(/'/g, '′'))
+      } else names.push(null)
+    }
+    if ('([{'.includes(ch)) depth++
+    if (')]}'.includes(ch)) depth--
+    out += ch
+  }
+  return names.some(Boolean) ? { text: out, names } : null
 }
 
 /** Is v close enough to w, relative to their size? */
@@ -182,11 +211,18 @@ export function parseEquation(
 ): { line?: Line; curve?: Curve; points?: Point[]; error?: string } | null {
   if (!String(text ?? '').trim()) return null
   try {
-    const node = parsers.equation.parse(fromText(text))
+    const named = splitNames(text)
+    const node = parsers.equation.parse(fromText(named?.text ?? text))
     if (node instanceof ComparisonNode) return graphOf(node)
     if (node instanceof CommaListNode) {
       const items = node.hasTag(ParenthesesChildTag) ? [node] : node.expressions
-      return { points: items.map(point) }
+      return {
+        points: items.map((item, i) => {
+          const p = point(item)
+          const name = named?.names[i]
+          return name ? { ...p, name } : p
+        }),
+      }
     }
     throw new ReadError(EXAMPLE)
   } catch (e) {
@@ -412,7 +448,7 @@ export function readEquations(texts: string[], box: Box): (ReadRow | null)[] {
     const off = read.points!.find((pt) => !inBox(pt, box))
     return {
       points: read.points!.filter((pt) => inBox(pt, box)),
-      problem: off ? `(${fmt(off.x)}, ${fmt(off.y)}) is off the grid. Widen the axes to show it.` : null,
+      problem: off ? `${off.name ?? ''}(${fmt(off.x)}, ${fmt(off.y)}) is off the grid. Widen the axes to show it.` : null,
     }
   })
 }

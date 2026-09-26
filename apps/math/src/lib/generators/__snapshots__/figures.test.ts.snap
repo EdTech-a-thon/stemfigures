@@ -237,6 +237,7 @@ exports[`coordinate grid >  1`] = `
         "y": 61.100000000000044,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       38.8,
@@ -517,6 +518,7 @@ exports[`coordinate grid > eq=y%3C2x&eq=y%3Dz%2B1&eq=x%5E2%2By%5E2%3D4&eq=0%3D0&
         "y": 61.100000000000044,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       38.8,
@@ -816,6 +818,7 @@ exports[`coordinate grid > title=Distance%20over%20time&titleMode=text&xTitle=Ti
         "y": 97.50000000000003,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       67.6,
@@ -1108,6 +1111,7 @@ exports[`coordinate grid > titleMode=blank&xTitleMode=blank&yTitleMode=blank&xLa
         "y": 97.50000000000003,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       67.6,
@@ -1269,6 +1273,7 @@ exports[`coordinate grid > xFrom=-3&xTo=4.5&yFrom=2&yTo=7&yStep=0.5&xEvery=10 1`
         "y": 61.09999999999999,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       34,
@@ -1496,6 +1501,7 @@ exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=(1%2C%202)%2C%20(3%2
         "y": 61.09999999999999,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       34,
@@ -1531,6 +1537,264 @@ exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=(1%2C%202)%2C%20(3%2
     "yTo": null,
   },
   "query": "xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=%281%2C+2%29%2C+%283%2C+4%29&eq=%28-2%2C+-3%29%7Ccolor%3Dorange%7Cpoint%3Dcross&eq=%289%2C+9%29",
+}
+`;
+
+exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=A(1%2C%202)%2C%20B'(-3%2C%204)%2C%20(0%2C%20-1)&eq=P(1%2F2%2C%20-2)%7Cnames%3Dcoords%7Ccolor%3Dblue 1`] = `
+{
+  "graph": {
+    "blanks": [],
+    "circles": [],
+    "dots": [
+      {
+        "color": "#111827",
+        "cross": false,
+        "x": 226,
+        "y": 152.2,
+      },
+      {
+        "color": "#111827",
+        "cross": false,
+        "x": 98,
+        "y": 88.19999999999999,
+      },
+      {
+        "color": "#111827",
+        "cross": false,
+        "x": 194,
+        "y": 248.2,
+      },
+      {
+        "color": "#2563eb",
+        "cross": false,
+        "x": 210,
+        "y": 280.2,
+      },
+    ],
+    "fs": 14,
+    "grid": {
+      "h": 320,
+      "w": 320,
+      "x": 34,
+      "y": 56.2,
+    },
+    "hLines": [
+      56.2,
+      88.2,
+      120.2,
+      152.2,
+      184.2,
+      216.2,
+      248.2,
+      280.2,
+      312.2,
+      344.2,
+      376.2,
+    ],
+    "height": 410.2,
+    "labels": [
+      {
+        "anchor": "start",
+        "kind": "tip",
+        "text": "x",
+        "x": 380,
+        "y": 221.79999999999998,
+      },
+      {
+        "anchor": "middle",
+        "kind": "tip",
+        "text": "y",
+        "x": 194,
+        "y": 30.200000000000003,
+      },
+    ],
+    "lines": [],
+    "numbers": [
+      {
+        "anchor": "middle",
+        "text": "−5",
+        "x": 34,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "−4",
+        "x": 66,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "−3",
+        "x": 98,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "−2",
+        "x": 130,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "−1",
+        "x": 162,
+        "y": 236.2,
+      },
+      {
+        "anchor": "end",
+        "text": "0",
+        "x": 186,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "1",
+        "x": 226,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "2",
+        "x": 258,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "3",
+        "x": 290,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "4",
+        "x": 322,
+        "y": 236.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "5",
+        "x": 354,
+        "y": 236.2,
+      },
+      {
+        "anchor": "end",
+        "text": "−5",
+        "x": 188,
+        "y": 381.09999999999997,
+      },
+      {
+        "anchor": "end",
+        "text": "−4",
+        "x": 188,
+        "y": 349.09999999999997,
+      },
+      {
+        "anchor": "end",
+        "text": "−3",
+        "x": 188,
+        "y": 317.09999999999997,
+      },
+      {
+        "anchor": "end",
+        "text": "−2",
+        "x": 188,
+        "y": 285.09999999999997,
+      },
+      {
+        "anchor": "end",
+        "text": "−1",
+        "x": 188,
+        "y": 253.1,
+      },
+      {
+        "anchor": "end",
+        "text": "1",
+        "x": 188,
+        "y": 189.1,
+      },
+      {
+        "anchor": "end",
+        "text": "2",
+        "x": 188,
+        "y": 157.1,
+      },
+      {
+        "anchor": "end",
+        "text": "3",
+        "x": 188,
+        "y": 125.1,
+      },
+      {
+        "anchor": "end",
+        "text": "4",
+        "x": 188,
+        "y": 93.1,
+      },
+      {
+        "anchor": "end",
+        "text": "5",
+        "x": 188,
+        "y": 61.09999999999999,
+      },
+    ],
+    "pointNames": [
+      {
+        "color": "#111827",
+        "coords": "",
+        "name": "A",
+        "x": 233,
+        "y": 145.2,
+      },
+      {
+        "color": "#111827",
+        "coords": "",
+        "name": "B′",
+        "x": 105,
+        "y": 81.19999999999999,
+      },
+      {
+        "color": "#2563eb",
+        "coords": "(0.5, −2)",
+        "name": "P",
+        "x": 217,
+        "y": 273.2,
+      },
+    ],
+    "r": 5.5,
+    "vLines": [
+      34,
+      66,
+      98,
+      130,
+      162,
+      194,
+      226,
+      258,
+      290,
+      322,
+      354,
+    ],
+    "width": 406.5,
+    "xAxis": {
+      "x1": 14,
+      "x2": 374,
+      "y": 216.2,
+    },
+    "yAxis": {
+      "x": 194,
+      "y1": 396.2,
+      "y2": 36.2,
+    },
+  },
+  "problems": {
+    "xFrom": null,
+    "xStep": null,
+    "xTo": null,
+    "yFrom": null,
+    "yStep": null,
+    "yTo": null,
+  },
+  "query": "xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=A%281%2C+2%29%2C+B%27%28-3%2C+4%29%2C+%280%2C+-1%29&eq=P%281%2F2%2C+-2%29%7Ccolor%3Dblue%7Cnames%3Dcoords",
 }
 `;
 
@@ -1800,6 +2064,7 @@ exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=y%3D(2x%2B1)%2F(3x%5
         "y": 61.09999999999999,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       34,
@@ -2064,6 +2329,7 @@ exports[`coordinate grid > xFrom=-5&xTo=5&yFrom=-5&yTo=5&eq=y%3Dx%5E2-4%7Ccolor%
         "y": 61.09999999999999,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       34,
@@ -2228,6 +2494,7 @@ exports[`coordinate grid > xFrom=-6&xTo=6&yFrom=-6&yTo=6&xEvery=2&yEvery=2 1`] =
         "y": 61.09999999999999,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       34,
@@ -2611,6 +2878,7 @@ exports[`coordinate grid > xFrom=-10&xTo=10&yFrom=-10&yTo=10&eq=y%3D2x%2B1&eq=2x
         "y": 61.100000000000044,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       34,
@@ -2781,6 +3049,7 @@ exports[`coordinate grid > xFrom=0&xTo=1&xStep=1%2F4&yFrom=-1&yTo=1&yStep=0.25 1
         "y": 61.09999999999999,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       64,
@@ -2810,6 +3079,148 @@ exports[`coordinate grid > xFrom=0&xTo=1&xStep=1%2F4&yFrom=-1&yTo=1&yStep=0.25 1
     "yTo": null,
   },
   "query": "xTo=1&xStep=1%2F4&yFrom=-1&yTo=1&yStep=0.25",
+}
+`;
+
+exports[`coordinate grid > xFrom=0&xTo=2pi&xStep=pi%2F2&yFrom=-2&yTo=2&eq=Q(pi%2F2%2C%201)%7Cnames%3Dcoords 1`] = `
+{
+  "graph": {
+    "blanks": [],
+    "circles": [],
+    "dots": [
+      {
+        "color": "#111827",
+        "cross": false,
+        "x": 70.8,
+        "y": 88.19999999999999,
+      },
+    ],
+    "fs": 14,
+    "grid": {
+      "h": 128,
+      "w": 128,
+      "x": 38.8,
+      "y": 56.2,
+    },
+    "hLines": [
+      56.2,
+      88.2,
+      120.2,
+      152.2,
+      184.2,
+    ],
+    "height": 218.2,
+    "labels": [
+      {
+        "anchor": "start",
+        "kind": "tip",
+        "text": "x",
+        "x": 192.8,
+        "y": 125.79999999999998,
+      },
+      {
+        "anchor": "middle",
+        "kind": "tip",
+        "text": "y",
+        "x": 38.8,
+        "y": 30.200000000000003,
+      },
+    ],
+    "lines": [],
+    "numbers": [
+      {
+        "anchor": "end",
+        "text": "0",
+        "x": 30.799999999999997,
+        "y": 140.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "π/2",
+        "x": 70.8,
+        "y": 140.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "π",
+        "x": 102.8,
+        "y": 140.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "3π/2",
+        "x": 134.8,
+        "y": 140.2,
+      },
+      {
+        "anchor": "middle",
+        "text": "2π",
+        "x": 166.8,
+        "y": 140.2,
+      },
+      {
+        "anchor": "end",
+        "text": "−2",
+        "x": 32.8,
+        "y": 189.1,
+      },
+      {
+        "anchor": "end",
+        "text": "−1",
+        "x": 32.8,
+        "y": 157.1,
+      },
+      {
+        "anchor": "end",
+        "text": "1",
+        "x": 32.8,
+        "y": 93.1,
+      },
+      {
+        "anchor": "end",
+        "text": "2",
+        "x": 32.8,
+        "y": 61.09999999999999,
+      },
+    ],
+    "pointNames": [
+      {
+        "color": "#111827",
+        "coords": "(π/2, 1)",
+        "name": "Q",
+        "x": 77.8,
+        "y": 81.19999999999999,
+      },
+    ],
+    "r": 5.5,
+    "vLines": [
+      38.8,
+      70.8,
+      102.8,
+      134.8,
+      166.8,
+    ],
+    "width": 219.3,
+    "xAxis": {
+      "x1": 18.799999999999997,
+      "x2": 186.8,
+      "y": 120.19999999999999,
+    },
+    "yAxis": {
+      "x": 38.8,
+      "y1": 204.2,
+      "y2": 36.2,
+    },
+  },
+  "problems": {
+    "xFrom": null,
+    "xStep": null,
+    "xTo": null,
+    "yFrom": null,
+    "yStep": null,
+    "yTo": null,
+  },
+  "query": "xTo=2pi&xStep=pi%2F2&yFrom=-2&yTo=2&eq=Q%28pi%2F2%2C+1%29%7Cnames%3Dcoords",
 }
 `;
 
@@ -2959,6 +3370,7 @@ exports[`coordinate grid > xFrom=0&xTo=2pi&xStep=pi%2F4&yFrom=-2&yTo=2&yStep=1%2
         "y": 61.09999999999999,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       55.6,
@@ -3232,6 +3644,7 @@ exports[`coordinate grid > xFrom=0&xTo=100&xStep=1 1`] = `
         "y": 61.100000000000044,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       38.8,
@@ -3512,6 +3925,7 @@ exports[`coordinate grid > xFrom=abc&xTo=1&xStep=0&yFrom=5&yTo=1 1`] = `
         "y": 61.100000000000044,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       38.8,
@@ -3737,6 +4151,7 @@ exports[`coordinate grid > xStart=-2&xBlocks=7&yStart=-1&yBlocks=14&yStep=0.5&ar
         "y": 51.09999999999999,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       14,
@@ -3847,6 +4262,7 @@ exports[`coordinate grid > xStartCap=circle&xEndCap=line&yStartCap=none&yEndCap=
         "y": 556.2,
       },
     ],
+    "pointNames": [],
     "r": 5.5,
     "vLines": [
       34,

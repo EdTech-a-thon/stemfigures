@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { ROW_DEFAULTS, clipLine, curveRuns, parseEquation, readEquations, rowFromParam } from './equations.js'
+import { ROW_DEFAULTS, clipLine, curveRuns, parseEquation, readEquations, rowFromParam, splitNames } from './equations.js'
 import { DEFAULT_SETTINGS, cleanSettings, settingsFromParams, settingsToQuery } from './settings.js'
 
 const line = (text: string) => {
@@ -200,6 +200,31 @@ describe('odd roots of negative numbers', () => {
   })
 })
 
+describe('point names', () => {
+  test.each([
+    ['A(1, 2), B(3, 4)', [{ x: 1, y: 2, name: 'A' }, { x: 3, y: 4, name: 'B' }]],
+    ['A(1, 2), (3, 4)', [{ x: 1, y: 2, name: 'A' }, { x: 3, y: 4 }]],
+    ["A'(1, 2), B''(3, 4)", [{ x: 1, y: 2, name: 'A′' }, { x: 3, y: 4, name: 'B″' }]],
+    ['P (0, 1/2)', [{ x: 0, y: 0.5, name: 'P' }]],
+    ['C(sqrt(4), pi)', [{ x: 2, y: Math.PI, name: 'C' }]],
+  ])('%s', (text, expected) => expect(parseEquation(text)!.points).toEqual(expected))
+
+  test('unnamed points and equations are left alone', () => {
+    expect(splitNames('(1, 2), (3, 4)')).toBeNull()
+    expect(splitNames('y = f(x)')).toBeNull()
+    expect(splitNames('(sqrt(2), 1)')).toBeNull()
+  })
+
+  test('a name off the grid says which point', () => {
+    expect(readEquations(['A(1, 1), B(9, 2)'], box)[0]!.problem).toMatch(/^B\(9, 2\) is off the grid/)
+  })
+
+  test('the row can show names with coordinates, and says so in the address', () => {
+    expect(rowFromParam('A(1,2)|names=coords').names).toBe('coords')
+    expect(rowFromParam('A(1,2)|names=wild').names).toBe('name')
+  })
+})
+
 describe('readEquations', () => {
   test('a curve off the grid says so', () => {
     expect(readEquations(['y = x^2 + 20'], box)[0]!.problem).toMatch(/misses the grid/)
@@ -219,7 +244,7 @@ describe('equations in the page address', () => {
     expect(settingsFromParams(new URLSearchParams(q)).equations.map((r) => r.text)).toEqual(['y=2x+1', '(1,2),(3,4)'])
   })
   test('a row keeps its style, and only what differs from the default is written', () => {
-    const row = { text: 'y=2x+1', color: 'red', line: 'dashed', arrows: 'both', point: 'dot' }
+    const row = { text: 'y=2x+1', color: 'red', line: 'dashed', arrows: 'both', point: 'dot', names: 'name' }
     const q = settingsToQuery(cleanSettings({ ...DEFAULT_SETTINGS, equations: [row] }))
     expect(new URLSearchParams(q).get('eq')).toBe('y=2x+1|color=red|line=dashed')
     expect(settingsFromParams(new URLSearchParams(q)).equations).toEqual([row])
