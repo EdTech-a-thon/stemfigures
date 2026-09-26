@@ -3,13 +3,13 @@
 
 import { niceText, numberText, type Numbering } from '$lib/shared/numbering.js'
 import { COLORS, clipLine, readEquations, type Point } from './equations.js'
+import { LABEL_SCALE } from '$lib/shared/labelSize.js'
 import { readAxes, type Settings } from './settings.js'
 
 export const CELL = 32
-const FS = 14 // tick-number font size
+const BASE_FS = 14 // tick-number font size, at medium labels
 const PAD = 14
 const EXT = 20 // how far an arrowed axis runs past the grid
-const CHAR = FS * 0.6 // rough width of one digit
 const HEAD = 12 // length of an arrowhead where a graphed line leaves the grid
 const HEAD_HALF = 5.5 // half its width
 const CIRCLE_R = 5.5 // a hole's or endpoint's circle
@@ -74,6 +74,8 @@ type Text = { x: number; y: number; text: string; anchor?: 'start' | 'middle' | 
 type Segment = { x1: number; y1: number; x2: number; y2: number }
 
 export function buildGraph(settings: Settings) {
+  const FS = BASE_FS * LABEL_SCALE[settings.labelSize]
+  const CHAR = FS * 0.6 // rough width of one digit
   const { x, y } = readAxes(settings)
   const s = { ...settings, xStart: x.start, xStep: x.step, xBlocks: x.blocks, yStart: y.start, yStep: y.step, yBlocks: y.blocks }
   const x0 = s.xStart

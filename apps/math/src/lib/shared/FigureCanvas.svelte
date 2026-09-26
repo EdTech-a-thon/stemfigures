@@ -2,13 +2,18 @@
   // The card every generator shows its figure in: an icon toolbar for getting
   // the figure out (copy, download, link) and undo/redo, above the figure
   // itself. `svg` is the rendered figure to export; `history` comes from
-  // createHistory. Status messages appear as a toast over the figure.
-  import { Copy, FileDown, ImageDown, Redo2, Share, Undo2 } from '@lucide/svelte'
+  // createHistory. `labelSize`, bound to the generator's setting, adds the
+  // label size picker, beside the export buttons it matters for. Status
+  // messages appear as a toast over the figure.
+  import { ALargeSmall, Copy, FileDown, ImageDown, Redo2, Share, Undo2 } from '@lucide/svelte'
   import type { Snippet } from 'svelte'
   import { copyPng, downloadPng, downloadSvg } from './exporting.js'
   import type { History } from './history.svelte.js'
+  import { LABEL_SIZES, type LabelSize } from './labelSize.js'
 
-  let { svg, filename, history, children }: { svg: SVGSVGElement | undefined; filename: string; history: History; children: Snippet } = $props()
+  let {
+    svg, filename, history, labelSize = $bindable(), children,
+  }: { svg: SVGSVGElement | undefined; filename: string; history: History; labelSize?: LabelSize; children: Snippet } = $props()
 
   let status = $state('')
   let statusTimer: ReturnType<typeof setTimeout> | undefined
@@ -47,6 +52,15 @@
     <span class="divider"></span>
     <button class="icon-btn" aria-label="Undo" data-tip="Undo" disabled={!history.canUndo} onclick={history.undo}><Undo2 size={19} /></button>
     <button class="icon-btn" aria-label="Redo" data-tip="Redo" disabled={!history.canRedo} onclick={history.redo}><Redo2 size={19} /></button>
+    {#if labelSize !== undefined}
+      <label class="label-size" data-tip="Label size, for how big text prints">
+        <ALargeSmall size={19} aria-hidden="true" />
+        <span class="visually-hidden">Label size</span>
+        <select bind:value={labelSize}>
+          {#each Object.entries(LABEL_SIZES) as [v, name]}<option value={v}>{name} labels</option>{/each}
+        </select>
+      </label>
+    {/if}
   </div>
   <div class="sheet">
     {@render children()}
@@ -58,6 +72,8 @@
   .canvas { display: flex; flex-direction: column; }
   .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 0.3rem; padding: 0.45rem; border-bottom: 1px solid var(--border); }
   .divider { width: 1px; height: 1.6rem; background: var(--border); margin: 0 0.3rem; }
+  .label-size { margin-left: auto; display: inline-flex; align-items: center; gap: 0.35rem; color: var(--muted); }
+  .label-size select { width: auto; padding-block: 0.25rem; font-size: 0.85rem; }
   @media (max-width: 480px) {
     .divider { display: none; }
     .toolbar { justify-content: space-between; gap: 0.15rem; padding: 0.35rem; }

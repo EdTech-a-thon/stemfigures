@@ -20,6 +20,10 @@ _Avoid_: Maker, tool, builder, app
 The home page, which lists every generator with a live preview of its figure.
 _Avoid_: Catalog, gallery, index
 
+**Label size**:
+How big a figure's text is compared to its lines: small, medium or large, one setting on every generator, set beside the export buttons. Medium is how figures have always looked; large keeps labels readable once a figure is shrunk to fit a worksheet.
+_Avoid_: Font size, text size, zoom, scale
+
 **Generator request**:
 A teacher asking for a kind of figure that no generator makes yet.
 _Avoid_: Feature request, suggestion

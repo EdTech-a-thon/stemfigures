@@ -34,6 +34,9 @@ const GRID = [
   `xFrom=-5&xTo=5&yFrom=-5&yTo=5&${eq('y=-x-1, x<0', 'y=x^2, 0≤x≤2|color=blue', 'y=4, x>2|color=red|arrows=right', 'x=-3, -4≤y<-1|color=green', 'y=x, -4≤x≤-2|ends=hidden|line=dashed')}`,
   `xFrom=-6&xTo=6&yFrom=-6&yTo=6&${eq('y=(x^2+1)/(x-1)|asym=shown', 'y=2^x-3|asym=shown|color=blue', 'y=ln(x+4)|asym=shown|color=green', 'y=1/x|color=red')}`,
   'xFrom=0&xTo=4&yFrom=0&yTo=3&minor=10',
+  `xFrom=-5&xTo=5&yFrom=-5&yTo=5&labelSize=large&titleMode=text&title=Big&${eq('A(1, 2)')}`,
+  'labelSize=small',
+  'labelSize=huge',
   'xFrom=-2&xTo=2&yFrom=-2&yTo=2&minor=4',
   'minor=3',
   `xFrom=-5&xTo=5&yFrom=-5&yTo=5&${eq("A(1, 2), B'(-3, 4), (0, -1)", 'P(1/2, -2)|names=coords|color=blue')}`,
@@ -55,6 +58,7 @@ const LINE = [
   'from=0&to=1000&step=1',
   `${eq('x<20', 'y>2 and x<3', '(1, 2)', 'x<y', 'x+')}`,
   'inequality=x%3E%3D2',
+  `labelSize=large&from=0&to=2&step=1%2F4&${eq('x>3/4')}`,
 ]
 
 const TRIANGLE = [
@@ -69,6 +73,8 @@ const TRIANGLE = [
   'moved=AB%3A4%2C-6%3BvC%3A0%2C3&rotate=-90',
   'AB=3sqrt(2)&BC=5%2F2&CA=3&ABLabel=measure&BCLabel=measure&round=0',
   'A=100&B=100',
+  'labelSize=large',
+  'labelSize=small&hB=1&hBLabel=measure&hBFoot=D',
   'AB=1&BC=1&CA=5',
   'A=abc',
   'A=20',
