@@ -1,17 +1,19 @@
 // Lays out a coordinate grid as plain numbers for Graph.svelte to draw. Every
 // block is a square of CELL units; the SVG scales to fit wherever it's shown.
 
-import { numberText, type Numbering } from '$lib/shared/numbering.js'
-import { COLORS, readEquations, type Point } from './equations.js'
+import { niceText, numberText, type Numbering } from '$lib/shared/numbering.js'
+import { COLORS, clipLine, readEquations, type Point } from './equations.js'
+import { LABEL_SCALE } from '$lib/shared/labelSize.js'
 import { readAxes, type Settings } from './settings.js'
 
 export const CELL = 32
-const FS = 14 // tick-number font size
+const BASE_FS = 14 // tick-number font size, at medium labels
 const PAD = 14
 const EXT = 20 // how far an arrowed axis runs past the grid
-const CHAR = FS * 0.6 // rough width of one digit
 const HEAD = 12 // length of an arrowhead where a graphed line leaves the grid
 const HEAD_HALF = 5.5 // half its width
+const CIRCLE_R = 5.5 // a hole's or endpoint's circle
+const NAME_GAP = 7 // how far a point name sits up and right of its point
 
 const round = (v: number) => Math.round(v * 100) / 100
 const pathLength = (pts: Point[]) => pts.reduce((sum, p, k) => (k ? sum + Math.hypot(p.x - pts[k - 1].x, p.y - pts[k - 1].y) : 0), 0)
@@ -61,6 +63,10 @@ function ticks(blocks: number, step: number, start: number, every: number, numbe
   return out
 }
 
+/** Where minor gridlines go, in blocks: each block split into `parts`. */
+const minorLines = (blocks: number, parts: number) =>
+  parts > 1 ? Array.from({ length: blocks * parts }, (_, k) => k / parts).filter((_, k) => k % parts) : []
+
 /** A coordinate grid laid out for Graph.svelte to draw. */
 export type GraphLayout = ReturnType<typeof buildGraph>
 
@@ -68,6 +74,8 @@ type Text = { x: number; y: number; text: string; anchor?: 'start' | 'middle' | 
 type Segment = { x1: number; y1: number; x2: number; y2: number }
 
 export function buildGraph(settings: Settings) {
+  const FS = BASE_FS * LABEL_SCALE[settings.labelSize]
+  const CHAR = FS * 0.6 // rough width of one digit
   const { x, y } = readAxes(settings)
   const s = { ...settings, xStart: x.start, xStep: x.step, xBlocks: x.blocks, yStart: y.start, yStep: y.step, yBlocks: y.blocks }
   const x0 = s.xStart
@@ -172,10 +180,21 @@ export function buildGraph(settings: Settings) {
   const box = { x0, x1, y0, y1 }
   const lines: { d: string; heads: string[]; color: string; dash: string | undefined; cap: 'round' | 'butt'; width: number }[] = []
   const dots: (Point & { color: string; cross: boolean })[] = []
+  // Holes and endpoints: open circles (not included) and closed ones (included).
+  const circles: (Point & { color: string; closed: boolean })[] = []
+  const pointNames: (Point & { name: string; coords: string; color: string })[] = []
+  // Asymptotes, when a row shows them: dotted lines in the row's color, under the curves.
+  const asymptotes: { d: string; color: string }[] = []
   const rows = settings.equations ?? []
-  readEquations(rows.map((r) => r.text), box).forEach((read, i) => {
-    const { color, line: style, arrows, point } = rows[i]
+  readEquations(rows.map((r) => r.text), box, s.angle).forEach((read, i) => {
+    const { color, line: style, arrows, point, names, ends, asym } = rows[i]
     const ink = COLORS[color]
+    if (asym === 'shown') {
+      for (const a of read?.asymptotes ?? []) {
+        const seg = clipLine(a, box)
+        if (seg) asymptotes.push({ d: `M${seg.map(px).map((p) => `${round(p.x)},${round(p.y)}`).join(' L')}`, color: ink })
+      }
+    }
     for (const run of read?.runs ?? []) {
       let pts = run.points.map(px)
       const heads: string[] = []
@@ -197,7 +216,14 @@ export function buildGraph(settings: Settings) {
         width: style === 'dotted' ? 3.2 : 2.5, // round dots look lighter than a solid stroke
       })
     }
-    for (const pt of read?.points ?? []) dots.push({ ...px(pt), color: ink, cross: point === 'cross' })
+    for (const c of read?.circles ?? []) if (!(c.end && ends === 'hidden')) circles.push({ ...px(c), color: ink, closed: c.closed })
+    for (const pt of read?.points ?? []) {
+      const at = px(pt)
+      dots.push({ ...at, color: ink, cross: point === 'cross' })
+      // Point names sit up and to the right of their point.
+      const coords = names === 'coords' ? `(${niceText(pt.x, x.numbering)}, ${niceText(pt.y, y.numbering)})` : ''
+      if (pt.name || coords) pointNames.push({ x: at.x + NAME_GAP, y: at.y - NAME_GAP, name: pt.name ?? '', coords, color: ink })
+    }
   })
 
   return {
@@ -207,6 +233,9 @@ export function buildGraph(settings: Settings) {
     grid: { x: L, y: T, w: gridW, h: gridH },
     vLines: Array.from({ length: s.xBlocks + 1 }, (_, i) => L + i * CELL),
     hLines: Array.from({ length: s.yBlocks + 1 }, (_, j) => T + j * CELL),
+    // Minor gridlines: the lines inside each block, never on a block's own line.
+    minorV: minorLines(s.xBlocks, s.minor).map((i) => round(L + i * CELL)),
+    minorH: minorLines(s.yBlocks, s.minor).map((j) => round(T + j * CELL)),
     xAxis: { x1: L - extL, x2: L + gridW + extR, y: axisY },
     yAxis: { y1: T + gridH + extB, y2: T - extT, x: axisX },
     numbers,
@@ -214,5 +243,9 @@ export function buildGraph(settings: Settings) {
     blanks,
     lines,
     dots,
+    circles,
+    r: CIRCLE_R,
+    pointNames,
+    asymptotes,
   }
 }

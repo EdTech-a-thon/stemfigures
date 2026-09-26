@@ -296,7 +296,7 @@
     </div>
 
     <div class="preview">
-      <FigureCanvas {svg} {filename} {history}>
+      <FigureCanvas {svg} {filename} {history} bind:labelSize={settings.labelSize}>
         <Triangle {figure} bind:svg onmove={moveLabel} />
       </FigureCanvas>
     </div>

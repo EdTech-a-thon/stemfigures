@@ -5,6 +5,7 @@
 // "-2 < x <= 5", "3, -1"); readLine() works out what they mean.
 
 import { niceText, numberingOf, type Numbering } from '$lib/shared/numbering.js'
+import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
 import { parseInequality, parseNumber, type Interval } from './inequality.js'
 
 export const MAX_TICKS = 100
@@ -19,6 +20,7 @@ export type Settings = {
   step: string
   every: number
   points: PointMark
+  labelSize: LabelSize
   equations: string[]
 }
 /** Settings as they may arrive: from a form, a link, or a preset stored by an older version. */
@@ -30,6 +32,7 @@ export const DEFAULT_SETTINGS: Settings = {
   step: '1',
   every: 1,
   points: 'dot',
+  labelSize: 'medium', // how big the numbers are (see labelSize.ts)
   equations: [], // what's graphed, one row each: an equation or inequality, or points
 }
 
@@ -50,6 +53,7 @@ export function cleanSettings(s: RawSettings): Settings {
     step: text(s.step, d.step),
     every: oneOf(EVERY, Number(s.every), d.every),
     points: oneOf(POINTS, s.points, d.points),
+    labelSize: cleanLabelSize(s.labelSize),
     equations: equations.map((e) => text(e, '')),
   }
 }

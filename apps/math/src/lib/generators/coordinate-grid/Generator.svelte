@@ -4,7 +4,8 @@
   // scrolls; only the settings column does. Settings are mirrored into the
   // page address so a bookmark or shared link brings back exactly this grid,
   // and the server renders that same grid on first load.
-  import { Heading, MoveRight, MoveUp, Plus, X } from '@lucide/svelte'
+  import { Grid3x3, Heading, MoveRight, MoveUp, Plus, X } from '@lucide/svelte'
+  import { untrack } from 'svelte'
   import { afterNavigate, replaceState } from '$app/navigation'
   import { page } from '$app/state'
   import CapPicker from '$lib/shared/CapPicker.svelte'
@@ -22,7 +23,7 @@
   import Graph from './Graph.svelte'
   import { presetStore } from './presets.js'
   import {
-    CAPS, cleanSettings, readAxes, sameGraph, settingsFromParams, settingsToQuery, type AxisName, type Settings,
+    ANGLE_UNITS, CAPS, cleanSettings, readAxes, sameGraph, settingsFromParams, settingsToQuery, type AxisName, type Settings,
   } from './settings.js'
 
   // There's always a row to type the next equation in.
@@ -37,8 +38,21 @@
     readEquations(clean.equations.map((r) => r.text), {
       x0: axes.x.start, x1: axes.x.start + axes.x.blocks * axes.x.step,
       y0: axes.y.start, y1: axes.y.start + axes.y.blocks * axes.y.step,
-    }),
+    }, clean.angle),
   )
+  // The angle unit only matters, so only shows (with the x-axis, whose values
+  // trig reads), once a row uses trig.
+  const usesTrig = $derived(clean.equations.some((r) => /sin|cos|tan|sec|csc|cot/.test(r.text)))
+  // Typing ° into the x-axis range switches trig to degrees, and taking it out
+  // switches back, so the axis and the graph agree. The setting can still be
+  // changed by hand afterwards (degrees on an axis numbered 0, 90, 180…).
+  const xInDegrees = $derived(/°/.test(`${settings.xFrom}${settings.xTo}${settings.xStep}`))
+  let wasInDegrees = untrack(() => xInDegrees)
+  $effect(() => {
+    if (xInDegrees === wasInDegrees) return
+    wasInDegrees = xInDegrees
+    settings.angle = xInDegrees ? 'degrees' : 'radians'
+  })
 
   // A new row, unless the last one is still empty, which gets the focus instead.
   function addRow() {
@@ -75,6 +89,13 @@
     [10, 'Every 10th line'],
     [0, 'No numbers'],
   ]
+  const MINOR_OPTIONS: [number, string][] = [
+    [0, 'None'],
+    [2, '2 per block'],
+    [4, '4 per block'],
+    [5, '5 per block'],
+  ]
+  const gridSummary = $derived(clean.minor ? `${clean.minor} minor gridlines per block` : 'No minor gridlines')
   // Each axis runs from its start end (left/bottom) to its end end (right/top).
   const AXES = [
     { axis: 'x', heading: 'x-axis', icon: MoveRight, ends: [['Start', 'Left end', 'left'], ['End', 'Right end', 'right']] },
@@ -99,10 +120,13 @@
     return [
       `${n(start)} to ${n(start + blocks * step)}`,
       `by ${n(step)}`,
+      axis === 'x' && usesTrig ? `trig in ${clean.angle}` : '',
       every ? (every === 1 ? 'numbered' : `numbered every ${every}`) : 'unnumbered',
       clean[`${axis}LabelMode` as const] === 'text' && clean[`${axis}Label` as const].trim() ? `“${clean[`${axis}Label` as const].trim()}”` : 'no label',
       endsSummary(clean[`${axis}StartCap` as const], clean[`${axis}EndCap` as const]),
-    ].join(' · ')
+    ]
+      .filter(Boolean)
+      .join(' · ')
   }
   function endsSummary(start: Cap, end: Cap) {
     if (start === end) return start === 'none' ? 'plain ends' : `${CAPS[start].toLowerCase()}s`
@@ -142,12 +166,18 @@
           <h2 class="card-head flush">Equations</h2>
           <HelpTip id="equation-tip" label="How to type an equation">
             Type a line like y = 2x + 1, 2x + 3y = 6 or x = 4, a curve like y = x^2 − 4 or y = −(x − 2)^2 + 3, or points like
-            (2, 3) or (1, 2), (3, 4). Type ^ for an exponent, / for a fraction and pi for π.
+            (2, 3) or (1, 2), (3, 4). To draw only part of a line, give its domain after a comma: y = 3x, −5 ≤ x &lt; 7 (≤ for a
+            closed circle, &lt; for an open one); a piecewise function is a row for each piece. Name points by writing a letter
+            first: A(1, 2), B'(3, 4). Functions work too: sin, cos,
+            tan, sec, csc, cot, arcsin, ln, log, log_2 (type _ for the base), e^x and |x|. Type ^ for an exponent, / for a fraction
+            and pi for π.
           </HelpTip>
         </div>
         {#each settings.equations as row, i}
           <div class="row">
-            <RowStyle {row} id="eq-{i}-style" label="equation {i + 1}" isPoints={!!rows[i]?.points} />
+            <RowStyle {row} id="eq-{i}-style" label="equation {i + 1}" isPoints={!!rows[i]?.points} hasDomain={!!rows[i]?.circles?.some((c) => c.end)}
+              hasAsymptotes={!!rows[i]?.asymptotes?.length}
+            />
             <MathInput
               kind="equation"
               id="eq-{i}"
@@ -186,6 +216,14 @@
             {#each RANGE_FIELDS as [key]}
               {#if axes.problems[`${axis}${key}`]}<p class="help problem">{axes.problems[`${axis}${key}`]}</p>{/if}
             {/each}
+            {#if axis === 'x' && (usesTrig || clean.angle !== 'radians')}
+              <label class="field">
+                <span>Trig reads x in <span class="hint">type ° (or deg) in the range for degrees</span></span>
+                <select bind:value={settings.angle}>
+                  {#each Object.entries(ANGLE_UNITS) as [v, label]}<option value={v}>{label}</option>{/each}
+                </select>
+              </label>
+            {/if}
             <label class="field">
               Numbers
               <select bind:value={settings[`${axis}Every` as const]}>
@@ -212,11 +250,20 @@
             </div>
           </Section>
         {/each}
+
+        <Section title="Grid" icon={Grid3x3} summary={gridSummary}>
+          <label class="field">
+            Minor gridlines
+            <select bind:value={settings.minor}>
+              {#each MINOR_OPTIONS as [v, label]}<option value={v}>{label}</option>{/each}
+            </select>
+          </label>
+        </Section>
       </section>
     </div>
 
     <div class="preview">
-      <FigureCanvas {svg} {filename} {history}>
+      <FigureCanvas {svg} {filename} {history} bind:labelSize={settings.labelSize}>
         <Graph settings={clean} bind:svg />
       </FigureCanvas>
     </div>

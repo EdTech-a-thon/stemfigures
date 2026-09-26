@@ -5,6 +5,7 @@
 // readTriangle() works out what they mean. The defaults are the triangle the
 // generator opens with: ∠B = 90°, ∠A = 24°, AB = 12, and BC labeled x.
 
+import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
 import { parseNumber } from '$lib/shared/math.js'
 import { ANGLES, SIDES, solveTriangle, type Part, type Side, type Solved, type Vertex } from './solve.js'
 
@@ -36,6 +37,7 @@ export type Settings = { [K in `name${Vertex}`]: string } & { [K in Part]: strin
   rotate: number
   other: boolean
   moved: string
+  labelSize: LabelSize
 }
 /** Settings as they may arrive: from a form, a link, or a preset stored by an older version. */
 export type RawSettings = Record<string, any>
@@ -64,6 +66,7 @@ export const DEFAULT_SETTINGS = {
   rotate: 0,
   other: false, // the ambiguous case's second triangle
   moved: '', // labels dragged from their spots: "AB:4,-6;vC:0,3"
+  labelSize: 'medium', // how big the labels are (see labelSize.ts)
 } as Settings
 
 /** Settings that describe the figure itself, which is what a preset saves. */
@@ -95,6 +98,7 @@ export function cleanSettings(s: RawSettings): Settings {
   out.base = oneOf(SIDES, out.base, d.base)
   out.rotate = Math.max(-180, Math.min(180, Math.round(out.rotate)))
   out.moved = writeMoved(readMoved(out.moved))
+  out.labelSize = cleanLabelSize(out.labelSize)
   return out as Settings
 }
 
