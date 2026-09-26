@@ -25,6 +25,17 @@ from: no formulas on the figure, no axes, no velocity arrows along the path,
 no downward launches, no landing on a raised or sloped surface, and no air
 resistance, until teachers ask.
 
+## Vector Diagram (built)
+
+Up to three vectors drawn to scale head to tail, each set by its magnitude
+(in grid squares) and direction, and their resultant. Every vector and the
+resultant can be drawn solid, dashed or left off, and each can show an angle
+mark and its components. A grid (no tick marks) is on by default; plain x and
+y axes through the first tail are optional. Left out on purpose, until
+teachers ask: vector subtraction, tail-to-tail (parallelogram) addition,
+setting a vector by its components, tick marks or a scale, and more than
+three vectors.
+
 ## Torque Balance
 
 A beam balanced on a pivot with objects hanging from it at different

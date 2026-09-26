@@ -3,14 +3,15 @@
   // figure on the right. Settings live in the page address.
   import { Box, Gauge, MoveUpRight, Plus, Trash2 } from '@lucide/svelte'
   import Choice from '$lib/shared/Choice.svelte'
+  import DirectionField from '$lib/shared/DirectionField.svelte'
   import { createGenerator } from '$lib/shared/generator.svelte'
   import GeneratorLayout from '$lib/shared/GeneratorLayout.svelte'
   import LabelField from '$lib/shared/LabelField.svelte'
-  import type { Label } from '$lib/shared/label'
+  import { componentLabel, type Label } from '$lib/shared/label'
   import Section from '$lib/shared/Section.svelte'
   import { sameDirection } from './fbd'
   import FreeBody from './FreeBody.svelte'
-  import { componentLabel, fbdSettings, MAX_FORCES, onAxis, STARTERS, starterForce, type Force } from './settings'
+  import { fbdSettings, MAX_FORCES, onAxis, STARTERS, starterForce, type Force } from './settings'
 
   const gen = createGenerator(fbdSettings, 'free-body-diagram')
   const s = $derived(gen.clean)
@@ -29,13 +30,6 @@
       .join(', ') || 'none',
   )
 
-  /** The quick picks for a direction. */
-  const DIRECTIONS = [
-    [90, 'Up'],
-    [270, 'Down'],
-    [180, 'Left'],
-    [0, 'Right'],
-  ] as const
   const full = $derived(s.forces.length >= MAX_FORCES)
   const names = (g: number[]) => g.slice(0, -1).map((i) => i + 1).join(', ') + ` and ${g.at(-1)! + 1}`
   const hidden = $derived(sameDirection(s.forces).map((g) => `Forces ${names(g)} point the same way, so one arrow hides the other.`))
@@ -52,22 +46,6 @@
     }
   }
 </script>
-
-<!-- Which way a force or motion points: a slider and a box in degrees, with quick picks. -->
-{#snippet directionField(target: Record<string, any>, key: string, name: string)}
-  <div class="field">
-    Direction
-    <span class="slider">
-      <input type="range" min="0" max="359" bind:value={target[key]} aria-label="{name} direction" />
-      <span class="degrees"><input type="number" min="0" max="359" bind:value={target[key]} aria-label="{name} angle in degrees" />°</span>
-    </span>
-    <div class="segmented" role="group" aria-label="{name} quick directions">
-      {#each DIRECTIONS as [angle, label]}
-        <button type="button" class:on={target[key] === angle} aria-pressed={target[key] === angle} onclick={() => (target[key] = angle)}>{label}</button>
-      {/each}
-    </div>
-  </div>
-{/snippet}
 
 <GeneratorLayout title="Free Body Diagram Generator" {gen} filename="free-body-diagram">
   {#snippet controls()}
@@ -95,7 +73,7 @@
               <Trash2 size={17} />
             </button>
           </div>
-          {@render directionField(force, 'angle', `Force ${i + 1}`)}
+          <DirectionField name="Force {i + 1}" bind:value={force.angle} />
           <label class="field">
             Length
             <span class="slider">
@@ -140,7 +118,7 @@
         <div class="motion">
           <label class="check"><input type="checkbox" bind:checked={gen.settings[m.key]} /> {m.name}</label>
           {#if s[m.key]}
-            {@render directionField(gen.settings, m.angle, m.name)}
+            <DirectionField name={m.name} bind:value={gen.settings[m.angle]} />
             <div class="field">Label <LabelField name="{m.name} label" bind:label={gen.settings[m.label]} /></div>
           {/if}
         </div>
@@ -156,8 +134,6 @@
 <style>
   .force { border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 0.75rem; }
   .force-head { display: flex; align-items: center; justify-content: space-between; font-weight: 800; margin-bottom: 0.25rem; }
-  .degrees { display: inline-flex; align-items: center; gap: 0.2rem; color: var(--muted); }
-  .degrees input { width: 4.2rem; }
   .motion + .motion { border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.25rem; }
   .warning { color: var(--ink); background: #fffbeb; border-left: 3px solid var(--amber); border-radius: 6px; padding: 0.5rem 0.7rem; }
   .starters { display: flex; flex-wrap: wrap; gap: 0.4rem; }

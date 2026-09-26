@@ -1,7 +1,9 @@
 import { describe, expect, test } from 'vitest'
 import { searchGenerators } from '$lib/generators'
-import { buildFbd, crosses, DOT_R, labelBox, overlaps, sameDirection, UNIT } from './fbd'
-import { componentLabel, fbdSettings, STARTERS, starterForce, type FbdSettings, type Force } from './settings'
+import { crosses, labelBox, overlaps } from '$lib/shared/layout'
+import { buildFbd, DOT_R, sameDirection, UNIT } from './fbd'
+import { componentLabel } from '$lib/shared/label'
+import { fbdSettings, STARTERS, starterForce, type FbdSettings, type Force } from './settings'
 
 const make = (over: Partial<FbdSettings> = {}) => buildFbd({ ...fbdSettings.defaults, ...over })
 const ROW = fbdSettings.clean({ forces: [{}] }).forces[0]

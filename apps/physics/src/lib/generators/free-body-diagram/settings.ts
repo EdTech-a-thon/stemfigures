@@ -50,15 +50,6 @@ export const starterForce = (s: (typeof STARTERS)[number]): Force => ({
 /** Is this force along the horizontal or vertical, so it has no angle to mark and no components? */
 export const onAxis = (angle: number) => angle % 90 === 0
 
-/** A component's label from its force's: T → T_x, F_g → F_{gx}, F_{air} → F_{airx}. */
-export function componentLabel(text: string, axis: 'x' | 'y'): string {
-  const braced = /^(.*)_\{(.*)\}$/.exec(text)
-  if (braced) return `${braced[1]}_{${braced[2]}${axis}}`
-  const single = /^(.*)_(.)$/u.exec(text)
-  if (single) return `${single[1]}_{${single[2]}${axis}}`
-  return text ? `${text}_${axis}` : ''
-}
-
 export const fbdSettings = defineSettings({
   body: choice('dot', ['dot', 'block', 'ball', 'cart']),
   bodySize: number(1, 0.5, 2),
