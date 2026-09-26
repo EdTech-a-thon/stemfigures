@@ -1,14 +1,15 @@
 // Reading what a teacher types to graph on a coordinate grid, with Caret (see
 // docs/adr/0002-caret-for-math-input.md): a straight line like y = 2x + 1,
-// 2x + 3y = 6 or x = 4, a curve that can be solved for y like y = x^2 - 4 or
-// y = 2^x, or points like (2, 3) or (1, 2), (3, 4). Not yet: sideways curves,
-// circles and shaded inequalities. Runs on the server too.
+// 2x + 3y = 6 or x = 4, a curve that can be solved for y like y = x^2 - 4,
+// y = 2^x or y = 3sin(2x), or points like (2, 3) or A(1, 2), B(3, 4). Not yet:
+// sideways curves, circles and shaded inequalities. Runs on the server too.
 
 import type { TreeNode } from '@caret-js/core'
 import { CommaListNode, ComparisonNode, ParenthesesChildTag, VariableNode } from '@caret-js/math'
 import { fromText, parsers } from '$lib/shared/math.js'
 import { fmt } from '$lib/shared/numbering.js'
-import { divisors, evaluate } from './evaluate.js'
+import { FunctionNameNode } from '$lib/shared/functions.js'
+import { divisors, evaluate, type AngleUnit } from './evaluate.js'
 
 const EXAMPLE = 'Try a line like y = 2x + 1, a curve like y = x^2 − 4, a point like (2, 3), or a list of points like (2, 3), (1, 4).'
 const EPS = 1e-9
@@ -84,11 +85,11 @@ export function rowFromParam(value: string): Row {
 }
 
 /** A bracketed pair like (2, 3) as { x, y }. */
-function point(node: TreeNode): Point {
+function point(node: TreeNode, angle: AngleUnit): Point {
   if (!(node instanceof CommaListNode && node.hasTag(ParenthesesChildTag) && node.expressions.length === 2)) {
     throw new ReadError('Write each point as (x, y), like (2, 3). For more than one, put commas between them: (2, 3), (1, 4).')
   }
-  const [x, y] = node.expressions.map((n) => evaluate(n))
+  const [x, y] = node.expressions.map((n) => evaluate(n, {}, angle))
   if (x === null || y === null || !Number.isFinite(x) || !Number.isFinite(y)) {
     throw new ReadError('Each point needs two numbers, like (2, 3) or (−1/2, 4). For more than one: (2, 3), (1, 4).')
   }
@@ -132,23 +133,24 @@ const XS = [-7.3, -3.7, -1.2, 0.4, 1.9, 2.9, 5.3, 8.6]
  * Both sides are evaluated at test points to see which, so any way of writing
  * it works: y − 3 = (x − 1)², for one.
  */
-function graphOf(node: ComparisonNode): { line: Line; curve?: undefined } | { curve: Curve; line?: undefined } {
+function graphOf(node: ComparisonNode, angle: AngleUnit): { line: Line; curve?: undefined } | { curve: Curve; line?: undefined } {
   if (node.operators.length > 1) throw new ReadError('Use one = sign, like y = 2x + 1.')
   if (node.operators[0] !== '=') throw new ReadError('Shading inequalities isn’t here yet. Try an equation like y = 2x + 1.')
   for (const n of node.traverse()) {
+    if (n instanceof FunctionNameNode) throw new ReadError(`Give ${n.name} something to work on, like ${n.name}(x).`)
     if (n instanceof VariableNode && n.name !== 'x' && n.name !== 'y') throw new ReadError(`Use x and y, not ${n.name}.`)
   }
   const [left, right] = node.operands
   const F = (x: number, y: number) => {
-    const l = evaluate(left, { x, y })
-    const r = evaluate(right, { x, y })
+    const l = evaluate(left, { x, y }, angle)
+    const r = evaluate(right, { x, y }, angle)
     return l === null || r === null || !Number.isFinite(l) || !Number.isFinite(r) ? null : l - r
   }
 
   // A straight line: F is a·x + b·y + c everywhere. One that divides by
   // something with x in it, like y = (x² − 1)/(x − 1), is drawn as a curve,
   // which knows about holes.
-  const divs = [...divisors(left), ...divisors(right)]
+  const divs = [...divisors(left, angle), ...divisors(right, angle)]
   const c = divs.length ? null : F(0, 0)
   // (F(1, 0) and F(0, 1) are checked before a and b are used.)
   const a = c === null ? null : F(1, 0)! - c
@@ -208,17 +210,18 @@ function graphOf(node: ComparisonNode): { line: Line; curve?: undefined } | { cu
  */
 export function parseEquation(
   text: string,
+  angle: AngleUnit = 'radians',
 ): { line?: Line; curve?: Curve; points?: Point[]; error?: string } | null {
   if (!String(text ?? '').trim()) return null
   try {
     const named = splitNames(text)
     const node = parsers.equation.parse(fromText(named?.text ?? text))
-    if (node instanceof ComparisonNode) return graphOf(node)
+    if (node instanceof ComparisonNode) return graphOf(node, angle)
     if (node instanceof CommaListNode) {
       const items = node.hasTag(ParenthesesChildTag) ? [node] : node.expressions
       return {
         points: items.map((item, i) => {
-          const p = point(item)
+          const p = point(item, angle)
           const name = named?.names[i]
           return name ? { ...p, name } : p
         }),
@@ -427,9 +430,9 @@ export function curveRuns(f: (x: number) => number | null, box: Box, breaks: num
  * or curve inside the grid (runs), the points on it, and a problem for the
  * settings panel when a row can't be read or doesn't show.
  */
-export function readEquations(texts: string[], box: Box): (ReadRow | null)[] {
+export function readEquations(texts: string[], box: Box, angle: AngleUnit = 'radians'): (ReadRow | null)[] {
   return texts.map((text): ReadRow | null => {
-    const read = parseEquation(text)
+    const read = parseEquation(text, angle)
     if (!read) return null
     if (read.error) return { problem: read.error }
     if (read.line || read.curve) {

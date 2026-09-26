@@ -1,11 +1,13 @@
-// How a tick's number is written: as a decimal, a fraction (stacked, improper) or
-// a multiple of π. A number that has no neat fraction falls back to a decimal.
+// How a tick's number is written: as a decimal, a fraction (stacked, improper),
+// a multiple of π, or in degrees. A number that has no neat fraction falls back
+// to a decimal.
 //
 // The numbering follows how the teacher typed the range: write π and the
-// numbers are in π, write a fraction and they are fractions.
+// numbers are in π, write a fraction and they are fractions, write ° and
+// they are degrees.
 
-/** How numbers are written: decimals, fractions, or multiples of π. */
-export type Numbering = 'decimal' | 'fraction' | 'pi'
+/** How numbers are written: decimals, fractions, multiples of π, or degrees (90°). */
+export type Numbering = 'decimal' | 'fraction' | 'pi' | 'degree'
 
 /**
  * A number ready to draw. Either { text } on one line, or a stacked fraction
@@ -13,9 +15,10 @@ export type Numbering = 'decimal' | 'fraction' | 'pi'
  */
 export type Label = { text: string; sign?: undefined; num?: undefined; den?: undefined } | { text?: undefined; sign: string; num: string; den: string }
 
-/** The numbering for a range typed as these texts ("0", "2pi", "pi/4"). */
+/** The numbering for a range typed as these texts ("0", "2pi", "pi/4", "90°"). */
 export function numberingOf(...texts: string[]): Numbering {
   const typed = texts.join(' ')
+  if (typed.includes('°')) return 'degree'
   if (/pi|π/i.test(typed)) return 'pi'
   if (typed.includes('/')) return 'fraction'
   return 'decimal'
@@ -40,6 +43,7 @@ function ratio(v: number): { p: number; q: number } | null {
 
 /** A tick number ready to draw. */
 export function numberLabel(v: number, numbering: Numbering): Label {
+  if (numbering === 'degree') return { text: `${fmt(v)}°` }
   if (numbering === 'fraction') {
     const r = ratio(v)
     if (r && r.q !== 1) return { sign: r.p < 0 ? '−' : '', num: String(Math.abs(r.p)), den: String(r.q) }
@@ -61,6 +65,7 @@ export function numberLabel(v: number, numbering: Numbering): Label {
  * fraction, then a decimal rounded to hundredths.
  */
 export function niceLabel(v: number, numbering: Numbering): Label {
+  if (numbering === 'degree') return { text: `${fmt(Math.round(v * 100) / 100)}°` }
   const short = (l: Label) => !l.text || !/\.\d{4}/.test(l.text)
   for (const n of [numbering, 'pi', 'fraction'] as const) {
     const l = numberLabel(v, n)

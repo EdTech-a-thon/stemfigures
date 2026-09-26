@@ -8,12 +8,14 @@ import { CAPS, type Cap } from '$lib/shared/caps.js'
 import { parseNumber } from '$lib/shared/math.js'
 import { fmt, niceText, numberingOf, type Numbering } from '$lib/shared/numbering.js'
 import { cleanRow, rowFromParam, rowToParam, type Row } from './equations.js'
+import type { AngleUnit } from './evaluate.js'
 
 export { CAPS, fmt }
 
 export const MAX_BLOCKS = 50
 export const EVERY = [1, 2, 5, 10, 0] // number every nth line; 0 = no numbers
 export const MINOR = [0, 2, 4, 5, 10] // minor gridlines: how many parts each block splits into; 0 = none
+export const ANGLE_UNITS = { radians: 'Radians', degrees: 'Degrees' } // what trig functions read x in
 export const TITLE_MODES = ['text', 'blank', 'none'] as const // written title, write-on line for students, nothing
 export const LABEL_MODES = ['text', 'none'] as const // the letter at an axis arrow, like x or y
 const CAP_KEYS = ['xStartCap', 'xEndCap', 'yStartCap', 'yEndCap'] as const
@@ -46,6 +48,7 @@ export type Settings = {
   yStartCap: Cap
   yEndCap: Cap
   minor: number
+  angle: AngleUnit
   equations: Row[]
 }
 /** Settings as they may arrive: from a form, a link, or a preset stored by an older version. */
@@ -78,6 +81,7 @@ export const DEFAULT_SETTINGS: Settings = {
   yStartCap: 'triangle', // bottom end
   yEndCap: 'triangle', // top end
   minor: 0, // minor gridlines per block, like millimetre graph paper's 10
+  angle: 'radians', // the angle unit: whether sin x reads x in radians or degrees
   equations: [], // what's graphed, one row each: { text: "y=2x+1", color, line, arrows }
 }
 
@@ -135,6 +139,7 @@ export function cleanSettings(s: RawSettings): Settings {
     xEvery: EVERY.includes(Number(s.xEvery)) ? Number(s.xEvery) : 1,
     yEvery: EVERY.includes(Number(s.yEvery)) ? Number(s.yEvery) : 1,
     minor: MINOR.includes(Number(s.minor)) ? Number(s.minor) : 0,
+    angle: s.angle in ANGLE_UNITS ? s.angle : d.angle,
     title: String(s.title ?? ''),
     xTitle: String(s.xTitle ?? ''),
     yTitle: String(s.yTitle ?? ''),

@@ -22,7 +22,7 @@
   import Graph from './Graph.svelte'
   import { presetStore } from './presets.js'
   import {
-    CAPS, cleanSettings, readAxes, sameGraph, settingsFromParams, settingsToQuery, type AxisName, type Settings,
+    ANGLE_UNITS, CAPS, cleanSettings, readAxes, sameGraph, settingsFromParams, settingsToQuery, type AxisName, type Settings,
   } from './settings.js'
 
   // There's always a row to type the next equation in.
@@ -37,8 +37,10 @@
     readEquations(clean.equations.map((r) => r.text), {
       x0: axes.x.start, x1: axes.x.start + axes.x.blocks * axes.x.step,
       y0: axes.y.start, y1: axes.y.start + axes.y.blocks * axes.y.step,
-    }),
+    }, clean.angle),
   )
+  // The angle unit only matters, so only shows, once a row uses trig.
+  const usesTrig = $derived(clean.equations.some((r) => /sin|cos|tan|sec|csc|cot/.test(r.text)))
 
   // A new row, unless the last one is still empty, which gets the focus instead.
   function addRow() {
@@ -150,8 +152,9 @@
           <h2 class="card-head flush">Equations</h2>
           <HelpTip id="equation-tip" label="How to type an equation">
             Type a line like y = 2x + 1, 2x + 3y = 6 or x = 4, a curve like y = x^2 − 4 or y = −(x − 2)^2 + 3, or points like
-            (2, 3) or (1, 2), (3, 4). Name points by writing a letter first: A(1, 2), B'(3, 4). Type ^ for an exponent, / for a
-            fraction and pi for π.
+            (2, 3) or (1, 2), (3, 4). Name points by writing a letter first: A(1, 2), B'(3, 4). Functions work too: sin, cos,
+            tan, sec, csc, cot, arcsin, ln, log, log_2 (type _ for the base), e^x and |x|. Type ^ for an exponent, / for a fraction
+            and pi for π.
           </HelpTip>
         </div>
         {#each settings.equations as row, i}
@@ -169,7 +172,17 @@
           </div>
           {#if rows[i]?.problem}<p class="help problem">{rows[i].problem}</p>{/if}
         {/each}
-        <button class="add" onclick={addRow}><Plus size={16} aria-hidden="true" /> Add equation</button>
+        <div class="add-row">
+          <button class="add" onclick={addRow}><Plus size={16} aria-hidden="true" /> Add equation</button>
+          {#if usesTrig || clean.angle !== 'radians'}
+            <label class="angle">
+              Trig in
+              <select bind:value={settings.angle}>
+                {#each Object.entries(ANGLE_UNITS) as [v, label]}<option value={v}>{label.toLowerCase()}</option>{/each}
+              </select>
+            </label>
+          {/if}
+        </div>
       </section>
 
       <section class="card sections">
@@ -283,6 +296,9 @@
     border: 1.5px dashed var(--border); border-radius: 999px; background: none; color: var(--blue-dark); font-weight: 700; font-size: 0.85rem;
   }
   .add:hover { background: var(--blue-soft); }
+  .add-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
+  .angle { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+  .angle select { width: auto; padding-block: 0.2rem; }
 
   .grid-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; margin-bottom: 0.75rem; }
   .range-field { display: flex; flex-direction: column; gap: 0.3rem; font-weight: 600; font-size: 0.88rem; min-width: 0; }

@@ -4,7 +4,7 @@
   // for the page address. `kind` is "number" (a range value like 3π/2) or
   // "inequality" (like −2 < x ≤ 5, with "or" and "and" set as words).
   import { MathField } from '@caret-js/svelte'
-  import { classify, commands, fromText, schema, toText, typingRules, type MathKind } from './math.js'
+  import { classify, classifyFunctions, commands, fromText, schema, toText, typingRules, type MathKind } from './math.js'
 
   // The rest (id, aria-label, placeholder…) go to the field's text box.
   let { value = $bindable(''), kind = 'number', ...rest }: { value?: string; kind?: MathKind; [attribute: string]: unknown } = $props()
@@ -17,7 +17,7 @@
   toText={(doc) => toText(doc, kind)}
   {typingRules}
   {commands}
-  classify={kind === 'inequality' ? classify : undefined}
+  classify={kind === 'inequality' ? classify : kind === 'equation' ? classifyFunctions : undefined}
   {...rest}
 />
 
@@ -29,5 +29,13 @@
     --caret-color: var(--ink);
     --caret-font-size: 1.1rem;
     --caret-placeholder-font: system-ui, sans-serif;
+  }
+  /* Function names like sin and log: upright, with a little room before what they act on. */
+  :global(.caret-math .caret-fn) { font-style: normal; }
+  :global(.caret-math .caret-fn-end) { margin-right: 0.15em; }
+  /* A subscript on its own, like log₂'s 2 (Caret places a subsup box as if it were an exponent), and a grey slot while it's empty. */
+  :global(.caret-math .subsup.subsup:not(:has(.superscript))) { vertical-align: -0.35em; }
+  :global(.caret-math .subscript.subscript:not(:has(:not(.cursor.placeholder)))::after) {
+    display: inline-block; content: ''; width: 0.6em; height: 0.7em; background: var(--caret-slot, #e5e7eb); vertical-align: -0.1em;
   }
 </style>

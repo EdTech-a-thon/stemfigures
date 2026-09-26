@@ -182,7 +182,7 @@ export function buildGraph(settings: Settings) {
   const circles: (Point & { color: string; closed: boolean })[] = []
   const pointNames: (Point & { name: string; coords: string; color: string })[] = []
   const rows = settings.equations ?? []
-  readEquations(rows.map((r) => r.text), box).forEach((read, i) => {
+  readEquations(rows.map((r) => r.text), box, s.angle).forEach((read, i) => {
     const { color, line: style, arrows, point, names } = rows[i]
     const ink = COLORS[color]
     for (const run of read?.runs ?? []) {
