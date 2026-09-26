@@ -37,7 +37,10 @@
   :global(.caret-math .caret-fn) { font-style: normal; }
   :global(.caret-math .caret-fn-end) { margin-right: 0.15em; }
   /* A subscript on its own, like log₂'s 2 (Caret places a subsup box as if it were an exponent), and a grey slot while it's empty. */
-  :global(.caret-math .subsup.subsup:not(:has(.superscript))) { vertical-align: -0.35em; }
+  :global(.caret-math .subsup.subsup:not(:has(.superscript))) { vertical-align: -0.75em; }
+  /* A function's power or base hugs its name (log₂, sin²), and the room goes after it instead. */
+  :global(.caret-math .caret-fn-end:has(+ .cursor + .subsup)) { margin-right: 0; }
+  :global(.caret-math .caret-fn-end + .cursor + .subsup) { margin-right: 0.25em; }
   :global(.caret-math .subscript.subscript:not(:has(:not(.cursor.placeholder)))::after) {
     display: inline-block; content: ''; width: 0.6em; height: 0.7em; background: var(--caret-slot, #e5e7eb); vertical-align: -0.1em;
   }

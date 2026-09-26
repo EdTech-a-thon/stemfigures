@@ -86,8 +86,16 @@ export function rowToParam(r: Row): string {
 }
 
 export function rowFromParam(value: string): Row {
-  const [text, ...style] = String(value).split('|')
-  return cleanRow({ text, ...Object.fromEntries(style.map((kv) => kv.split('='))) })
+  // The style is the "key=value" parts at the end; anything before is the
+  // text, which can have bars of its own, as in y = |x| − 2.
+  const parts = String(value).split('|')
+  const style: string[][] = []
+  const isStyle = (p: string) => {
+    const k = p.split('=')[0]
+    return p.includes('=') && k !== 'text' && k in ROW_DEFAULTS
+  }
+  while (parts.length > 1 && isStyle(parts.at(-1)!)) style.unshift(parts.pop()!.split('='))
+  return cleanRow({ text: parts.join('|'), ...Object.fromEntries(style) })
 }
 
 /** A bracketed pair like (2, 3) as { x, y }. */

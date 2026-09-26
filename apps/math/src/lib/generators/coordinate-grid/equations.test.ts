@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { ROW_DEFAULTS, clipLine, curveRuns, parseEquation, readEquations, rowFromParam, splitNames } from './equations.js'
+import { ROW_DEFAULTS, clipLine, curveRuns, parseEquation, readEquations, rowFromParam, rowToParam, splitNames } from './equations.js'
 import { DEFAULT_SETTINGS, cleanSettings, settingsFromParams, settingsToQuery } from './settings.js'
 
 const line = (text: string) => {
@@ -367,6 +367,13 @@ describe('equations in the page address', () => {
   })
   test('unknown styles fall back to the defaults', () => {
     expect(rowFromParam('(1,2)|color=plaid|arrows=left')).toEqual({ ...ROW_DEFAULTS, text: '(1,2)', arrows: 'left' })
+  })
+  test('absolute value bars in the text aren’t taken for the style', () => {
+    expect(rowFromParam('y=|x|-2')).toEqual({ ...ROW_DEFAULTS, text: 'y=|x|-2' })
+    expect(rowFromParam('y=|x-1|+|x|')).toEqual({ ...ROW_DEFAULTS, text: 'y=|x-1|+|x|' })
+    expect(rowFromParam('y=|x|-2|color=red|asym=shown')).toEqual({ ...ROW_DEFAULTS, text: 'y=|x|-2', color: 'red', asym: 'shown' })
+    const row = { ...ROW_DEFAULTS, text: 'y=|x|', color: 'blue' as const }
+    expect(rowFromParam(rowToParam(row))).toEqual(row)
   })
   test('no rows, no eq', () => expect(settingsToQuery(cleanSettings(DEFAULT_SETTINGS))).toBe(''))
 })
