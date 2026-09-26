@@ -5,11 +5,13 @@
   // CapPicker's menu, so the scrolling settings column can't clip it.
   import { tick } from 'svelte'
   import {
-    ARROWS, COLORS, LINE_STYLES, NAME_STYLES, POINT_STYLES, type Arrows, type Color, type LineStyle, type NameStyle, type PointStyle, type Row,
+    ARROWS, COLORS, ENDPOINTS, LINE_STYLES, NAME_STYLES, POINT_STYLES,
+    type Arrows, type Color, type Endpoints, type LineStyle, type NameStyle, type PointStyle, type Row,
   } from './equations.js'
 
-  // row: { color, line, arrows, point }, edited in place. isPoints: only color and point apply.
-  let { row, label, id, isPoints = false }: { row: Row; label: string; id: string; isPoints?: boolean } = $props()
+  // row: { color, line, arrows, point, … }, edited in place. isPoints: only color, point and names apply.
+  // hasDomain: the row's line stops at a domain, so it can show endpoints.
+  let { row, label, id, isPoints = false, hasDomain = false }: { row: Row; label: string; id: string; isPoints?: boolean; hasDomain?: boolean } = $props()
 
   let open = $state(false)
   let root = $state<HTMLElement>()
@@ -97,6 +99,18 @@
   </svg>
 {/snippet}
 
+{#snippet endsIcon(style: Endpoints)}
+  <svg viewBox="0 0 28 12" width="28" height="12" aria-hidden="true" stroke="currentColor" stroke-width="2">
+    {#if style === 'shown'}
+      <line x1="7" y1="6" x2="21" y2="6" />
+      <circle cx="5" cy="6" r="3" fill="currentColor" />
+      <circle cx="23" cy="6" r="3" fill="#fff" />
+    {:else}
+      <line x1="3" y1="6" x2="25" y2="6" />
+    {/if}
+  </svg>
+{/snippet}
+
 {#snippet arrowIcon(ends: Arrows)}
   <svg viewBox="0 0 28 12" width="28" height="12" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="2">
     <line x1={ends === 'both' || ends === 'left' ? 8 : 3} y1="6" x2={ends === 'both' || ends === 'right' ? 20 : 25} y2="6" />
@@ -180,6 +194,19 @@
             {/each}
           </div>
         </div>
+
+        {#if hasDomain}
+          <div class="group">
+            <span class="name" id="{id}-ends">Endpoints</span>
+            <div class="segmented" role="radiogroup" aria-labelledby="{id}-ends">
+              {#each (Object.entries(ENDPOINTS) as [Endpoints, string][]) as [v, name]}
+                <button type="button" role="radio" aria-checked={row.ends === v} aria-label={name} title={name} class:on={row.ends === v} onclick={() => (row.ends = v)}>
+                  {@render endsIcon(v)}
+                </button>
+              {/each}
+            </div>
+          </div>
+        {/if}
 
         <div class="group">
           <span class="name" id="{id}-arrows">Arrows</span>

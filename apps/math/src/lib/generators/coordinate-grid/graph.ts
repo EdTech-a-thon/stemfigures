@@ -183,7 +183,7 @@ export function buildGraph(settings: Settings) {
   const pointNames: (Point & { name: string; coords: string; color: string })[] = []
   const rows = settings.equations ?? []
   readEquations(rows.map((r) => r.text), box, s.angle).forEach((read, i) => {
-    const { color, line: style, arrows, point, names } = rows[i]
+    const { color, line: style, arrows, point, names, ends } = rows[i]
     const ink = COLORS[color]
     for (const run of read?.runs ?? []) {
       let pts = run.points.map(px)
@@ -206,7 +206,7 @@ export function buildGraph(settings: Settings) {
         width: style === 'dotted' ? 3.2 : 2.5, // round dots look lighter than a solid stroke
       })
     }
-    for (const c of read?.circles ?? []) circles.push({ ...px(c), color: ink, closed: c.closed })
+    for (const c of read?.circles ?? []) if (!(c.end && ends === 'hidden')) circles.push({ ...px(c), color: ink, closed: c.closed })
     for (const pt of read?.points ?? []) {
       const at = px(pt)
       dots.push({ ...at, color: ink, cross: point === 'cross' })

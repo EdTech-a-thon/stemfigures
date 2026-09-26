@@ -200,6 +200,77 @@ describe('odd roots of negative numbers', () => {
   })
 })
 
+describe('domains', () => {
+  const row = (text: string, b = box) => readEquations([text], b)[0]!
+  const ends = (text: string) => row(text).circles!.filter((c) => c.end).map(({ x, y, closed }) => ({ x: +x.toFixed(6), y: +y.toFixed(6), closed }))
+
+  test('a line with both ends inside the grid stops at a closed and an open circle, with no arrows', () => {
+    const r = row('y = x, -2 ≤ x < 3')
+    expect(r.runs![0].edges).toEqual([false, false])
+    expect(ends('y = x, -2 ≤ x < 3')).toEqual([{ x: -2, y: -2, closed: true }, { x: 3, y: 3, closed: false }])
+  })
+
+  test('the end whose domain runs past the grid keeps its arrow', () => {
+    const r = row('y = x, x >= 0')
+    expect(r.runs![0].edges).toEqual([false, true])
+    expect(ends('y = x, x >= 0')).toEqual([{ x: 0, y: 0, closed: true }])
+  })
+
+  test('written either way round, and <= as ≤', () => {
+    expect(ends('y = 2, 1 > x')).toEqual([{ x: 1, y: 2, closed: false }])
+    expect(ends('y = 2, x <= 1')).toEqual([{ x: 1, y: 2, closed: true }])
+  })
+
+  test('several conditions all hold', () => {
+    expect(ends('y = 1, x > -1, x ≤ 2').map((e) => e.x)).toEqual([-1, 2])
+  })
+
+  test('an up-and-down line takes its domain in y', () => {
+    const r = row('x = 4, 0 ≤ y ≤ 3')
+    expect(r.runs![0].points.map((p) => p.y)).toEqual([0, 3])
+    expect(r.circles!.every((c) => c.closed)).toBe(true)
+  })
+
+  test('a curve stops at its domain, where the curve is', () => {
+    const r = row('y = x^2 - 4, -1 < x ≤ 2')
+    expect(r.runs).toHaveLength(1)
+    expect(r.runs![0].edges).toEqual([false, false])
+    expect(ends('y = x^2 - 4, -1 < x ≤ 2')).toEqual([{ x: -1, y: -3, closed: false }, { x: 2, y: 0, closed: true }])
+  })
+
+  test('a piecewise function is two rows', () => {
+    const [a, b] = readEquations(['y = -x, x < 0', 'y = x^2, x ≥ 0'], box)
+    const [ea, eb] = [a!.circles!.find((c) => c.end)!, b!.circles!.find((c) => c.end)!]
+    expect([ea.x, ea.y, eb.x, eb.y].every((v) => Math.abs(v) < 1e-9)).toBe(true)
+    expect([ea.closed, eb.closed]).toEqual([false, true])
+  })
+
+  test('an endpoint where the curve isn’t defined is open, where it heads', () => {
+    const [c] = row('y = 1/x + 1, 0 ≤ x ≤ 10', { x0: -5, x1: 5, y0: -5, y1: 5 }).circles!.filter((c) => c.end)
+    expect(c).toBeUndefined() // (it heads off the top, so there's no circle to draw)
+    expect(ends('y = sqrt(x), 0 ≤ x')).toEqual([{ x: 0, y: 0, closed: true }])
+  })
+
+  test.each([
+    ['y = x, x', /After the comma/],
+    ['y = x, x = 2', /After the comma/],
+    ['y = x, 2 < 3', /After the comma/],
+    ['y = x, x > 3, x < 1', /No x-values/],
+    ['y = x, 0 < x < y', /After the comma/],
+    ['y = x^2, 0 < y < 3', /a curve’s domain in x/],
+    ['y = x, x > 1, y < 2', /one letter/],
+  ])('%s: %s', (text, message) => expect(parseEquation(text)!.error).toMatch(message))
+
+  test('a domain off the grid says so', () => {
+    expect(row('y = x, x > 9').problem).toMatch(/domain is off the grid/)
+  })
+
+  test('endpoints can be hidden, and the row says so in the address', () => {
+    expect(rowFromParam('y=x, x>0|ends=hidden').ends).toBe('hidden')
+    expect(rowFromParam('y=x, x>0|ends=maybe').ends).toBe('shown')
+  })
+})
+
 describe('point names', () => {
   test.each([
     ['A(1, 2), B(3, 4)', [{ x: 1, y: 2, name: 'A' }, { x: 3, y: 4, name: 'B' }]],
@@ -244,7 +315,7 @@ describe('equations in the page address', () => {
     expect(settingsFromParams(new URLSearchParams(q)).equations.map((r) => r.text)).toEqual(['y=2x+1', '(1,2),(3,4)'])
   })
   test('a row keeps its style, and only what differs from the default is written', () => {
-    const row = { text: 'y=2x+1', color: 'red', line: 'dashed', arrows: 'both', point: 'dot', names: 'name' }
+    const row = { text: 'y=2x+1', color: 'red', line: 'dashed', arrows: 'both', point: 'dot', names: 'name', ends: 'shown' }
     const q = settingsToQuery(cleanSettings({ ...DEFAULT_SETTINGS, equations: [row] }))
     expect(new URLSearchParams(q).get('eq')).toBe('y=2x+1|color=red|line=dashed')
     expect(settingsFromParams(new URLSearchParams(q)).equations).toEqual([row])

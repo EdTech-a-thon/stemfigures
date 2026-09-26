@@ -33,18 +33,21 @@ export const ARROWS = { both: 'Both ends', none: 'No arrows', left: 'Left end', 
 export const POINT_STYLES = { dot: 'Dot', cross: 'Cross' }
 // What's written beside a named point: its name (A), or its name and coordinates (A(1, 2)).
 export const NAME_STYLES = { name: 'Name', coords: 'Name and coordinates' }
+// Whether a line with a domain shows open and closed circles at its ends, or just stops.
+export const ENDPOINTS = { shown: 'Show endpoints', hidden: 'No endpoints' }
 
 export type Color = keyof typeof COLORS
 export type LineStyle = keyof typeof LINE_STYLES
 export type Arrows = keyof typeof ARROWS
 export type PointStyle = keyof typeof POINT_STYLES
 export type NameStyle = keyof typeof NAME_STYLES
+export type Endpoints = keyof typeof ENDPOINTS
 /** One equation row: what's typed, and how it's drawn. */
-export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle; names: NameStyle }
+export type Row = { text: string; color: Color; line: LineStyle; arrows: Arrows; point: PointStyle; names: NameStyle; ends: Endpoints }
 
-export const ROW_DEFAULTS: Row = { text: '', color: 'black', line: 'solid', arrows: 'both', point: 'dot', names: 'name' }
+export const ROW_DEFAULTS: Row = { text: '', color: 'black', line: 'solid', arrows: 'both', point: 'dot', names: 'name', ends: 'shown' }
 
-const STYLE_KEYS = { color: COLORS, line: LINE_STYLES, arrows: ARROWS, point: POINT_STYLES, names: NAME_STYLES }
+const STYLE_KEYS = { color: COLORS, line: LINE_STYLES, arrows: ARROWS, point: POINT_STYLES, names: NAME_STYLES, ends: ENDPOINTS }
 type StyleKey = keyof typeof STYLE_KEYS
 
 /** A point, in the grid's own values, and its point name if it has one (A, B′). */
@@ -55,8 +58,8 @@ export type Line = { a: number; b: number; c: number }
 export type Box = { x0: number; x1: number; y0: number; y1: number }
 /** Part of a line or curve inside the grid, left to right, and whether each end leaves through the grid's edge. */
 export type Run = { points: Point[]; edges: [boolean, boolean] }
-/** An open or closed circle on a graphed line: a hole, or an endpoint. */
-export type Circle = Point & { closed: boolean }
+/** An open or closed circle on a graphed line: a hole, or (end) an endpoint at the end of its domain. */
+export type Circle = Point & { closed: boolean; end?: boolean }
 /** y = f(x), and the parts of it that divide by something with x in it (see divisors()). */
 export type Curve = { f: (x: number) => number | null; divisors: ((x: number) => number | null)[] }
 /** One row, read: what it draws, or a problem for the settings panel. */
@@ -205,18 +208,67 @@ function graphOf(node: ComparisonNode, angle: AngleUnit): { line: Line; curve?: 
   }
 }
 
+/** One end of a domain: where it stops, and whether that number is included (≤) or not (<). */
+export type Bound = { v: number; closed: boolean }
+/** The x-values a graphed line is drawn over (or y-values, for an up-and-down line); a missing end runs on. */
+export type Domain = { variable: 'x' | 'y'; lo: Bound | null; hi: Bound | null }
+
+const DOMAIN_EXAMPLE = 'After the comma, give the x-values to draw, like y = 2x + 1, −2 ≤ x < 3 or y = x^2, x ≥ 0.'
+
+/** A domain from what's typed after the equation's comma: −5 ≤ x < 7, or x ≥ 0, or several (all of them hold). */
+function domainOf(conditions: TreeNode[], angle: AngleUnit): Domain {
+  let variable: 'x' | 'y' | null = null
+  let lo: Bound | null = null
+  let hi: Bound | null = null
+  const tighter = (a: Bound | null, b: Bound, low: boolean): Bound => {
+    if (!a) return b
+    if (a.v === b.v) return { v: a.v, closed: a.closed && b.closed }
+    return (low ? b.v > a.v : b.v < a.v) ? b : a
+  }
+  for (const c of conditions) {
+    if (!(c instanceof ComparisonNode) || c.operators.some((op) => !['<', '≤', '>', '≥'].includes(op))) throw new ReadError(DOMAIN_EXAMPLE)
+    const isVar = (n: TreeNode): n is VariableNode => n instanceof VariableNode && (n.name === 'x' || n.name === 'y')
+    for (let i = 0; i < c.operators.length; i++) {
+      const [l, r, op] = [c.operands[i], c.operands[i + 1], c.operators[i]]
+      const v = isVar(l) ? l : isVar(r) ? r : null
+      const other = v === l ? r : l
+      if (!v || isVar(other)) throw new ReadError(DOMAIN_EXAMPLE)
+      if (variable && v.name !== variable) throw new ReadError('Give the domain in one letter, x or y.')
+      variable = v.name as 'x' | 'y'
+      const n = evaluate(other, {}, angle)
+      if (n === null) throw new ReadError(DOMAIN_EXAMPLE)
+      // x < n and n > x put n above x; x > n and n < x put it below.
+      const above = (v === l) === (op === '<' || op === '≤')
+      const b = { v: n, closed: op === '≤' || op === '≥' }
+      if (above) hi = tighter(hi, b, false)
+      else lo = tighter(lo, b, true)
+    }
+  }
+  if (!variable) throw new ReadError(DOMAIN_EXAMPLE)
+  if (lo && hi && (lo.v > hi.v || (lo.v === hi.v && !(lo.closed && hi.closed)))) throw new ReadError(`No ${variable}-values fit that domain, so there’s nothing to draw.`)
+  return { variable, lo, hi }
+}
+
 /**
  * Read one row. Blank text draws nothing.
  */
 export function parseEquation(
   text: string,
   angle: AngleUnit = 'radians',
-): { line?: Line; curve?: Curve; points?: Point[]; error?: string } | null {
+): { line?: Line; curve?: Curve; domain?: Domain; points?: Point[]; error?: string } | null {
   if (!String(text ?? '').trim()) return null
   try {
     const named = splitNames(text)
     const node = parsers.equation.parse(fromText(named?.text ?? text))
     if (node instanceof ComparisonNode) return graphOf(node, angle)
+    // An equation and its domain after a comma: y = 3x, −5 ≤ x < 7.
+    if (node instanceof CommaListNode && !node.hasTag(ParenthesesChildTag) && node.expressions[0] instanceof ComparisonNode) {
+      const [eq, ...conditions] = node.expressions
+      const graph = graphOf(eq as ComparisonNode, angle)
+      const domain = domainOf(conditions, angle)
+      if (graph.curve && domain.variable === 'y') throw new ReadError('Give a curve’s domain in x, like y = x^2, −2 ≤ x ≤ 3.')
+      return { ...graph, domain }
+    }
     if (node instanceof CommaListNode) {
       const items = node.hasTag(ParenthesesChildTag) ? [node] : node.expressions
       return {
@@ -436,15 +488,50 @@ export function readEquations(texts: string[], box: Box, angle: AngleUnit = 'rad
     if (!read) return null
     if (read.error) return { problem: read.error }
     if (read.line || read.curve) {
+      // A domain narrows the box the graph is drawn in. An end cut off by the
+      // domain inside the grid stops at an endpoint instead of an arrow.
+      const d = read.domain
+      const sub = { ...box }
+      const cut = { lo: false, hi: false }
+      if (d) {
+        const [k0, k1] = d.variable === 'x' ? (['x0', 'x1'] as const) : (['y0', 'y1'] as const)
+        if (d.lo && d.lo.v > box[k0] - EPS) [sub[k0], cut.lo] = [d.lo.v, true]
+        if (d.hi && d.hi.v < box[k1] + EPS) [sub[k1], cut.hi] = [d.hi.v, true]
+        if (sub[k0] > sub[k1] + EPS) return { problem: 'That graph’s domain is off the grid. Widen the axes to show it.' }
+      }
+      const along = (p: Point) => (d?.variable === 'y' ? p.y : p.x)
+      const atLo = (p: Point) => cut.lo && Math.abs(along(p) - d!.lo!.v) < 1e-7 * Math.max(1, Math.abs(d!.lo!.v))
+      const atHi = (p: Point) => cut.hi && Math.abs(along(p) - d!.hi!.v) < 1e-7 * Math.max(1, Math.abs(d!.hi!.v))
+
       let runs: Run[] = []
       let circles: Circle[] = []
       if (read.line) {
-        const ends = clipLine(read.line, box)
-        if (ends) runs = [{ points: leftFirst(...ends) ? ends : [ends[1], ends[0]], edges: [true, true] }]
+        const ends = clipLine(read.line, sub)
+        if (ends) {
+          const [p, q] = leftFirst(...ends) ? ends : [ends[1], ends[0]]
+          runs = [{ points: [p, q], edges: [!atLo(p) && !atHi(p), !atLo(q) && !atHi(q)] }]
+          for (const e of [p, q]) {
+            if (atLo(e)) circles.push({ ...e, closed: d!.lo!.closed, end: true })
+            else if (atHi(e)) circles.push({ ...e, closed: d!.hi!.closed, end: true })
+          }
+        }
       } else {
-        const { holes, at } = breaksOf(read.curve!, box)
-        runs = curveRuns(read.curve!.f, box, at)
+        const { f } = read.curve!
+        const { holes, at } = breaksOf(read.curve!, sub)
+        runs = curveRuns(f, sub, at)
+        for (const run of runs) {
+          if (atLo(run.points[0]) || atHi(run.points[0])) run.edges[0] = false
+          if (atLo(run.points.at(-1)!) || atHi(run.points.at(-1)!)) run.edges[1] = false
+        }
         circles = holes.map((p) => ({ ...p, closed: false }))
+        // An endpoint sits where the curve is at that end, or where it heads, if it isn't defined there.
+        const w = (sub.x1 - sub.x0) * 1e-9
+        for (const [bound, x, inward] of [[d?.lo, sub.x0, w], [d?.hi, sub.x1, -w]] as const) {
+          if (!bound || !(bound === d?.lo ? cut.lo : cut.hi)) continue
+          const own = f(x)
+          const y = own ?? f(x + inward)
+          if (y !== null && inBox({ x, y }, box)) circles.push({ x, y, closed: bound.closed && own !== null, end: true })
+        }
       }
       return runs.length ? { runs, circles } : { problem: 'That graph misses the grid. Widen the axes to show it.' }
     }

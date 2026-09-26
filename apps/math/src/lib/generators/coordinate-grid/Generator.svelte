@@ -152,14 +152,16 @@
           <h2 class="card-head flush">Equations</h2>
           <HelpTip id="equation-tip" label="How to type an equation">
             Type a line like y = 2x + 1, 2x + 3y = 6 or x = 4, a curve like y = x^2 − 4 or y = −(x − 2)^2 + 3, or points like
-            (2, 3) or (1, 2), (3, 4). Name points by writing a letter first: A(1, 2), B'(3, 4). Functions work too: sin, cos,
+            (2, 3) or (1, 2), (3, 4). To draw only part of a line, give its domain after a comma: y = 3x, −5 ≤ x &lt; 7 (≤ for a
+            closed circle, &lt; for an open one); a piecewise function is a row for each piece. Name points by writing a letter
+            first: A(1, 2), B'(3, 4). Functions work too: sin, cos,
             tan, sec, csc, cot, arcsin, ln, log, log_2 (type _ for the base), e^x and |x|. Type ^ for an exponent, / for a fraction
             and pi for π.
           </HelpTip>
         </div>
         {#each settings.equations as row, i}
           <div class="row">
-            <RowStyle {row} id="eq-{i}-style" label="equation {i + 1}" isPoints={!!rows[i]?.points} />
+            <RowStyle {row} id="eq-{i}-style" label="equation {i + 1}" isPoints={!!rows[i]?.points} hasDomain={!!rows[i]?.circles?.some((c) => c.end)} />
             <MathInput
               kind="equation"
               id="eq-{i}"
