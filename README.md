@@ -1,48 +1,46 @@
 # STEM Figures
 
-The home of the STEM Figures family: free generators for clean, printable
-figures that teachers paste into tests, worksheets and slides. Live at
-**https://stemfigures.com**, a teacher.dev project. See `CONTEXT.md` for the
-vocabulary and `docs/adr/` for decisions.
+Free generators for clean, printable figures that teachers paste into tests,
+worksheets and slides, a teacher.dev project. This monorepo holds every site
+in the family. Each is its own SvelteKit app, deployed as its own Vercel
+project on its own domain.
 
-The family's figure sites, each its own repo and domain:
+| App                | Site                                                 | Vercel root directory |
+| ------------------ | ---------------------------------------------------- | --------------------- |
+| `apps/stem`        | [stemfigures.com](https://stemfigures.com)           | `apps/stem`           |
+| `apps/math`        | [mathfigures.com](https://mathfigures.com)           | `apps/math`           |
+| `apps/physics`     | [physicsfigures.com](https://physicsfigures.com)     | `apps/physics`        |
+| `apps/chemistry`   | [chemistryfigures.com](https://chemistryfigures.com) | `apps/chemistry`      |
+| `apps/biology`     | [biologyfigures.com](https://biologyfigures.com)     | `apps/biology`        |
+| `apps/engineering` | [engineeringfigures.com](https://engineeringfigures.com) | `apps/engineering` |
 
-- [Math Figures](https://mathfigures.com)
-- [Physics Figures](https://physicsfigures.com)
-- [Chemistry Figures](https://chemistryfigures.com)
-- [Biology Figures](https://biologyfigures.com)
-- [Engineering Figures](https://engineeringfigures.com)
+`packages/shared` holds components and helpers used by more than one site,
+imported as `$shared/...` (an alias set in each app's `svelte.config.js`).
+Move something there only when the sites that use it want the same code; a
+site that needs its own version keeps it in its `src/lib/`.
 
-## Pages
-
-- `/` **Directory**: every figure site as a card linking out to it.
-- `/sitemap.xml`, `/robots.txt`
-
-Searching every generator across the family from here is planned; see
-`docs/adr/0001-family-search-from-site-manifests.md`.
-
-## Code layout
-
-```
-src/routes/            SvelteKit pages
-src/lib/sites.ts       every figure site in the family
-src/lib/site/          top bar, footer, SEO, site config
-static/sites/          each figure site's favicon, copied from its repo
-```
-
-To add a figure site: copy its `static/favicon.svg` to `static/sites/`, add
-one entry to `src/lib/sites.ts`, and add STEM Figures' link to that site's
-`SISTER_SITES`.
+Each app came from its own repo (EdTech-a-thon/mathfigures and so on) with
+its full history, so `git log -- apps/math` shows the site's past commits.
 
 ## Development
 
 ```bash
-npm install
-../scripts/agent-dev.mjs stemfigures --no-pocketbase   # from the workspace, never npm run dev directly
-npm run check   # svelte-check
-npm run build
+npm install                    # once, at the repo root: installs every app
+../scripts/agent-dev.mjs stemfigures/apps/math   # from the workspace, never npm run dev directly
+npm run check                  # svelte-check in every app
+npm test                       # vitest in every app and packages/shared
+npm run build                  # build every app
+npm run build -w apps/math     # or just one
 ```
 
-Deployed on Vercel with `@sveltejs/adapter-vercel`. The Cloudflare Web
-Analytics token is read from `CF_BEACON_TOKEN`, which is set only in
-Vercel's production environment.
+## Deployment
+
+Each Vercel project points at this repo with its **Root Directory** set to its
+app (table above), and keeps its own domains and environment variables
+(`CF_BEACON_TOKEN` for Cloudflare Web Analytics). Each app's `vercel.json`
+installs from the repo root and skips a build when nothing in that app,
+`packages/`, or the root package files changed.
+
+`apps/math` and `apps/physics` vendor different builds of Caret, so
+`apps/physics/vendor` stamps its copies `0.0.0-physics`, and `.npmrc` sets
+`legacy-peer-deps` so npm can install both.
