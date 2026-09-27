@@ -9,7 +9,7 @@ import { parseNumber } from '$lib/shared/math.js'
 import { fmt, niceText, numberingOf, type Numbering } from '$lib/shared/numbering.js'
 import { cleanRow, rowFromParam, rowToParam, type Row } from './equations.js'
 import type { AngleUnit } from './evaluate.js'
-import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
+import { cleanLabelSize, type LabelSize } from '$shared/labelSize'
 
 export { CAPS, fmt }
 

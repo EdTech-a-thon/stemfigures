@@ -3,11 +3,16 @@
   // under them down the left, and the figure card filling the rest of the
   // window. Phones stack them, figure first. `settingsWidth` is the settings
   // column's width in rem on wide screens, so a generator with long settings
-  // can take more room from the figure, or give it back.
+  // can take more room from the figure, or give it back. `inputs`, when given,
+  // is a card of its own between the presets and the settings groups, for
+  // what the teacher types first (Math's equations). What prints is just the
+  // figure, `printWidth` inches wide, or fitted into `printWidth` by
+  // `printHeight` inches when a height is given.
   import type { Snippet } from 'svelte'
   import FigureCanvas from './FigureCanvas.svelte'
   import Presets from './Presets.svelte'
   import type { generatorState } from './generatorState.svelte'
+  import type { LabelSize } from './labelSize'
 
   interface Props {
     name: string
@@ -16,15 +21,27 @@
     /** the figure to export, when it isn't the first <svg> in the figure card */
     svg?: SVGSVGElement
     settingsWidth?: number
+    printWidth?: number
+    printHeight?: number
+    /** bound to the generator's label size setting, for the picker in the figure card */
+    labelSize?: LabelSize
+    inputs?: Snippet
     settings: Snippet
     figure: Snippet
   }
-  let { name, filename, gen, svg, settingsWidth = 24, settings, figure }: Props = $props()
+  let {
+    name, filename, gen, svg, settingsWidth = 24, printWidth = 7.5, printHeight, labelSize = $bindable(), inputs, settings, figure,
+  }: Props = $props()
 </script>
 
-<div class="generator" style:--settings-width="{settingsWidth}rem">
+<div
+  class="generator"
+  style:--settings-width="{settingsWidth}rem"
+  style:--print-width="{printWidth}in"
+  style:--print-height={printHeight ? `${printHeight}in` : 'auto'}
+>
   <div class="figure-side">
-    <FigureCanvas {svg} {filename} history={gen.history}>{@render figure()}</FigureCanvas>
+    <FigureCanvas {svg} {filename} history={gen.history} bind:labelSize>{@render figure()}</FigureCanvas>
   </div>
   <aside class="settings-side no-print">
     <!-- The top bar shows the name; this keeps the page's heading for screen readers. -->
@@ -32,6 +49,7 @@
     <div class="card">
       <Presets store={gen.presets} same={gen.same} settings={gen.snapshot()} onapply={gen.apply} />
     </div>
+    {#if inputs}<div class="card">{@render inputs()}</div>{/if}
     <div class="card">{@render settings()}</div>
   </aside>
 </div>

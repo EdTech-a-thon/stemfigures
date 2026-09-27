@@ -5,7 +5,7 @@
 // "-2 < x <= 5", "P(3), -1", "aₙ = 1/n"); readLine() works out what they mean.
 
 import { niceText, numberingOf, type Numbering } from '$lib/shared/numbering.js'
-import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
+import { cleanLabelSize, type LabelSize } from '$shared/labelSize'
 import { splitLabels } from '$lib/shared/pointLabels.js'
 import {
   COLORS, LABEL_STYLES, POINT_STYLES, VALUE_STYLES, type Color, type LabelStyle, type PointStyle, type ValueStyle,

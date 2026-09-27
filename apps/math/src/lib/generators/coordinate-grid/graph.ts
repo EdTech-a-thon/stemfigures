@@ -3,7 +3,7 @@
 
 import { niceText, numberText, type Numbering } from '$lib/shared/numbering.js'
 import { COLORS, clipLine, readEquations, type Point } from './equations.js'
-import { LABEL_SCALE } from '$lib/shared/labelSize.js'
+import { LABEL_SCALE } from '$shared/labelSize'
 import { readAxes, type Settings } from './settings.js'
 
 export const CELL = 32

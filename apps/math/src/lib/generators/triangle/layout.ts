@@ -8,7 +8,7 @@
 // directions (along and across a side, say), so it follows the part when the
 // triangle is turned, flipped or reshaped.
 
-import { LABEL_SCALE } from '$lib/shared/labelSize.js'
+import { LABEL_SCALE } from '$shared/labelSize'
 import { layoutMath, type MathBox } from '$lib/shared/mathSvg.js'
 import { ANGLES, OPPOSITE, sideOf, type Part, type Side, type Solved, type Vertex } from './solve.js'
 import { readMoved, type LineStyle, type Offset, type Settings } from './settings.js'
