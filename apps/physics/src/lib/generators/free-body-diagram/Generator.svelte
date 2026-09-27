@@ -5,7 +5,8 @@
   import Choice from '$lib/shared/Choice.svelte'
   import DirectionField from '$lib/shared/DirectionField.svelte'
   import { createGenerator } from '$lib/shared/generator.svelte'
-  import GeneratorLayout from '$lib/shared/GeneratorLayout.svelte'
+  import FigureOptions from '$lib/shared/FigureOptions.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import LabelField from '$lib/shared/LabelField.svelte'
   import { componentLabel, type Label } from '$lib/shared/label'
   import Section from '$lib/shared/Section.svelte'
@@ -14,7 +15,7 @@
   import { fbdSettings, MAX_FORCES, onAxis, STARTERS, starterForce, type Force } from './settings'
 
   const gen = createGenerator(fbdSettings, 'free-body-diagram')
-  const s = $derived(gen.clean)
+  const s = $derived(gen.snapshot())
 
   const shown = (l: Label) => (l.mode === 'text' ? `“${l.text}”` : l.mode === 'blank' ? 'blank' : 'no label')
   const bodySummary = $derived(s.body === 'dot' ? 'dot' : `${s.body} · ${Math.round(s.bodySize * 100)}% size`)
@@ -34,9 +35,9 @@
   const names = (g: number[]) => g.slice(0, -1).map((i) => i + 1).join(', ') + ` and ${g.at(-1)! + 1}`
   const hidden = $derived(sameDirection(s.forces).map((g) => `Forces ${names(g)} point the same way, so one arrow hides the other.`))
   const add = (starter: (typeof STARTERS)[number]) => {
-    if (!full) gen.settings.forces.push(starterForce(starter))
+    if (!full) gen.s.forces.push(starterForce(starter))
   }
-  const remove = (i: number) => gen.settings.forces.splice(i, 1)
+  const remove = (i: number) => gen.s.forces.splice(i, 1)
   // Turning components on names them after the force (T → T_x), unless the teacher already named them.
   function nameComponents(force: Force) {
     if (force.label.mode !== 'text') return
@@ -47,17 +48,17 @@
   }
 </script>
 
-<GeneratorLayout title="Free Body Diagram Generator" {gen} filename="free-body-diagram">
-  {#snippet controls()}
+<GeneratorPage name="Free Body Diagram Generator" filename="free-body-diagram" {gen}>
+  {#snippet settings()}
     <Section title="Body" icon={Box} summary={bodySummary}>
       <div class="field">
-        <Choice name="Body" options={[['dot', 'Dot'], ['block', 'Block'], ['ball', 'Ball'], ['cart', 'Cart']]} bind:value={gen.settings.body} />
+        <Choice name="Body" options={[['dot', 'Dot'], ['block', 'Block'], ['ball', 'Ball'], ['cart', 'Cart']]} bind:value={gen.s.body} />
       </div>
       {#if s.body !== 'dot'}
         <label class="field">
           Size
           <span class="slider">
-            <input type="range" min="0.5" max="2" step="0.05" bind:value={gen.settings.bodySize} />
+            <input type="range" min="0.5" max="2" step="0.05" bind:value={gen.s.bodySize} />
             <output>{Math.round(s.bodySize * 100)}%</output>
           </span>
         </label>
@@ -65,7 +66,7 @@
     </Section>
 
     <Section title="Forces" icon={MoveUpRight} summary={forcesSummary}>
-      {#each gen.settings.forces as force, i (force)}
+      {#each gen.s.forces as force, i (force)}
         <div class="force">
           <div class="force-head">
             <span>Force {i + 1}</span>
@@ -116,20 +117,21 @@
       <p class="note">Drawn beside the body, dashed, because velocity and acceleration aren't forces.</p>
       {#each MOTION as m (m.key)}
         <div class="motion">
-          <label class="check"><input type="checkbox" bind:checked={gen.settings[m.key]} /> {m.name}</label>
+          <label class="check"><input type="checkbox" bind:checked={gen.s[m.key]} /> {m.name}</label>
           {#if s[m.key]}
-            <DirectionField name={m.name} bind:value={gen.settings[m.angle]} />
-            <div class="field">Label <LabelField name="{m.name} label" bind:label={gen.settings[m.label]} /></div>
+            <DirectionField name={m.name} bind:value={gen.s[m.angle]} />
+            <div class="field">Label <LabelField name="{m.name} label" bind:label={gen.s[m.label]} /></div>
           {/if}
         </div>
       {/each}
     </Section>
+    <FigureOptions bind:mirror={gen.s.mirror} bind:color={gen.s.color} />
   {/snippet}
 
-  {#snippet figure(id)}
-    <FreeBody settings={s} {id} />
+  {#snippet figure()}
+    <FreeBody settings={s} id="f" />
   {/snippet}
-</GeneratorLayout>
+</GeneratorPage>
 
 <style>
   .force { border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 0.75rem; }

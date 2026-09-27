@@ -10,14 +10,14 @@
 // fit the same box whatever its measures; the frame then grows to hold its
 // labels.
 
-import { LABEL_SCALE } from '$lib/shared/labelSize.js'
+import { LABEL_SCALE } from '$shared/labelSize'
 import { layoutMath, type MathBox } from '$lib/shared/mathSvg.js'
-import { labelPlacer } from '$lib/shared/placeLabels.js'
-import { add, dot, len, mul, perp, r1, reach, sub, unit, type Vec } from '$lib/shared/vec.js'
+import { labelPlacer } from '$lib/shapes/placeLabels.js'
+import { add, dot, len, mul, perp, r1, reach, sub, unit, type Vec } from '$lib/shapes/vec.js'
 import type { Part, Settings } from './settings.js'
 import { radiusOf, type ShapeRead } from './solve.js'
 
-export type { Vec } from '$lib/shared/vec.js'
+export type { Vec } from '$lib/shapes/vec.js'
 
 const BASE_FS = 20 // label font size, at medium labels
 const BASE_NAME_FS = 21
@@ -416,7 +416,7 @@ export function buildShape(s: Settings, read: Pick<ShapeRead, 'form' | 'given'> 
       if (!box) return
       let out = unit(sub(pts[i], frameCenter))
       if (!len(out)) out = UP
-      place(`v${i}`, box, add(pts[i], mul(out, 7 + reach(box, out))), out, perp(out))
+      place(`v${letter(i)}`, box, add(pts[i], mul(out, 7 + reach(box, out))), out, perp(out))
     })
   }
 

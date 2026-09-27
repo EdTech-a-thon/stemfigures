@@ -15,7 +15,18 @@ interface SettingsDefinition<S> {
   keyOf(s: S): string
 }
 
-export function generatorState<S extends object>(definition: SettingsDefinition<S>, id: string) {
+/** Where undo history and presets are saved in the browser, for a site whose
+ *  teachers already have them saved under other names. */
+interface StorageKeys {
+  history: string
+  presets: string
+}
+
+export function generatorState<S extends object>(
+  definition: SettingsDefinition<S>,
+  id: string,
+  storageKeys: StorageKeys = { history: `${id}-history`, presets: `${id}-presets` },
+) {
   const s = $state(definition.fromParams(page.url.searchParams)) as S
   const snapshot = () => definition.tidy($state.snapshot(s))
   const apply = (next: S) => Object.assign(s, definition.tidy(next))
@@ -35,9 +46,9 @@ export function generatorState<S extends object>(definition: SettingsDefinition<
     write: apply,
     keyOf: definition.keyOf,
     tidy: definition.tidy,
-    storageKey: `${id}-history`,
+    storageKey: storageKeys.history,
   })
-  const presets = createPresetStore(`${id}-presets`, definition.tidy)
+  const presets = createPresetStore(storageKeys.presets, definition.tidy)
   const same = (a: S, b: S) => definition.keyOf(a) === definition.keyOf(b)
 
   return { s, snapshot, apply, history, presets, same }

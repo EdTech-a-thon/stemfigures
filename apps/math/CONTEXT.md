@@ -128,47 +128,105 @@ _Avoid_: Discontinuity, break, limit line
 The letter written at a point, typed before it in textbook notation: A(1, 2) on a coordinate grid, P(0.35) on a number line. It's one letter, with primes or a subscript allowed (A′, A₁), and it belongs to its point, so it stays when the point's numbers change and goes when the point is deleted. A points row's style shows just the labels or the labels with their coordinates or values, A or A(0.35). On a number line a labeled point's value is never written, since it would give the answer away; endpoints and sequence terms aren't labeled.
 _Avoid_: Point name, vertex name (that's a triangle's), letter, tag
 
-### Triangles
+### Shapes
 
-**Triangle**:
-A figure of one triangle, drawn to scale from the measures the teacher gives and labeled for students. Its generator is the Triangle Generator.
-_Avoid_: Shape, polygon, diagram, drawing
+**Shape**:
+A figure of straight sides meeting at named vertices, drawn to scale from its measures and labeled for students: a triangle or a quadrilateral. Each has its own generator.
+_Avoid_: Polygon (a regular polygon will be its own figure), diagram, drawing
 
 **Part**:
-Any vertex, side, angle or extra line of a triangle: something that can carry a label or a marking.
+Any vertex, side, angle or extra line of a shape, or any of a box plot's five-number summary: something that can carry a label or a marking.
 _Avoid_: Element, component, piece
 
 **Vertex name**:
-The letter at a corner, such as A, B or C. Each can be renamed or left blank, and the triangle's measures are named after them (∠B, AB).
+The letter at a corner, such as A, B or C. Each can be renamed or left blank, and the shape's measures are named after them (∠B, AB).
 _Avoid_: Point, corner label
 
 **Measure**:
-A side's length or an angle's size, in degrees. A **given** measure is one the teacher types; any three that make a triangle are enough. A **solved** measure is worked out from the givens. Drawing to scale means proportional, not true size on paper.
+A side's length or an angle's size, in degrees. A **given** measure is one the teacher types; a **solved** measure is worked out from the givens. Drawing to scale means proportional, not true size on paper.
 _Avoid_: Value, dimension, size
 
 **Part label**:
-What's written at a part: nothing, its measure (such as 12 or 24°, with the figure's unit on lengths), or text the teacher types, such as x or 2y + 1. It replaces the text boxes teachers otherwise lay over a drawing.
+What's written at a part: nothing, its measure (such as 12 or 24°, with the figure's unit on lengths, or a box plot's Q1 value), or text the teacher types, such as x or 2y + 1. It replaces the text boxes teachers otherwise lay over a drawing.
 _Avoid_: Text box, caption, annotation, label (alone; axes have their own labels)
 
 **Unit**:
-One optional unit for the whole triangle, such as cm or ft, added to every length shown as its measure.
+One optional unit for the whole shape, such as cm or ft, added to every length shown as its measure.
 _Avoid_: Scale
 
 **Extra line**:
-A line drawn onto a triangle that isn't one of its sides. For now the only one is a height: dropped from a vertex to the opposite side, which is extended when the height lands outside the triangle. The point where it lands can be given a name, such as D. It can be solid, dashed or dotted, like a graphed line.
+A line drawn onto a shape that isn't one of its sides: a height, dropped from a vertex to a side, which is extended when the height lands outside the shape, or a quadrilateral's diagonal, joining opposite vertices. The point where a height lands, or where the diagonals cross, can be given a name, such as E. It can be solid, dashed or dotted, like a graphed line.
 _Avoid_: Auxiliary line, segment, construction
 
 **Marking**:
-A standard geometry symbol on a part: congruence ticks on sides, congruence arcs on angles, or a right-angle square. The teacher sets congruence marks by hand, never from equal measures, so they don't give answers away. An angle gets an arc only when it has a label or congruence arcs. A right-angle square appears on its own at every 90° angle, including where a height meets a side, and can be turned off.
+A standard geometry symbol on a part: congruence ticks on sides, parallel arrows on sides, congruence arcs on angles, or a right-angle square. The teacher sets congruence marks and parallel arrows by hand, never from the measures or the kind of shape, so they don't give answers away. An angle gets an arc only when it has a label or congruence arcs. A right-angle square appears on its own at every 90° angle, including where a height meets a side and where diagonals cross at right angles, and can be turned off.
 _Avoid_: Symbol, annotation, tick (a number line's tick is different)
 
+**Parallel arrows**:
+One, two or three arrowheads in the middle of a side; sides with the same number are parallel.
+_Avoid_: Parallel marks, chevrons
+
 **Base side**:
-The side that sits flat along the bottom before any flip or rotation, AB unless the teacher picks another.
+The side that sits flat along the bottom before any flip or rotation.
 _Avoid_: Bottom, base (alone; a height's base is the side it meets)
+
+### Triangles
+
+**Triangle**:
+A shape with three vertices, drawn from any three measures that make one. Its generator is the Triangle Generator.
+_Avoid_: Shape (alone), polygon
 
 **Other triangle**:
 The second triangle two sides and a non-included angle can make (the ambiguous case). The generator draws the one whose unknown angle is acute unless the teacher switches to the other.
 _Avoid_: Second solution, alternate
+
+### Quadrilaterals
+
+**Quadrilateral**:
+A shape with four vertices, A, B, C and D in order around it. Each family of quadrilaterals has its own generator: the Rectangle, Parallelogram, Trapezoid and Kite Generators.
+_Avoid_: Quad, four-sided polygon
+
+**Kind**:
+Which quadrilateral a generator draws, which decides the measures the teacher gives. The Rectangle Generator draws rectangles and squares, the Parallelogram Generator parallelograms and rhombi, the Trapezoid Generator trapezoids, isosceles trapezoids and right trapezoids, and the Kite Generator kites.
+_Avoid_: Type, shape (alone), category
+
+**Trapezoid**:
+A quadrilateral with exactly one pair of parallel sides, its **bases**; the other two are its **legs**. A right trapezoid has a leg at right angles to both bases.
+_Avoid_: Trapezium (what UK teachers call it; fine as a search word)
+
+### Data displays
+
+**Data set**:
+The numbers a teacher types in one row to be displayed, such as 12, 15, 15, 18, 22, 30, with an optional name like "Class A". Several rows are drawn over the same axis to compare them.
+_Avoid_: Data, list, values, series
+
+**Box Plot**:
+A figure of one or more data sets, each drawn as a box from Q1 to Q3 split at the median, with whiskers out to the ends, over one shared number line. Its generator is the Box Plot Generator.
+_Avoid_: Box and whisker plot, box chart (fine as search words, not as the name)
+
+**Five-number summary**:
+The minimum, Q1, median, Q3 and maximum of a data set. Quartiles are the medians of the lower and upper halves, leaving out the median when the count is odd, as the TI-84 works them out. A teacher can type the five numbers instead of a data set. None is written on the figure unless the teacher gives it a part label, so the figure doesn't give answers away.
+_Avoid_: Summary statistics, five statistics
+
+**Outlier**:
+A value more than 1.5 times the box's width beyond either end of the box, drawn as its own point with the whisker stopping at the last value that isn't one. Outliers are only drawn when the teacher turns them on; otherwise whiskers reach the minimum and maximum.
+_Avoid_: Extreme value, anomaly
+
+**Histogram**:
+A figure of touching bars over a numbered axis, one bar per bin, whose heights show how many values fall in each bin. Its generator is the Histogram Generator.
+_Avoid_: Bar graph (bars there are separate categories), column chart
+
+**Bin**:
+One stretch of the histogram's axis, such as 10 to 20, numbered at its edges. A value on an edge belongs to the bin that starts there. Bins come from a data set with a start and bin width, or are typed with their counts as a frequency table.
+_Avoid_: Interval, class, bucket, range (a range is an axis's From, To and Step)
+
+**Frequency**:
+How many values fall in a bin: the height of its bar, read off the histogram's vertical axis.
+_Avoid_: Count (fine in speech), tally
+
+**Line plot**:
+A number line with a mark stacked above each value of a data set, as grades 3–6 use the name. No generator makes one yet.
+_Avoid_: Dot plot is the same figure; line graph (points joined across a coordinate grid) is a different one
 
 ### 3D shapes
 

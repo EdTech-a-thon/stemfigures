@@ -7,10 +7,11 @@
 // the teacher typed ("12", "3sqrt(2)", "5/2"); readShape() in solve.ts works
 // out what they mean.
 
-import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
-import { readMoved, writeMoved } from '$lib/shared/placeLabels.js'
+import { cleanLabelSize, type LabelSize } from '$shared/labelSize'
+import { LABEL_MODES, ROUNDING, INK, cleanAgainst, oneOf, queryAgainst, readMoved, writeMoved, type LabelMode, type RawSettings } from '$lib/shapes/parts.js'
 
-export { readMoved, writeMoved, type Offset } from '$lib/shared/placeLabels.js'
+export { INK, LABEL_MODES, ROUNDING, readMoved, writeMoved, type LabelMode, type RawSettings }
+export type { Offset } from '$lib/shapes/parts.js'
 
 export const SHAPES = { prism: 'Prism', cylinder: 'Cylinder', pyramid: 'Pyramid', cone: 'Cone', sphere: 'Sphere', hemisphere: 'Hemisphere' }
 export type Shape = keyof typeof SHAPES
@@ -36,11 +37,6 @@ export type Measure = (typeof MEASURES)[number]
 export type Part = Measure | (typeof SOLVED_ONLY)[number]
 export const PARTS: Part[] = [...MEASURES, ...SOLVED_ONLY]
 
-/** How a part is labeled. "auto" is its measure when given, and nothing when worked out. */
-export const LABEL_MODES = ['auto', 'measure', 'text', 'none'] as const
-export type LabelMode = (typeof LABEL_MODES)[number]
-export const ROUNDING = [0, 1, 2] // decimal places for worked-out measures
-export const INK = '#111827'
 
 export type Settings = { [K in Measure]: string } & { [K in `${Part}Label`]: LabelMode } & { [K in `${Part}Text`]: string } & {
   shape: Shape
@@ -67,8 +63,6 @@ export type Settings = { [K in Measure]: string } & { [K in `${Part}Label`]: Lab
   moved: string
   labelSize: LabelSize
 }
-/** Settings as they may arrive: from a form, a link, or a preset stored by an older version. */
-export type RawSettings = Record<string, any>
 
 /** The settings every kind shares; settingsFor() sets the shape and its opening measures. */
 const SHARED_DEFAULTS = {
@@ -99,16 +93,9 @@ const SHARED_DEFAULTS = {
   nameList: '',
   unit: 'cm',
   round: 1,
-  moved: '', // labels dragged from their spots: "length:4,-6;v2:0,3"
+  moved: '', // labels dragged from their spots: "length:4,-6;vC:0,3"
   labelSize: 'medium',
 } as Settings
-
-/** Settings that describe the figure itself, which is what a preset saves. */
-export const FIGURE_KEYS = Object.keys(SHARED_DEFAULTS) as (keyof Settings)[]
-
-const text = (v: unknown, fallback: string) => (v === undefined || v === null ? fallback : String(v))
-const oneOf = <T>(list: readonly T[], v: any, fallback: T): T => (list.includes(v) ? v : fallback)
-const bool = (v: unknown, fallback: boolean) => (typeof v === 'boolean' ? v : v === '1' || v === 'true' ? true : v === '0' || v === 'false' ? false : fallback)
 
 /** The shape each generator opens with: a 5 × 3 × 4 cm box, a 6 × 6 square pyramid, round shapes of radius 3 cm and height 4 cm. */
 const OPENING: Record<Kind, Partial<Settings>> = {
@@ -127,13 +114,7 @@ export function settingsFor(kind: Kind) {
   /** Tidy raw values (from a form, a link or a stored preset) into usable settings. */
   function cleanSettings(s: RawSettings): Settings {
     const d = DEFAULT_SETTINGS
-    const out: Record<string, any> = {}
-    for (const [key, def] of Object.entries(d)) {
-      const v = s[key]
-      if (typeof def === 'boolean') out[key] = bool(v, def)
-      else if (typeof def === 'number') out[key] = Number.isFinite(Number(v)) && v !== '' && v !== null && v !== undefined ? Number(v) : def
-      else out[key] = text(v, def)
-    }
+    const out = cleanAgainst(d, s)
     for (const k of PARTS) out[`${k}Label`] = oneOf(LABEL_MODES, out[`${k}Label`], 'auto')
     out.shape = oneOf(shapes, out.shape, d.shape)
     out.base = oneOf(kind === 'pyramid' ? PYRAMID_BASES : Object.keys(BASES), out.base, d.base)
@@ -148,21 +129,8 @@ export function settingsFor(kind: Kind) {
     return out as Settings
   }
 
-  /** Do two settings draw the same figure? */
-  function sameFigure(a: RawSettings, b: RawSettings): boolean {
-    const ca = cleanSettings(a)
-    const cb = cleanSettings(b)
-    return FIGURE_KEYS.every((k) => ca[k] === cb[k])
-  }
-
   function settingsToQuery(s: Settings): string {
-    const params = new URLSearchParams()
-    for (const [key, def] of Object.entries(DEFAULT_SETTINGS)) {
-      const v = s[key as keyof Settings]
-      if (v === def || v === null || v === undefined) continue
-      params.set(key, typeof v === 'boolean' ? (v ? '1' : '0') : String(v))
-    }
-    return params.toString()
+    return queryAgainst(DEFAULT_SETTINGS, s)
   }
 
   function settingsFromParams(params: URLSearchParams): Settings {
@@ -171,7 +139,7 @@ export function settingsFor(kind: Kind) {
     return cleanSettings(s)
   }
 
-  return { kind, shapes, DEFAULT_SETTINGS, cleanSettings, sameFigure, settingsToQuery, settingsFromParams }
+  return { kind, shapes, DEFAULT_SETTINGS, cleanSettings, settingsToQuery, settingsFromParams }
 }
 
 export type KindSettings = ReturnType<typeof settingsFor>

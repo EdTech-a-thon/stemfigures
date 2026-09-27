@@ -5,7 +5,7 @@
   // excited-state diagram for a "which rule is broken?" question.
   import { Atom, ListOrdered, Palette, PencilLine, RotateCcw, Type, Wrench } from '@lucide/svelte'
   import FigureTextSettings from '$lib/shared/FigureTextSettings.svelte'
-  import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import Section from '$lib/shared/Section.svelte'
   import { generatorState } from '$shared/generatorState.svelte'
   import OrbitalEditor from './OrbitalEditor.svelte'
@@ -95,7 +95,7 @@
   </div>
 {/snippet}
 
-<GeneratorPage name="Orbital Diagram" filename="orbital-diagram" {gen} {svg}>
+<GeneratorPage name="Orbital Diagram" filename="orbital-diagram" settingsWidth={27} {gen} {svg}>
   {#snippet settings()}
     <Section title="Atom or ion" summary={atomSummary} icon={Atom} open>
       <div class="atom">

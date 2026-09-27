@@ -4,7 +4,8 @@
   import { CircuitBoard, Heading, Palette } from '@lucide/svelte'
   import Choice from '$lib/shared/Choice.svelte'
   import { createGenerator } from '$lib/shared/generator.svelte'
-  import GeneratorLayout from '$lib/shared/GeneratorLayout.svelte'
+  import FigureOptions from '$lib/shared/FigureOptions.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import LabelField from '$lib/shared/LabelField.svelte'
   import Section from '$lib/shared/Section.svelte'
   import CircuitDiagram from './CircuitDiagram.svelte'
@@ -13,7 +14,7 @@
   import { partsOf, type Item } from './tree'
 
   const gen = createGenerator(circuitSettings, 'circuit-diagram')
-  const s = $derived(gen.clean)
+  const s = $derived(gen.snapshot())
 
   const countGroups = (items: Item[]): number => items.reduce((n, i) => (i.type === 'part' ? n : n + 1 + countGroups(i.items)), 0)
   const circuitSummary = $derived.by(() => {
@@ -26,26 +27,27 @@
   const titleSummary = $derived(s.title.mode === 'text' ? `“${s.title.text}”` : s.title.mode === 'blank' ? 'blank' : 'none')
 </script>
 
-<GeneratorLayout title="Circuit Diagram Generator" {gen} filename="circuit-diagram">
-  {#snippet controls()}
+<GeneratorPage name="Circuit Diagram Generator" filename="circuit-diagram" {gen}>
+  {#snippet settings()}
     <Section title="Circuit" icon={CircuitBoard} summary={circuitSummary}>
-      <Outline circuit={gen.settings.circuit} onedit={(next) => (gen.settings.circuit = next)} />
+      <Outline circuit={gen.s.circuit} onedit={(next) => (gen.s.circuit = next)} />
     </Section>
 
     <Section title="Symbols" icon={Palette} summary={styleSummary}>
       <div class="field">
         Symbol style
-        <Choice name="Symbol style" options={[['us', 'US (zigzag resistor)'], ['iec', 'IEC (box resistor)']]} bind:value={gen.settings.symbols} />
+        <Choice name="Symbol style" options={[['us', 'US (zigzag resistor)'], ['iec', 'IEC (box resistor)']]} bind:value={gen.s.symbols} />
       </div>
-      <label class="check"><input type="checkbox" bind:checked={gen.settings.polarity} /> + and − beside each battery</label>
+      <label class="check"><input type="checkbox" bind:checked={gen.s.polarity} /> + and − beside each battery</label>
     </Section>
 
     <Section title="Chart title" icon={Heading} summary={titleSummary}>
-      <div class="field"><LabelField name="Chart title" placeholder="Title" bind:label={gen.settings.title} /></div>
+      <div class="field"><LabelField name="Chart title" placeholder="Title" bind:label={gen.s.title} /></div>
     </Section>
+    <FigureOptions bind:mirror={gen.s.mirror} bind:color={gen.s.color} />
   {/snippet}
 
-  {#snippet figure(id)}
-    <CircuitDiagram settings={s} {id} />
+  {#snippet figure()}
+    <CircuitDiagram settings={s} id="f" />
   {/snippet}
-</GeneratorLayout>
+</GeneratorPage>

@@ -5,7 +5,8 @@
   import Choice from '$lib/shared/Choice.svelte'
   import DirectionField from '$lib/shared/DirectionField.svelte'
   import { createGenerator } from '$lib/shared/generator.svelte'
-  import GeneratorLayout from '$lib/shared/GeneratorLayout.svelte'
+  import FigureOptions from '$lib/shared/FigureOptions.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import LabelField from '$lib/shared/LabelField.svelte'
   import { componentLabel, type Label } from '$lib/shared/label'
   import Section from '$lib/shared/Section.svelte'
@@ -14,7 +15,7 @@
   import VectorDiagram from './VectorDiagram.svelte'
 
   const gen = createGenerator(vectorSettings, 'vector-diagram')
-  const s = $derived(gen.clean)
+  const s = $derived(gen.snapshot())
 
   const STYLES: [ArrowStyle, string][] = [
     ['solid', 'Drawn'],
@@ -37,13 +38,13 @@
   let added = $state<unknown>(null)
   const add = () => {
     if (full) return
-    gen.settings.vectors.push(newVector(gen.settings.vectors.length))
-    added = gen.settings.vectors.at(-1)
+    gen.s.vectors.push(newVector(gen.s.vectors.length))
+    added = gen.s.vectors.at(-1)
   }
   const remove = (e: Event, i: number) => {
     // The button is inside the row's summary, so don't let the click fold it too.
     e.preventDefault()
-    gen.settings.vectors.splice(i, 1)
+    gen.s.vectors.splice(i, 1)
   }
   const styleName = { solid: '', dashed: 'dashed', none: 'left off' } as const
   const rowSummary = (v: (typeof s.vectors)[number]) =>
@@ -58,11 +59,11 @@
   }
 </script>
 
-<GeneratorLayout title="Vector Diagram Generator" {gen} filename="vector-diagram">
-  {#snippet controls()}
+<GeneratorPage name="Vector Diagram Generator" filename="vector-diagram" {gen}>
+  {#snippet settings()}
     <Section title="Vectors" icon={MoveUpRight} summary={vectorsSummary}>
       <p class="note">Drawn to scale, head to tail, in order. One grid square is a magnitude of 1.</p>
-      {#each gen.settings.vectors as vector, i (vector)}
+      {#each gen.s.vectors as vector, i (vector)}
         <details class="row" open={added === vector}>
           <summary class="row-head">
             <span class="chevron"><ChevronDown size={16} aria-hidden="true" /></span>
@@ -125,45 +126,46 @@
         {#if s.vectors.length === 1 && s.resultant !== 'none'}
           <p class="note warning" role="status">With one vector, the resultant is the same arrow, drawn on top of it.</p>
         {/if}
-        <div class="field">Arrow <Choice name="Resultant arrow" options={STYLES} bind:value={gen.settings.resultant} /></div>
-        <div class="field">Label <LabelField name="Resultant label" bind:label={gen.settings.resultantLabel} /></div>
+        <div class="field">Arrow <Choice name="Resultant arrow" options={STYLES} bind:value={gen.s.resultant} /></div>
+        <div class="field">Label <LabelField name="Resultant label" bind:label={gen.s.resultantLabel} /></div>
         {#if !onAxis(Math.round(sum.angle * 1000) / 1000)}
-          <label class="check"><input type="checkbox" bind:checked={gen.settings.resultantArc} /> Mark its angle</label>
+          <label class="check"><input type="checkbox" bind:checked={gen.s.resultantArc} /> Mark its angle</label>
           {#if s.resultantArc}
             <div class="field">
               Measured from
-              <Choice name="Resultant angle measured from" options={[['h', 'Horizontal'], ['v', 'Vertical']]} bind:value={gen.settings.resultantFrom} />
+              <Choice name="Resultant angle measured from" options={[['h', 'Horizontal'], ['v', 'Vertical']]} bind:value={gen.s.resultantFrom} />
             </div>
-            <div class="field">Angle label <LabelField name="Resultant angle label" bind:label={gen.settings.resultantArcLabel} /></div>
+            <div class="field">Angle label <LabelField name="Resultant angle label" bind:label={gen.s.resultantArcLabel} /></div>
           {/if}
           <label class="check">
             <input
               type="checkbox"
-              bind:checked={gen.settings.resultantParts}
+              bind:checked={gen.s.resultantParts}
               onchange={(e) =>
                 e.currentTarget.checked &&
-                nameComponents(gen.settings.resultantLabel, [gen.settings.resultantXLabel, gen.settings.resultantYLabel], ['R_x', 'R_y'])}
+                nameComponents(gen.s.resultantLabel, [gen.s.resultantXLabel, gen.s.resultantYLabel], ['R_x', 'R_y'])}
             />
             Show its components
           </label>
           {#if s.resultantParts}
-            <div class="field">Horizontal label <LabelField name="Resultant horizontal component label" bind:label={gen.settings.resultantXLabel} /></div>
-            <div class="field">Vertical label <LabelField name="Resultant vertical component label" bind:label={gen.settings.resultantYLabel} /></div>
+            <div class="field">Horizontal label <LabelField name="Resultant horizontal component label" bind:label={gen.s.resultantXLabel} /></div>
+            <div class="field">Vertical label <LabelField name="Resultant vertical component label" bind:label={gen.s.resultantYLabel} /></div>
           {/if}
         {/if}
       {/if}
     </Section>
 
     <Section title="Grid and axes" icon={Grid3x3} summary={gridSummary}>
-      <label class="check"><input type="checkbox" bind:checked={gen.settings.grid} /> Grid</label>
-      <label class="check"><input type="checkbox" bind:checked={gen.settings.axes} /> x and y axes, from the first tail</label>
+      <label class="check"><input type="checkbox" bind:checked={gen.s.grid} /> Grid</label>
+      <label class="check"><input type="checkbox" bind:checked={gen.s.axes} /> x and y axes, from the first tail</label>
     </Section>
+    <FigureOptions bind:mirror={gen.s.mirror} bind:color={gen.s.color} />
   {/snippet}
 
-  {#snippet figure(id)}
-    <VectorDiagram settings={s} {id} />
+  {#snippet figure()}
+    <VectorDiagram settings={s} id="f" />
   {/snippet}
-</GeneratorLayout>
+</GeneratorPage>
 
 <style>
   .row { border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; }

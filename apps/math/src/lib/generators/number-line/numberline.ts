@@ -3,7 +3,7 @@
 // into a worksheet at the same width; the SVG scales to fit wherever it's shown.
 
 import { niceLabel, niceText, numberLabel, type Label } from '$lib/shared/numbering.js'
-import { LABEL_SCALE } from '$lib/shared/labelSize.js'
+import { LABEL_SCALE } from '$shared/labelSize'
 import { COLORS } from '$lib/shared/rowStyle.js'
 import { readLine, type Settings } from './settings.js'
 

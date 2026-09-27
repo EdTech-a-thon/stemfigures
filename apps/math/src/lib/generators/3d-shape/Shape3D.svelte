@@ -4,7 +4,7 @@
   // With `onmove`, its labels can be dragged: onmove(part, [along, across])
   // gets the label's new offset from its usual spot. The frame holds still
   // while a label is dragged, so the figure doesn't rescale under the pointer.
-  import FigureLabels from '$lib/shared/FigureLabels.svelte'
+  import FigureLabels from '$lib/shapes/FigureLabels.svelte'
   import type { ShapeLayout, Vec } from './layout.js'
   import { INK, type Offset } from './settings.js'
 
