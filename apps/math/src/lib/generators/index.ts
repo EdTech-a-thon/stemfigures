@@ -3,7 +3,11 @@
 // folder and one entry here.
 
 import CoordinateGridPreview from './coordinate-grid/Preview.svelte'
+import KitePreview from './kite/Preview.svelte'
 import NumberLinePreview from './number-line/Preview.svelte'
+import ParallelogramPreview from './parallelogram/Preview.svelte'
+import RectanglePreview from './rectangle/Preview.svelte'
+import TrapezoidPreview from './trapezoid/Preview.svelte'
 import TrianglePreview from './triangle/Preview.svelte'
 import type { Component } from 'svelte'
 
@@ -69,6 +73,64 @@ export const GENERATORS: Generator[] = [
       'asa', 'aas', 'ssa', 'ambiguous case', 'labels', 'printable',
     ],
     Preview: TrianglePreview,
+  },
+  {
+    id: 'rectangle',
+    name: 'Rectangle Generator',
+    path: '/rectangle',
+    blurb: 'Rectangles and squares drawn to scale, labeled for students.',
+    description:
+      'Make a printable rectangle or square drawn to scale for your class. Label its sides with their lengths or with x, add diagonals, congruence marks and right-angle squares, then copy it into a worksheet or test.',
+    keywords: [
+      'rectangle', 'rectangles', 'square', 'squares', 'quadrilateral', 'quadrilaterals', 'length', 'width', 'side lengths',
+      'diagonal', 'diagonals', 'right angles', 'area', 'perimeter', 'to scale', 'diagram', 'geometry', 'congruent',
+      'tick marks', 'shapes', 'labels', 'printable',
+    ],
+    Preview: RectanglePreview,
+  },
+  {
+    id: 'parallelogram',
+    name: 'Parallelogram Generator',
+    path: '/parallelogram',
+    blurb: 'Parallelograms and rhombi drawn to scale, with parallel arrows.',
+    description:
+      'Make a printable parallelogram or rhombus drawn to scale for your class. Give its sides and angle, label sides and angles with their measures or with x, add parallel arrows, congruence marks, heights and diagonals, then copy it into a worksheet or test.',
+    keywords: [
+      'parallelogram', 'parallelograms', 'rhombus', 'rhombi', 'rhombuses', 'diamond', 'quadrilateral', 'quadrilaterals',
+      'parallel', 'parallel sides', 'parallel arrows', 'opposite sides', 'opposite angles', 'base', 'height', 'altitude',
+      'diagonal', 'diagonals', 'area', 'perimeter', 'angles', 'side lengths', 'to scale', 'diagram', 'geometry',
+      'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+    Preview: ParallelogramPreview,
+  },
+  {
+    id: 'trapezoid',
+    name: 'Trapezoid Generator',
+    path: '/trapezoid',
+    blurb: 'Trapezoids, including right and isosceles ones, drawn to scale and labeled.',
+    description:
+      'Make a printable trapezoid drawn to scale for your class: a right, isosceles or scalene trapezoid, from its bases and height. Label sides and angles with their measures or with x, add parallel arrows, congruence marks, heights and diagonals, then copy it into a worksheet or test.',
+    keywords: [
+      'trapezoid', 'trapezoids', 'trapezium', 'trapeziums', 'right trapezoid', 'isosceles trapezoid', 'scalene trapezoid',
+      'irregular trapezoid', 'quadrilateral', 'quadrilaterals', 'bases', 'legs', 'parallel', 'parallel sides',
+      'parallel arrows', 'height', 'altitude', 'diagonal', 'diagonals', 'area', 'perimeter', 'angles', 'side lengths',
+      'to scale', 'diagram', 'geometry', 'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+    Preview: TrapezoidPreview,
+  },
+  {
+    id: 'kite',
+    name: 'Kite Generator',
+    path: '/kite',
+    blurb: 'Kites drawn to scale, with their equal sides marked and labeled.',
+    description:
+      'Make a printable kite drawn to scale for your class. Give its short and long sides and top angle, label sides and angles with their measures or with x, add diagonals and congruence marks, then copy it into a worksheet or test.',
+    keywords: [
+      'kite', 'kites', 'quadrilateral', 'quadrilaterals', 'diagonal', 'diagonals', 'perpendicular diagonals',
+      'line of symmetry', 'symmetry', 'adjacent sides', 'area', 'perimeter', 'angles', 'side lengths', 'to scale',
+      'diagram', 'geometry', 'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+    Preview: KitePreview,
   },
 ]
 

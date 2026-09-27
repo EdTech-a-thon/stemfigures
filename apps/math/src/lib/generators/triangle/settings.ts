@@ -7,28 +7,24 @@
 
 import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
 import { parseNumber } from '$lib/shared/math.js'
+import {
+  LABEL_MODES, LINE_LABEL_MODES, LINE_STYLES, MARKS, ROUNDING,
+  cleanAgainst, oneOf, queryAgainst, readMoved, writeMoved,
+  type LabelMode, type LineLabelMode, type LineStyle, type RawSettings,
+} from '$lib/shapes/parts.js'
 import { ANGLES, SIDES, solveTriangle, type Part, type Side, type Solved, type Vertex } from './solve.js'
 
-export { ANGLES, SIDES }
+export { ANGLES, SIDES, readMoved, writeMoved }
+export type { LineStyle, RawSettings }
+export type { Offset } from '$lib/shapes/parts.js'
 export type Height = 'hA' | 'hB' | 'hC'
 export const HEIGHTS: Height[] = ['hA', 'hB', 'hC'] // the height from each vertex
-/** How a part is labeled. "auto" is its measure when given, and nothing when solved. */
-export const LABEL_MODES = ['auto', 'measure', 'text', 'none'] as const
-export const HEIGHT_LABEL_MODES = ['measure', 'text', 'none'] as const
-export const LINE_STYLES = { solid: 'Solid', dashed: 'Dashed', dotted: 'Dotted' }
-export const ROUNDING = [0, 1, 2] // decimal places for solved measures
-export const MARKS = [0, 1, 2, 3] // congruence ticks on a side, or arcs on an angle
-export const INK = '#111827'
-
-export type LabelMode = (typeof LABEL_MODES)[number]
-export type HeightLabelMode = (typeof HEIGHT_LABEL_MODES)[number]
-export type LineStyle = keyof typeof LINE_STYLES
 
 export type Settings = { [K in `name${Vertex}`]: string } & { [K in Part]: string } & { [K in `${Part}Label`]: LabelMode } & {
   [K in `${Part}Text`]: string
 } & { [K in `${Vertex}Arcs`]: number } & { [K in `${Side}Ticks`]: number } & { [K in Height]: boolean } & {
   [K in `${Height}Style`]: LineStyle
-} & { [K in `${Height}Label`]: HeightLabelMode } & { [K in `${Height}Text` | `${Height}Foot`]: string } & {
+} & { [K in `${Height}Label`]: LineLabelMode } & { [K in `${Height}Text` | `${Height}Foot`]: string } & {
   unit: string
   round: number
   square: boolean
@@ -39,9 +35,6 @@ export type Settings = { [K in `name${Vertex}`]: string } & { [K in Part]: strin
   moved: string
   labelSize: LabelSize
 }
-/** Settings as they may arrive: from a form, a link, or a preset stored by an older version. */
-export type RawSettings = Record<string, any>
-
 const parts = <K extends string>(keys: K[], make: (key: K) => [string, unknown][]) => Object.fromEntries(keys.flatMap(make))
 
 export const DEFAULT_SETTINGS = {
@@ -72,26 +65,16 @@ export const DEFAULT_SETTINGS = {
 /** Settings that describe the figure itself, which is what a preset saves. */
 export const FIGURE_KEYS = Object.keys(DEFAULT_SETTINGS) as (keyof Settings)[]
 
-const text = (v: unknown, fallback: string) => (v === undefined || v === null ? fallback : String(v))
-const oneOf = <T>(list: readonly T[], v: any, fallback: T): T => (list.includes(v) ? v : fallback)
-const bool = (v: unknown, fallback: boolean) => (typeof v === 'boolean' ? v : v === '1' || v === 'true' ? true : v === '0' || v === 'false' ? false : fallback)
-
 /** Tidy raw values (from a form, a link or a stored preset) into usable settings. */
 export function cleanSettings(s: RawSettings): Settings {
   const d = DEFAULT_SETTINGS
-  const out: Record<string, any> = {}
-  for (const [key, def] of Object.entries(d)) {
-    const v = s[key]
-    if (typeof def === 'boolean') out[key] = bool(v, def)
-    else if (typeof def === 'number') out[key] = Number.isFinite(Number(v)) && v !== '' && v !== null && v !== undefined ? Number(v) : def
-    else out[key] = text(v, def)
-  }
+  const out = cleanAgainst(d, s)
   for (const k of [...ANGLES, ...SIDES]) out[`${k}Label`] = oneOf(LABEL_MODES, out[`${k}Label`], 'auto')
   for (const v of ANGLES) out[`${v}Arcs`] = oneOf(MARKS, out[`${v}Arcs`], 0)
   for (const s of SIDES) out[`${s}Ticks`] = oneOf(MARKS, out[`${s}Ticks`], 0)
   for (const h of HEIGHTS) {
     out[`${h}Style`] = oneOf(Object.keys(LINE_STYLES), out[`${h}Style`], 'dashed')
-    out[`${h}Label`] = oneOf(HEIGHT_LABEL_MODES, out[`${h}Label`], 'none')
+    out[`${h}Label`] = oneOf(LINE_LABEL_MODES, out[`${h}Label`], 'none')
   }
   for (const v of ANGLES) out[`name${v}`] = out[`name${v}`].slice(0, 4)
   out.round = oneOf(ROUNDING, out.round, d.round)
@@ -110,41 +93,13 @@ export function sameFigure(a: RawSettings, b: RawSettings): boolean {
 }
 
 export function settingsToQuery(s: Settings): string {
-  const params = new URLSearchParams()
-  for (const [key, def] of Object.entries(DEFAULT_SETTINGS)) {
-    const v = s[key as keyof Settings]
-    if (v === def || v === null || v === undefined) continue
-    params.set(key, typeof v === 'boolean' ? (v ? '1' : '0') : String(v))
-  }
-  return params.toString()
+  return queryAgainst(DEFAULT_SETTINGS, s)
 }
 
 export function settingsFromParams(params: URLSearchParams): Settings {
   const s: RawSettings = { ...DEFAULT_SETTINGS }
   for (const key of Object.keys(DEFAULT_SETTINGS)) if (params.has(key)) s[key] = params.get(key)
   return cleanSettings(s)
-}
-
-/** A dragged label's offset: along and across its part (see layout.ts). */
-export type Offset = [number, number]
-
-/** Dragged labels, as { part: [along, across] } offsets in the part's own directions (see layout.ts). */
-export function readMoved(text: string): Record<string, Offset> {
-  const out: Record<string, Offset> = {}
-  for (const item of String(text ?? '').split(';')) {
-    const m = item.match(/^([A-Za-z]+):(-?[\d.]+),(-?[\d.]+)$/)
-    if (m && (Number(m[2]) || Number(m[3]))) out[m[1]] = [Number(m[2]), Number(m[3])]
-  }
-  return out
-}
-
-export function writeMoved(moved: Record<string, Offset>): string {
-  const r = (v: number) => String(Math.round(v))
-  return Object.entries(moved)
-    .filter(([, [x, y]]) => Math.round(x) || Math.round(y))
-    .sort(([a], [b]) => (a < b ? -1 : 1))
-    .map(([k, [x, y]]) => `${k}:${r(x)},${r(y)}`)
-    .join(';')
 }
 
 const names = (s: Settings) => Object.fromEntries(ANGLES.map((v) => [v, s[`name${v}`].trim()]))

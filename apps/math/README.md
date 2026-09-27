@@ -19,6 +19,12 @@ and `docs/adr/` for decisions.
   Each side and angle is labeled with its measure, typed math like x, or
   nothing, with congruence marks; heights, right-angle squares, a unit,
   rounding, base side, flip and turn. Labels can be dragged on the figure.
+- `/rectangle`, `/parallelogram`, `/trapezoid`, `/kite` **Rectangle,
+  Parallelogram, Trapezoid and Kite Generators**: one page each, drawing its
+  own kinds (rectangles and squares; parallelograms and rhombi; trapezoids,
+  isosceles and right trapezoids; kites) to scale from the measures the kind
+  asks for. The same labels and markings as the triangle, plus parallel arrows,
+  heights to AB and diagonals with a named crossing point.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
@@ -39,8 +45,19 @@ src/lib/site/          top bar, directory dialogs, Help, footer, SEO
 src/lib/shared/        pieces every generator uses: figure card and toolbar,
                        undo history, presets, dialogs, fields, end-cap picker
 $shared/               ../../packages/shared: pieces shared with the other sites
+src/lib/shapes/        the shape layer the triangle and quadrilaterals share:
+                       laying out and drawing a shape's parts, labels and
+                       markings, the label popup and extra-line options;
+                       quadrilateral/ holds the kinds and the page all four
+                       quadrilateral generators use, each generator's folder
+                       only naming its family (its kinds and opening figure)
 src/lib/generators/    index.ts lists every generator; one folder each
 ```
+
+A shape generator works out where its corners go and what each part says,
+and hands that to `shapes/layout.ts`; every mark and label is placed there.
+Every part has an id (a corner "B", a side "AB", an extra line "hB" or
+"dAC"), which a future click-to-label canvas can use to pick parts out.
 
 To add a generator: make a folder under `src/lib/generators/` with its
 builder and preview, add one entry to `generators/index.ts`, and add its route
