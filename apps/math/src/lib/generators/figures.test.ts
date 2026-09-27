@@ -3,6 +3,9 @@
 // `npx vitest run -u` after a change that is meant to move the drawing.
 
 import { describe, expect, test } from 'vitest'
+import { buildShape } from './3d-shape/layout.js'
+import * as shape from './3d-shape/settings.js'
+import { readShape } from './3d-shape/solve.js'
 import { buildGraph } from './coordinate-grid/graph.js'
 import * as grid from './coordinate-grid/settings.js'
 import { buildLine } from './number-line/numberline.js'
@@ -88,6 +91,35 @@ const TRIANGLE = [
   'A=20',
 ]
 
+const SHAPE = [
+  '',
+  'depth=left&names=1',
+  'hidden=0&unit=in&labelSize=large',
+  'oblique=1&height=4&lean=3&edgeLabel=measure',
+  'oblique=1&leanTo=left&height=&lean=3&edge=5',
+  'base=right',
+  'base=right&pose=stand&oblique=1',
+  'base=isosceles&triHeightLabel=text&triHeightText=h&hypLabel=measure&names=1',
+  'base=regular&sides=6&side=3&height=6&apothemLabel=measure',
+  'base=regular&sides=5&pose=lie&names=1&depth=left&nameList=P+Q',
+  'shape=pyramid&slantLabel=measure&names=1',
+  'shape=pyramid&base=regular&sides=3&side=4&height=&slant=5&apothemLabel=measure',
+  'shape=pyramid&oblique=1&lean=3&square=0',
+  'shape=cylinder',
+  'shape=cylinder&oblique=1&leanTo=left&edgeLabel=measure',
+  'shape=cylinder&diameter=1&radius=6&radiusLabel=text&radiusText=d',
+  'shape=cone&slantLabel=measure&showHeight=0',
+  'shape=cone&oblique=1&lean=4',
+  'shape=cone&radius=10&height=1',
+  'shape=sphere',
+  'shape=hemisphere&diameter=1&radius=8',
+  'shape=hemisphere&bowl=1&hidden=0',
+  'length=1&width=1&height=100',
+  'moved=length%3A4%2C-6%3Bv2%3A0%2C3&names=1',
+  'length=abc',
+  'oblique=1&height=4&lean=3&edge=9',
+]
+
 const params = (q: string) => new URLSearchParams(q)
 
 describe('coordinate grid', () => {
@@ -111,5 +143,15 @@ describe('triangle', () => {
     const read = triangle.readTriangle(s)
     const figure = read.triangle ? buildTriangle(s, read.triangle, read.given) : null
     expect({ query: triangle.settingsToQuery(s), read, figure }).toMatchSnapshot()
+  })
+})
+
+describe('3D shape', () => {
+  test.each(SHAPE)('%s', (q) => {
+    const kind = shape.settingsFor(shape.kindOf(params(q).get('shape')))
+    const s = kind.settingsFromParams(params(q))
+    const read = readShape(s)
+    const figure = read.values ? buildShape(s, { ...read, values: read.values }) : null
+    expect({ query: kind.settingsToQuery(s), read, figure }).toMatchSnapshot()
   })
 })

@@ -2,8 +2,13 @@
 // and the sitemap all read this list, so adding a generator means adding its
 // folder and one entry here.
 
+import ConePreview from './cone/Preview.svelte'
+import CylinderPreview from './cylinder/Preview.svelte'
 import CoordinateGridPreview from './coordinate-grid/Preview.svelte'
 import NumberLinePreview from './number-line/Preview.svelte'
+import PrismPreview from './prism/Preview.svelte'
+import PyramidPreview from './pyramid/Preview.svelte'
+import SpherePreview from './sphere/Preview.svelte'
 import TrianglePreview from './triangle/Preview.svelte'
 import type { Component } from 'svelte'
 
@@ -70,6 +75,73 @@ export const GENERATORS: Generator[] = [
       'asa', 'aas', 'ssa', 'ambiguous case', 'labels', 'printable',
     ],
     Preview: TrianglePreview,
+  },
+  {
+    id: 'prism',
+    name: 'Prism Generator',
+    path: '/prism',
+    blurb: 'Rectangular, triangular and other prisms drawn to scale, labeled for students.',
+    description:
+      'Make a printable prism drawn to scale for your class. Draw rectangular, triangular and regular prisms, standing or lying down, right or oblique, label lengths, widths and heights with their measures or with x, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'prism', 'prisms', 'rectangular prism', 'right rectangular prism', 'cuboid', 'box', 'cube', 'triangular prism',
+      'pentagonal prism', 'hexagonal prism', 'octagonal prism', 'oblique prism', 'lateral area', 'length', 'width', 'height',
+      'apothem', 'hidden edges', 'dashed', 'hypotenuse', 'pythagorean theorem', 'to scale', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+    Preview: PrismPreview,
+  },
+  {
+    id: 'cylinder',
+    name: 'Cylinder Generator',
+    path: '/cylinder',
+    blurb: 'Right and oblique cylinders drawn to scale, with the radius and height labeled.',
+    description:
+      'Make a printable cylinder drawn to scale for your class. Give its radius or diameter and height, make it right or oblique, label each with its measure or with x, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'cylinder', 'cylinders', 'can', 'oblique cylinder', 'radius', 'diameter', 'height', 'lateral area', 'circle',
+      'hidden edges', 'dashed', 'to scale', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+    Preview: CylinderPreview,
+  },
+  {
+    id: 'pyramid',
+    name: 'Pyramid Generator',
+    path: '/pyramid',
+    blurb: 'Square, rectangular and other pyramids with their height and slant height labeled.',
+    description:
+      'Make a printable pyramid drawn to scale for your class. Draw square, rectangular, triangular and regular pyramids, right or oblique, label the height and slant height with their measures or with x, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'pyramid', 'pyramids', 'square pyramid', 'rectangular pyramid', 'triangular pyramid', 'tetrahedron',
+      'hexagonal pyramid', 'oblique pyramid', 'height', 'slant height', 'apothem', 'lateral area', 'hidden edges', 'dashed',
+      'pythagorean theorem', 'to scale', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+    Preview: PyramidPreview,
+  },
+  {
+    id: 'cone',
+    name: 'Cone Generator',
+    path: '/cone',
+    blurb: 'Right and oblique cones with their radius, height and slant height labeled.',
+    description:
+      'Make a printable cone drawn to scale for your class. Give its radius or diameter and its height or slant height, make it right or oblique, label each with its measure or with x, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'cone', 'cones', 'oblique cone', 'radius', 'diameter', 'height', 'slant height', 'lateral area', 'circle',
+      'hidden edges', 'dashed', 'pythagorean theorem', 'to scale', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+    Preview: ConePreview,
+  },
+  {
+    id: 'sphere',
+    name: 'Sphere Generator',
+    path: '/sphere',
+    blurb: 'Spheres and hemispheres with their radius or diameter labeled.',
+    description:
+      'Make a printable sphere or hemisphere for your class. Give its radius or diameter, label it with its measure or with x, turn a hemisphere into a dome or a bowl, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'sphere', 'spheres', 'ball', 'hemisphere', 'hemispheres', 'half sphere', 'dome', 'bowl', 'radius', 'diameter',
+      'great circle', 'circle', 'hidden edges', 'dashed', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+    Preview: SpherePreview,
   },
 ]
 
