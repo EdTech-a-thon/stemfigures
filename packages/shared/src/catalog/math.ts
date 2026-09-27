@@ -51,4 +51,19 @@ export const MATH: CatalogEntry[] = [
       'asa', 'aas', 'ssa', 'ambiguous case', 'labels', 'printable',
     ],
   },
+  {
+    id: 'box-plot',
+    site: 'math',
+    name: 'Box Plot Generator',
+    path: '/box-plot',
+    blurb: 'Box plots from a list of numbers, one or several over the same number line.',
+    description:
+      'Make a printable box plot for your class. Type or paste the data, or the five-number summary, compare several box plots on one number line, label Q1, the median or Q3 or leave them for students to find, then copy it into a worksheet or test.',
+    keywords: [
+      'box plot', 'box plots', 'box and whisker', 'box and whisker plot', 'box-and-whisker', 'whiskers', 'five number summary',
+      'five-number summary', 'quartile', 'quartiles', 'q1', 'q3', 'median', 'minimum', 'maximum', 'range', 'interquartile range',
+      'iqr', 'outlier', 'outliers', 'statistics', 'stats', 'data', 'data set', 'data display', 'compare data', 'distribution',
+      'spread', 'center', 'printable',
+    ],
+  },
 ]
