@@ -100,9 +100,6 @@
     opacity: 0; pointer-events: none; transition: opacity 0.15s, transform 0.15s;
   }
   .status.shown { opacity: 1; transform: translate(-50%, 0); }
-  /* A faint edge round a figure's white .paper background shows what will be
-     copied. It's page CSS, so exported pictures and printouts don't have it. */
-  @media screen { .sheet :global(.paper) { stroke: var(--border); stroke-width: 1.5; } }
 
   /* Wide screens: the card fills the space beside the settings and the figure
      shrinks to fit it (see the generator's page layout). */
