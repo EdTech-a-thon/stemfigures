@@ -135,7 +135,7 @@ A figure of one triangle, drawn to scale from the measures the teacher gives and
 _Avoid_: Shape, polygon, diagram, drawing
 
 **Part**:
-Any vertex, side, angle or extra line of a triangle: something that can carry a label or a marking.
+Any vertex, side, angle or extra line of a triangle, or any of a box plot's five-number summary: something that can carry a label or a marking.
 _Avoid_: Element, component, piece
 
 **Vertex name**:
@@ -147,7 +147,7 @@ A side's length or an angle's size, in degrees. A **given** measure is one the t
 _Avoid_: Value, dimension, size
 
 **Part label**:
-What's written at a part: nothing, its measure (such as 12 or 24°, with the figure's unit on lengths), or text the teacher types, such as x or 2y + 1. It replaces the text boxes teachers otherwise lay over a drawing.
+What's written at a part: nothing, its measure (such as 12 or 24°, with the figure's unit on lengths, or a box plot's Q1 value), or text the teacher types, such as x or 2y + 1. It replaces the text boxes teachers otherwise lay over a drawing.
 _Avoid_: Text box, caption, annotation, label (alone; axes have their own labels)
 
 **Unit**:
@@ -169,3 +169,37 @@ _Avoid_: Bottom, base (alone; a height's base is the side it meets)
 **Other triangle**:
 The second triangle two sides and a non-included angle can make (the ambiguous case). The generator draws the one whose unknown angle is acute unless the teacher switches to the other.
 _Avoid_: Second solution, alternate
+
+### Data displays
+
+**Data set**:
+The numbers a teacher types in one row to be displayed, such as 12, 15, 15, 18, 22, 30, with an optional name like "Class A". Several rows are drawn over the same axis to compare them.
+_Avoid_: Data, list, values, series
+
+**Box Plot**:
+A figure of one or more data sets, each drawn as a box from Q1 to Q3 split at the median, with whiskers out to the ends, over one shared number line. Its generator is the Box Plot Generator.
+_Avoid_: Box and whisker plot, box chart (fine as search words, not as the name)
+
+**Five-number summary**:
+The minimum, Q1, median, Q3 and maximum of a data set. Quartiles are the medians of the lower and upper halves, leaving out the median when the count is odd, as the TI-84 works them out. A teacher can type the five numbers instead of a data set. None is written on the figure unless the teacher gives it a part label, so the figure doesn't give answers away.
+_Avoid_: Summary statistics, five statistics
+
+**Outlier**:
+A value more than 1.5 times the box's width beyond either end of the box, drawn as its own point with the whisker stopping at the last value that isn't one. Outliers are only drawn when the teacher turns them on; otherwise whiskers reach the minimum and maximum.
+_Avoid_: Extreme value, anomaly
+
+**Histogram**:
+A figure of touching bars over a numbered axis, one bar per bin, whose heights show how many values fall in each bin. Its generator is the Histogram Generator.
+_Avoid_: Bar graph (bars there are separate categories), column chart
+
+**Bin**:
+One stretch of the histogram's axis, such as 10 to 20, numbered at its edges. A value on an edge belongs to the bin that starts there. Bins come from a data set with a start and bin width, or are typed with their counts as a frequency table.
+_Avoid_: Interval, class, bucket, range (a range is an axis's From, To and Step)
+
+**Frequency**:
+How many values fall in a bin: the height of its bar, read off the histogram's vertical axis.
+_Avoid_: Count (fine in speech), tally
+
+**Line plot**:
+A number line with a mark stacked above each value of a data set, as grades 3–6 use the name. No generator makes one yet.
+_Avoid_: Dot plot is the same figure; line graph (points joined across a coordinate grid) is a different one

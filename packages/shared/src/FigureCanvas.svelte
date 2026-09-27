@@ -1,20 +1,29 @@
 <script lang="ts">
   // The card every generator shows its figure in: an icon toolbar for getting
   // the figure out (copy, download, link) and undo/redo, above the figure
-  // itself. `svg` is the rendered figure to export; `history` comes from
-  // createHistory. Status messages appear as a toast over the figure.
-  import { Copy, FileDown, ImageDown, Redo2, Share, Undo2 } from '@lucide/svelte'
+  // itself. `svg` is the rendered figure to export (when it isn't given, the
+  // first <svg> inside the card is); `history` comes from createHistory.
+  // `labelSize`, bound to the generator's setting, adds the label size picker,
+  // beside the export buttons it matters for. Status messages appear as a
+  // toast over the figure. Printing prints just the figure, the width of a
+  // letter page unless the page sets --print-width (and --print-height).
+  import { ALargeSmall, Copy, FileDown, ImageDown, Redo2, Share, Undo2 } from '@lucide/svelte'
   import type { Snippet } from 'svelte'
   import { copyPng, downloadPng, downloadSvg } from './exporting'
   import type { createHistory } from './history.svelte'
+  import { LABEL_SIZES, type LabelSize } from './labelSize'
 
   interface Props {
-    svg: SVGSVGElement | undefined
+    svg?: SVGSVGElement
     filename: string
     history: ReturnType<typeof createHistory>
+    labelSize?: LabelSize
     children: Snippet
   }
-  let { svg, filename, history, children }: Props = $props()
+  let { svg, filename, history, labelSize = $bindable(), children }: Props = $props()
+
+  let sheet = $state<HTMLElement>()
+  const figure = () => svg ?? sheet?.querySelector('svg') ?? undefined
 
   let status = $state('')
   let statusTimer: ReturnType<typeof setTimeout> | undefined
@@ -25,9 +34,10 @@
   }
 
   async function copyImage() {
-    if (!svg) return
+    const el = figure()
+    if (!el) return
     try {
-      await copyPng(svg)
+      await copyPng(el)
       flash('Image copied. Paste it into your document.')
     } catch {
       flash('Your browser blocked copying. Try downloading a PNG instead.')
@@ -46,18 +56,27 @@
 <svelte:window onkeydown={history.onkeydown} />
 
 <div class="card canvas">
-  <div class="toolbar" role="toolbar" aria-label="Figure actions">
+  <div class="toolbar no-print" role="toolbar" aria-label="Figure actions">
     <button class="icon-btn" aria-label="Copy image" data-tip="Copy image" onclick={copyImage}><Copy size={19} /></button>
-    <button class="icon-btn" aria-label="Download PNG" data-tip="Download PNG" onclick={() => svg && downloadPng(svg, `${filename}.png`)}><ImageDown size={19} /></button>
-    <button class="icon-btn" aria-label="Download SVG" data-tip="Download SVG" onclick={() => svg && downloadSvg(svg, `${filename}.svg`)}><FileDown size={19} /></button>
+    <button class="icon-btn" aria-label="Download PNG" data-tip="Download PNG" onclick={() => figure() && downloadPng(figure()!, `${filename}.png`)}><ImageDown size={19} /></button>
+    <button class="icon-btn" aria-label="Download SVG" data-tip="Download SVG" onclick={() => figure() && downloadSvg(figure()!, `${filename}.svg`)}><FileDown size={19} /></button>
     <button class="icon-btn" aria-label="Share link" data-tip="Share link" onclick={shareLink}><Share size={19} /></button>
     <span class="divider"></span>
     <button class="icon-btn" aria-label="Undo" data-tip="Undo" disabled={!history.canUndo} onclick={history.undo}><Undo2 size={19} /></button>
     <button class="icon-btn" aria-label="Redo" data-tip="Redo" disabled={!history.canRedo} onclick={history.redo}><Redo2 size={19} /></button>
+    {#if labelSize !== undefined}
+      <label class="label-size" data-tip="Label size, for how big text prints">
+        <ALargeSmall size={19} aria-hidden="true" />
+        <span class="visually-hidden">Label size</span>
+        <select bind:value={labelSize}>
+          {#each Object.entries(LABEL_SIZES) as [v, name] (v)}<option value={v}>{name} labels</option>{/each}
+        </select>
+      </label>
+    {/if}
   </div>
-  <div class="sheet">
+  <div class="sheet" bind:this={sheet}>
     {@render children()}
-    <p class="status" class:shown={status} aria-live="polite">{status}</p>
+    <p class="status no-print" class:shown={status} aria-live="polite">{status}</p>
   </div>
 </div>
 
@@ -65,6 +84,8 @@
   .canvas { display: flex; flex-direction: column; }
   .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 0.3rem; padding: 0.45rem; border-bottom: 1px solid var(--border); }
   .divider { width: 1px; height: 1.6rem; background: var(--border); margin: 0 0.3rem; }
+  .label-size { margin-left: auto; display: inline-flex; align-items: center; gap: 0.35rem; color: var(--muted); }
+  .label-size select { width: auto; padding-block: 0.25rem; font-size: 0.85rem; }
   @media (max-width: 480px) {
     .divider { display: none; }
     .toolbar { justify-content: space-between; gap: 0.15rem; padding: 0.35rem; }
@@ -86,5 +107,12 @@
     .canvas { flex: 1; min-height: 0; }
     .sheet { flex: 1; min-height: 0; }
     .sheet :global(svg) { width: 100%; height: 100%; max-height: none; }
+  }
+
+  @media print {
+    @page { size: letter portrait; margin: 0.5in; }
+    .canvas { border: none; box-shadow: none; }
+    .sheet { display: block; width: var(--print-width, 7.5in); padding: 0; break-inside: avoid; }
+    .sheet :global(svg) { width: 100%; height: var(--print-height, auto); max-height: none; }
   }
 </style>
