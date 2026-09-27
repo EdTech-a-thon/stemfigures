@@ -3,6 +3,8 @@
 // `npx vitest run -u` after a change that is meant to move the drawing.
 
 import { describe, expect, test } from 'vitest'
+import { buildPlot } from './box-plot/boxplot.js'
+import * as box from './box-plot/settings.js'
 import { buildGraph } from './coordinate-grid/graph.js'
 import * as grid from './coordinate-grid/settings.js'
 import { buildLine } from './number-line/numberline.js'
@@ -88,6 +90,22 @@ const TRIANGLE = [
   'A=20',
 ]
 
+const data = (...rows: string[]) => rows.map((r) => `data=${encodeURIComponent(r)}`).join('&')
+
+const BOX = [
+  '',
+  data('11, 14, 15, 18, 20, 21, 24, 27, 30, 35, 42'),
+  data('4, 7, 9, 12, 20'),
+  data('55, 60, 62, 70, 71, 75, 80|name=Period 1', '40, 58, 66, 69, 72, 90, 95|name=Period 2'),
+  `outliers=1&${data('1, 10, 11, 12, 13, 14, 15, 40')}`,
+  `minLabel=measure&q1Label=measure&medianLabel=measure&q3Label=text&q3Text=x&maxLabel=measure&${data('10, 11, 12, 13, 30')}`,
+  `title=Test%20scores&titleMode=text&axisTitle=Score&axisTitleMode=text&startCap=none&endCap=circle&${data('70, 75, 80, 85, 90')}`,
+  'titleMode=blank&axisTitleMode=blank',
+  `from=0&to=1&step=1%2F4&${data('0.1, 0.3, 0.5, 0.6, 0.9')}`,
+  `from=0&to=100&step=1&every=10&${data('12, 40, 55, 90')}`,
+  `from=abc&step=-1&${data('1, 2, x', '3, 400')}`,
+]
+
 const params = (q: string) => new URLSearchParams(q)
 
 describe('coordinate grid', () => {
@@ -102,6 +120,14 @@ describe('number line', () => {
     const s = line.settingsFromParams(params(q))
     const { rows } = line.readLine(s)
     expect({ query: line.settingsToQuery(s), rows, line: buildLine(s) }).toMatchSnapshot()
+  })
+})
+
+describe('box plot', () => {
+  test.each(BOX)('%s', (q) => {
+    const s = box.settingsFromParams(params(q))
+    const { rows, problems } = box.readPlot(s)
+    expect({ query: box.settingsToQuery(s), rows, problems, plot: buildPlot(s) }).toMatchSnapshot()
   })
 })
 

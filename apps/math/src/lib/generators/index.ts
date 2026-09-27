@@ -6,6 +6,7 @@
 import type { Component } from 'svelte'
 import { generatorsOn } from '$shared/catalog/index.js'
 import { SITE_ID } from '$lib/site/config.js'
+import BoxPlotPreview from './box-plot/Preview.svelte'
 import CoordinateGridPreview from './coordinate-grid/Preview.svelte'
 import NumberLinePreview from './number-line/Preview.svelte'
 import TrianglePreview from './triangle/Preview.svelte'
@@ -15,6 +16,7 @@ export const PREVIEWS: Record<string, Component> = {
   'coordinate-grid': CoordinateGridPreview,
   'number-line': NumberLinePreview,
   'triangle': TrianglePreview,
+  'box-plot': BoxPlotPreview,
 }
 
 export const GENERATORS = generatorsOn(SITE_ID, PREVIEWS)
