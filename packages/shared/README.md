@@ -5,12 +5,26 @@ Components and helpers used by more than one STEM Figures site, imported as
 
 | File                                                                                        | Used by                                   |
 | ------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `catalog/`, `GeneratorDirectory`                                                            | math, physics, chemistry, biology, engineering |
 | `request.svelte.ts`                                                                         | math, physics, chemistry, biology, engineering |
 | `Modal`                                                                                     | math, chemistry, physics, biology, engineering |
 | `LabelField`                                                                                | chemistry, biology, engineering           |
 | `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics |
 | `labelSize`                                                                                 | math                                      |
 | `FigureFrame`, `HelpTip`, `Section`, `settings`, `figureText`                               | none yet                                  |
+
+`catalog/` lists every generator on every site. Each lives on one site
+(`site`), the only address it has; `alsoOn` names other sites whose
+directories list it after their own generators. `GeneratorDirectory` is each
+site's directory: its own generators with live previews, then those it lists
+from other sites, and, while searching, matches from every other site under
+their site's name. A site can only draw its own previews, so the others show
+pictures from `catalog/previews/`. Retake a site's pictures after changing its
+previews: start it with `./scripts/agent-dev.mjs`, then run
+`node scripts/snapshot-previews.mjs <its address>` from the monorepo root.
+
+To add a generator: its entry in its site's `catalog/` file, its preview in
+that app's `src/lib/generators/index.ts`, and a snapshot.
 
 `GeneratorPage` is the page every generator is meant to use: presets and
 settings down the left, the figure card on the right. Its `settingsWidth` is
