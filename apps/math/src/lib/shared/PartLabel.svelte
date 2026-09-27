@@ -1,11 +1,13 @@
 <script lang="ts">
   // The button after a measure, showing what's written at that part of the
-  // triangle. It opens a small popup to choose the label (its measure, typed
+  // figure. It opens a small popup to choose the label (its measure, typed
   // text, or nothing) and congruence marks. Fixed-position like RowStyle's
   // popup, so the scrolling settings column can't clip it.
   import { tick } from 'svelte'
   import MathInput from '$lib/shared/MathInput.svelte'
-  import type { LabelMode } from './settings.js'
+
+  /** How a part is labeled. "auto" is its measure when given, and nothing when solved. */
+  type LabelMode = 'auto' | 'measure' | 'text' | 'none'
 
   // mode: auto | measure | text | none, where auto shows the measure only when
   // it's given. measure: how the measure reads (null when it can't be shown,

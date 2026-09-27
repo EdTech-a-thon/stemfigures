@@ -7,6 +7,7 @@
 
 import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
 import { parseNumber } from '$lib/shared/math.js'
+import { readMoved, writeMoved } from '$lib/shared/placeLabels.js'
 import { ANGLES, SIDES, solveTriangle, type Part, type Side, type Solved, type Vertex } from './solve.js'
 
 export { ANGLES, SIDES }
@@ -125,27 +126,7 @@ export function settingsFromParams(params: URLSearchParams): Settings {
   return cleanSettings(s)
 }
 
-/** A dragged label's offset: along and across its part (see layout.ts). */
-export type Offset = [number, number]
-
-/** Dragged labels, as { part: [along, across] } offsets in the part's own directions (see layout.ts). */
-export function readMoved(text: string): Record<string, Offset> {
-  const out: Record<string, Offset> = {}
-  for (const item of String(text ?? '').split(';')) {
-    const m = item.match(/^([A-Za-z]+):(-?[\d.]+),(-?[\d.]+)$/)
-    if (m && (Number(m[2]) || Number(m[3]))) out[m[1]] = [Number(m[2]), Number(m[3])]
-  }
-  return out
-}
-
-export function writeMoved(moved: Record<string, Offset>): string {
-  const r = (v: number) => String(Math.round(v))
-  return Object.entries(moved)
-    .filter(([, [x, y]]) => Math.round(x) || Math.round(y))
-    .sort(([a], [b]) => (a < b ? -1 : 1))
-    .map(([k, [x, y]]) => `${k}:${r(x)},${r(y)}`)
-    .join(';')
-}
+export { readMoved, writeMoved, type Offset } from '$lib/shared/placeLabels.js'
 
 const names = (s: Settings) => Object.fromEntries(ANGLES.map((v) => [v, s[`name${v}`].trim()]))
 

@@ -10,11 +10,11 @@
   import FigureCanvas from '$lib/shared/FigureCanvas.svelte'
   import HelpTip from '$lib/shared/HelpTip.svelte'
   import MathInput from '$lib/shared/MathInput.svelte'
+  import PartLabel from '$lib/shared/PartLabel.svelte'
   import Presets from '$lib/shared/Presets.svelte'
   import Section from '$lib/shared/Section.svelte'
   import { createHistory } from '$lib/shared/history.svelte.js'
   import { buildTriangle } from './layout.js'
-  import PartLabel from './PartLabel.svelte'
   import { presetStore } from './presets.js'
   import {
     ANGLES, DEFAULT_SETTINGS, LINE_STYLES, SIDES,

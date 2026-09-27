@@ -11,7 +11,9 @@
 import { LABEL_SCALE } from '$lib/shared/labelSize.js'
 import { layoutMath, type MathBox } from '$lib/shared/mathSvg.js'
 import { ANGLES, OPPOSITE, sideOf, type Part, type Side, type Solved, type Vertex } from './solve.js'
-import { readMoved, type LineStyle, type Offset, type Settings } from './settings.js'
+import { labelPlacer } from '$lib/shared/placeLabels.js'
+import { add, dot, len, mul, perp, r1, reach, sub, unit, type Vec } from '$lib/shared/vec.js'
+import type { LineStyle, Settings } from './settings.js'
 
 const BASE_FS = 20 // label font size, at medium labels
 const BASE_NAME_FS = 21
@@ -26,22 +28,10 @@ const TICK_GAP = 5
 const RIGHT = 1e-6 // how close to 90° counts as a right angle
 
 const RAD = Math.PI / 180
-/** A point or a direction, in the figure's own units (SVG's, y down). */
-export type Vec = [number, number]
-const add = (p: Vec, q: Vec): Vec => [p[0] + q[0], p[1] + q[1]]
-const sub = (p: Vec, q: Vec): Vec => [p[0] - q[0], p[1] - q[1]]
-const mul = (p: Vec, k: number): Vec => [p[0] * k, p[1] * k]
-const dot = (p: Vec, q: Vec) => p[0] * q[0] + p[1] * q[1]
-const len = (p: Vec) => Math.hypot(p[0], p[1])
-const unit = (p: Vec) => mul(p, 1 / (len(p) || 1))
-const perp = (p: Vec): Vec => [-p[1], p[0]]
-const r1 = (v: number) => Math.round(v * 10) / 10
 
-/** How far a label's box reaches from its middle in direction d. */
-const reach = (box: MathBox, d: Vec) => (box.w / 2) * Math.abs(d[0]) + ((box.asc + box.desc) / 2) * Math.abs(d[1])
-
-/** A label placed on the figure. `part` is what it labels: a side or angle ("AB", "B"), a vertex name ("vB"), a height ("hB") or where it lands ("fB"). */
-export type PlacedLabel = { part: string; box: MathBox; cx: number; cy: number; x: number; y: number; along: Vec; across: Vec; offset: Offset }
+// A label's `part` is what it labels: a side or angle ("AB", "B"), a vertex name ("vB"), a height ("hB") or where it lands ("fB").
+export type { PlacedLabel } from '$lib/shared/placeLabels.js'
+export type { Vec } from '$lib/shared/vec.js'
 
 /** A triangle laid out for Triangle.svelte to draw. */
 export type TriangleLayout = ReturnType<typeof buildTriangle>
@@ -75,21 +65,7 @@ export function buildTriangle(s: Settings, triangle: Pick<Solved, 'angles' | 'si
   const [x0, y0] = [Math.min(...xs), Math.min(...ys)]
   for (const v of ANGLES) pts[v] = [(pts[v][0] - x0) * scale, (pts[v][1] - y0) * scale]
 
-  const moved = readMoved(s.moved)
-  const labels: PlacedLabel[] = []
-  const overlaps = (box: MathBox, [cx, cy]: Vec) =>
-    labels.some((l) => Math.abs(l.cx - cx) < (l.box.w + box.w) / 2 + 3 && Math.abs(l.cy - cy) < (l.box.asc + l.box.desc + box.asc + box.desc) / 2 + 2)
-  // `slide`: how far the label may move along its part to clear the labels already placed.
-  const place = (part: string, box: MathBox | null, center: Vec, along: Vec, across: Vec, slide = 0) => {
-    if (!box) return
-    for (let k = 1; slide && overlaps(box, center) && k * 8 <= slide; k++) {
-      const tries = [add(center, mul(along, k * 8)), add(center, mul(along, -k * 8))].filter((c) => !overlaps(box, c))
-      if (tries.length) center = tries[0]
-    }
-    const o = moved[part] ?? [0, 0]
-    const [cx, cy] = add(center, add(mul(along, o[0]), mul(across, o[1])))
-    labels.push({ part, box, cx, cy, x: cx - box.w / 2, y: cy + (box.asc - box.desc) / 2, along, across, offset: o })
-  }
+  const { labels, overlaps, place } = labelPlacer(s.moved)
 
   const rounded = (v: number) => String(Number(v.toFixed(s.round)))
   const unitText = s.unit.trim() ? ` ${s.unit.trim()}` : ''
