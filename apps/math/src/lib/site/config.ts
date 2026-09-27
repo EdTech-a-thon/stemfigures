@@ -1,5 +1,10 @@
 // Facts about the site as a whole.
 
+import type { SiteId } from '$shared/catalog/index.js'
+
+/** its name in the STEM Figures catalog */
+export const SITE_ID: SiteId = 'math'
+
 export const SITE_NAME = 'Math Figures'
 export const SITE_URL = 'https://mathfigures.com'
 export const SUPPORT_EMAIL = 'support@teacher.dev'

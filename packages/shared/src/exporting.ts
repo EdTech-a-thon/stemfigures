@@ -24,7 +24,8 @@ export function pngBlob(svg: SVGSVGElement, scale = 3): Promise<Blob> {
       const canvas = document.createElement('canvas')
       canvas.width = Math.round(w * scale)
       canvas.height = Math.round(h * scale)
-      const ctx = canvas.getContext('2d')!
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return reject(new Error('PNG export failed'))
       ctx.fillStyle = '#fff'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)

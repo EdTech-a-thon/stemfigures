@@ -42,9 +42,11 @@ Saved presets stay in the browser's localStorage.
 ```
 src/routes/            SvelteKit pages
 src/lib/site/          top bar, directory dialogs, Help, footer, SEO
-src/lib/shared/        pieces every generator uses: figure card and toolbar,
-                       undo history, presets, dialogs, fields, end-cap picker
-$shared/               ../../packages/shared: pieces shared with the other sites
+src/lib/shared/        pieces Math's generators use: math fields and their
+                       SVG layout, sections, help tips, end-cap and row-style pickers
+$shared/               ../../packages/shared: pieces shared with the other sites,
+                       including the generator page, figure card and toolbar,
+                       undo history, presets and the generator catalog
 src/lib/shapes/        the shape layer the triangle and quadrilaterals share:
                        laying out and drawing a shape's parts, labels and
                        markings, the label popup and extra-line options;
@@ -60,8 +62,10 @@ Every part has an id (a corner "B", a side "AB", an extra line "hB" or
 "dAC"), which a future click-to-label canvas can use to pick parts out.
 
 To add a generator: make a folder under `src/lib/generators/` with its
-builder and preview, add one entry to `generators/index.ts`, and add its route
-under `src/routes/`. The directory, search and sitemap pick it up from the list.
+builder and preview, add its entry to `$shared/catalog/math.ts` and its preview
+to `generators/index.ts`, add its route under `src/routes/`, and retake the
+preview pictures (see `packages/shared/README.md`). The directory, search and
+sitemap pick it up from the list.
 
 ## Development
 

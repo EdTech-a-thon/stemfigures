@@ -5,7 +5,7 @@
 // readTriangle() works out what they mean. The defaults are the triangle the
 // generator opens with: ∠B = 90°, ∠A = 24°, AB = 12, and BC labeled x.
 
-import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
+import { cleanLabelSize, type LabelSize } from '$shared/labelSize'
 import { parseNumber } from '$lib/shared/math.js'
 import {
   LABEL_MODES, LINE_LABEL_MODES, LINE_STYLES, MARKS, ROUNDING,

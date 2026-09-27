@@ -1,5 +1,10 @@
 // Facts about the site as a whole.
 
+import type { SiteId } from '$shared/catalog/index'
+
+/** its name in the STEM Figures catalog */
+export const SITE_ID: SiteId = 'biology'
+
 export const SITE_NAME = 'Biology Figures'
 export const SITE_URL = 'https://biologyfigures.com'
 export const SUPPORT_EMAIL = 'support@teacher.dev'

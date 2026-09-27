@@ -7,7 +7,7 @@
 // readQuadrilateral() works out what they mean. Only the kind's own measures
 // are kept.
 
-import { cleanLabelSize, type LabelSize } from '$lib/shared/labelSize.js'
+import { cleanLabelSize, type LabelSize } from '$shared/labelSize'
 import { parseNumber } from '$lib/shared/math.js'
 import {
   LABEL_MODES, LINE_LABEL_MODES, LINE_STYLES, MARKS, ROUNDING,
@@ -78,9 +78,6 @@ export function plain(kind: KindId): Settings {
     labelSize: 'medium',
   } as Settings
 }
-
-/** Settings that describe the figure itself, which is what a preset saves. */
-export const FIGURE_KEYS = Object.keys(plain('rectangle')) as (keyof Settings)[]
 
 /** What carries over when the teacher picks another kind: everything but its measures, labels and markings. */
 export const KEPT_ON_SWITCH = ['nameA', 'nameB', 'nameC', 'nameD', 'unit', 'round', 'square', 'base', 'flip', 'rotate', 'labelSize'] as const

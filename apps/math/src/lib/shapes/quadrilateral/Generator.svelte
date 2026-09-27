@@ -7,17 +7,14 @@
   // same quadrilateral on first load. When the measures stop making one, the
   // last one that did stays on screen.
   import { Diameter, MoveDown, RotateCw, Tag } from '@lucide/svelte'
-  import { afterNavigate, replaceState } from '$app/navigation'
-  import { page } from '$app/state'
-  import FigureCanvas from '$lib/shared/FigureCanvas.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
+  import { generatorState } from '$shared/generatorState.svelte'
   import HelpTip from '$lib/shared/HelpTip.svelte'
   import MathInput from '$lib/shared/MathInput.svelte'
-  import Presets from '$lib/shared/Presets.svelte'
   import Section from '$lib/shared/Section.svelte'
-  import { createHistory } from '$lib/shared/history.svelte.js'
   import LineOptions from '$lib/shapes/LineOptions.svelte'
   import PartLabel from '$lib/shapes/PartLabel.svelte'
-  import { ROUND_NAMES, UNITS, pretty, roundTo, type Offset } from '$lib/shapes/parts.js'
+  import { ROUND_NAMES, UNITS, pretty, roundTo, type Offset, type RawSettings } from '$lib/shapes/parts.js'
   import ShapeFigure from '$lib/shapes/ShapeFigure.svelte'
   import type { Family } from './family.js'
   import { isAngle, kindOf, type Corner, type KindId, type Measure, type Side } from './kinds.js'
@@ -31,15 +28,15 @@
   let { family, title }: { family: Family; title: string } = $props()
   // A generator's family never changes while its page is open.
   // svelte-ignore state_referenced_locally
-  const { id, DEFAULT_SETTINGS, cleanSettings, sameFigure, settingsFromParams, settingsToQuery, switchKind, presetStore } = family
+  const { id, DEFAULT_SETTINGS, cleanSettings, settingsFromParams, settingsToQuery, switchKind } = family
 
-  let settings = $state(settingsFromParams(page.url.searchParams))
-  const clean = $derived(cleanSettings(settings))
-  const query = $derived(settingsToQuery(clean))
+  const gen = generatorState({ tidy: (s) => cleanSettings(s as RawSettings), fromParams: settingsFromParams, toQuery: settingsToQuery, keyOf: settingsToQuery }, id)
+  const s = gen.s
+  const clean = $derived(gen.snapshot())
   const read = $derived(readQuadrilateral(clean))
   const kind = $derived(kindOf(clean.kind))
 
-  // The last kind and measures that made a quadrilateral, drawn with the current settings.
+  // The last kind and measures that made a quadrilateral, drawn with the current s.
   type Measures = Pick<Settings, 'kind' | Measure>
   const measuresOf = (s: Settings) => Object.fromEntries(['kind', ...MEASURES].map((k) => [k, s[k as keyof Settings]])) as Measures
   type Good = QuadrilateralRead & { shape: Shape; measures: Measures }
@@ -49,24 +46,7 @@
     if (read.shape) lastGood = { ...read, measures: measuresOf(clean) } as Good
     return lastGood
   })
-  const figure = $derived(buildQuadrilateral({ ...clean, ...good.measures }, good.shape, good.given))
-
-  // The router can't replace the address until the page has hydrated, which
-  // matters when a link arrives written differently from how we'd write it.
-  let routerReady = $state(false)
-  afterNavigate(() => (routerReady = true))
-  $effect(() => {
-    const url = query ? `${page.url.pathname}?${query}` : page.url.pathname
-    if (routerReady && url !== `${location.pathname}${location.search}`) replaceState(url, page.state)
-  })
-
-  const history = createHistory({
-    read: () => $state.snapshot(clean),
-    write: (snap) => (settings = snap),
-    keyOf: settingsToQuery,
-    tidy: cleanSettings,
-    storageKey: `mathfigures.${id}.history`,
-  })
+  const drawing = $derived(buildQuadrilateral({ ...clean, ...good.measures }, good.shape, good.given))
 
   const name = (v: Corner) => clean[`name${v}` as const].trim() || v
   const sideName = (s: Side) => `${name(s[0] as Corner)}${name(s[1] as Corner)}`
@@ -95,18 +75,13 @@
   const fieldProblem = $derived(MEASURES.map((k) => read.problems[k]).find(Boolean) ?? null)
 
   function chooseKind(event: Event & { currentTarget: HTMLSelectElement }) {
-    settings = switchKind(clean, event.currentTarget.value as KindId)
+    gen.apply(switchKind(clean, event.currentTarget.value as KindId))
   }
 
   function moveLabel(part: string, offset: Offset) {
-    const moved = readMoved(settings.moved)
+    const moved = readMoved(s.moved)
     moved[part] = offset
-    settings.moved = writeMoved(moved)
-  }
-
-  function applyPreset(preset: Settings) {
-    pickedOther = false
-    settings = cleanSettings($state.snapshot(preset))
+    s.moved = writeMoved(moved)
   }
 
   // "Other…" stays picked while its box is still empty.
@@ -115,8 +90,10 @@
   function chooseUnit(event: Event & { currentTarget: HTMLSelectElement }) {
     const v = event.currentTarget.value
     pickedOther = v === 'other'
-    settings.unit = pickedOther ? '' : v
+    s.unit = pickedOther ? '' : v
   }
+  // A preset brings its own unit, so "Other…" is unpicked first.
+  const page = { ...gen, apply: (preset: Settings) => ((pickedOther = false), gen.apply(preset)) }
 
   // A height that lands on a corner is a side already, with no extra line to draw.
   const heightIsSide = (h: 'hD' | 'hC') => {
@@ -149,7 +126,7 @@
 {#snippet measureRow(k: Corner | Side)}
   <div class="row">
     {#if isAngle(k)}
-      <input class="vname" type="text" maxlength="4" aria-label="Name of corner {k}" placeholder={k} bind:value={settings[`name${k}` as const]} />
+      <input class="vname" type="text" maxlength="4" aria-label="Name of corner {k}" placeholder={k} bind:value={s[`name${k}` as const]} />
       <span class="sym" aria-hidden="true">∠</span>
     {:else}
       <span class="sname">{sideName(k as Side)}</span>
@@ -157,7 +134,7 @@
     {#if role(k) === 'given'}
       <MathInput
         id="m-{k}" aria-label={isAngle(k) ? `Angle ${name(k)} in degrees` : `Length of ${sideName(k as Side)}`}
-        aria-invalid={!!read.problems[k] || read.field === k} bind:value={settings[k]}
+        aria-invalid={!!read.problems[k] || read.field === k} bind:value={s[k]}
       />
     {:else}
       <span class="fixed" class:solved={role(k) === 'solved'} title={role(k) === 'equal' ? `The same as ${sideName(kind.equal![k as Side]!)}` : 'Worked out from the others'}>
@@ -168,30 +145,23 @@
     {#if isAngle(k)}
       <PartLabel
         name={partName(k)} id="l-{k}" given={role(k) === 'given'} measure={measureText(k)} note={measureNote(k)} markKind="arcs"
-        bind:mode={settings[`${k}Label` as const]} bind:text={settings[`${k}Text` as const]} bind:marks={settings[`${k}Arcs` as const]}
+        bind:mode={s[`${k}Label` as const]} bind:text={s[`${k}Text` as const]} bind:marks={s[`${k}Arcs` as const]}
       />
     {:else}
       <PartLabel
         name={partName(k)} id="l-{k}" given={role(k) === 'given'} measure={measureText(k)} note={measureNote(k)} markKind="ticks"
-        bind:mode={settings[`${k}Label` as const]} bind:text={settings[`${k}Text` as const]}
-        bind:marks={settings[`${k as Side}Ticks` as const]} bind:arrows={settings[`${k as Side}Arrows` as const]}
+        bind:mode={s[`${k}Label` as const]} bind:text={s[`${k}Text` as const]}
+        bind:marks={s[`${k as Side}Ticks` as const]} bind:arrows={s[`${k as Side}Arrows` as const]}
       />
     {/if}
   </div>
 {/snippet}
 
-<div class="page no-print">
-  <h1 class="visually-hidden">{title}</h1>
-  <div class="layout">
-    <div class="controls">
-      <section class="card">
-        <h2 class="card-head">Presets</h2>
-        <Presets store={presetStore} same={sameFigure} settings={clean} onapply={applyPreset} />
-      </section>
-
-      <section class="card measures">
+<GeneratorPage name={title} {filename} gen={page} {svg} bind:labelSize={s.labelSize} printWidth={6}>
+  {#snippet inputs()}
+      <section class="measures">
         <div class="head-row">
-          <h2 class="card-head flush">Measures</h2>
+          <h2 class="card-head">Measures</h2>
           <HelpTip id="measure-tip" label="How to give the measures">
             {family.kinds.length > 1 ? 'Pick a kind, then fill in its measures' : 'Fill in the measures'}; the rest are worked
             out and shown faintly. Type sqrt for √, / for a fraction and pi for π. Rename a corner in the box before its angle.
@@ -221,7 +191,7 @@
           <h3 class="sub">Height</h3>
           <div class="row">
             <span class="sname">h</span>
-            <MathInput id="m-h" aria-label="Height between the bases" aria-invalid={!!read.problems.h || read.field === 'h'} bind:value={settings.h} />
+            <MathInput id="m-h" aria-label="Height between the bases" aria-invalid={!!read.problems.h || read.field === 'h'} bind:value={s.h} />
             <span class="suffix unit" aria-hidden="true">{clean.unit.trim()}</span>
           </div>
           <p class="hint">Between the bases, drawn as the height from {name('D')} under Heights.</p>
@@ -230,15 +200,16 @@
         {#if fieldProblem}<p class="help problem">{fieldProblem}</p>
         {:else if read.problem}<p class="help problem">{read.problem}</p>{/if}
       </section>
+  {/snippet}
 
-      <section class="card sections">
+  {#snippet settings()}
         {#if family.heights !== false}
           <Section title="Heights" icon={MoveDown} summary={heightsSummary}>
             {#each HEIGHTS as h}
               {@const v = h[1] as Corner}
               <div class="line-part">
                 <label class="check">
-                  <input type="checkbox" bind:checked={settings[h]} />
+                  <input type="checkbox" bind:checked={s[h]} />
                   <span>Height from {name(v)} to {sideName('AB')}</span>
                 </label>
                 {#if clean[h]}
@@ -247,11 +218,11 @@
                     {#if side}<p class="hint note">This height is side {sideName(side.side)}, since ∠{name(side.corner)} is 90°, so there's no extra line to draw.</p>{/if}
                     <LineOptions
                       id={h} name="the height from {name(v)}"
-                      bind:style={settings[`${h}Style` as const]} bind:mode={settings[`${h}Label` as const]} bind:text={settings[`${h}Text` as const]}
+                      bind:style={s[`${h}Style` as const]} bind:mode={s[`${h}Label` as const]} bind:text={s[`${h}Text` as const]}
                     />
                     <label class="field">
                       <span>Name where it lands <span class="hint">optional</span></span>
-                      <input type="text" maxlength="4" placeholder={h === 'hD' ? 'E' : 'F'} bind:value={settings[`${h}Foot` as const]} />
+                      <input type="text" maxlength="4" placeholder={h === 'hD' ? 'E' : 'F'} bind:value={s[`${h}Foot` as const]} />
                     </label>
                   </div>
                 {/if}
@@ -265,14 +236,14 @@
             {@const ends = `${name(d[1] as Corner)}${name(d[2] as Corner)}`}
             <div class="line-part">
               <label class="check">
-                <input type="checkbox" bind:checked={settings[d]} />
+                <input type="checkbox" bind:checked={s[d]} />
                 <span>Diagonal {ends}</span>
               </label>
               {#if clean[d]}
                 <div class="line-opts">
                   <LineOptions
                     id={d} name="diagonal {ends}" placeholder={d === 'dAC' ? 'p' : 'q'}
-                    bind:style={settings[`${d}Style` as const]} bind:mode={settings[`${d}Label` as const]} bind:text={settings[`${d}Text` as const]}
+                    bind:style={s[`${d}Style` as const]} bind:mode={s[`${d}Label` as const]} bind:text={s[`${d}Text` as const]}
                   />
                 </div>
               {/if}
@@ -281,7 +252,7 @@
           {#if clean.dAC && clean.dBD}
             <label class="field cross">
               <span>Name where they cross <span class="hint">optional</span></span>
-              <input type="text" maxlength="4" placeholder="E" bind:value={settings.cross} />
+              <input type="text" maxlength="4" placeholder="E" bind:value={s.cross} />
             </label>
           {/if}
         </Section>
@@ -298,7 +269,7 @@
             </label>
             <label class="field">
               Round to
-              <select bind:value={settings.round}>
+              <select bind:value={s.round}>
                 <option value={0}>Whole numbers</option>
                 <option value={1}>Tenths</option>
                 <option value={2}>Hundredths</option>
@@ -308,77 +279,48 @@
           {#if otherUnit}
             <label class="field">
               Unit name
-              <input type="text" maxlength="12" placeholder="km" bind:value={settings.unit} />
+              <input type="text" maxlength="12" placeholder="km" bind:value={s.unit} />
             </label>
           {/if}
           <label class="check">
-            <input type="checkbox" bind:checked={settings.square} />
+            <input type="checkbox" bind:checked={s.square} />
             <span>Right-angle squares <span class="hint">at 90° angles, where heights meet a side, and where diagonals cross at 90°</span></span>
           </label>
           <div class="reset-row">
             <p class="hint">Drag any label on the figure to move it.</p>
-            <button class="btn-ghost small" disabled={!clean.moved} onclick={() => (settings.moved = '')}>Reset label positions</button>
+            <button class="btn-ghost small" disabled={!clean.moved} onclick={() => (s.moved = '')}>Reset label positions</button>
           </div>
         </Section>
 
         <Section title="Position" icon={RotateCw} summary={positionSummary}>
           <label class="field">
             Side at the bottom
-            <select bind:value={settings.base}>
+            <select bind:value={s.base}>
               <option value="">{clean.kind === 'kite' ? 'None (standing upright)' : `${sideName('AB')}, as it stands`}</option>
               {#each SIDES as s}<option value={s}>{sideName(s)}</option>{/each}
             </select>
           </label>
           <label class="check">
-            <input type="checkbox" bind:checked={settings.flip} />
+            <input type="checkbox" bind:checked={s.flip} />
             <span>Flip <span class="hint">mirror left to right</span></span>
           </label>
           <div class="field">
             <label for="rotate">Turn <span class="hint">{clean.rotate}°</span></label>
             <div class="turn">
-              <input id="rotate" type="range" min="-180" max="180" step="1" bind:value={settings.rotate} />
-              <button class="btn-ghost small" disabled={!clean.rotate} onclick={() => (settings.rotate = 0)}>Straighten</button>
+              <input id="rotate" type="range" min="-180" max="180" step="1" bind:value={s.rotate} />
+              <button class="btn-ghost small" disabled={!clean.rotate} onclick={() => (s.rotate = 0)}>Straighten</button>
             </div>
           </div>
         </Section>
-      </section>
-    </div>
+  {/snippet}
 
-    <div class="preview">
-      <FigureCanvas {svg} {filename} {history} bind:labelSize={settings.labelSize}>
-        <ShapeFigure {figure} label={kind.name} bind:svg onmove={moveLabel} />
-      </FigureCanvas>
-    </div>
-  </div>
-</div>
-
-<!-- What actually prints: just the quadrilateral. -->
-<div class="print-sheet">
-  <ShapeFigure {figure} label={kind.name} />
-</div>
+  {#snippet figure()}
+    <ShapeFigure figure={drawing} label={kind.name} bind:svg onmove={moveLabel} />
+  {/snippet}
+</GeneratorPage>
 
 <style>
-  .page { padding: 1.25rem 1.25rem 1rem; }
-
-  .layout { display: grid; grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
-  @media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } }
-
-  .controls { display: flex; flex-direction: column; gap: 1rem; }
-  .controls > :global(*) { flex-shrink: 0; }
-
-  @media (min-width: 861px) and (min-height: 560px) {
-    .page { height: calc(100dvh - var(--topbar-h)); display: flex; flex-direction: column; }
-    .layout { flex: 1; min-height: 0; grid-template-rows: minmax(0, 1fr); align-items: stretch; }
-    .controls {
-      min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
-      margin: 0 -0.75rem -1rem; padding: 0 0.75rem 1.25rem;
-    }
-    .preview { display: flex; flex-direction: column; min-height: 0; }
-  }
-  .card-head { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 1rem 1.1rem 0; }
-  .card-head + :global(.presets) { padding-top: 0.6rem; }
-  .card-head.flush { padding: 0; }
-  .sections { overflow: hidden; }
+  .card-head { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 
   .measures { padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.45rem; }
   .head-row { display: flex; align-items: center; justify-content: space-between; }
@@ -417,11 +359,4 @@
   .small { padding: 0.45rem 0.8rem; font-size: 0.85rem; border-radius: 10px; white-space: nowrap; }
   .turn { display: flex; align-items: center; gap: 0.6rem; }
   .turn input { flex: 1; accent-color: var(--blue); }
-
-  .print-sheet { display: none; }
-  @media print {
-    @page { size: letter portrait; margin: 0.5in; }
-    .print-sheet { display: block; width: 6in; break-inside: avoid; }
-    .print-sheet :global(svg) { width: 100%; height: auto; }
-  }
 </style>

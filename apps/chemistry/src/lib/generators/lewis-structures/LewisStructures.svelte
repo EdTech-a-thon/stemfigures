@@ -4,7 +4,7 @@
   // from it, or change it into a wrong one for a "find the mistake" question.
   import { tick } from 'svelte'
   import { Atom, Eye, KeyRound, Minus, PencilLine, Plus, RotateCcw, SquareDashed, Type } from '@lucide/svelte'
-  import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import HelpTip from '$lib/shared/HelpTip.svelte'
   import LabelField from '$shared/LabelField.svelte'
   import Modal from '$shared/Modal.svelte'
@@ -179,7 +179,7 @@
   </div>
 {/snippet}
 
-<GeneratorPage name="Lewis Structures" filename="lewis-structure" {gen} {svg}>
+<GeneratorPage name="Lewis Structures" filename="lewis-structure" settingsWidth={27} {gen} {svg}>
   {#snippet settings()}
     <Section title="Structure" summary={structureSummary} icon={Atom} open>
       <label class="field">

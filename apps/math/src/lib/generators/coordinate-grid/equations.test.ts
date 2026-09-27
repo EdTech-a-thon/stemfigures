@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { ROW_DEFAULTS, clipLine, curveRuns, parseEquation, readEquations, rowFromParam, rowToParam, splitNames } from './equations.js'
+import { ROW_DEFAULTS, clipLine, curveRuns, parseEquation, readEquations, rowFromParam, rowToParam, splitLabels } from './equations.js'
 import { DEFAULT_SETTINGS, cleanSettings, settingsFromParams, settingsToQuery } from './settings.js'
 
 const line = (text: string) => {
@@ -312,19 +312,20 @@ describe('domains', () => {
   })
 })
 
-describe('point names', () => {
+describe('point labels', () => {
   test.each([
     ['A(1, 2), B(3, 4)', [{ x: 1, y: 2, name: 'A' }, { x: 3, y: 4, name: 'B' }]],
     ['A(1, 2), (3, 4)', [{ x: 1, y: 2, name: 'A' }, { x: 3, y: 4 }]],
     ["A'(1, 2), B''(3, 4)", [{ x: 1, y: 2, name: 'A′' }, { x: 3, y: 4, name: 'B″' }]],
     ['P (0, 1/2)', [{ x: 0, y: 0.5, name: 'P' }]],
     ['C(sqrt(4), pi)', [{ x: 2, y: Math.PI, name: 'C' }]],
+    ["A_1(1, 2), B_{12}'(3, 4)", [{ x: 1, y: 2, name: 'A₁' }, { x: 3, y: 4, name: 'B₁₂′' }]],
   ])('%s', (text, expected) => expect(parseEquation(text)!.points).toEqual(expected))
 
   test('unnamed points and equations are left alone', () => {
-    expect(splitNames('(1, 2), (3, 4)')).toBeNull()
-    expect(splitNames('y = f(x)')).toBeNull()
-    expect(splitNames('(sqrt(2), 1)')).toBeNull()
+    expect(splitLabels('(1, 2), (3, 4)')).toBeNull()
+    expect(splitLabels('y = f(x)')).toBeNull()
+    expect(splitLabels('(sqrt(2), 1)')).toBeNull()
   })
 
   test('a name off the grid says which point', () => {

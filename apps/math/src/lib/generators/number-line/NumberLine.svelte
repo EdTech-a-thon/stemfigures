@@ -8,6 +8,7 @@
 
   const g = $derived(buildLine(settings))
   const SANS = 'Arial, Helvetica, sans-serif'
+  const SERIF = "'Times New Roman', Times, serif"
 </script>
 
 <svg
@@ -17,7 +18,7 @@
   width={g.width}
   height={g.height}
   role="img"
-  aria-label={settings.equations.filter((e) => e.trim()).join('; ') || 'Number line'}
+  aria-label={settings.equations.map((r) => r.text.trim()).filter(Boolean).join('; ') || 'Number line'}
 >
   <defs>
     <!-- The line's arrows, one at each end. -->
@@ -36,15 +37,18 @@
     {#each g.ticks as t}<line x1={t.x} y1={t.y1} x2={t.x} y2={t.y2} />{/each}
   </g>
 
-  <g stroke={INK} stroke-width="6">
-    {#each g.segments as s}<line x1={s.x1} y1={g.axis.y} x2={s.x2} y2={g.axis.y} />{/each}
-  </g>
-  {#each g.arrows as d}<path {d} fill={INK} />{/each}
-  {#each g.crosses as cx}
-    <path d="M{cx - 7},{g.axis.y - 7} L{cx + 7},{g.axis.y + 7} M{cx - 7},{g.axis.y + 7} L{cx + 7},{g.axis.y - 7}" stroke={INK} stroke-width="3" stroke-linecap="round" />
-  {/each}
-  {#each g.endpoints as e}
-    <circle cx={e.x} cy={g.axis.y} r={g.r} fill={e.closed ? INK : '#fff'} stroke={INK} stroke-width="2.5" />
+  <!-- Each color's equation graphs and points, later colors over earlier ones. -->
+  {#each g.groups as group}
+    <g stroke={group.ink} stroke-width="6">
+      {#each group.segments as s}<line x1={s.x1} y1={g.axis.y} x2={s.x2} y2={g.axis.y} />{/each}
+    </g>
+    {#each group.arrows as d}<path {d} fill={group.ink} />{/each}
+    {#each group.crosses as cx}
+      <path d="M{cx - 7},{g.axis.y - 7} L{cx + 7},{g.axis.y + 7} M{cx - 7},{g.axis.y + 7} L{cx + 7},{g.axis.y - 7}" stroke={group.ink} stroke-width="3" stroke-linecap="round" />
+    {/each}
+    {#each group.endpoints as e}
+      <circle cx={e.x} cy={g.axis.y} r={g.r} fill={e.closed ? group.ink : '#fff'} stroke={group.ink} stroke-width="2.5" />
+    {/each}
   {/each}
 
   <g font-family={SANS} font-size={g.fs} font-weight="bold" fill={INK} text-anchor="middle">
@@ -62,6 +66,15 @@
     {/each}
   </g>
 
+  <!-- Point labels, as on the coordinate grid: the letter in italic serif, a value after it upright. -->
+  <g font-size={g.labelFs} font-weight="bold" text-anchor="middle" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
+    {#each g.labels as l}
+      <text x={l.x} y={l.y} fill={l.ink}
+        ><tspan font-family={SERIF} font-style="italic">{l.text}</tspan
+        >{#if l.coords}<tspan font-family={SANS} font-size={g.fs}>{l.coords}</tspan>{/if}</text
+      >
+    {/each}
+  </g>
 </svg>
 
 <style>

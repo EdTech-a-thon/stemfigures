@@ -1,16 +1,15 @@
 // A family of quadrilaterals: the kinds one generator draws (a Trapezoid
 // Generator's trapezoids, isosceles trapezoids and right trapezoids, say) and
 // the figure it opens with. From those it works out everything that generator
-// needs: its defaults, tidying, page addresses and presets.
+// needs: its defaults, tidying and page addresses.
 //
 // A page address carries the kind (when it isn't the one the generator opens
 // on) and any values that differ from that kind's defaults, so a
 // quadrilateral can be bookmarked or shared.
 
-import { createPresetStore } from '$lib/shared/presetStore.js'
 import { oneOf, queryAgainst, type RawSettings } from '$lib/shapes/parts.js'
 import { kindOf, type KindId } from './kinds.js'
-import { FIGURE_KEYS, HEIGHTS, KEPT_ON_SWITCH, plain, tidy, type Settings } from './settings.js'
+import { HEIGHTS, KEPT_ON_SWITCH, plain, tidy, type Settings } from './settings.js'
 
 export type FamilyDef = {
   /** Names the generator's saved presets and undo history: "trapezoid". */
@@ -54,12 +53,6 @@ export function createFamily(def: FamilyDef) {
       return next
     },
 
-    /** Do two settings draw the same figure? */
-    sameFigure(a: RawSettings, b: RawSettings): boolean {
-      const [ca, cb] = [cleanSettings(a), cleanSettings(b)]
-      return FIGURE_KEYS.every((k) => ca[k] === cb[k])
-    },
-
     settingsToQuery(s: Settings): string {
       const query = queryAgainst(defaultsFor(s.kind), s)
       return s.kind === openingKind ? query : [`kind=${s.kind}`, query].filter(Boolean).join('&')
@@ -70,10 +63,5 @@ export function createFamily(def: FamilyDef) {
       for (const key of Object.keys(s)) if (params.has(key)) s[key] = params.get(key)
       return cleanSettings(s)
     },
-
-    presetStore: createPresetStore(`mathfigures.${def.id}.presets`, (s): Settings => {
-      const c = cleanSettings(s)
-      return Object.fromEntries(FIGURE_KEYS.map((k) => [k, c[k]])) as Settings
-    }),
   }
 }

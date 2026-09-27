@@ -1,52 +1,69 @@
 <script lang="ts" generics="S extends object">
-  // The layout every generator shares: the generator's name and its settings
-  // groups down the left, saved presets under them, and the figure card
-  // filling the rest of the window. Phones stack them, figure first.
+  // The layout every generator shares: saved presets and the settings groups
+  // under them down the left, and the figure card filling the rest of the
+  // window. Phones stack them, figure first. `settingsWidth` is the settings
+  // column's width in rem on wide screens, so a generator with long settings
+  // can take more room from the figure, or give it back. `inputs`, when given,
+  // is a card of its own between the presets and the settings groups, for
+  // what the teacher types first (Math's equations). What prints is just the
+  // figure, `printWidth` inches wide, or fitted into `printWidth` by
+  // `printHeight` inches when a height is given.
   import type { Snippet } from 'svelte'
   import FigureCanvas from './FigureCanvas.svelte'
   import Presets from './Presets.svelte'
   import type { generatorState } from './generatorState.svelte'
+  import type { LabelSize } from './labelSize'
 
   interface Props {
     name: string
-    intro: string
     filename: string
     gen: ReturnType<typeof generatorState<S>>
-    svg: SVGSVGElement | undefined
+    /** the figure to export, when it isn't the first <svg> in the figure card */
+    svg?: SVGSVGElement
+    settingsWidth?: number
+    printWidth?: number
+    printHeight?: number
+    /** bound to the generator's label size setting, for the picker in the figure card */
+    labelSize?: LabelSize
+    inputs?: Snippet
     settings: Snippet
     figure: Snippet
   }
-  let { name, intro, filename, gen, svg, settings, figure }: Props = $props()
+  let {
+    name, filename, gen, svg, settingsWidth = 24, printWidth = 7.5, printHeight, labelSize = $bindable(), inputs, settings, figure,
+  }: Props = $props()
 </script>
 
-<div class="generator">
+<div
+  class="generator"
+  style:--settings-width="{settingsWidth}rem"
+  style:--print-width="{printWidth}in"
+  style:--print-height={printHeight ? `${printHeight}in` : 'auto'}
+>
   <div class="figure-side">
-    <FigureCanvas {svg} {filename} history={gen.history}>{@render figure()}</FigureCanvas>
+    <FigureCanvas {svg} {filename} history={gen.history} bind:labelSize>{@render figure()}</FigureCanvas>
   </div>
   <aside class="settings-side no-print">
-    <header>
-      <h1>{name}</h1>
-      <p>{intro}</p>
-    </header>
-    <div class="card">{@render settings()}</div>
+    <!-- The top bar shows the name; this keeps the page's heading for screen readers. -->
+    <h1 class="visually-hidden">{name}</h1>
     <div class="card">
       <Presets store={gen.presets} same={gen.same} settings={gen.snapshot()} onapply={gen.apply} />
     </div>
+    {#if inputs}<div class="card">{@render inputs()}</div>{/if}
+    <div class="card">{@render settings()}</div>
   </aside>
 </div>
 
 <style>
   .generator { display: flex; flex-direction: column; gap: 1rem; padding: 1rem; }
   .settings-side { display: flex; flex-direction: column; gap: 1rem; }
-  header h1 { font-size: 1.35rem; font-weight: 800; }
-  header p { margin: 0.3rem 0 0; color: var(--muted); font-size: 0.9rem; }
 
   /* Wide screens: settings on the left, scrolling on their own, and the
      figure card filling the window beside them. */
   @media (min-width: 861px) and (min-height: 560px) {
     .generator {
       display: grid;
-      grid-template-columns: 23rem minmax(0, 1fr);
+      grid-template-columns: var(--settings-width) minmax(0, 1fr);
       height: calc(100vh - var(--topbar-h));
       padding: 1.25rem;
       gap: 1.25rem;
@@ -55,4 +72,5 @@
     .figure-side { grid-column: 2; grid-row: 1; display: flex; min-height: 0; }
     .figure-side > :global(.canvas) { width: 100%; }
   }
+  @media print { .generator { padding: 0; } }
 </style>

@@ -3,7 +3,7 @@
   // get one atom's Bohr model. Nothing is checked, so a teacher can draw a
   // wrong one on purpose (CONTEXT.md "Bohr model").
   import { Atom, CircleDot, Dices, List, Palette, Type, WandSparkles } from '@lucide/svelte'
-  import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import LabelField from '$shared/LabelField.svelte'
   import Section from '$lib/shared/Section.svelte'
   import { generatorState } from '$shared/generatorState.svelte'
@@ -77,7 +77,7 @@
   </label>
 {/snippet}
 
-<GeneratorPage name="Bohr Model" filename="bohr-model" {gen} {svg}>
+<GeneratorPage name="Bohr Model" filename="bohr-model" settingsWidth={27} {gen} {svg}>
   {#snippet settings()}
     <Section title="Nucleus" summary={nucleusSummary} icon={Atom} open>
       <div class="numbers">

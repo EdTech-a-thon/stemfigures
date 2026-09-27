@@ -3,7 +3,7 @@
   // read the mass from.
   import { Scale, Type, Weight, ZoomIn } from '@lucide/svelte'
   import FigureTextSettings from '$lib/shared/FigureTextSettings.svelte'
-  import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import MagnifierSettings from '$lib/shared/MagnifierSettings.svelte'
   import ReadingField from '$lib/shared/ReadingField.svelte'
   import Section from '$lib/shared/Section.svelte'
@@ -52,6 +52,7 @@
 <GeneratorPage
   name="Mass Reading"
   filename="mass-reading"
+  settingsWidth={27}
   {gen}
   {svg}
 >

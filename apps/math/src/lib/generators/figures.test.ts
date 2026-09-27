@@ -3,6 +3,8 @@
 // `npx vitest run -u` after a change that is meant to move the drawing.
 
 import { describe, expect, test } from 'vitest'
+import { buildPlot } from './box-plot/boxplot.js'
+import * as box from './box-plot/settings.js'
 import { buildGraph } from './coordinate-grid/graph.js'
 import * as grid from './coordinate-grid/settings.js'
 import { buildLine } from './number-line/numberline.js'
@@ -65,6 +67,13 @@ const LINE = [
   'from=0&to=1000&step=1',
   `${eq('x<20', 'y>2 and x<3', '(1, 2)', 'x<y', 'x+')}`,
   'inequality=x%3E%3D2',
+  `${eq('x<2|color=red', 'x>=2|color=blue', 'x>6|color=red', '-5, 0|color=green|point=cross')}`,
+  `from=0&to=1&step=1%2F10&${eq('a_n=1/n|last=6')}`,
+  `from=0&to=10&${eq('u_n=2n+1|first=0|last=8|color=purple|values=hidden')}`,
+  `from=-3&to=3&${eq('A(-2.5), 1, C(1.25)', 'P(0.5)|point=cross|labels=coords|color=red', '-1.5|values=hidden')}`,
+  `${eq('a_n=a_{n-1}+3', 'a_n=2k', '1/n|first=4|last=2')}`,
+  'points=cross&eq=3&eq=x%3C1',
+  `from=0&to=10&${eq('1/3, 1/2, 2/3, Q_1(4.5)')}`,
   `labelSize=large&from=0&to=2&step=1%2F4&${eq('x>3/4')}`,
 ]
 
@@ -119,6 +128,22 @@ const QUADRILATERALS = {
   ],
 }
 
+const data = (...rows: string[]) => rows.map((r) => `data=${encodeURIComponent(r)}`).join('&')
+
+const BOX = [
+  '',
+  data('11, 14, 15, 18, 20, 21, 24, 27, 30, 35, 42'),
+  data('4, 7, 9, 12, 20'),
+  data('55, 60, 62, 70, 71, 75, 80|name=Period 1', '40, 58, 66, 69, 72, 90, 95|name=Period 2'),
+  `outliers=1&${data('1, 10, 11, 12, 13, 14, 15, 40')}`,
+  `minLabel=measure&q1Label=measure&medianLabel=measure&q3Label=text&q3Text=x&maxLabel=measure&${data('10, 11, 12, 13, 30')}`,
+  `title=Test%20scores&titleMode=text&axisTitle=Score&axisTitleMode=text&startCap=none&endCap=circle&${data('70, 75, 80, 85, 90')}`,
+  'titleMode=blank&axisTitleMode=blank',
+  `from=0&to=1&step=1%2F4&${data('0.1, 0.3, 0.5, 0.6, 0.9')}`,
+  `from=0&to=100&step=1&every=10&${data('12, 40, 55, 90')}`,
+  `from=abc&step=-1&${data('1, 2, x', '3, 400')}`,
+]
+
 const params = (q: string) => new URLSearchParams(q)
 
 describe('coordinate grid', () => {
@@ -133,6 +158,14 @@ describe('number line', () => {
     const s = line.settingsFromParams(params(q))
     const { rows } = line.readLine(s)
     expect({ query: line.settingsToQuery(s), rows, line: buildLine(s) }).toMatchSnapshot()
+  })
+})
+
+describe('box plot', () => {
+  test.each(BOX)('%s', (q) => {
+    const s = box.settingsFromParams(params(q))
+    const { rows, problems } = box.readPlot(s)
+    expect({ query: box.settingsToQuery(s), rows, problems, plot: buildPlot(s) }).toMatchSnapshot()
   })
 })
 

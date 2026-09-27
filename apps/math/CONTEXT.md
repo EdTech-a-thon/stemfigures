@@ -77,7 +77,7 @@ A figure of one horizontal axis with evenly spaced ticks, for placing numbers an
 _Avoid_: Line graph, ruler
 
 **Equation**:
-What the teacher types to graph, one per row. On a number line it's an inequality or equation in one letter, such as −2 < x ≤ 5, x < −1 or x ≥ 3, or x = 2, or a list of points, each one number, such as 3 or −1, 2.5, π/2; every row is drawn over the same line, and a number line with no equation is blank. On a coordinate grid it's a line or curve that can be written as y = …, such as y = 2x + 1, 2x + 3y = 6, x = 4 or y = x² − 4, or a list of points, such as (1, 2), (3, 4). Points aren't equations, but they're typed in the same rows and called the same thing. (Both generators' rows are `eq` in the page address; the number line's reading code still calls an equation `inequality`, and older number line links with `inequality=` still open.)
+What the teacher types to graph, one per row. On a number line it's an inequality or equation in one letter, such as −2 < x ≤ 5, x < −1 or x ≥ 3, or x = 2, or a list of points, each one number, such as 3 or −1, 2.5, π/2, or a sequence; every row is drawn over the same line, and a number line with no equation is blank. On a coordinate grid it's a line or curve that can be written as y = …, such as y = 2x + 1, 2x + 3y = 6, x = 4 or y = x² − 4, or a list of points, such as (1, 2), (3, 4). Points aren't equations, but they're typed in the same rows and called the same thing. (Both generators' rows are `eq` in the page address; the number line's reading code still calls an equation `inequality`, and older number line links with `inequality=` still open.)
 _Avoid_: Solution set, interval, expression
 
 **Tick**:
@@ -93,12 +93,20 @@ A straight line or curve drawn across a coordinate grid from an equation, with a
 _Avoid_: Plot, function, curve
 
 **Row style**:
-How one equation is drawn, set from the button before it, which shows a miniature of how the row is drawn: a color, a line style (solid, dashed or dotted) and which ends have arrows (both, neither, left or right; for an up-and-down line, left means the bottom), whether endpoints show, and whether asymptotes show. Points take the color and a point mark: a dot, or a cross as French classrooms use.
+How one equation is drawn, set from the button before it, which shows a miniature of how the row is drawn: a color, a line style (solid, dashed or dotted) and which ends have arrows (both, neither, left or right; for an up-and-down line, left means the bottom), whether endpoints show, and whether asymptotes show. Points take the color and a point mark: a dot, or a cross as French classrooms use. On a number line a row's style is its color, whether values are written, and for points and sequences a point mark and how point labels show; a number line's thick line, arrows and circles carry meaning, so they can't be changed. Every row starts black. Values are written above the line for endpoints and unlabeled points that don't sit on a numbered tick, the way their own row was typed (0.35 as 0.35, 3/8 as a fraction), unless the row style turns them off (for an estimate-this-point question). The color goes on the row's thick line, arrows, circles and points, never on the line, ticks or numbers. Rows of the same color join into one equation graph, as they always have; rows of different colors are drawn separately, each color over the colors that came before it in the list.
 _Avoid_: Format, appearance, theme
 
 **Point mark**:
-How points are drawn: a dot or a cross. On a coordinate grid it's part of each points row's row style; on a number line it's one setting for every point on the line. It never changes an endpoint, whose open or closed circle has a meaning.
+How points are drawn: a dot or a cross. It's part of each points row's row style, on both the coordinate grid and the number line. It never changes an endpoint, whose open or closed circle has a meaning.
 _Avoid_: Marker, symbol, dot style
+
+**Sequence**:
+A number line row typed as a rule in n, such as aₙ = 1/n, uₙ = 1/n or just 1/n, shown for n from one whole number to another (1 to 5 unless the teacher changes it). Its terms are drawn as points, so 1/n from 1 to 5 marks 1, 1/2, 1/3, 1/4 and 1/5. Terms past the end of the line are left off with a note, not treated as a mistake. Rules built from earlier terms, such as aₙ = aₙ₋₁ + 3, aren't read yet.
+_Avoid_: Series, pattern, list
+
+**Term**:
+One number a sequence makes, drawn as a point on the line.
+_Avoid_: Element, value
 
 **Endpoint**:
 Where an equation's graph or a graphed line stops at a number, drawn as an open circle (not included) or a closed circle (included). On a coordinate grid, a graphed line's endpoints are at the ends of its domain, and a row style can hide them so the line simply stops.
@@ -116,9 +124,9 @@ _Avoid_: Gap, removable discontinuity (fine in teaching, not as the name), missi
 A line that a graphed line approaches but never reaches: vertical, horizontal or slant. Where a graphed line meets a vertical asymptote, the curve breaks and each side runs to the grid's edge with an arrowhead. Asymptotes are found for the whole row and, when its row style shows them, drawn as dotted lines in the row's color, without their equations; they're hidden unless the teacher shows them.
 _Avoid_: Discontinuity, break, limit line
 
-**Point name**:
-The letter written beside a point on a coordinate grid, typed in textbook notation such as A(1, 2), primes allowed (A′). A points row shows just the names, or the names with their coordinates.
-_Avoid_: Point label, vertex name (that's a triangle's), tag
+**Point label**:
+The letter written at a point, typed before it in textbook notation: A(1, 2) on a coordinate grid, P(0.35) on a number line. It's one letter, with primes or a subscript allowed (A′, A₁), and it belongs to its point, so it stays when the point's numbers change and goes when the point is deleted. A points row's style shows just the labels or the labels with their coordinates or values, A or A(0.35). On a number line a labeled point's value is never written, since it would give the answer away; endpoints and sequence terms aren't labeled.
+_Avoid_: Point name, vertex name (that's a triangle's), letter, tag
 
 ### Shapes
 
@@ -127,7 +135,7 @@ A figure of straight sides meeting at named vertices, drawn to scale from its me
 _Avoid_: Polygon (a regular polygon will be its own figure), diagram, drawing
 
 **Part**:
-Any vertex, side, angle or extra line of a shape: something that can carry a label or a marking.
+Any vertex, side, angle or extra line of a shape, or any of a box plot's five-number summary: something that can carry a label or a marking.
 _Avoid_: Element, component, piece
 
 **Vertex name**:
@@ -139,7 +147,7 @@ A side's length or an angle's size, in degrees. A **given** measure is one the t
 _Avoid_: Value, dimension, size
 
 **Part label**:
-What's written at a part: nothing, its measure (such as 12 or 24°, with the figure's unit on lengths), or text the teacher types, such as x or 2y + 1. It replaces the text boxes teachers otherwise lay over a drawing.
+What's written at a part: nothing, its measure (such as 12 or 24°, with the figure's unit on lengths, or a box plot's Q1 value), or text the teacher types, such as x or 2y + 1. It replaces the text boxes teachers otherwise lay over a drawing.
 _Avoid_: Text box, caption, annotation, label (alone; axes have their own labels)
 
 **Unit**:
@@ -185,3 +193,37 @@ _Avoid_: Type, shape (alone), category
 **Trapezoid**:
 A quadrilateral with exactly one pair of parallel sides, its **bases**; the other two are its **legs**. A right trapezoid has a leg at right angles to both bases.
 _Avoid_: Trapezium (what UK teachers call it; fine as a search word)
+
+### Data displays
+
+**Data set**:
+The numbers a teacher types in one row to be displayed, such as 12, 15, 15, 18, 22, 30, with an optional name like "Class A". Several rows are drawn over the same axis to compare them.
+_Avoid_: Data, list, values, series
+
+**Box Plot**:
+A figure of one or more data sets, each drawn as a box from Q1 to Q3 split at the median, with whiskers out to the ends, over one shared number line. Its generator is the Box Plot Generator.
+_Avoid_: Box and whisker plot, box chart (fine as search words, not as the name)
+
+**Five-number summary**:
+The minimum, Q1, median, Q3 and maximum of a data set. Quartiles are the medians of the lower and upper halves, leaving out the median when the count is odd, as the TI-84 works them out. A teacher can type the five numbers instead of a data set. None is written on the figure unless the teacher gives it a part label, so the figure doesn't give answers away.
+_Avoid_: Summary statistics, five statistics
+
+**Outlier**:
+A value more than 1.5 times the box's width beyond either end of the box, drawn as its own point with the whisker stopping at the last value that isn't one. Outliers are only drawn when the teacher turns them on; otherwise whiskers reach the minimum and maximum.
+_Avoid_: Extreme value, anomaly
+
+**Histogram**:
+A figure of touching bars over a numbered axis, one bar per bin, whose heights show how many values fall in each bin. Its generator is the Histogram Generator.
+_Avoid_: Bar graph (bars there are separate categories), column chart
+
+**Bin**:
+One stretch of the histogram's axis, such as 10 to 20, numbered at its edges. A value on an edge belongs to the bin that starts there. Bins come from a data set with a start and bin width, or are typed with their counts as a frequency table.
+_Avoid_: Interval, class, bucket, range (a range is an axis's From, To and Step)
+
+**Frequency**:
+How many values fall in a bin: the height of its bar, read off the histogram's vertical axis.
+_Avoid_: Count (fine in speech), tally
+
+**Line plot**:
+A number line with a mark stacked above each value of a data set, as grades 3–6 use the name. No generator makes one yet.
+_Avoid_: Dot plot is the same figure; line graph (points joined across a coordinate grid) is a different one

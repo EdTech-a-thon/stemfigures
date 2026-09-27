@@ -4,7 +4,7 @@
   // find the object's volume from.
   import { ArrowUpRight, Circle, Dices, FlaskConical, Ruler, Type, ZoomIn } from '@lucide/svelte'
   import FigureTextSettings from '$lib/shared/FigureTextSettings.svelte'
-  import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import MagnifierSettings from '$lib/shared/MagnifierSettings.svelte'
   import ReadingField from '$lib/shared/ReadingField.svelte'
   import Section from '$lib/shared/Section.svelte'
@@ -47,7 +47,7 @@
   }
 </script>
 
-<GeneratorPage name="Volume by Displacement" filename="volume-by-displacement" {gen} {svg}>
+<GeneratorPage name="Volume by Displacement" filename="volume-by-displacement" settingsWidth={27} {gen} {svg}>
   {#snippet settings()}
     <Section title="Graduated cylinder" summary="{s.size} mL" icon={FlaskConical} open>
       <div class="chips" role="radiogroup" aria-label="Graduated cylinder size">

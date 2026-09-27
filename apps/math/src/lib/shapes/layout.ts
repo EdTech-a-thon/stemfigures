@@ -16,7 +16,7 @@
 // Labels add a prefix for what they name: "vB" for a vertex name, "fB" for
 // where the height from B lands, "x" for where the diagonals cross.
 
-import { LABEL_SCALE, type LabelSize } from '$lib/shared/labelSize.js'
+import { LABEL_SCALE, type LabelSize } from '$shared/labelSize'
 import { layoutMath, type MathBox } from '$lib/shared/mathSvg.js'
 import { readMoved, roundTo, type LabelMode, type LineLabelMode, type LineStyle, type Offset } from './parts.js'
 
