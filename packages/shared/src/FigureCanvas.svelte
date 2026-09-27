@@ -1,20 +1,25 @@
 <script lang="ts">
   // The card every generator shows its figure in: an icon toolbar for getting
   // the figure out (copy, download, link) and undo/redo, above the figure
-  // itself. `svg` is the rendered figure to export; `history` comes from
-  // createHistory. Status messages appear as a toast over the figure.
+  // itself. `svg` is the rendered figure to export (when it isn't given, the
+  // first <svg> inside the card is); `history` comes from createHistory.
+  // Status messages appear as a toast over the figure. Printing prints just
+  // the figure, the width of a letter page.
   import { Copy, FileDown, ImageDown, Redo2, Share, Undo2 } from '@lucide/svelte'
   import type { Snippet } from 'svelte'
   import { copyPng, downloadPng, downloadSvg } from './exporting'
   import type { createHistory } from './history.svelte'
 
   interface Props {
-    svg: SVGSVGElement | undefined
+    svg?: SVGSVGElement
     filename: string
     history: ReturnType<typeof createHistory>
     children: Snippet
   }
   let { svg, filename, history, children }: Props = $props()
+
+  let sheet = $state<HTMLElement>()
+  const figure = () => svg ?? sheet?.querySelector('svg') ?? undefined
 
   let status = $state('')
   let statusTimer: ReturnType<typeof setTimeout> | undefined
@@ -25,9 +30,10 @@
   }
 
   async function copyImage() {
-    if (!svg) return
+    const el = figure()
+    if (!el) return
     try {
-      await copyPng(svg)
+      await copyPng(el)
       flash('Image copied. Paste it into your document.')
     } catch {
       flash('Your browser blocked copying. Try downloading a PNG instead.')
@@ -46,18 +52,18 @@
 <svelte:window onkeydown={history.onkeydown} />
 
 <div class="card canvas">
-  <div class="toolbar" role="toolbar" aria-label="Figure actions">
+  <div class="toolbar no-print" role="toolbar" aria-label="Figure actions">
     <button class="icon-btn" aria-label="Copy image" data-tip="Copy image" onclick={copyImage}><Copy size={19} /></button>
-    <button class="icon-btn" aria-label="Download PNG" data-tip="Download PNG" onclick={() => svg && downloadPng(svg, `${filename}.png`)}><ImageDown size={19} /></button>
-    <button class="icon-btn" aria-label="Download SVG" data-tip="Download SVG" onclick={() => svg && downloadSvg(svg, `${filename}.svg`)}><FileDown size={19} /></button>
+    <button class="icon-btn" aria-label="Download PNG" data-tip="Download PNG" onclick={() => figure() && downloadPng(figure()!, `${filename}.png`)}><ImageDown size={19} /></button>
+    <button class="icon-btn" aria-label="Download SVG" data-tip="Download SVG" onclick={() => figure() && downloadSvg(figure()!, `${filename}.svg`)}><FileDown size={19} /></button>
     <button class="icon-btn" aria-label="Share link" data-tip="Share link" onclick={shareLink}><Share size={19} /></button>
     <span class="divider"></span>
     <button class="icon-btn" aria-label="Undo" data-tip="Undo" disabled={!history.canUndo} onclick={history.undo}><Undo2 size={19} /></button>
     <button class="icon-btn" aria-label="Redo" data-tip="Redo" disabled={!history.canRedo} onclick={history.redo}><Redo2 size={19} /></button>
   </div>
-  <div class="sheet">
+  <div class="sheet" bind:this={sheet}>
     {@render children()}
-    <p class="status" class:shown={status} aria-live="polite">{status}</p>
+    <p class="status no-print" class:shown={status} aria-live="polite">{status}</p>
   </div>
 </div>
 
@@ -79,6 +85,9 @@
     opacity: 0; pointer-events: none; transition: opacity 0.15s, transform 0.15s;
   }
   .status.shown { opacity: 1; transform: translate(-50%, 0); }
+  /* A faint edge round a figure's white .paper background shows what will be
+     copied. It's page CSS, so exported pictures and printouts don't have it. */
+  @media screen { .sheet :global(.paper) { stroke: var(--border); stroke-width: 1.5; } }
 
   /* Wide screens: the card fills the space beside the settings and the figure
      shrinks to fit it (see the generator's page layout). */
@@ -86,5 +95,12 @@
     .canvas { flex: 1; min-height: 0; }
     .sheet { flex: 1; min-height: 0; }
     .sheet :global(svg) { width: 100%; height: 100%; max-height: none; }
+  }
+
+  @media print {
+    @page { size: letter portrait; margin: 0.5in; }
+    .canvas { border: none; box-shadow: none; }
+    .sheet { display: block; width: 7.5in; padding: 0; break-inside: avoid; }
+    .sheet :global(svg) { width: 100%; height: auto; max-height: none; }
   }
 </style>

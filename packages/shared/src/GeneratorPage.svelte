@@ -13,7 +13,8 @@
     name: string
     filename: string
     gen: ReturnType<typeof generatorState<S>>
-    svg: SVGSVGElement | undefined
+    /** the figure to export, when it isn't the first <svg> in the figure card */
+    svg?: SVGSVGElement
     settingsWidth?: number
     settings: Snippet
     figure: Snippet
@@ -53,4 +54,5 @@
     .figure-side { grid-column: 2; grid-row: 1; display: flex; min-height: 0; }
     .figure-side > :global(.canvas) { width: 100%; }
   }
+  @media print { .generator { padding: 0; } }
 </style>

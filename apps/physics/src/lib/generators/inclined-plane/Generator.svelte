@@ -4,7 +4,8 @@
   import { Box, MoveUpRight, Ruler, Triangle } from '@lucide/svelte'
   import Choice from '$lib/shared/Choice.svelte'
   import { createGenerator } from '$lib/shared/generator.svelte'
-  import GeneratorLayout from '$lib/shared/GeneratorLayout.svelte'
+  import FigureOptions from '$lib/shared/FigureOptions.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import LabelField from '$lib/shared/LabelField.svelte'
   import type { Label } from '$lib/shared/label'
   import Section from '$lib/shared/Section.svelte'
@@ -12,7 +13,7 @@
   import { inclineSettings } from './settings'
 
   const gen = createGenerator(inclineSettings, 'inclined-plane')
-  const s = $derived(gen.clean)
+  const s = $derived(gen.snapshot())
 
   const shown = (l: Label) => (l.mode === 'text' ? `“${l.text}”` : l.mode === 'blank' ? 'blank' : 'no label')
   const objectSummary = $derived(`${s.object} · ${shown(s.objectLabel)} · ${Math.round(s.objectSize * 100)}% size`)
@@ -41,24 +42,24 @@
   )
 </script>
 
-<GeneratorLayout title="Inclined Plane Generator" {gen} filename="inclined-plane">
-  {#snippet controls()}
+<GeneratorPage name="Inclined Plane Generator" filename="inclined-plane" {gen}>
+  {#snippet settings()}
     <Section title="Object" icon={Box} summary={objectSummary}>
       <div class="field">
-        <Choice name="Object" options={[['block', 'Block'], ['ball', 'Ball'], ['cart', 'Cart']]} bind:value={gen.settings.object} />
+        <Choice name="Object" options={[['block', 'Block'], ['ball', 'Ball'], ['cart', 'Cart']]} bind:value={gen.s.object} />
       </div>
-      <div class="field">Label <LabelField name="Object label" bind:label={gen.settings.objectLabel} /></div>
+      <div class="field">Label <LabelField name="Object label" bind:label={gen.s.objectLabel} /></div>
       <label class="field">
         Size
         <span class="slider">
-          <input type="range" min="0.5" max="2" step="0.05" bind:value={gen.settings.objectSize} />
+          <input type="range" min="0.5" max="2" step="0.05" bind:value={gen.s.objectSize} />
           <output>{Math.round(s.objectSize * 100)}%</output>
         </span>
       </label>
       <label class="field">
         Where on the ramp
         <span class="slider">
-          <input type="range" min="0.2" max="0.85" step="0.01" bind:value={gen.settings.position} />
+          <input type="range" min="0.2" max="0.85" step="0.01" bind:value={gen.s.position} />
           <output>{s.position < 0.4 ? 'low' : s.position > 0.65 ? 'high' : 'middle'}</output>
         </span>
       </label>
@@ -68,14 +69,14 @@
       <label class="field">
         Angle
         <span class="slider">
-          <input type="range" min="5" max="60" bind:value={gen.settings.angle} />
+          <input type="range" min="5" max="60" bind:value={gen.s.angle} />
           <output>{s.angle}°</output>
         </span>
       </label>
-      <div class="field">Angle label <LabelField name="Angle label" bind:label={gen.settings.angleLabel} /></div>
+      <div class="field">Angle label <LabelField name="Angle label" bind:label={gen.s.angleLabel} /></div>
       <div class="field">
         Surface
-        <Choice name="Surface" options={[['smooth', 'Smooth'], ['rough', 'Rough']]} bind:value={gen.settings.surface} />
+        <Choice name="Surface" options={[['smooth', 'Smooth'], ['rough', 'Rough']]} bind:value={gen.s.surface} />
       </div>
     </Section>
 
@@ -88,31 +89,32 @@
               <Choice
                 name={v.name}
                 options={[['none', 'None'], ['up', 'Up the ramp'], ['down', 'Down the ramp']]}
-                bind:value={gen.settings[v.key]}
+                bind:value={gen.s[v.key]}
               />
             </div>
           {:else}
-            <label class="check"><input type="checkbox" bind:checked={gen.settings[v.key]} /> {v.name}</label>
+            <label class="check"><input type="checkbox" bind:checked={gen.s[v.key]} /> {v.name}</label>
           {/if}
           {#if isOn(v.key)}
-            <div class="field"><LabelField name="{v.name} label" bind:label={gen.settings[v.label]} /></div>
+            <div class="field"><LabelField name="{v.name} label" bind:label={gen.s[v.label]} /></div>
           {/if}
         </div>
       {/each}
     </Section>
 
     <Section title="Marks" icon={Ruler} summary={marksSummary}>
-      <label class="check"><input type="checkbox" bind:checked={gen.settings.lengthMark} /> Length of the ramp</label>
-      {#if s.lengthMark}<div class="field"><LabelField name="Length label" bind:label={gen.settings.lengthLabel} /></div>{/if}
-      <label class="check"><input type="checkbox" bind:checked={gen.settings.heightMark} /> Height of the ramp</label>
-      {#if s.heightMark}<div class="field"><LabelField name="Height label" bind:label={gen.settings.heightLabel} /></div>{/if}
+      <label class="check"><input type="checkbox" bind:checked={gen.s.lengthMark} /> Length of the ramp</label>
+      {#if s.lengthMark}<div class="field"><LabelField name="Length label" bind:label={gen.s.lengthLabel} /></div>{/if}
+      <label class="check"><input type="checkbox" bind:checked={gen.s.heightMark} /> Height of the ramp</label>
+      {#if s.heightMark}<div class="field"><LabelField name="Height label" bind:label={gen.s.heightLabel} /></div>{/if}
     </Section>
+    <FigureOptions bind:mirror={gen.s.mirror} bind:color={gen.s.color} />
   {/snippet}
 
-  {#snippet figure(id)}
-    <Incline settings={s} {id} />
+  {#snippet figure()}
+    <Incline settings={s} id="f" />
   {/snippet}
-</GeneratorLayout>
+</GeneratorPage>
 
 <style>
   .vector + .vector { border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.25rem; }
