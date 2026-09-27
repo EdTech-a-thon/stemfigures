@@ -14,6 +14,8 @@ import { readQuadrilateral } from '$lib/shapes/quadrilateral/settings.js'
 import { family as kite } from './kite/family.js'
 import { family as parallelogram } from './parallelogram/family.js'
 import { family as rectangle } from './rectangle/family.js'
+import { buildPolygon } from './regular-polygon/layout.js'
+import * as polygon from './regular-polygon/settings.js'
 import { family as trapezoid } from './trapezoid/family.js'
 import { buildTriangle } from './triangle/layout.js'
 import * as triangle from './triangle/settings.js'
@@ -128,6 +130,17 @@ const QUADRILATERALS = {
   ],
 }
 
+const POLYGON = [
+  '',
+  'n=3&sideLabel=measure&angleLabel=measure&angleArcs=1&sideTicks=1',
+  'n=4&apothem=0&radii=1&centerName=O',
+  'n=5&radius=1&radiusLabel=text&radiusText=r&apothemLabel=measure&centerName=O&letters=1',
+  'n=8&sizeBy=apothem&size=6&radius=1&radiusLabel=measure&apothemLabel=measure&sideLabel=measure&unit=cm',
+  'n=12&sizeBy=radius&size=4sqrt(2)&dot=0&apothem=0&sideTicks=2&rotate=15',
+  'n=20&letters=1&labelSize=large&moved=apothem%3A4%2C-6',
+  'size=x',
+]
+
 const data = (...rows: string[]) => rows.map((r) => `data=${encodeURIComponent(r)}`).join('&')
 
 const BOX = [
@@ -175,6 +188,15 @@ describe('triangle', () => {
     const read = triangle.readTriangle(s)
     const figure = read.triangle ? buildTriangle(s, read.triangle, read.given) : null
     expect({ query: triangle.settingsToQuery(s), read, figure }).toMatchSnapshot()
+  })
+})
+
+describe('regular polygon', () => {
+  test.each(POLYGON)('%s', (q) => {
+    const s = polygon.settingsFromParams(params(q))
+    const read = polygon.readPolygon(s)
+    const figure = read.polygon ? buildPolygon(s, read.polygon) : null
+    expect({ query: polygon.settingsToQuery(s), read, figure }).toMatchSnapshot()
   })
 })
 

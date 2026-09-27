@@ -25,6 +25,9 @@ and `docs/adr/` for decisions.
   isosceles and right trapezoids; kites) to scale from the measures the kind
   asks for. The same labels and markings as the triangle, plus parallel arrows,
   heights to AB and diagonals with a named crossing point.
+- `/regular-polygon` **Regular Polygon Generator**: a regular polygon of 3 to
+  20 sides, sized by its side, radius or apothem, with the apothem, a radius or
+  all the radii drawn from its center, and marks on every side and angle.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
@@ -47,7 +50,8 @@ src/lib/shared/        pieces Math's generators use: math fields and their
 $shared/               ../../packages/shared: pieces shared with the other sites,
                        including the generator page, figure card and toolbar,
                        undo history, presets and the generator catalog
-src/lib/shapes/        the shape layer the triangle and quadrilaterals share:
+src/lib/shapes/        the shape layer the triangle, quadrilaterals and regular
+                       polygon share:
                        laying out and drawing a shape's parts, labels and
                        markings, the label popup and extra-line options;
                        quadrilateral/ holds the kinds and the page all four

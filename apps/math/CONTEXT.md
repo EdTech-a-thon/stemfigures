@@ -131,8 +131,8 @@ _Avoid_: Point name, vertex name (that's a triangle's), letter, tag
 ### Shapes
 
 **Shape**:
-A figure of straight sides meeting at named vertices, drawn to scale from its measures and labeled for students: a triangle or a quadrilateral. Each has its own generator.
-_Avoid_: Polygon (a regular polygon will be its own figure), diagram, drawing
+A figure of straight sides meeting at named vertices, drawn to scale from its measures and labeled for students: a triangle, a quadrilateral or a regular polygon. Each has its own generator.
+_Avoid_: Polygon (alone; say regular polygon for that figure), diagram, drawing
 
 **Part**:
 Any vertex, side, angle or extra line of a shape, or any of a box plot's five-number summary: something that can carry a label or a marking.
@@ -155,7 +155,7 @@ One optional unit for the whole shape, such as cm or ft, added to every length s
 _Avoid_: Scale
 
 **Extra line**:
-A line drawn onto a shape that isn't one of its sides: a height, dropped from a vertex to a side, which is extended when the height lands outside the shape, or a quadrilateral's diagonal, joining opposite vertices. The point where a height lands, or where the diagonals cross, can be given a name, such as E. It can be solid, dashed or dotted, like a graphed line.
+A line drawn onto a shape that isn't one of its sides: a height, dropped from a vertex to a side, which is extended when the height lands outside the shape, a quadrilateral's diagonal, joining opposite vertices, or a regular polygon's apothem or radius. The point where a height lands, or where the diagonals cross, can be given a name, such as E. It can be solid, dashed or dotted, like a graphed line.
 _Avoid_: Auxiliary line, segment, construction
 
 **Marking**:
@@ -193,6 +193,24 @@ _Avoid_: Type, shape (alone), category
 **Trapezoid**:
 A quadrilateral with exactly one pair of parallel sides, its **bases**; the other two are its **legs**. A right trapezoid has a leg at right angles to both bases.
 _Avoid_: Trapezium (what UK teachers call it; fine as a search word)
+
+### Regular polygons
+
+**Regular polygon**:
+A shape with 3 to 20 equal sides and equal angles around a center, sized by its side, radius or apothem. Its generator is the Regular Polygon Generator. Past 12 sides it's named by its count, such as a 15-gon.
+_Avoid_: Polygon (alone), n-sided shape
+
+**Center**:
+The point a regular polygon is drawn around, the same distance from every vertex. It can be shown as a dot and named, such as O.
+_Avoid_: Centre, midpoint, origin
+
+**Apothem**:
+The line from a regular polygon's center to the middle of a side, at right angles to it, and its length. The generator draws it to the bottom side.
+_Avoid_: Inradius, height
+
+**Radius**:
+The line from a regular polygon's center to a vertex, and its length; together, the **radii**. The generator draws one to the bottom right vertex, so with the apothem it makes the right triangle used for area.
+_Avoid_: Circumradius
 
 ### Data displays
 

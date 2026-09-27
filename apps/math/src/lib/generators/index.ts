@@ -12,6 +12,7 @@ import KitePreview from './kite/Preview.svelte'
 import NumberLinePreview from './number-line/Preview.svelte'
 import ParallelogramPreview from './parallelogram/Preview.svelte'
 import RectanglePreview from './rectangle/Preview.svelte'
+import RegularPolygonPreview from './regular-polygon/Preview.svelte'
 import TrapezoidPreview from './trapezoid/Preview.svelte'
 import TrianglePreview from './triangle/Preview.svelte'
 
@@ -24,6 +25,7 @@ export const PREVIEWS: Record<string, Component> = {
   'parallelogram': ParallelogramPreview,
   'trapezoid': TrapezoidPreview,
   'kite': KitePreview,
+  'regular-polygon': RegularPolygonPreview,
   'box-plot': BoxPlotPreview,
 }
 

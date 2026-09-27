@@ -14,7 +14,8 @@
 // Every part has an id: a corner's angle is its corner's id ("B"), a side is
 // its two corners' ids ("AB"), and extra lines have their own ("hB", "dAC").
 // Labels add a prefix for what they name: "vB" for a vertex name, "fB" for
-// where the height from B lands, "x" for where the diagonals cross.
+// where the height from B lands, "x" for where the diagonals cross, "o" for
+// the center.
 
 import { LABEL_SCALE, type LabelSize } from '$shared/labelSize'
 import { layoutMath, type MathBox } from '$lib/shared/mathSvg.js'
@@ -64,6 +65,12 @@ export type LineLabelSpec = { mode: LineLabelMode; text: string; typed?: string 
 export type HeightSpec = { id: string; from: string; onto: [string, string]; style: LineStyle; label: LineLabelSpec; foot: string }
 /** A diagonal: between two corners that aren't next to each other. */
 export type DiagonalSpec = { id: string; ends: [string, string]; style: LineStyle; label: LineLabelSpec }
+/**
+ * A line out from the shape's center: to a corner (a regular polygon's
+ * radius), or to the middle of a side, which it meets at right angles (its
+ * apothem). `label` is null for one drawn without a label.
+ */
+export type SpokeSpec = { id: string; to: string | [string, string]; style: LineStyle; label: LineLabelSpec | null }
 
 /** A shape, ready to lay out. */
 export type ShapeSpec = {
@@ -83,6 +90,9 @@ export type ShapeSpec = {
   diagonals?: DiagonalSpec[]
   /** The name of where the diagonals cross, when both are drawn. */
   cross?: string
+  /** The shape's center, placed like the corners, shown as a dot and named when asked, and the lines out from it. */
+  center?: { at: Vec; dot: boolean; name: string }
+  spokes?: SpokeSpec[]
   unit: string
   round: number
   square: boolean
@@ -112,16 +122,19 @@ export function layoutShape(spec: ShapeSpec) {
   // Flipped and turned, then in SVG's y-down coordinates, scaled to fit.
   const pts: Record<string, Vec> = {}
   const turn = spec.rotate * RAD
-  for (const c of spec.corners) {
-    let [x, y] = c.at
+  const turned = (at: Vec): Vec => {
+    let [x, y] = at
     if (spec.flip) x = -x
-    pts[c.id] = [x * Math.cos(turn) - y * Math.sin(turn), -(x * Math.sin(turn) + y * Math.cos(turn))]
+    return [x * Math.cos(turn) - y * Math.sin(turn), -(x * Math.sin(turn) + y * Math.cos(turn))]
   }
+  for (const c of spec.corners) pts[c.id] = turned(c.at)
   const xs = ids.map((v) => pts[v][0])
   const ys = ids.map((v) => pts[v][1])
   const scale = Math.min(FIT_W / (Math.max(...xs) - Math.min(...xs) || 1), FIT_H / (Math.max(...ys) - Math.min(...ys) || 1))
   const [x0, y0] = [Math.min(...xs), Math.min(...ys)]
-  for (const v of ids) pts[v] = [(pts[v][0] - x0) * scale, (pts[v][1] - y0) * scale]
+  const fitted = ([x, y]: Vec): Vec => [(x - x0) * scale, (y - y0) * scale]
+  for (const v of ids) pts[v] = fitted(pts[v])
+  const center = spec.center ? fitted(turned(spec.center.at)) : null
   const middle = mul(ids.reduce<Vec>((m, v) => add(m, pts[v]), [0, 0]), 1 / n)
 
   const moved = readMoved(spec.moved)
@@ -351,6 +364,52 @@ export function layoutShape(spec: ShapeSpec) {
     }
   }
 
+  // Lines out from the center: each label beside its line's middle, on the
+  // side away from the other lines' ends, so an apothem's label and a
+  // radius's don't meet in the triangle between them.
+  const dots: Vec[] = []
+  if (center) {
+    const ends = (spec.spokes ?? []).map((sp) => (typeof sp.to === 'string' ? pts[sp.to] : mul(add(pts[sp.to[0]], pts[sp.to[1]]), 0.5)))
+    ;(spec.spokes ?? []).forEach((sp, i) => {
+      const end = ends[i]
+      lines.push({ part: sp.id, from: center, to: end, style: sp.style })
+      if (typeof sp.to !== 'string' && spec.square) {
+        const q = Math.min(12, 0.4 * len(sub(end, center)))
+        const along = unit(sub(pts[sp.to[1]], end))
+        const up = unit(sub(center, end))
+        squares.push([add(end, mul(along, q)), add(end, add(mul(along, q), mul(up, q))), add(end, mul(up, q))])
+      }
+      const box = sp.label ? lineContent(sp.label, len(sub(end, center))) : null
+      if (!box) return
+      const t = unit(sub(end, center))
+      let across = perp(t)
+      const others = ends.filter((_, j) => j !== i)
+      if (others.length) {
+        const away = sub(mul(add(center, end), 0.5), mul(others.reduce<Vec>((m, e) => add(m, e), [0, 0]), 1 / others.length))
+        if (dot(across, away) < 0) across = mul(across, -1)
+      } else if (across[1] > 0) across = mul(across, -1)
+      place(sp.id, box, add(mul(add(center, end), 0.5), mul(across, 6 + reach(box, across))), t, across, 0.4 * len(sub(end, center)))
+    })
+    if (spec.center!.dot) dots.push(center)
+    // The center's name in the widest gap between its lines, or just below it.
+    const name = spec.center!.name.trim()
+    const box = name ? layoutMath(name, NAME_FS) : null
+    if (box) {
+      const angleOf = (u: Vec) => Math.atan2(u[1], u[0])
+      const rays = ends.map((e) => unit(sub(e, center))).sort((u, w) => angleOf(u) - angleOf(w))
+      let dir: Vec = [0, 1]
+      let widest = -1
+      rays.forEach((u, i) => {
+        const w = rays[(i + 1) % rays.length]
+        const gap = rays.length === 1 ? 2 * Math.PI : (angleOf(w) - angleOf(u) + 2 * Math.PI) % (2 * Math.PI)
+        // The middle of a gap wider than half a turn is away from both its edges.
+        const mid = rays.length === 1 ? mul(u, -1) : mul(add(u, w), gap > Math.PI ? -1 : 1)
+        if (gap > widest + 1e-9) [widest, dir] = [gap, len(mid) < 1e-6 ? perp(u) : unit(mid)]
+      })
+      place('o', box, add(center, mul(dir, 7 + reach(box, dir))), dir, perp(dir))
+    }
+  }
+
   // The frame holds the shape, its extensions and every label.
   const points: Vec[] = [...ids.map((v) => pts[v]), ...extensions.flat()]
   for (const l of labels) points.push([l.cx - l.box.w / 2, l.y - l.box.asc], [l.cx + l.box.w / 2, l.y + l.box.desc])
@@ -368,6 +427,7 @@ export function layoutShape(spec: ShapeSpec) {
     arrows,
     lines,
     extensions,
+    dots,
     labels,
     /** The figure's units per unit of length, for anything the generator measures on it. */
     scale,
