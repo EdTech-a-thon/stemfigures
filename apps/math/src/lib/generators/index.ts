@@ -8,7 +8,11 @@ import { generatorsOn } from '$shared/catalog/index.js'
 import { SITE_ID } from '$lib/site/config.js'
 import BoxPlotPreview from './box-plot/Preview.svelte'
 import CoordinateGridPreview from './coordinate-grid/Preview.svelte'
+import KitePreview from './kite/Preview.svelte'
 import NumberLinePreview from './number-line/Preview.svelte'
+import ParallelogramPreview from './parallelogram/Preview.svelte'
+import RectanglePreview from './rectangle/Preview.svelte'
+import TrapezoidPreview from './trapezoid/Preview.svelte'
 import TrianglePreview from './triangle/Preview.svelte'
 
 /** Each generator's directory preview, by id. */
@@ -16,6 +20,10 @@ export const PREVIEWS: Record<string, Component> = {
   'coordinate-grid': CoordinateGridPreview,
   'number-line': NumberLinePreview,
   'triangle': TrianglePreview,
+  'rectangle': RectanglePreview,
+  'parallelogram': ParallelogramPreview,
+  'trapezoid': TrapezoidPreview,
+  'kite': KitePreview,
   'box-plot': BoxPlotPreview,
 }
 

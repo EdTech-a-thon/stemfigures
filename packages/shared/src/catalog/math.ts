@@ -52,6 +52,64 @@ export const MATH: CatalogEntry[] = [
     ],
   },
   {
+    id: 'rectangle',
+    site: 'math',
+    name: 'Rectangle Generator',
+    path: '/rectangle',
+    blurb: 'Rectangles and squares drawn to scale, labeled for students.',
+    description:
+      'Make a printable rectangle or square drawn to scale for your class. Label its sides with their lengths or with x, add diagonals, congruence marks and right-angle squares, then copy it into a worksheet or test.',
+    keywords: [
+      'rectangle', 'rectangles', 'square', 'squares', 'quadrilateral', 'quadrilaterals', 'length', 'width', 'side lengths',
+      'diagonal', 'diagonals', 'right angles', 'area', 'perimeter', 'to scale', 'diagram', 'geometry', 'congruent',
+      'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'parallelogram',
+    site: 'math',
+    name: 'Parallelogram Generator',
+    path: '/parallelogram',
+    blurb: 'Parallelograms and rhombi drawn to scale, with parallel arrows.',
+    description:
+      'Make a printable parallelogram or rhombus drawn to scale for your class. Give its sides and angle, label sides and angles with their measures or with x, add parallel arrows, congruence marks, heights and diagonals, then copy it into a worksheet or test.',
+    keywords: [
+      'parallelogram', 'parallelograms', 'rhombus', 'rhombi', 'rhombuses', 'diamond', 'quadrilateral', 'quadrilaterals',
+      'parallel', 'parallel sides', 'parallel arrows', 'opposite sides', 'opposite angles', 'base', 'height', 'altitude',
+      'diagonal', 'diagonals', 'area', 'perimeter', 'angles', 'side lengths', 'to scale', 'diagram', 'geometry',
+      'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'trapezoid',
+    site: 'math',
+    name: 'Trapezoid Generator',
+    path: '/trapezoid',
+    blurb: 'Trapezoids, including right and isosceles ones, drawn to scale and labeled.',
+    description:
+      'Make a printable trapezoid drawn to scale for your class: a right, isosceles or scalene trapezoid, from its bases and height. Label sides and angles with their measures or with x, add parallel arrows, congruence marks, heights and diagonals, then copy it into a worksheet or test.',
+    keywords: [
+      'trapezoid', 'trapezoids', 'trapezium', 'trapeziums', 'right trapezoid', 'isosceles trapezoid', 'scalene trapezoid',
+      'irregular trapezoid', 'quadrilateral', 'quadrilaterals', 'bases', 'legs', 'parallel', 'parallel sides',
+      'parallel arrows', 'height', 'altitude', 'diagonal', 'diagonals', 'area', 'perimeter', 'angles', 'side lengths',
+      'to scale', 'diagram', 'geometry', 'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'kite',
+    site: 'math',
+    name: 'Kite Generator',
+    path: '/kite',
+    blurb: 'Kites drawn to scale, with their equal sides marked and labeled.',
+    description:
+      'Make a printable kite drawn to scale for your class. Give its short and long sides and top angle, label sides and angles with their measures or with x, add diagonals and congruence marks, then copy it into a worksheet or test.',
+    keywords: [
+      'kite', 'kites', 'quadrilateral', 'quadrilaterals', 'diagonal', 'diagonals', 'perpendicular diagonals',
+      'line of symmetry', 'symmetry', 'adjacent sides', 'area', 'perimeter', 'angles', 'side lengths', 'to scale',
+      'diagram', 'geometry', 'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
     id: 'box-plot',
     site: 'math',
     name: 'Box Plot Generator',

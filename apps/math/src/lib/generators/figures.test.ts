@@ -9,6 +9,12 @@ import { buildGraph } from './coordinate-grid/graph.js'
 import * as grid from './coordinate-grid/settings.js'
 import { buildLine } from './number-line/numberline.js'
 import * as line from './number-line/settings.js'
+import { buildQuadrilateral } from '$lib/shapes/quadrilateral/layout.js'
+import { readQuadrilateral } from '$lib/shapes/quadrilateral/settings.js'
+import { family as kite } from './kite/family.js'
+import { family as parallelogram } from './parallelogram/family.js'
+import { family as rectangle } from './rectangle/family.js'
+import { family as trapezoid } from './trapezoid/family.js'
 import { buildTriangle } from './triangle/layout.js'
 import * as triangle from './triangle/settings.js'
 
@@ -90,6 +96,38 @@ const TRIANGLE = [
   'A=20',
 ]
 
+const QUADRILATERALS = {
+  rectangle: [
+    '',
+    'unit=cm&BCLabel=measure&dAC=1&dACLabel=measure',
+    'kind=square&ABTicks=1&BCTicks=1&CDTicks=1&DATicks=1',
+    'kind=square&AB=x',
+    'ABTicks=1&CDTicks=1&labelSize=large&moved=AB%3A4%2C-6%3BvC%3A0%2C3',
+  ],
+  parallelogram: [
+    '',
+    'AArcs=1&CArcs=1&hD=1&hDFoot=E',
+    'kind=rhombus&dAC=1&dBD=1&cross=E&ABTicks=1&BCTicks=1&CDTicks=1&DATicks=1',
+    'nameA=P&nameB=Q&nameC=R&nameD=S&unit=cm&ALabel=measure&BLabel=text&BText=2x%2B1&hD=1&hDLabel=measure&base=CD&flip=1&rotate=20',
+  ],
+  trapezoid: [
+    '',
+    'kind=trapezoid',
+    'kind=trapezoid&AB=4&CD=9&h=3&A=30&hD=1&hC=1&hDLabel=text&hDText=h&hDFoot=E&hCFoot=F',
+    'kind=trapezoid&ALabel=measure&ABArrows=2&CDArrows=2&dAC=1&dBD=1&cross=E&hDFoot=F',
+    'kind=isosceles-trapezoid&DATicks=1&BCTicks=1&AArcs=1&BArcs=1&round=2',
+    'base=BC&flip=1&rotate=45&hC=1&hCStyle=dotted',
+    'ABTicks=1&ABArrows=2&CDTicks=1&labelSize=large',
+    'kind=trapezoid&AB=7&CD=7',
+  ],
+  kite: [
+    '',
+    'dAC=1&dBD=1&cross=E&BLabel=measure',
+    'base=AB&square=0&dAC=1&dBD=1',
+    'DA=2',
+  ],
+}
+
 const data = (...rows: string[]) => rows.map((r) => `data=${encodeURIComponent(r)}`).join('&')
 
 const BOX = [
@@ -137,5 +175,17 @@ describe('triangle', () => {
     const read = triangle.readTriangle(s)
     const figure = read.triangle ? buildTriangle(s, read.triangle, read.given) : null
     expect({ query: triangle.settingsToQuery(s), read, figure }).toMatchSnapshot()
+  })
+})
+
+const FAMILIES = { rectangle, parallelogram, trapezoid, kite }
+
+describe.each(Object.keys(FAMILIES) as (keyof typeof FAMILIES)[])('%s', (name) => {
+  const family = FAMILIES[name]
+  test.each(QUADRILATERALS[name])('%s', (q) => {
+    const s = family.settingsFromParams(params(q))
+    const read = readQuadrilateral(s)
+    const figure = read.shape ? buildQuadrilateral(s, read.shape, read.given) : null
+    expect({ query: family.settingsToQuery(s), read, figure }).toMatchSnapshot()
   })
 })

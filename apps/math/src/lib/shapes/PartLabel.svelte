@@ -1,32 +1,29 @@
 <script lang="ts">
-  // The button after a measure, showing what's written at that part of the
-  // triangle. It opens a small popup to choose the label (its measure, typed
-  // text, or nothing) and congruence marks. Fixed-position like RowStyle's
-  // popup, so the scrolling settings column can't clip it.
+  // The button after a measure, showing what's written at that part of a
+  // shape. It opens a small popup to choose the label (its measure, typed
+  // text, or nothing) and markings: congruence ticks or arcs, and parallel
+  // arrows on a side that takes them. Fixed-position like RowStyle's popup,
+  // so the scrolling settings column can't clip it.
   import { tick } from 'svelte'
   import MathInput from '$lib/shared/MathInput.svelte'
-  import type { LabelMode } from './settings.js'
+  import { pretty, type LabelMode } from './parts.js'
 
   // mode: auto | measure | text | none, where auto shows the measure only when
   // it's given. measure: how the measure reads (null when it can't be shown,
   // with `unavailable` saying why; `note` says where it comes from). marks: congruence ticks or arcs, 0–3, or
-  // undefined for a part that takes none.
+  // undefined for a part that takes none. arrows: parallel arrows, 0–3, or undefined for a part that takes none.
   let {
     name, id, given, measure, note = '', unavailable = '', markKind = 'ticks',
-    mode = $bindable(), text = $bindable(), marks = $bindable(),
+    mode = $bindable(), text = $bindable(), marks = $bindable(), arrows = $bindable(),
   }: {
     name: string; id: string; given: boolean; measure: string | null; note?: string; unavailable?: string; markKind?: 'ticks' | 'arcs'
-    mode: LabelMode; text: string; marks?: number
+    mode: LabelMode; text: string; marks?: number; arrows?: number
   } = $props()
 
   const shown = $derived(mode === 'auto' ? (given ? 'measure' : 'none') : mode)
   const preview = $derived(
     shown === 'measure' ? measure : shown === 'text' ? pretty(text) : '',
   )
-  /** Stored math, the way it reads: sqrt(2) as √2, pi as π. */
-  function pretty(t: string | undefined) {
-    return String(t ?? '').replace(/sqrt\(([^()]*)\)/g, '√$1').replace(/pi/g, 'π').replace(/-/g, '−')
-  }
 
   const MODES = [['measure', 'Measure'], ['text', 'Text'], ['none', 'None']] as const
 
@@ -93,6 +90,17 @@
   </svg>
 {/snippet}
 
+{#snippet arrowIcon(n: number)}
+  <svg viewBox="0 0 28 16" width="28" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <line x1="2" y1="8" x2="26" y2="8" stroke-width="1.4" />
+    {#each Array(n) as _, i}
+      {@const x = 14 + (i - (n - 1) / 2) * 5}
+      <polyline points="{x - 2.5},4 {x + 1.5},8 {x - 2.5},12" />
+    {/each}
+    {#if n === 0}<line x1="9" y1="3" x2="19" y2="13" stroke-width="1.4" opacity="0.5" />{/if}
+  </svg>
+{/snippet}
+
 <div class="part-label" bind:this={root}>
   <button
     bind:this={trigger}
@@ -107,6 +115,7 @@
   >
     <span class="text">{preview || 'None'}</span>
     {#if marks}<span class="marks">{markKind === 'ticks' ? '|'.repeat(marks) : '◠'.repeat(marks)}</span>{/if}
+    {#if arrows}<span class="marks">{'›'.repeat(arrows)}</span>{/if}
   </button>
 
   {#if open}
@@ -132,6 +141,19 @@
             {#each [0, 1, 2, 3] as n}
               <button type="button" role="radio" aria-checked={marks === n} aria-label={n ? `${n}` : 'None'} title={n ? `${n}` : 'None'} class:on={marks === n} onclick={() => (marks = n)}>
                 {@render markIcon(n)}
+              </button>
+            {/each}
+          </div>
+        </div>
+      {/if}
+
+      {#if arrows !== undefined}
+        <div class="group">
+          <span class="name" id="{id}-arrows">Parallel arrows</span>
+          <div class="segmented" role="radiogroup" aria-labelledby="{id}-arrows">
+            {#each [0, 1, 2, 3] as n}
+              <button type="button" role="radio" aria-checked={arrows === n} aria-label={n ? `${n}` : 'None'} title={n ? `${n}` : 'None'} class:on={arrows === n} onclick={() => (arrows = n)}>
+                {@render arrowIcon(n)}
               </button>
             {/each}
           </div>
