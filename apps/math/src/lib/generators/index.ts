@@ -7,12 +7,17 @@ import type { Component } from 'svelte'
 import { generatorsOn } from '$shared/catalog/index.js'
 import { SITE_ID } from '$lib/site/config.js'
 import BoxPlotPreview from './box-plot/Preview.svelte'
+import ConePreview from './cone/Preview.svelte'
 import CoordinateGridPreview from './coordinate-grid/Preview.svelte'
+import CylinderPreview from './cylinder/Preview.svelte'
 import KitePreview from './kite/Preview.svelte'
 import NumberLinePreview from './number-line/Preview.svelte'
 import ParallelogramPreview from './parallelogram/Preview.svelte'
+import PrismPreview from './prism/Preview.svelte'
+import PyramidPreview from './pyramid/Preview.svelte'
 import RectanglePreview from './rectangle/Preview.svelte'
 import RegularPolygonPreview from './regular-polygon/Preview.svelte'
+import SpherePreview from './sphere/Preview.svelte'
 import TrapezoidPreview from './trapezoid/Preview.svelte'
 import TrianglePreview from './triangle/Preview.svelte'
 
@@ -26,6 +31,11 @@ export const PREVIEWS: Record<string, Component> = {
   'trapezoid': TrapezoidPreview,
   'kite': KitePreview,
   'regular-polygon': RegularPolygonPreview,
+  'prism': PrismPreview,
+  'cylinder': CylinderPreview,
+  'pyramid': PyramidPreview,
+  'cone': ConePreview,
+  'sphere': SpherePreview,
   'box-plot': BoxPlotPreview,
 }
 

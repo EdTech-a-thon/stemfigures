@@ -245,3 +245,48 @@ _Avoid_: Count (fine in speech), tally
 **Line plot**:
 A number line with a mark stacked above each value of a data set, as grades 3–6 use the name. No generator makes one yet.
 _Avoid_: Dot plot is the same figure; line graph (points joined across a coordinate grid) is a different one
+
+### 3D shapes
+
+**3D Shape**:
+Any of the three-dimensional figures below — a prism, cylinder, pyramid, cone or sphere — drawn to scale from the measures the teacher gives and labeled for students. Each has its own generator; the words in this section belong to all of them. A 3D shape isn’t a **Shape**, which is flat.
+_Avoid_: Solid (fine as a search word), 3D figure, volume diagram, shape (alone)
+
+**Prism**:
+A 3D shape with two matching bases joined by flat sides: a rectangle (a box), a right or isosceles triangle, or a regular polygon of 3 to 8 sides. It stands on its base or lies on its side; a triangular prism lies down unless the teacher stands it up. Its generator is the Prism Generator.
+_Avoid_: Box (fine as a search word), cuboid
+
+**Cylinder**:
+A 3D shape with two matching circles joined by a curved side. Its generator is the Cylinder Generator.
+_Avoid_: Can, tube
+
+**Pyramid**:
+A 3D shape with a base, a rectangle or a regular polygon, whose sides meet at a tip. Its generator is the Pyramid Generator.
+_Avoid_: Tetrahedron (fine as a search word)
+
+**Cone**:
+A 3D shape with a circle for its base and a curved side that meets at a tip. Its generator is the Cone Generator.
+
+**Sphere**:
+A 3D shape that is round all over, every point on it the same distance from its middle. Its generator, the Sphere Generator, also draws a **hemisphere**: half a sphere, its flat face down like a dome or up like a bowl.
+_Avoid_: Ball, half sphere
+
+**Oblique**:
+A 3D shape that leans: its top slides sideways from above its base, so its side edges slant and its height is shorter than them. The opposite, standing straight up, is **right**, as in right prism.
+_Avoid_: Slanted, tilted, leaning, skewed
+
+**Hidden edge**:
+An edge a viewer couldn't see through the front of a 3D shape, drawn dashed. Hidden edges can be turned off to leave only the outline.
+_Avoid_: Back edge, dotted edge, invisible line
+
+**Height** (of a 3D shape):
+The straight-up distance from a 3D shape's base to its top or tip, drawn dashed with a right-angle square where it meets the base. On an oblique shape it lands outside the shape, so the base's line is extended out to meet it. It can be shown or hidden.
+_Avoid_: Altitude, perpendicular height (fine in a label), vertical
+
+**Slant height**:
+On a right pyramid or cone, the distance from the tip down the middle of a sloping face (on a cone, down its side) to the base's edge.
+_Avoid_: Slant, lateral height, side length
+
+**Lean**:
+How far an oblique shape's top slides sideways past its base, measured along the base's extended line. Any two of the height, the lean and the slanted side edge are enough; the third is worked out.
+_Avoid_: Offset, shift, overhang
