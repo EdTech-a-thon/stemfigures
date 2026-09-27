@@ -3,7 +3,7 @@
   // clusters, say how many of each, and get a box with them scattered in it;
   // or pick one or two atoms or ions and get them packed in a lattice.
   import { Atom, Dices, Grid3x3, LayoutGrid, List, Plus, Square, Trash2, Type } from '@lucide/svelte'
-  import GeneratorPage from '$lib/shared/GeneratorPage.svelte'
+  import GeneratorPage from '$shared/GeneratorPage.svelte'
   import LabelField from '$shared/LabelField.svelte'
   import Section from '$lib/shared/Section.svelte'
   import { generatorState } from '$shared/generatorState.svelte'
@@ -98,7 +98,7 @@
   <button type="button" class="btn-ghost small" onclick={() => (s.seed = newSeed())}><Dices size={17} aria-hidden="true" /> Shuffle</button>
 {/snippet}
 
-<GeneratorPage name="Particle Diagram" filename="particle-diagram" {gen} {svg}>
+<GeneratorPage name="Particle Diagram" filename="particle-diagram" settingsWidth={27} {gen} {svg}>
   {#snippet settings()}
     <Section title="Layout" summary={LAYOUT_NAMES[s.layout]} icon={LayoutGrid} open>
       <div class="segmented" role="radiogroup" aria-label="Layout">
