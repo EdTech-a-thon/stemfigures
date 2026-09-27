@@ -231,7 +231,7 @@ _Avoid_: Dot plot is the same figure; line graph (points joined across a coordin
 ### 3D shapes
 
 **3D Shape**:
-Any of the three-dimensional figures below — a prism, cylinder, pyramid, cone or sphere — drawn to scale from the measures the teacher gives and labeled for students. Each has its own generator; the words in this section belong to all of them.
+Any of the three-dimensional figures below — a prism, cylinder, pyramid, cone or sphere — drawn to scale from the measures the teacher gives and labeled for students. Each has its own generator; the words in this section belong to all of them. A 3D shape isn’t a **Shape**, which is flat.
 _Avoid_: Solid (fine as a search word), 3D figure, volume diagram, shape (alone)
 
 **Prism**:
