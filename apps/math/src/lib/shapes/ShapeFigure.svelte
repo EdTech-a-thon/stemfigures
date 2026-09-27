@@ -69,6 +69,7 @@
   </g>
 
   <polygon points={pts(figure.corners)} fill="none" stroke={INK} stroke-width="2.4" stroke-linejoin="round" />
+  {#each figure.dots as [x, y]}<circle cx={x.toFixed(1)} cy={y.toFixed(1)} r="3.5" fill={INK} />{/each}
 
   {#each figure.labels as l (l.part)}
     <g

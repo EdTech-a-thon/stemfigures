@@ -16,6 +16,7 @@ import ParallelogramPreview from './parallelogram/Preview.svelte'
 import PrismPreview from './prism/Preview.svelte'
 import PyramidPreview from './pyramid/Preview.svelte'
 import RectanglePreview from './rectangle/Preview.svelte'
+import RegularPolygonPreview from './regular-polygon/Preview.svelte'
 import SpherePreview from './sphere/Preview.svelte'
 import TrapezoidPreview from './trapezoid/Preview.svelte'
 import TrianglePreview from './triangle/Preview.svelte'
@@ -29,6 +30,7 @@ export const PREVIEWS: Record<string, Component> = {
   'parallelogram': ParallelogramPreview,
   'trapezoid': TrapezoidPreview,
   'kite': KitePreview,
+  'regular-polygon': RegularPolygonPreview,
   'prism': PrismPreview,
   'cylinder': CylinderPreview,
   'pyramid': PyramidPreview,

@@ -110,6 +110,21 @@ export const MATH: CatalogEntry[] = [
     ],
   },
   {
+    id: 'regular-polygon',
+    site: 'math',
+    name: 'Regular Polygon Generator',
+    path: '/regular-polygon',
+    blurb: 'Regular polygons from 3 to 20 sides, with their apothem and radius.',
+    description:
+      'Make a printable regular polygon for your class, from an equilateral triangle to a 20-gon. Size it by its side, radius or apothem, draw and label the apothem and radius, mark equal sides and angles, then copy it into a worksheet or test.',
+    keywords: [
+      'regular polygon', 'regular polygons', 'polygon', 'polygons', 'pentagon', 'hexagon', 'heptagon', 'octagon', 'nonagon',
+      'decagon', 'hendecagon', 'dodecagon', 'n-gon', 'equilateral triangle', 'square', 'apothem', 'radius', 'radii', 'center',
+      'central angle', 'interior angle', 'side length', 'area', 'perimeter', 'area of a regular polygon',
+      'to scale', 'diagram', 'geometry', 'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
     id: 'prism',
     site: 'math',
     name: 'Prism Generator',
