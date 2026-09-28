@@ -7,6 +7,7 @@ import type { Component } from 'svelte'
 import { generatorsOn, matches } from '$shared/catalog/index'
 import { SITE_ID } from '$lib/site/config'
 import BohrModelPreview from './bohr-model/Preview.svelte'
+import GasSyringePreview from './gas-syringe/Preview.svelte'
 import LewisStructuresPreview from './lewis-structures/Preview.svelte'
 import MassReadingPreview from './mass-reading/Preview.svelte'
 import OrbitalDiagramPreview from './orbital-diagram/Preview.svelte'
@@ -26,6 +27,7 @@ export const PREVIEWS: Record<string, Component> = {
   'ph-reading': PhReadingPreview,
   'temperature-reading': TemperatureReadingPreview,
   'volume-by-displacement': VolumeByDisplacementPreview,
+  'gas-syringe': GasSyringePreview,
   'volume-reading': VolumeReadingPreview,
 }
 

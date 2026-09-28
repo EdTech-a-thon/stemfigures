@@ -24,6 +24,16 @@ export const CHEMISTRY: CatalogEntry[] = [
     keywords: ['water', 'displacement', 'displaced', 'graduated', 'cylinder', 'object', 'marble', 'rock', 'cube', 'metal', 'irregular', 'solid', 'volume', 'density', 'mL', 'measurement', 'lab'],
   },
   {
+    id: 'gas-syringe',
+    site: 'chemistry',
+    name: 'Gas Syringe',
+    path: '/gas-syringe',
+    blurb: 'A gas syringe showing the volume of gas you type, alone or collecting from a flask.',
+    description:
+      'Make printable gas syringe figures for chemistry tests. Type a volume of gas in cm³ or mL and students read it from the plunger of a 50 or 100 cm³ syringe, alone or set up with a conical flask and stand, with a magnified view for the estimated digit.',
+    keywords: ['gas', 'syringe', 'plunger', 'collecting', 'collection', 'rate', 'reaction', 'volume', 'cm3', 'mL', 'conical', 'flask', 'delivery', 'tube', 'measurement', 'lab', 'apparatus'],
+  },
+  {
     id: 'mass-reading',
     site: 'chemistry',
     name: 'Mass Reading',

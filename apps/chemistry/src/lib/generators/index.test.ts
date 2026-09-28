@@ -28,6 +28,11 @@ describe('searching the directory', () => {
       expect(ids(query), query).toContain('lewis-structures')
   })
 
+  it('finds Gas Syringe the ways teachers ask for it', () => {
+    for (const query of ['gas syringe', 'syringe', 'plunger', 'gas collection', 'rate of reaction', 'cm3'])
+      expect(ids(query), query).toContain('gas-syringe')
+  })
+
   it('finds a generator by its path', () => {
     expect(findGenerator('/volume-by-displacement')?.name).toBe('Volume by Displacement')
   })
