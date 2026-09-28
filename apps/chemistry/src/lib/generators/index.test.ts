@@ -28,6 +28,21 @@ describe('searching the directory', () => {
       expect(ids(query), query).toContain('lewis-structures')
   })
 
+  it('finds Gas Syringe the ways teachers ask for it', () => {
+    for (const query of ['gas syringe', 'syringe', 'plunger', 'gas collection', 'rate of reaction', 'cm3'])
+      expect(ids(query), query).toContain('gas-syringe')
+  })
+
+  it('finds Titration Curve the ways teachers ask for it', () => {
+    for (const query of ['titration curve', 'titration', 'equivalence point', 'half equivalence', 'pKa', 'weak acid', 'buffer'])
+      expect(ids(query), query).toContain('titration-curve')
+  })
+
+  it('finds Length Reading the ways teachers ask for it', () => {
+    for (const query of ['ruler', 'length', 'measuring length', 'centimeter', 'millimeter', 'inches', 'metric ruler'])
+      expect(ids(query), query).toContain('length-reading')
+  })
+
   it('finds a generator by its path', () => {
     expect(findGenerator('/volume-by-displacement')?.name).toBe('Volume by Displacement')
   })

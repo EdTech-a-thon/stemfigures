@@ -3,15 +3,10 @@
 // line uses the color, point mark, label style and values, since its thick
 // line, arrows and circles carry meaning.
 
-/** How a row is drawn. Colors print well in color and read as distinct in gray. */
-export const COLORS = {
-  black: '#111827',
-  blue: '#2563eb',
-  red: '#dc2626',
-  green: '#15803d',
-  orange: '#ea580c',
-  purple: '#7c3aed',
-}
+import { COLORS, type Color } from '$shared/graph/colors'
+
+// A row's color is one of the inks every graph draws in.
+export { COLORS, type Color }
 export const LINE_STYLES = { solid: 'Solid', dashed: 'Dashed', dotted: 'Dotted' }
 // Which ends of a line get an arrowhead. "left" is the end with the smaller x
 // (the bottom, for an up-and-down line).
@@ -29,7 +24,6 @@ export const ENDPOINTS = { shown: 'Show endpoints', hidden: 'No endpoints' }
 // Whether a curve's asymptotes are drawn as dotted lines. Hidden unless asked, so a test can ask for them.
 export const ASYMPTOTES = { hidden: 'No asymptotes', shown: 'Show asymptotes' }
 
-export type Color = keyof typeof COLORS
 export type LineStyle = keyof typeof LINE_STYLES
 export type Arrows = keyof typeof ARROWS
 export type PointStyle = keyof typeof POINT_STYLES

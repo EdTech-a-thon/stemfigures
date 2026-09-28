@@ -8,10 +8,16 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `catalog/`, `GeneratorDirectory`                                                            | math, physics, chemistry, biology, engineering |
 | `request.svelte.ts`                                                                         | math, physics, chemistry, biology, engineering |
 | `Modal`                                                                                     | math, chemistry, physics, biology, engineering |
-| `LabelField`                                                                                | chemistry, biology, engineering           |
+| `LabelField`                                                                                | math, chemistry, biology, engineering     |
 | `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics |
-| `labelSize`                                                                                 | math                                      |
-| `FigureFrame`, `HelpTip`, `Section`, `settings`, `figureText`                               | none yet                                  |
+| `labelSize`                                                                                 | math, chemistry (Titration Curve)         |
+| `graph/`: `Grid`, `grid`, `axes`, `AxisSettings`, `TitleSettings`, `GridlineSettings`       | math (Coordinate Grid), chemistry (Titration Curve) |
+| `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve)         |
+| `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve) |
+| `HelpTip`                                                                                   | math                                      |
+| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading) |
+| `Magnifier`, `MagnifierSettings`, `magnify`                                                 | physics (Spring Scale), math (Length Reading) |
+| `marks`, `ReadingField`                                                                     | physics (Spring Scale)                    |
 
 `catalog/` lists every generator on every site. Each lives on one site
 (`site`), the only address it has; `alsoOn` names other sites whose
@@ -22,6 +28,12 @@ their site's name. A site can only draw its own previews, so the others show
 pictures from `catalog/previews/`. Retake a site's pictures after changing its
 previews: start it with `./scripts/agent-dev.mjs`, then run
 `node scripts/snapshot-previews.mjs <its address>` from the monorepo root.
+
+A generator can instead be copied onto a second site, with an entry on each
+under the same id, so each site has it at its own address; each directory
+then shows only its own copy. Length Reading, on Math and Chemistry, is the
+one so far. Its two copies are kept in step by hand (see
+`docs/adr/0001-a-generator-on-two-sites.md`).
 
 To add a generator: its entry in its site's `catalog/` file, its preview in
 that app's `src/lib/generators/index.ts`, and a snapshot.
@@ -46,5 +58,21 @@ other options:
 presets as a third argument, for a site whose teachers already have them
 saved under other names (Math and Physics do).
 
-Every site keeps the rest in its own `src/lib/`. When changing a file here, run `npm run check` and `npm run build`
-in every app that imports it.
+`graph/` is a graph on a square grid, the one Math's Coordinate Grid and
+Chemistry's Titration Curve both draw on. `axes` holds its settings: each
+axis's range as typed (read by `readAxes` with the site's number reader, since
+Math's are typed in Caret and can be 3π/2), numbering, labels, end caps,
+titles and minor gridlines, plus `gridFields` for a generator using
+`defineSettings`. `layoutGrid` lays the grid out and gives `px`, which places
+a point of the graph on the drawing; `Grid.svelte` draws it with the
+generator's own marks as its children. `AxisSettings`, `TitleSettings` and
+`GridlineSettings` are its settings groups; `AxisSettings` takes a `field` for
+the range boxes (a plain text box unless given) and children for fields of the
+generator's own. `clipPath` cuts a line to the grid.
+
+Every site keeps the rest in its own `src/lib/`, except Physics' Spring Scale
+and Math's Length Reading, which use the instrument-reading pieces above.
+Chemistry keeps its own copies of those reading pieces (the magnifier, marks,
+reading box, figure frame and title settings) for now; they started as copies
+of its files and match them. When changing a file here, run `npm run check`
+and `npm run build` in every app that imports it.

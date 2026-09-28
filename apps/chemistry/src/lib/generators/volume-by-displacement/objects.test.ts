@@ -9,20 +9,20 @@ const heightOf = (b: ReturnType<typeof objectBounds>) => b.bottom - b.top
 const widthOf = (b: ReturnType<typeof objectBounds>) => b.right - b.left
 
 describe('an object in the cylinder', () => {
-  it.each(['marbles', 'rock', 'cube'] as const)('%s rests on the bottom, inside the tube', (kind) => {
+  it.each(['marbles', 'rock', 'cube', 'cylinder'] as const)('%s rests on the bottom, inside the tube', (kind) => {
     const b = objectBounds(placeObject(kind, 2, deep, 1500))
     expect(b.bottom).toBeCloseTo(deep.bottom)
     expect(b.left).toBeGreaterThanOrEqual(deep.left)
     expect(b.right).toBeLessThanOrEqual(deep.right)
   })
 
-  it.each(['marbles', 'rock', 'cube'] as const)('%s grows with the displaced volume', (kind) => {
+  it.each(['marbles', 'rock', 'cube', 'cylinder'] as const)('%s grows with the displaced volume', (kind) => {
     const small = objectBounds(placeObject(kind, 1, deep, 300))
     const big = objectBounds(placeObject(kind, 1, deep, 700))
     expect(heightOf(big) * widthOf(big)).toBeGreaterThan(heightOf(small) * widthOf(small))
   })
 
-  it.each(['marbles', 'rock', 'cube'] as const)('%s never pokes out of the water or the tube', (kind) => {
+  it.each(['marbles', 'rock', 'cube', 'cylinder'] as const)('%s never pokes out of the water or the tube', (kind) => {
     for (const height of [10, 40, 120, 400])
       for (const area of [50, 800, 5000, 40000])
         for (const count of [1, 3, 5]) {
@@ -77,12 +77,23 @@ describe('a rock', () => {
   })
 })
 
+describe('a metal cylinder', () => {
+  it('stands on end, and grows longer rather than wider once it is as wide as the tube', () => {
+    const small = objectBounds(placeObject('cylinder', 1, deep, 300))
+    expect(heightOf(small)).toBeGreaterThan(widthOf(small))
+    const big = placeObject('cylinder', 1, deep, 4000)
+    expect(widthOf(objectBounds(big))).toBeCloseTo(36)
+    expect(heightOf(objectBounds(big)) / widthOf(objectBounds(big))).toBeGreaterThan(2)
+    expect(drawnArea(big)).toBeCloseTo(4000)
+  })
+})
+
 describe('the drawn area', () => {
-  it.each(['marbles', 'rock', 'cube'] as const)('%s is about the area asked for when there is room', (kind) => {
+  it.each(['marbles', 'rock', 'cube', 'cylinder'] as const)('%s is about the area asked for when there is room', (kind) => {
     expect(drawnArea(placeObject(kind, 2, deep, 600))).toBeCloseTo(600)
   })
 
-  it.each(['marbles', 'rock', 'cube'] as const)('%s is smaller when the water is too shallow to cover it', (kind) => {
+  it.each(['marbles', 'rock', 'cube', 'cylinder'] as const)('%s is smaller when the water is too shallow to cover it', (kind) => {
     // Under 60% of the area asked for, the page says it was drawn smaller.
     expect(drawnArea(placeObject(kind, 2, room(12), 600))).toBeLessThan(600 * 0.6)
   })

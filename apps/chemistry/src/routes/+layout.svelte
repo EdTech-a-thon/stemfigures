@@ -7,7 +7,7 @@
   import { findGenerator } from '$lib/generators/index'
   import Footer from '$lib/site/Footer.svelte'
   import Help from '$lib/site/Help.svelte'
-  import RequestDialog from '$lib/site/RequestDialog.svelte'
+  import RequestDialog from '$shared/RequestDialog.svelte'
   import TopBar from '$lib/site/TopBar.svelte'
 
   let { children }: { children: Snippet } = $props()

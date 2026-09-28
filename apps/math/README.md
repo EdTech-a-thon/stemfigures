@@ -28,6 +28,11 @@ and `docs/adr/` for decisions.
 - `/regular-polygon` **Regular Polygon Generator**: a regular polygon of 3 to
   20 sides, sized by its side, radius or apothem, with the apothem, a radius or
   all the radii drawn from its center, and marks on every side and angle.
+- `/mapping-diagram` **Mapping Diagram Generator**: inputs and outputs typed or
+  pasted as lists (or as ordered pairs), and arrows chosen per input, so it can
+  show a function or a relation that isn't one; the panel says which, and why.
+  Each side is titled (Input and Output, or text, a blank line or nothing) and
+  drawn in an oval, a box or nothing.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a

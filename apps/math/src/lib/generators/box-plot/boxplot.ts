@@ -5,7 +5,7 @@
 
 import { LABEL_SCALE } from '$shared/labelSize'
 import { layoutMath, type MathBox } from '$lib/shared/mathSvg.js'
-import { numberLabel, type Label } from '$lib/shared/numbering.js'
+import { numberLabel, type Label } from '$shared/graph/numbering'
 import { SUMMARY_KEYS, fmt, readPlot, type Settings } from './settings.js'
 
 export const LINE = 600

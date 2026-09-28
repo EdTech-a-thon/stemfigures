@@ -1,8 +1,8 @@
 // What a Bohr model is drawn from and where each part goes: the nucleus (as
 // text, a blank circle, or a cluster of proton and neutron balls mixed from a
-// seed), the rings, the electrons on them and the shell labels. Nothing here
-// checks the counts; any within the limits draw as given (CONTEXT.md "Bohr
-// models").
+// seed), the rings, the electrons on them, the shell labels, and an ion's
+// brackets. Nothing here checks the counts; any within the limits draw as
+// given (CONTEXT.md "Bohr models").
 
 import { seededRandom } from '../particle-diagram/layout'
 
@@ -86,12 +86,17 @@ export interface ComponentLook {
 
 export type Component = 'proton' | 'neutron' | 'electron'
 
+/** How an electron differs from the neutral atom's (CONTEXT.md "Gained
+ *  electron / Lost electron"). A lost one is drawn as an empty spot. */
+export type ElectronChange = 'gained' | 'lost'
+
 /** A ball or electron as drawn. */
 export interface Dot {
   x: number
   y: number
   r: number
   component: Component
+  change?: ElectronChange
 }
 
 /** Browsers may differ in the last digit of sin and cos; rounding keeps the
@@ -160,19 +165,29 @@ export function electronRadius(shell: number, count: number, withSymbol: boolean
 const TOP = -90
 const COMPASS = [TOP, 0, 90, 180]
 
-/** Where each electron on a ring goes, in degrees: evenly spaced from the
- *  top, or the first four singly at top, right, bottom and left and the rest
- *  paired with them, the two of a pair `r` apart either side of their point.
- *  A full first shell is one pair at the top, as He's Lewis structure is. */
+/** Where each electron on a ring goes, in degrees, in the order they fill
+ *  it: evenly spaced clockwise from the top, or the first four singly at top,
+ *  right, bottom and left and the rest paired with them, the two of a pair
+ *  `r` apart either side of their point. A full first shell is one pair at
+ *  the top, as He's Lewis structure is. */
 export function electronAngles(shell: number, count: number, placement: Placement, r: number): number[] {
   if (placement === 'even' || count > MAX_PAIRED)
     return Array.from({ length: count }, (_, k) => TOP + (k * 360) / count)
   const half = ((1.4 * r) / ringRadius(shell)) * (180 / Math.PI)
   if (shell === 0 && count === 2) return [TOP - half, TOP + half]
-  return COMPASS.flatMap((angle, c) => {
-    if (c >= count) return []
-    return c + 4 < count ? [angle - half, angle + half] : [angle]
+  return Array.from({ length: count }, (_, k) => {
+    const c = k % 4
+    if (c + 4 >= count) return COMPASS[c]
+    return COMPASS[c] + (k < 4 ? -half : half)
   })
+}
+
+/** How many places each shell has for electrons: its electrons, or with
+ *  `neutral` given, the neutral atom's electrons where it had more, so a lost
+ *  electron keeps its place (and its ring, past the ion's outermost shell). */
+export function shellPlaces(electrons: number[], neutral?: number[]): number[] {
+  const shells = Math.max(electrons.length, neutral?.length ?? 0)
+  return Array.from({ length: shells }, (_, i) => Math.max(electrons[i] ?? 0, neutral?.[i] ?? 0))
 }
 
 const toXY = (radius: number, degrees: number) => {
@@ -227,20 +242,69 @@ function labelAngle(angles: number[], radius: number, text: string) {
   return best ? best.angle : widest.middle
 }
 
-/** Every ring around (0, 0) with its electrons and label. */
-export function rings(electrons: number[], placement: Placement, electronSymbol: boolean): Ring[] {
-  return electrons.map((count, shell) => {
+/** Every ring around (0, 0) with its electrons and label. With the neutral
+ *  atom's shells given, each shell's electrons past the neutral atom's are
+ *  gained, and those it is short of are drawn as lost, in the places they
+ *  had: the last to fill, since that is where an ion's electrons come and go. */
+export function rings(electrons: number[], placement: Placement, electronSymbol: boolean, neutral?: number[]): Ring[] {
+  return shellPlaces(electrons, neutral).map((places, shell) => {
     const radius = ringRadius(shell)
-    const r = electronRadius(shell, count, electronSymbol)
-    const angles = electronAngles(shell, count, placement, r)
+    const r = electronRadius(shell, places, electronSymbol)
+    const angles = electronAngles(shell, places, placement, r)
+    const count = electrons[shell] ?? 0
+    const kept = neutral ? Math.min(count, neutral[shell] ?? 0) : count
+    const change = (k: number): ElectronChange | undefined => (k >= count ? 'lost' : k >= kept ? 'gained' : undefined)
     const text = `n = ${shell + 1}`
     return {
       shell,
       radius,
-      electrons: angles.map((a) => ({ ...toXY(radius, a), r, component: 'electron' as const })),
+      electrons: angles.map((a, k) => {
+        const dot: Dot = { ...toXY(radius, a), r, component: 'electron' }
+        const c = change(k)
+        return c ? { ...dot, change: c } : dot
+      }),
       label: { ...toXY(radius, labelAngle(angles, radius, text)), text },
     }
   })
+}
+
+// ---- Brackets -------------------------------------------------------------
+
+export const CHARGE_FONT = 18
+/** Brackets sit just outside the model's square, their arms reaching in. */
+const BRACKET_GAP = 3
+export const BRACKET_ARM = 8
+const CHARGE_GAP = 4
+/** Room above the brackets for the charge, which is set on their top. */
+const CHARGE_RISE = 12
+/** The charge's room is kept at least this wide, so ions with the same
+ *  number of shells line up whatever their charge. */
+const CHARGE_ROOM = textWidth('3+', CHARGE_FONT)
+
+export interface Brackets {
+  /** the box the brackets are drawn on, around (0, 0) */
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+  charge: { x: number; y: number; text: string }
+  /** how far the brackets and charge reach past the model's square */
+  pad: { left: number; right: number; top: number; bottom: number }
+}
+
+/** An ion's brackets around a model of `shells` shells, with `charge`
+ *  written at the top right, as for a Lewis structure. */
+export function brackets(shells: number, charge: string): Brackets {
+  const half = modelSide(shells) / 2 + BRACKET_GAP
+  const room = Math.max(CHARGE_ROOM, textWidth(charge, CHARGE_FONT))
+  return {
+    x1: -half,
+    y1: -half,
+    x2: half,
+    y2: half,
+    charge: { x: half + CHARGE_GAP, y: -half + CHARGE_FONT * 0.35, text: charge },
+    pad: { left: BRACKET_GAP + 1, right: BRACKET_GAP + CHARGE_GAP + room, top: BRACKET_GAP + CHARGE_RISE, bottom: BRACKET_GAP + 1 },
+  }
 }
 
 // ---- Words ----------------------------------------------------------------
@@ -254,4 +318,16 @@ export function describeModel(protons: number, neutrons: number, electrons: numb
     ? `${plural(electrons.length, 'empty ring')}`
     : `${plural(electrons.length, 'shell')} holding ${electrons.join(', ')} electrons`
   return `A Bohr model: ${inside}, with ${shells}`
+}
+
+/** The gained and lost electrons drawn on these rings, as read by a screen
+ *  reader, e.g. "1 lost electron on shell 3". Empty when there are none. */
+export function describeChanges(drawn: Ring[]) {
+  const parts: string[] = []
+  for (const change of ['gained', 'lost'] as const)
+    for (const ring of drawn) {
+      const n = ring.electrons.filter((e) => e.change === change).length
+      if (n) parts.push(`${plural(n, `${change} electron`)} on shell ${ring.shell + 1}`)
+    }
+  return parts.join(', ')
 }

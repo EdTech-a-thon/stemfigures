@@ -21,7 +21,28 @@ export const CHEMISTRY: CatalogEntry[] = [
     blurb: 'A graduated cylinder before and after an object is dropped in.',
     description:
       'Make printable water displacement figures for chemistry tests. Type the before and after readings and get two graduated cylinders, with an object in the second, for students to find its volume.',
-    keywords: ['water', 'displacement', 'displaced', 'graduated', 'cylinder', 'object', 'marble', 'rock', 'cube', 'irregular', 'solid', 'volume', 'density', 'mL', 'measurement', 'lab'],
+    keywords: ['water', 'displacement', 'displaced', 'graduated', 'cylinder', 'object', 'marble', 'rock', 'cube', 'metal', 'irregular', 'solid', 'volume', 'density', 'mL', 'measurement', 'lab'],
+  },
+  {
+    id: 'gas-syringe',
+    site: 'chemistry',
+    name: 'Gas Syringe',
+    path: '/gas-syringe',
+    blurb: 'A gas syringe showing the volume of gas you type, alone or collecting from a flask.',
+    description:
+      'Make printable gas syringe figures for chemistry tests. Type a volume of gas in cm³ or mL and students read it from the plunger of a 50 or 100 cm³ syringe, alone or set up with a conical flask and stand, with a magnified view for the estimated digit.',
+    keywords: ['gas', 'syringe', 'plunger', 'collecting', 'collection', 'rate', 'reaction', 'volume', 'cm3', 'mL', 'conical', 'flask', 'delivery', 'tube', 'measurement', 'lab', 'apparatus'],
+  },
+  {
+    // Also on Math Figures, as its own copy: see docs/adr/0001-a-generator-on-two-sites.md.
+    id: 'length-reading',
+    site: 'chemistry',
+    name: 'Length Reading',
+    path: '/length-reading',
+    blurb: 'A metric or imperial ruler with an object lying along it, to measure.',
+    description:
+      'Make printable ruler figures for chemistry tests. Pick a centimeter or inch ruler and how finely it is marked, type an object’s length, and students measure it, lined up with 0 or starting partway along, with magnified views of its ends.',
+    keywords: ['ruler', 'length', 'measure', 'measuring', 'metric', 'imperial', 'meter', 'stick', 'meterstick', 'centimeters', 'cm', 'millimeters', 'mm', 'inches', 'fraction', 'marble', 'rock', 'cube', 'metal', 'cylinder', 'object', 'estimated', 'digit', 'significant', 'figures', 'measurement', 'lab'],
   },
   {
     id: 'mass-reading',
@@ -31,7 +52,7 @@ export const CHEMISTRY: CatalogEntry[] = [
     blurb: 'A triple beam or digital balance showing the mass you type.',
     description:
       'Make printable balance figures for chemistry tests. Type a mass and get a digital, analytical or triple beam balance showing it, for students to read.',
-    keywords: ['balance', 'scale', 'digital', 'analytical', 'electronic', 'triple', 'beam', 'mass', 'grams', 'weigh', 'weight', 'marble', 'rock', 'cube', 'object', 'density', 'measurement', 'lab'],
+    keywords: ['balance', 'scale', 'digital', 'analytical', 'electronic', 'triple', 'beam', 'mass', 'grams', 'weigh', 'weight', 'marble', 'rock', 'cube', 'metal', 'object', 'density', 'measurement', 'lab'],
   },
   {
     id: 'temperature-reading',
@@ -56,6 +77,16 @@ export const CHEMISTRY: CatalogEntry[] = [
     keywords: ['pH', 'meter', 'electrode', 'probe', 'digital', 'analog', 'needle', 'dial', 'paper', 'litmus', 'universal', 'indicator', 'color', 'chart', 'acid', 'base', 'acidic', 'basic', 'neutral', 'measurement', 'lab'],
   },
   {
+    id: 'titration-curve',
+    site: 'chemistry',
+    name: 'Titration Curve',
+    path: '/titration-curve',
+    blurb: 'An acid–base titration curve from molarities and pKa, or from the pH values you type.',
+    description:
+      'Make printable titration curves for chemistry tests. Pick a strong or weak acid or base, type the molarities, volume and pKa, or just the starting, equivalence and ending pH, and get the curve with its equivalence and half-equivalence points marked.',
+    keywords: ['titration', 'titrate', 'curve', 'graph', 'pH', 'equivalence', 'half-equivalence', 'endpoint', 'end', 'point', 'pKa', 'pKb', 'Ka', 'buffer', 'acid', 'base', 'strong', 'weak', 'neutralization', 'NaOH', 'HCl', 'acetic', 'ammonia', 'molarity', 'buret', 'AP'],
+  },
+  {
     id: 'particle-diagram',
     site: 'chemistry',
     name: 'Particle Diagram',
@@ -70,10 +101,10 @@ export const CHEMISTRY: CatalogEntry[] = [
     site: 'chemistry',
     name: 'Bohr Model',
     path: '/bohr-model',
-    blurb: 'An atom’s protons, neutrons and electrons on their shells.',
+    blurb: 'An atom or ion’s protons, neutrons and electrons on their shells.',
     description:
-      'Make printable Bohr model diagrams for chemistry tests. Set the protons, neutrons and electrons on each shell, or fill the shells for any element, and get the nucleus and rings in your colors, with empty rings or a blank nucleus for students to complete.',
-    keywords: ['bohr', 'atom', 'atomic', 'model', 'structure', 'proton', 'protons', 'neutron', 'neutrons', 'electron', 'electrons', 'nucleus', 'shell', 'shells', 'energy', 'level', 'orbit', 'isotope', 'ion', 'diagram'],
+      'Make printable Bohr model diagrams for chemistry tests. Pick any element and charge, or set the protons, neutrons and electrons on each shell, and get the nucleus and rings in your colors, with an ion’s gained and lost electrons marked, empty rings or a blank nucleus for students to complete.',
+    keywords: ['bohr', 'atom', 'atomic', 'model', 'structure', 'proton', 'protons', 'neutron', 'neutrons', 'electron', 'electrons', 'nucleus', 'shell', 'shells', 'energy', 'level', 'orbit', 'isotope', 'ion', 'ions', 'cation', 'anion', 'charge', 'element', 'periodic', 'gained', 'lost', 'valence', 'diagram'],
   },
   {
     id: 'lewis-structures',

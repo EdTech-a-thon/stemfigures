@@ -11,6 +11,8 @@ import ConePreview from './cone/Preview.svelte'
 import CoordinateGridPreview from './coordinate-grid/Preview.svelte'
 import CylinderPreview from './cylinder/Preview.svelte'
 import KitePreview from './kite/Preview.svelte'
+import LengthReadingPreview from './length-reading/Preview.svelte'
+import MappingDiagramPreview from './mapping-diagram/Preview.svelte'
 import NumberLinePreview from './number-line/Preview.svelte'
 import ParallelogramPreview from './parallelogram/Preview.svelte'
 import PrismPreview from './prism/Preview.svelte'
@@ -37,6 +39,8 @@ export const PREVIEWS: Record<string, Component> = {
   'cone': ConePreview,
   'sphere': SpherePreview,
   'box-plot': BoxPlotPreview,
+  'mapping-diagram': MappingDiagramPreview,
+  'length-reading': LengthReadingPreview,
 }
 
 export const GENERATORS = generatorsOn(SITE_ID, PREVIEWS)

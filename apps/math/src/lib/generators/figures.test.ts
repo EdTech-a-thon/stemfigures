@@ -12,6 +12,8 @@ import { buildGraph } from './coordinate-grid/graph.js'
 import * as grid from './coordinate-grid/settings.js'
 import { buildLine } from './number-line/numberline.js'
 import * as line from './number-line/settings.js'
+import { buildDiagram } from './mapping-diagram/layout.js'
+import * as mapping from './mapping-diagram/settings.js'
 import { buildQuadrilateral } from '$lib/shapes/quadrilateral/layout.js'
 import { readQuadrilateral } from '$lib/shapes/quadrilateral/settings.js'
 import { family as kite } from './kite/family.js'
@@ -160,6 +162,19 @@ const BOX = [
   `from=abc&step=-1&${data('1, 2, x', '3, 400')}`,
 ]
 
+const arrows = (...pairs: [string, string][]) => pairs.map(([a, b]) => `arrow=${encodeURIComponent(`${a}→${b}`)}`).join('&')
+
+const MAPPING = [
+  '',
+  `inputs=-2%2C+-1%2C+0%2C+1%2C+2&outputs=0%2C+1%2C+4&${arrows(['-2', '4'], ['-1', '1'], ['0', '0'], ['1', '1'], ['2', '4'])}`,
+  `inputs=4%2C+9&outputs=-3%2C+-2%2C+2%2C+3&${arrows(['4', '-2'], ['4', '2'], ['9', '-3'], ['9', '3'])}`,
+  'inputs=1%2C+2%2C+3&outputs=a%2C+b',
+  `inputs=Ana%0ABo%0ACy&outputs=red%0Ablue&inputTitle=Student&outputTitle=Favorite+color&${arrows(['Ana', 'red'], ['Bo', 'blue'], ['Cy', 'red'])}`,
+  `inputs=x%2C+2x%2C+1%2F2&outputs=sqrt(2)%2C+x%5E2&shape=box&title=Relation+R&titleMode=text&${arrows(['x', 'x^2'], ['1/2', 'sqrt(2)'])}`,
+  'inputs=1%2C+2&outputs=3&shape=none&inputTitleMode=blank&outputTitleMode=none&titleMode=blank&labelSize=large',
+  `inputs=1&outputs=2&${arrows(['1', '2'], ['5', '2'])}`,
+]
+
 const SHAPE = [
   '',
   'depth=left&names=1',
@@ -211,6 +226,14 @@ describe('box plot', () => {
     const s = box.settingsFromParams(params(q))
     const { rows, problems } = box.readPlot(s)
     expect({ query: box.settingsToQuery(s), rows, problems, plot: buildPlot(s) }).toMatchSnapshot()
+  })
+})
+
+describe('mapping diagram', () => {
+  test.each(MAPPING)('%s', (q) => {
+    const s = mapping.settingsFromParams(params(q))
+    const { verdict, repeated } = mapping.readMapping(s)
+    expect({ query: mapping.settingsToQuery(s), verdict, repeated, diagram: buildDiagram(s) }).toMatchSnapshot()
   })
 })
 

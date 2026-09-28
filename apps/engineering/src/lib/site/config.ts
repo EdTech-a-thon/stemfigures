@@ -7,7 +7,6 @@ export const SITE_ID: SiteId = 'engineering'
 
 export const SITE_NAME = 'Engineering Figures'
 export const SITE_URL = 'https://engineeringfigures.com'
-export const SUPPORT_EMAIL = 'support@teacher.dev'
 
 // The STEM Figures family this site belongs to, and its other sites, linked
 // from the top bar and footer.
