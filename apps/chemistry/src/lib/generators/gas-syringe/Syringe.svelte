@@ -24,7 +24,14 @@
   const tick = $derived({ major: g.barrelH * 0.42, medium: g.barrelH * 0.3, minor: g.barrelH * 0.19 })
 
   const face = $derived(g.xOf(reading))
-  const pistonHalf = $derived(g.half - 3)
+  // The piston fills the bore, sealing the gas in: its outline sits just
+  // inside the barrel's walls, touching them without overlapping.
+  const pistonLine = $derived(1.5 * k)
+  const pistonHalf = $derived(g.half - k - pistonLine / 2)
+  // The thick line of the piston's face ends in round caps that reach just
+  // as far as its outline, rounding off its corners.
+  const faceLine = $derived(2.4 * k)
+  const faceHalf = $derived(pistonHalf + (pistonLine - faceLine) / 2)
   const stemHalf = $derived(g.half * 0.28)
   const knobHalf = $derived(g.half * 0.8)
   const pistonEnd = $derived(face + g.piston)
@@ -41,8 +48,8 @@
   <!-- the plunger: its glass piston, the stem, and the knob -->
   <rect x={pistonEnd} y={-stemHalf} width={g.stem + 2} height={2 * stemHalf} fill="#e6e6e6" stroke="#111" stroke-width={1.5 * k} />
   <rect x={pistonEnd + g.stem} y={-knobHalf} width={g.knob} height={2 * knobHalf} rx={3} fill="#e6e6e6" stroke="#111" stroke-width={2 * k} />
-  <rect x={face} y={-pistonHalf} width={g.piston} height={2 * pistonHalf} fill="#e6e6e6" stroke="#111" stroke-width={1.2 * k} />
-  <line x1={face} x2={face} y1={-pistonHalf} y2={pistonHalf} stroke="#111" stroke-width={2.4 * k} />
+  <rect x={face} y={-pistonHalf} width={g.piston} height={2 * pistonHalf} fill="#e6e6e6" stroke="#111" stroke-width={pistonLine} />
+  <line x1={face} x2={face} y1={-faceHalf} y2={faceHalf} stroke="#111" stroke-width={faceLine} />
 
   {#each shown as m (m.value)}
     {@const x = g.xOf(m.value)}
