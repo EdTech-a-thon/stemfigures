@@ -290,3 +290,21 @@ _Avoid_: Slant, lateral height, side length
 **Lean**:
 How far an oblique shape's top slides sideways past its base, measured along the base's extended line. Any two of the height, the lean and the slanted side edge are enough; the third is worked out.
 _Avoid_: Offset, shift, overhang
+
+### Mapping diagrams
+
+**Mapping diagram**:
+A figure of two lists side by side, the inputs on the left and the outputs on the right, each in an oval (or a box, or nothing) under its title, with an arrow from each input to each output it maps to. It shows a function, or a relation that isn't one. Its generator is the Mapping Diagram Generator.
+_Avoid_: Arrow diagram, mapping (fine as search words, not as the name)
+
+**Input**, **Output**:
+One item on a mapping diagram's left side, or its right. Each is a number, math like 2x or 1/2, or a word, typed or pasted as a list, and shown once however often it's typed. The sides are titled Input and Output unless the teacher writes something else, such as x and y.
+_Avoid_: Domain and range (a graphed line's domain and an axis's range are different things here), element, value
+
+**Arrow** (on a mapping diagram):
+A straight line with an arrowhead from one input to one output, saying that input maps to it. It's kept by what its two ends say, so reordering a list keeps it. An input can have several arrows, or none, for students to draw.
+_Avoid_: Line, connection, link
+
+**Function** (on a mapping diagram):
+A mapping diagram where every input has exactly one arrow. The generator tells the teacher whether theirs is one, and why not (an input with two outputs, or one with none), but never writes it on the figure.
+_Avoid_: Well-defined, valid

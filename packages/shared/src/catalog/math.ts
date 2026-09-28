@@ -206,4 +206,18 @@ export const MATH: CatalogEntry[] = [
       'spread', 'center', 'printable',
     ],
   },
+  {
+    id: 'mapping-diagram',
+    site: 'math',
+    name: 'Mapping Diagram Generator',
+    path: '/mapping-diagram',
+    blurb: 'Mapping diagrams from a list of inputs and outputs, with arrows between them.',
+    description:
+      'Make a printable mapping diagram for your class. Type or paste the inputs and outputs, or ordered pairs, click to draw arrows between them for a function or a relation that isn’t one, title each side, then copy it into a worksheet or test.',
+    keywords: [
+      'mapping diagram', 'mapping diagrams', 'mapping', 'arrow diagram', 'function', 'functions', 'relation', 'relations',
+      'is it a function', 'not a function', 'function or not', 'one-to-one', 'many-to-one', 'input', 'output', 'inputs',
+      'outputs', 'domain', 'range', 'codomain', 'ordered pairs', 'pairs', 'arrows', 'ovals', 'algebra', 'printable',
+    ],
+  },
 ]
