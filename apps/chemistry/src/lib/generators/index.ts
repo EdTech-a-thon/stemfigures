@@ -4,6 +4,7 @@
 
 import type { Component } from 'svelte'
 import BohrModelPreview from './bohr-model/Preview.svelte'
+import GasSyringePreview from './gas-syringe/Preview.svelte'
 import LewisStructuresPreview from './lewis-structures/Preview.svelte'
 import MassReadingPreview from './mass-reading/Preview.svelte'
 import OrbitalDiagramPreview from './orbital-diagram/Preview.svelte'
@@ -49,6 +50,16 @@ export const GENERATORS: Generator[] = [
       'Make printable water displacement figures for chemistry tests. Type the before and after readings and get two graduated cylinders, with an object in the second, for students to find its volume.',
     keywords: ['water', 'displacement', 'displaced', 'graduated', 'cylinder', 'object', 'marble', 'rock', 'cube', 'irregular', 'solid', 'volume', 'density', 'mL', 'measurement', 'lab'],
     Preview: VolumeByDisplacementPreview,
+  },
+  {
+    id: 'gas-syringe',
+    name: 'Gas Syringe',
+    path: '/gas-syringe',
+    blurb: 'A gas syringe showing the volume of gas you type, alone or collecting from a flask.',
+    description:
+      'Make printable gas syringe figures for chemistry tests. Type a volume of gas in cm³ or mL and students read it from the plunger of a 50 or 100 cm³ syringe, alone or set up with a conical flask and stand, with a magnified view for the estimated digit.',
+    keywords: ['gas', 'syringe', 'plunger', 'collecting', 'collection', 'rate', 'reaction', 'volume', 'cm3', 'mL', 'conical', 'flask', 'delivery', 'tube', 'measurement', 'lab', 'apparatus'],
+    Preview: GasSyringePreview,
   },
   {
     id: 'mass-reading',

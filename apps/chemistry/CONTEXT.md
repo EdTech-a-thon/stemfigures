@@ -57,6 +57,18 @@ _Avoid_: Cup, jar
 **Meniscus**:
 The curved top surface of a liquid; a volume reading is taken at its bottom.
 
+**Gas syringe**:
+A volume instrument for collecting gas: a glass barrel lying on its side, 50 or 100 mL, marked every 1 and numbered every 10 from 0 at its nozzle end, read to 0.1 at the plunger's face. Its scale is printed in cm³ or mL, which are the same size, so changing the unit never changes the reading. Both sizes are drawn the same length; the 50 is thinner.
+_Avoid_: Syringe (alone), gas burette
+
+**Plunger**:
+The glass piston the gas pushes out of a gas syringe, with a knob on its outside end. The reading is taken at its flat face, the end nearest the nozzle.
+_Avoid_: Piston (fine in help text), stopper
+
+**Setup**:
+What can be drawn around a gas syringe to show it collecting gas: a conical flask of liquid with a bung and delivery tube, a rubber sleeve joining the tube to the nozzle, and a stand clamping the barrel past its last mark. It isn't an instrument; nothing is read from it.
+_Avoid_: Apparatus (fine in search keywords), equipment
+
 **Digital balance**:
 A mass instrument with a numeric display showing 1 to 4 decimal places of grams; at 3 or 4 it is drawn as an analytical balance inside a draft shield.
 _Avoid_: Scale, electronic balance
@@ -110,7 +122,7 @@ The short line under each cylinder in a volume by displacement figure, "Before" 
 _Avoid_: Label, subtitle
 
 **Magnifier**:
-An enlarged circle showing a small stretch of an instrument's scale around the reading, beside or instead of the whole instrument. In a volume by displacement figure it's optional, with one beside each cylinder, and never replaces the cylinders.
+An enlarged circle showing a small stretch of an instrument's scale around the reading, beside or instead of the whole instrument (above it, for a gas syringe lying on its side). In a volume by displacement figure it's optional, with one beside each cylinder, and never replaces the cylinders.
 _Avoid_: Zoom, callout, inset
 
 **Answer key**:
