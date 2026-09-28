@@ -70,10 +70,10 @@ export const CHEMISTRY: CatalogEntry[] = [
     site: 'chemistry',
     name: 'Bohr Model',
     path: '/bohr-model',
-    blurb: 'An atom’s protons, neutrons and electrons on their shells.',
+    blurb: 'An atom or ion’s protons, neutrons and electrons on their shells.',
     description:
-      'Make printable Bohr model diagrams for chemistry tests. Set the protons, neutrons and electrons on each shell, or fill the shells for any element, and get the nucleus and rings in your colors, with empty rings or a blank nucleus for students to complete.',
-    keywords: ['bohr', 'atom', 'atomic', 'model', 'structure', 'proton', 'protons', 'neutron', 'neutrons', 'electron', 'electrons', 'nucleus', 'shell', 'shells', 'energy', 'level', 'orbit', 'isotope', 'ion', 'diagram'],
+      'Make printable Bohr model diagrams for chemistry tests. Pick any element and charge, or set the protons, neutrons and electrons on each shell, and get the nucleus and rings in your colors, with an ion’s gained and lost electrons marked, empty rings or a blank nucleus for students to complete.',
+    keywords: ['bohr', 'atom', 'atomic', 'model', 'structure', 'proton', 'protons', 'neutron', 'neutrons', 'electron', 'electrons', 'nucleus', 'shell', 'shells', 'energy', 'level', 'orbit', 'isotope', 'ion', 'ions', 'cation', 'anion', 'charge', 'element', 'periodic', 'gained', 'lost', 'valence', 'diagram'],
   },
   {
     id: 'lewis-structures',
