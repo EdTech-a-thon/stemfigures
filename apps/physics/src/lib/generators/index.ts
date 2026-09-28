@@ -11,6 +11,7 @@ import FreeBodyPreview from './free-body-diagram/Preview.svelte'
 import InclinedPlanePreview from './inclined-plane/Preview.svelte'
 import PulleyPreview from './pulley/Preview.svelte'
 import ProjectileMotionPreview from './projectile-motion/Preview.svelte'
+import SpringScalePreview from './spring-scale/Preview.svelte'
 import VectorDiagramPreview from './vector-diagram/Preview.svelte'
 
 export interface Generator {
@@ -100,6 +101,20 @@ export const GENERATORS: Generator[] = [
       'gravity', 'free fall', 'kinematics', '2d motion', 'two dimensional motion', 'mechanics', 'printable',
     ],
     Preview: ProjectileMotionPreview,
+  },
+  {
+    id: 'spring-scale',
+    name: 'Spring Scale Generator',
+    path: '/spring-scale',
+    blurb: 'A spring scale with its pointer at any force, for reading practice.',
+    description:
+      'Make a printable spring scale figure for your class: a 1 N to 50 N scale, color-coded by capacity and printed in newtons, grams or both, with its pointer at any force, a zero offset if you want one and a magnifier on the pointer, then copy it into a worksheet or test.',
+    keywords: [
+      'spring scale', 'spring balance', 'newton meter', 'newtonmeter', 'force meter', 'forcemeter', 'force', 'weight',
+      'newton', 'newtons', 'grams', 'mass', 'hooke', "hooke's law", 'spring', 'reading', 'measuring', 'measurement',
+      'scale', 'zero error', 'zero offset', 'magnifier', 'slotted masses', 'hanging mass', 'mechanics', 'printable',
+    ],
+    Preview: SpringScalePreview,
   },
 ]
 
