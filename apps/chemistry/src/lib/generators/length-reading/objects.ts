@@ -1,7 +1,8 @@
 // Volume by Displacement's objects lying along a ruler, drawn the same way.
 // Here the drawing is to scale across: the object's ends are exactly where
 // its reading says, so students can measure it. Its height only has to look
-// right, so a long rock or metal cylinder doesn't grow ever taller.
+// right, so a long metal cylinder doesn't grow ever taller, and a long rock
+// grows taller only as much as it needs to still look like a rock.
 
 import { CYLINDER_ASPECT, ROCK_ASPECT, rockPath, type Circle, type ObjectKind } from '../volume-by-displacement/objects'
 
@@ -14,9 +15,12 @@ export type Lying =
   /** the box it fills, lying on its side: `l` long and `d` across */
   | { kind: 'cylinder'; x: number; y: number; l: number; d: number }
 
-/** The most a rock or a lying cylinder is drawn across, in drawing units. */
+/** The most a lying cylinder is drawn across, and a rock is drawn tall
+ *  before it has to grow taller to stay rock-shaped, in drawing units. */
 const ROCK_TALLEST = 84
 const CYLINDER_WIDEST = 60
+/** how many times longer than tall a rock is drawn, at most */
+const ROCK_LONGEST = 2.2
 
 /** Where the rock's outline actually reaches across its box, 0 to 1: its
  *  curves stay a little inside the points they bend toward. */
@@ -47,7 +51,8 @@ export function objectOnRuler(kind: ObjectKind, count: number, left: number, rig
   }
   if (kind === 'rock') {
     const w = L / (ROCK_REACH.max - ROCK_REACH.min)
-    const h = Math.min(ROCK_TALLEST, L / ROCK_ASPECT)
+    // Its usual shape, then longer, then no longer than ROCK_LONGEST allows.
+    const h = Math.max(Math.min(ROCK_TALLEST, L / ROCK_ASPECT), L / ROCK_LONGEST)
     return { kind, x: left - ROCK_REACH.min * w, y: -h, w, h }
   }
   if (kind === 'cylinder') {
