@@ -44,11 +44,13 @@
   const precision = $derived(
     scale.system === 'imperial'
       ? `to the nearest ${formatLength(scale, scale.step)} in; type 3 3/8 or 3.375`
-      : scale.decimals === 0
-        ? 'in whole centimeters'
-        : scale.decimals === 1
-          ? 'to one decimal place'
-          : `to ${scale.decimals} decimal places`,
+      : scale.step > 1
+        ? `to the nearest ${scale.step} cm`
+        : scale.decimals === 0
+          ? 'in whole centimeters'
+          : scale.decimals === 1
+            ? 'to one decimal place'
+            : `to ${scale.decimals} decimal places`,
   )
 </script>
 

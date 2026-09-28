@@ -14,7 +14,7 @@
   import LengthFigure from './LengthFigure.svelte'
   import {
     CM_PER_INCH, CM_SIZES, IMPERIAL_MARKS, INCH_SIZES, METRIC_MARKS, METRIC_MARK_NAMES, READS, READ_NAMES, SYSTEMS, SYSTEM_NAMES, UNITS,
-    formatLength, nearestSize, randomLength, rulerScale, shortest, type System,
+    formatLength, marksFit, nearestSize, randomLength, rulerScale, shortest, type System,
   } from './ruler'
   import { LENGTH_VIEWS, LENGTH_VIEW_NAMES, answerLine, endOf, lengthSettings, lengthText, type LengthSettings } from './settings'
 
@@ -31,13 +31,14 @@
 
   /** The other system keeps the object the same real length, on the
    *  shortest ruler of that system it fits on, and the magnifiers about as
-   *  close (3 cm across is about 1 inch). */
+   *  wide (3 cm across is about 1 inch). */
   function changeSystem(system: System) {
     if (system === s.system) return
     const k = system === 'imperial' ? 1 / CM_PER_INCH : CM_PER_INCH
-    const [length, start] = [s.length * k, s.start * k]
+    const [length, start, across] = [s.length * k, s.start * k, s.span * scale.numbered * k]
     const size = system === 'imperial' ? { inches: nearestSize(INCH_SIZES, start + length) } : { cm: nearestSize(CM_SIZES, start + length) }
-    set({ system, ...size, length, start, span: Math.round(s.span * k) })
+    const next = lengthSettings.tidy({ ...$state.snapshot(s), system, ...size, length, start })
+    set({ ...next, span: Math.round(across / rulerScale(next).numbered) })
   }
 
   const marksName = $derived(s.system === 'imperial' ? `${formatLength(scale, scale.minor)} in` : METRIC_MARK_NAMES[s.metricMarks])
@@ -79,7 +80,7 @@
           {#each METRIC_MARKS as metricMarks (metricMarks)}
             <button
               type="button" role="radio" aria-checked={s.metricMarks === metricMarks} class="chip" class:on={s.metricMarks === metricMarks}
-              onclick={() => set({ metricMarks })}
+              disabled={!marksFit(metricMarks, s.cm)} onclick={() => set({ metricMarks })}
             >
               {METRIC_MARK_NAMES[metricMarks]}
             </button>
@@ -90,11 +91,14 @@
               type="button" role="radio" aria-checked={s.imperialMarks === imperialMarks} class="chip" class:on={s.imperialMarks === imperialMarks}
               onclick={() => set({ imperialMarks })}
             >
-              1/{imperialMarks} in
+              {imperialMarks === '1' ? '1' : `1/${imperialMarks}`} in
             </button>
           {/each}
         {/if}
       </div>
+      {#if s.system === 'metric' && !marksFit('ten', s.cm)}
+        <p class="note">5 cm and 10 cm marks are for the 50 cm and 100 cm rulers.</p>
+      {/if}
       {#if s.system === 'metric'}
         <p class="field-label">Read to</p>
         <div class="segmented" role="radiogroup" aria-label="Read to">
@@ -185,6 +189,7 @@
   .note { margin: 0.7rem 0 0; color: var(--muted); font-size: 0.85rem; }
   .zero { margin-top: 0.8rem; padding: 0.5rem 0.8rem; font-size: 0.9rem; }
   .segmented button { font-size: 0.8rem; }
+  .chip:disabled, .chip:disabled:hover { border-color: var(--border); background: #fff; color: var(--muted); opacity: 0.6; cursor: not-allowed; }
   .check { display: flex; align-items: flex-start; gap: 0.6rem; margin-top: 1rem; cursor: pointer; }
   .check input { width: 1.1rem; height: 1.1rem; margin: 0.15rem 0 0; accent-color: var(--blue); }
   .check span { display: flex; flex-direction: column; }

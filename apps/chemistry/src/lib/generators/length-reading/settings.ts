@@ -4,7 +4,7 @@ import { figureTextFields } from '$lib/shared/figureText'
 import { bool, choice, defineSettings, number } from '$lib/shared/settings'
 import { OBJECTS, objectName } from '../volume-by-displacement/objects'
 import {
-  CM_SIZES, IMPERIAL_MARKS, INCH_SIZES, METRIC_MARKS, READS, SYSTEMS, UNITS, formatLength, rulerName, rulerScale, shortest, snap,
+  CM_SIZES, IMPERIAL_MARKS, INCH_SIZES, METRIC_MARKS, READS, SYSTEMS, UNITS, formatLength, marksFit, rulerName, rulerScale, shortest, snap,
 } from './ruler'
 
 /** A magnifier on each end of the object that isn't lined up with 0. */
@@ -26,14 +26,16 @@ export const lengthSettings = defineSettings(
      *  one whose ends are above where it touches */
     guides: bool(false),
     /** the object's length, in the ruler's cm or inches */
-    length: number({ min: 0, max: 30, fallback: 4.37 }),
+    length: number({ min: 0, max: 100, fallback: 4.37 }),
     /** where its left end is on the ruler; 0 lines it up with the 0 mark */
-    start: number({ min: 0, max: 30, fallback: 0 }),
+    start: number({ min: 0, max: 100, fallback: 0 }),
     view: choice(LENGTH_VIEWS, 'both'),
     span: number({ min: 1, max: 6, fallback: 3 }),
     ...figureTextFields(),
   },
-  (s) => {
+  (settings) => {
+    // 5 cm and 10 cm marks on a short ruler become 1 cm ones.
+    const s = marksFit(settings.metricMarks, settings.cm) ? settings : { ...settings, metricMarks: 'cm' as const }
     const scale = rulerScale(s)
     const length = snap(scale, s.length, shortest(scale))
     const start = snap(scale, s.start, 0, scale.size - length)

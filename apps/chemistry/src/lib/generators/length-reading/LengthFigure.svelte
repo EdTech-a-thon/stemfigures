@@ -31,7 +31,7 @@
 
   const sources = $derived.by(() => {
     if (settings.view === 'whole') return []
-    const r = (settings.span * g.perUnit) / 2
+    const r = (settings.span * scale.numbered * g.perUnit) / 2
     // A little below the ruler's edge, so the object's end shows above it
     // and the marks and numbers below.
     const y = top + Math.min(0.3 * r, 20)

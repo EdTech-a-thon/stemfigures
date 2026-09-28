@@ -41,7 +41,7 @@ export const CHEMISTRY: CatalogEntry[] = [
     blurb: 'A metric or imperial ruler with an object lying along it, to measure.',
     description:
       'Make printable ruler figures for chemistry tests. Pick a centimeter or inch ruler and how finely it is marked, type an object’s length, and students measure it, lined up with 0 or starting partway along, with magnified views of its ends.',
-    keywords: ['ruler', 'length', 'measure', 'measuring', 'metric', 'imperial', 'centimeters', 'cm', 'millimeters', 'mm', 'inches', 'fraction', 'marble', 'rock', 'cube', 'metal', 'cylinder', 'object', 'estimated', 'digit', 'significant', 'figures', 'measurement', 'lab'],
+    keywords: ['ruler', 'length', 'measure', 'measuring', 'metric', 'imperial', 'meter', 'stick', 'meterstick', 'centimeters', 'cm', 'millimeters', 'mm', 'inches', 'fraction', 'marble', 'rock', 'cube', 'metal', 'cylinder', 'object', 'estimated', 'digit', 'significant', 'figures', 'measurement', 'lab'],
   },
   {
     id: 'mass-reading',
