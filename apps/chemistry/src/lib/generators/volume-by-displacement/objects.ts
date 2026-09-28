@@ -39,9 +39,9 @@ export type Placed =
    *  face `front` wide with a darker face `side` wide beside it, their top
    *  and bottom edges level. */
   | { kind: 'cube'; x: number; y: number; a: number; front: number; side: number }
-  /** the box it fills, standing on end: `d` across and `h` from the top of
-   *  its top face to the bottom of its curved lower edge. Seen from a little
-   *  above, so its top face shows as an ellipse. */
+  /** the box it fills, standing on end: `d` across and `h` high. Seen
+   *  level with the bottom it rests on, like the cube, so its top and bottom
+   *  edges are straight and its whole base sits on the pan or the glass. */
   | { kind: 'cylinder'; x: number; y: number; d: number; h: number }
 
 /** Drawn area per unit of tube width times the height the water rose, which
@@ -65,12 +65,13 @@ export const cubeArea = (a: number) => a ** 2 * (CUBE_FRONT + CUBE_SIDE)
 export const CYLINDER_ASPECT = 2
 /** its height over its width, at most, once it's as wide as the tube */
 const CYLINDER_LONGEST = 3.5
-/** how deep its top face and lower edge are drawn, over its width */
-export const CYLINDER_RIM = 0.3
-/** What its rounded top and bottom take off its box, over its width squared */
-const CYLINDER_ROUNDING = (CYLINDER_RIM / 2) * (2 - Math.PI / 2)
+/** how round its machined edges are, over its width: enough to sit in the
+ *  rounded bottom of the glass */
+export const CYLINDER_EDGE = 0.1
+/** What its rounded edges take off its box, over its width squared */
+const CYLINDER_ROUNDING = (4 - Math.PI) * CYLINDER_EDGE ** 2
 /** The area a cylinder `d` wide and `h` high covers: its box less the
- *  corners outside the ellipses at its top and bottom. */
+ *  rounded corners. */
 export const cylinderArea = (d: number, h: number) => d * h - CYLINDER_ROUNDING * d ** 2
 
 /** Where `kind` goes in `room` when drawn with about `area` square units. */
@@ -167,18 +168,4 @@ export function rockPath({ x, y, w, h }: { x: number; y: number; w: number; h: n
     d += ` Q ${px} ${py} ${mid(i)}`
   }
   return `${d} Z`
-}
-
-/** A metal cylinder's outline, and the band from `u1` to `u2` of the way
- *  across its side, which curves along its lower edge like the outline. */
-export function cylinderPaths({ x, y, d, h }: { x: number; y: number; d: number; h: number }) {
-  const [rx, ry] = [d / 2, (CYLINDER_RIM * d) / 2]
-  const [top, low] = [y + ry, y + h - ry]
-  // Around the bottom from left to right, on the ellipse the lower edge is.
-  const lowerEdge = (u: number) => [x + u * d, low + ry * Math.sqrt(Math.max(0, 1 - (2 * u - 1) ** 2))]
-  const band = (u1: number, u2: number) => {
-    const [[x1, y1], [x2, y2]] = [lowerEdge(u1), lowerEdge(u2)]
-    return `M ${x1} ${top} V ${y1} A ${rx} ${ry} 0 0 0 ${x2} ${y2} V ${top} Z`
-  }
-  return { top: { cx: x + rx, cy: top, rx, ry }, side: band(0, 1), band }
 }
