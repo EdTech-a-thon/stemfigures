@@ -220,4 +220,20 @@ export const MATH: CatalogEntry[] = [
       'outputs', 'domain', 'range', 'codomain', 'ordered pairs', 'pairs', 'arrows', 'ovals', 'algebra', 'printable',
     ],
   },
+  {
+    // Also on Chemistry Figures, as its own copy: see docs/adr/0001-a-generator-on-two-sites.md.
+    id: 'length-reading',
+    site: 'math',
+    name: 'Length Reading Generator',
+    path: '/length-reading',
+    blurb: 'A metric or imperial ruler with an object lying along it, to measure.',
+    description:
+      'Make a printable ruler figure for your class. Pick a centimeter or inch ruler and how finely it is marked, type an object’s length, and students measure it, lined up with 0 or starting partway along, with magnified views of its ends, then copy it into a worksheet or test.',
+    keywords: [
+      'ruler', 'rulers', 'length', 'measure', 'measuring', 'measuring length', 'measurement', 'metric', 'imperial', 'customary',
+      'meter', 'stick', 'meterstick', 'centimeters', 'cm', 'millimeters', 'mm', 'inches', 'inch', 'fraction', 'fractions',
+      'fractions of an inch', 'nearest quarter inch', 'nearest eighth inch', 'line plot', 'marble', 'rock', 'cube', 'cylinder',
+      'object', 'estimated', 'digit', 'units', 'printable',
+    ],
+  },
 ]

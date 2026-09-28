@@ -34,6 +34,7 @@ export const CHEMISTRY: CatalogEntry[] = [
     keywords: ['gas', 'syringe', 'plunger', 'collecting', 'collection', 'rate', 'reaction', 'volume', 'cm3', 'mL', 'conical', 'flask', 'delivery', 'tube', 'measurement', 'lab', 'apparatus'],
   },
   {
+    // Also on Math Figures, as its own copy: see docs/adr/0001-a-generator-on-two-sites.md.
     id: 'length-reading',
     site: 'chemistry',
     name: 'Length Reading',

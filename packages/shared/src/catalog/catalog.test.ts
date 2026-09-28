@@ -5,8 +5,18 @@ import { previewSnapshot } from './previews'
 const ids = (list: { id: string }[]) => list.map((g) => g.id)
 
 describe('the catalog', () => {
-  it('gives every generator its own id', () => {
-    expect(new Set(ids(CATALOG)).size).toBe(CATALOG.length)
+  it('gives every generator its own id on its site', () => {
+    const keys = CATALOG.map((g) => `${g.site}/${g.id}`)
+    expect(new Set(keys).size).toBe(CATALOG.length)
+  })
+
+  it('has Length Reading on both Math and Chemistry, at the same path', () => {
+    const copies = CATALOG.filter((g) => g.id === 'length-reading')
+    expect(copies.map((g) => [g.site, g.path])).toEqual([['math', '/length-reading'], ['chemistry', '/length-reading']])
+  })
+
+  it('shares an id only between copies of one generator, at the same path', () => {
+    for (const g of CATALOG) for (const h of CATALOG.filter((h) => h.id === g.id)) expect(h.path, g.id).toBe(g.path)
   })
 
   it('lists a generator only on other, real sites', () => {
@@ -40,6 +50,20 @@ describe('a site’s directory', () => {
     const { listed, elsewhere } = directory('physics', 'thermometer')
     expect(ids(listed)).toContain('temperature-reading')
     expect(elsewhere.flatMap((group) => ids(group.generators))).not.toContain('temperature-reading')
+  })
+
+  it('lists a copied generator on each of its sites, not again under the other', () => {
+    for (const [here, other] of [['math', 'chemistry'], ['chemistry', 'math']] as const) {
+      const { listed, elsewhere } = directory(here, 'ruler')
+      expect(listed.filter((g) => g.id === 'length-reading').map((g) => g.site), here).toEqual([here])
+      expect(elsewhere.find((group) => group.site === other)?.generators.map((g) => g.id) ?? [], here).not.toContain('length-reading')
+    }
+  })
+
+  it('finds both copies from a site that has neither, under each of their sites', () => {
+    const { elsewhere } = directory('physics', 'ruler')
+    const sites = elsewhere.filter((group) => ids(group.generators).includes('length-reading')).map((group) => group.site)
+    expect(sites).toEqual(['math', 'chemistry'])
   })
 
   it('links to a generator at its one address', () => {

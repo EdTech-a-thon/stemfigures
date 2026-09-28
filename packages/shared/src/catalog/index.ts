@@ -3,6 +3,10 @@
 // directories show it too, after their own generators. Searching any site's
 // directory finds generators from every site.
 //
+// The one exception is a generator copied onto two sites so each has it at
+// its own address (Length Reading, on Math and Chemistry): it has an entry
+// on each, with the same id. See docs/adr/0001-a-generator-on-two-sites.md.
+//
 // Adding a generator means adding its entry to its site's file here, its
 // preview to that app's src/lib/generators/index.ts, and a preview snapshot
 // (see previews.ts).
@@ -24,6 +28,7 @@ export type SiteId = keyof typeof SITES
 export const SITE_IDS = Object.keys(SITES) as SiteId[]
 
 export interface CatalogEntry {
+  /** unique on its site; a generator copied onto two sites has the same id on both */
   id: string
   /** the site it lives on */
   site: SiteId
@@ -70,7 +75,7 @@ export function matches(g: CatalogEntry, query: string) {
 /** A site's directory for a search (empty for none). `listed` is the site's
  *  own matching generators, then those it lists from other sites. While
  *  searching, `elsewhere` holds every other match, grouped by the site it
- *  lives on. */
+ *  lives on, leaving out other sites' copies of a generator listed here. */
 export function directory(here: SiteId, query: string) {
   const found = CATALOG.filter((g) => matches(g, query))
   const listed = [
@@ -80,7 +85,7 @@ export function directory(here: SiteId, query: string) {
   const searching = words(query).length > 0
   const elsewhere = searching
     ? SITE_IDS.filter((site) => site !== here)
-        .map((site) => ({ site, generators: found.filter((g) => g.site === site && !listed.includes(g)) }))
+        .map((site) => ({ site, generators: found.filter((g) => g.site === site && !listed.some((l) => l.id === g.id)) }))
         .filter((group) => group.generators.length)
     : []
   return { listed, elsewhere }
