@@ -10,15 +10,17 @@
   import HelpTip from '$shared/HelpTip.svelte'
   import MathInput from '$lib/shared/MathInput.svelte'
   import Section from '$shared/Section.svelte'
+  import LineOptions from '$lib/shapes/LineOptions.svelte'
+  import PartLabel from '$lib/shapes/PartLabel.svelte'
+  import { ROUND_NAMES, UNITS, pretty, roundTo } from '$lib/shapes/parts.js'
+  import ShapeFigure from '$lib/shapes/ShapeFigure.svelte'
   import { buildTriangle } from './layout.js'
-  import PartLabel from './PartLabel.svelte'
   import {
-    ANGLES, DEFAULT_SETTINGS, LINE_STYLES, SIDES,
+    ANGLES, DEFAULT_SETTINGS, SIDES,
     cleanSettings, readMoved, readTriangle, settingsFromParams, settingsToQuery, writeMoved,
-    type LineStyle, type Offset, type RawSettings, type Settings, type TriangleRead,
+    type Offset, type RawSettings, type Settings, type TriangleRead,
   } from './settings.js'
   import { OPPOSITE, type Part, type Side, type Solved, type Vertex } from './solve.js'
-  import Triangle from './Triangle.svelte'
 
   // Undo history and presets keep the names they were first saved under.
   const gen = generatorState(
@@ -48,8 +50,7 @@
 
   // How each measure reads: as typed when given, else solved and rounded.
   const unitText = $derived(clean.unit.trim() ? ` ${clean.unit.trim()}` : '')
-  const rounded = (v: number) => String(Number(v.toFixed(clean.round)))
-  const pretty = (t: string) => String(t).replace(/sqrt\(([^()]*)\)/g, '√$1').replace(/sqrt/g, '√').replace(/pi/g, 'π').replace(/-/g, '−')
+  const rounded = (v: number) => roundTo(v, clean.round)
   function solvedText(k: Part) {
     const t = read.triangle
     if (!t) return ''
@@ -63,7 +64,6 @@
   }
   const measureNote = (k: Part) => (clean[k].trim() ? 'Its measure, as you typed it.' : `Its measure, worked out from the others and rounded to ${ROUND_NAMES[clean.round]}.`)
   const NO_LENGTHS = 'No side has a length, so the triangle has a shape but no size. Give a side to show lengths.'
-  const ROUND_NAMES = ['whole numbers', 'tenths', 'hundredths']
 
   const fieldProblem = $derived(MEASURES.map((k) => read.problems[k]).find(Boolean) ?? null)
 
@@ -73,7 +73,6 @@
     s.moved = writeMoved(moved)
   }
 
-  const UNITS = ['', 'cm', 'm', 'mm', 'in', 'ft', 'yd', 'units']
   // "Other…" stays picked while its box is still empty.
   let pickedOther = $state(false)
   const otherUnit = $derived(pickedOther || !UNITS.includes(clean.unit))
@@ -101,16 +100,6 @@
   let svg = $state<SVGSVGElement>()
   const filename = 'triangle'
 </script>
-
-{#snippet lineIcon(style: LineStyle)}
-  <svg viewBox="0 0 28 12" width="28" height="12" aria-hidden="true">
-    <line
-      x1="3" y1="6" x2="25" y2="6" stroke="currentColor" stroke-width="2.5"
-      stroke-dasharray={style === 'dashed' ? '6 4' : style === 'dotted' ? '0.01 4.5' : undefined}
-      stroke-linecap={style === 'dotted' ? 'round' : 'butt'}
-    />
-  </svg>
-{/snippet}
 
 <GeneratorPage name="Triangle Generator" {filename} gen={page} {svg} bind:labelSize={s.labelSize} printWidth={6}>
   {#snippet inputs()}
@@ -180,29 +169,10 @@
             {@const right = ANGLES.find((u) => u !== v && Math.abs((good.triangle.angles[u] ?? 0) - 90) < 1e-6)}
             <div class="height-opts">
               {#if right}<p class="hint note">This height is side {sideName(`${v}${right}` as Side)}, since ∠{name(right)} is 90°, so there's no extra line to draw.</p>{/if}
-              <div class="field">
-                <span id="{h}-line">Line</span>
-                <div class="segmented" role="radiogroup" aria-labelledby="{h}-line">
-                  {#each (Object.entries(LINE_STYLES) as [LineStyle, string][]) as [value, title]}
-                    <button type="button" role="radio" aria-checked={clean[`${h}Style` as const] === value} aria-label={title} title={title} class:on={clean[`${h}Style` as const] === value} onclick={() => (s[`${h}Style` as const] = value)}>
-                      {@render lineIcon(value)}
-                    </button>
-                  {/each}
-                </div>
-              </div>
-              <div class="field">
-                <span id="{h}-label">Label</span>
-                <div class="segmented" role="radiogroup" aria-labelledby="{h}-label">
-                  {#each ([['measure', 'Measure'], ['text', 'Text'], ['none', 'None']] as const) as [value, title]}
-                    <button type="button" role="radio" aria-checked={clean[`${h}Label` as const] === value} class:on={clean[`${h}Label` as const] === value} onclick={() => (s[`${h}Label` as const] = value)}>{title}</button>
-                  {/each}
-                </div>
-                {#if clean[`${h}Label` as const] === 'text'}
-                  <MathInput id="{h}-text" aria-label="Label for the height from {name(v)}" placeholder="h" bind:value={s[`${h}Text` as const]} />
-                {:else if clean[`${h}Label` as const] === 'measure' && read.triangle && !read.triangle.sized}
-                  <p class="hint">{NO_LENGTHS}</p>
-                {/if}
-              </div>
+              <LineOptions
+                id={h} name="the height from {name(v)}" unavailable={read.triangle && !read.triangle.sized ? NO_LENGTHS : ''}
+                bind:style={s[`${h}Style` as const]} bind:mode={s[`${h}Label` as const]} bind:text={s[`${h}Text` as const]}
+              />
               <label class="field">
                 <span>Name where it lands <span class="hint">optional</span></span>
                 <input type="text" maxlength="4" placeholder="D" bind:value={s[`${h}Foot` as const]} />
@@ -270,7 +240,7 @@
   {/snippet}
 
   {#snippet figure()}
-    <Triangle figure={drawing} bind:svg onmove={moveLabel} />
+    <ShapeFigure figure={drawing} label="Triangle" bind:svg onmove={moveLabel} />
   {/snippet}
 </GeneratorPage>
 
@@ -303,7 +273,6 @@
   .height .check { margin-bottom: 0.6rem; }
   .height-opts { padding-left: 1.55rem; }
   .note { margin: -0.2rem 0 0.6rem; }
-  .segmented button { flex: 1; display: inline-grid; place-items: center; padding: 0.3rem 0.4rem; }
 
   .reset-row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
   .small { padding: 0.45rem 0.8rem; font-size: 0.85rem; border-radius: 10px; white-space: nowrap; }

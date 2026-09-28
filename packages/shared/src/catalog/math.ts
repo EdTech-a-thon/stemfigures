@@ -52,6 +52,146 @@ export const MATH: CatalogEntry[] = [
     ],
   },
   {
+    id: 'rectangle',
+    site: 'math',
+    name: 'Rectangle Generator',
+    path: '/rectangle',
+    blurb: 'Rectangles and squares drawn to scale, labeled for students.',
+    description:
+      'Make a printable rectangle or square drawn to scale for your class. Label its sides with their lengths or with x, add diagonals, congruence marks and right-angle squares, then copy it into a worksheet or test.',
+    keywords: [
+      'rectangle', 'rectangles', 'square', 'squares', 'quadrilateral', 'quadrilaterals', 'length', 'width', 'side lengths',
+      'diagonal', 'diagonals', 'right angles', 'area', 'perimeter', 'to scale', 'diagram', 'geometry', 'congruent',
+      'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'parallelogram',
+    site: 'math',
+    name: 'Parallelogram Generator',
+    path: '/parallelogram',
+    blurb: 'Parallelograms and rhombi drawn to scale, with parallel arrows.',
+    description:
+      'Make a printable parallelogram or rhombus drawn to scale for your class. Give its sides and angle, label sides and angles with their measures or with x, add parallel arrows, congruence marks, heights and diagonals, then copy it into a worksheet or test.',
+    keywords: [
+      'parallelogram', 'parallelograms', 'rhombus', 'rhombi', 'rhombuses', 'diamond', 'quadrilateral', 'quadrilaterals',
+      'parallel', 'parallel sides', 'parallel arrows', 'opposite sides', 'opposite angles', 'base', 'height', 'altitude',
+      'diagonal', 'diagonals', 'area', 'perimeter', 'angles', 'side lengths', 'to scale', 'diagram', 'geometry',
+      'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'trapezoid',
+    site: 'math',
+    name: 'Trapezoid Generator',
+    path: '/trapezoid',
+    blurb: 'Trapezoids, including right and isosceles ones, drawn to scale and labeled.',
+    description:
+      'Make a printable trapezoid drawn to scale for your class: a right, isosceles or scalene trapezoid, from its bases and height. Label sides and angles with their measures or with x, add parallel arrows, congruence marks, heights and diagonals, then copy it into a worksheet or test.',
+    keywords: [
+      'trapezoid', 'trapezoids', 'trapezium', 'trapeziums', 'right trapezoid', 'isosceles trapezoid', 'scalene trapezoid',
+      'irregular trapezoid', 'quadrilateral', 'quadrilaterals', 'bases', 'legs', 'parallel', 'parallel sides',
+      'parallel arrows', 'height', 'altitude', 'diagonal', 'diagonals', 'area', 'perimeter', 'angles', 'side lengths',
+      'to scale', 'diagram', 'geometry', 'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'kite',
+    site: 'math',
+    name: 'Kite Generator',
+    path: '/kite',
+    blurb: 'Kites drawn to scale, with their equal sides marked and labeled.',
+    description:
+      'Make a printable kite drawn to scale for your class. Give its short and long sides and top angle, label sides and angles with their measures or with x, add diagonals and congruence marks, then copy it into a worksheet or test.',
+    keywords: [
+      'kite', 'kites', 'quadrilateral', 'quadrilaterals', 'diagonal', 'diagonals', 'perpendicular diagonals',
+      'line of symmetry', 'symmetry', 'adjacent sides', 'area', 'perimeter', 'angles', 'side lengths', 'to scale',
+      'diagram', 'geometry', 'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'regular-polygon',
+    site: 'math',
+    name: 'Regular Polygon Generator',
+    path: '/regular-polygon',
+    blurb: 'Regular polygons from 3 to 20 sides, with their apothem and radius.',
+    description:
+      'Make a printable regular polygon for your class, from an equilateral triangle to a 20-gon. Size it by its side, radius or apothem, draw and label the apothem and radius, mark equal sides and angles, then copy it into a worksheet or test.',
+    keywords: [
+      'regular polygon', 'regular polygons', 'polygon', 'polygons', 'pentagon', 'hexagon', 'heptagon', 'octagon', 'nonagon',
+      'decagon', 'hendecagon', 'dodecagon', 'n-gon', 'equilateral triangle', 'square', 'apothem', 'radius', 'radii', 'center',
+      'central angle', 'interior angle', 'side length', 'area', 'perimeter', 'area of a regular polygon',
+      'to scale', 'diagram', 'geometry', 'congruent', 'tick marks', 'shapes', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'prism',
+    site: 'math',
+    name: 'Prism Generator',
+    path: '/prism',
+    blurb: 'Rectangular, triangular and other prisms drawn to scale, labeled for students.',
+    description:
+      'Make a printable prism drawn to scale for your class. Draw rectangular, triangular and regular prisms, standing or lying down, right or oblique, label lengths, widths and heights with their measures or with x, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'prism', 'prisms', 'rectangular prism', 'right rectangular prism', 'cuboid', 'box', 'cube', 'triangular prism',
+      'pentagonal prism', 'hexagonal prism', 'octagonal prism', 'oblique prism', 'lateral area', 'length', 'width', 'height',
+      'apothem', 'hidden edges', 'dashed', 'hypotenuse', 'pythagorean theorem', 'to scale', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'cylinder',
+    site: 'math',
+    name: 'Cylinder Generator',
+    path: '/cylinder',
+    blurb: 'Right and oblique cylinders drawn to scale, with the radius and height labeled.',
+    description:
+      'Make a printable cylinder drawn to scale for your class. Give its radius or diameter and height, make it right or oblique, label each with its measure or with x, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'cylinder', 'cylinders', 'can', 'oblique cylinder', 'radius', 'diameter', 'height', 'lateral area', 'circle',
+      'hidden edges', 'dashed', 'to scale', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'pyramid',
+    site: 'math',
+    name: 'Pyramid Generator',
+    path: '/pyramid',
+    blurb: 'Square, rectangular and other pyramids with their height and slant height labeled.',
+    description:
+      'Make a printable pyramid drawn to scale for your class. Draw square, rectangular, triangular and regular pyramids, right or oblique, label the height and slant height with their measures or with x, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'pyramid', 'pyramids', 'square pyramid', 'rectangular pyramid', 'triangular pyramid', 'tetrahedron',
+      'hexagonal pyramid', 'oblique pyramid', 'height', 'slant height', 'apothem', 'lateral area', 'hidden edges', 'dashed',
+      'pythagorean theorem', 'to scale', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'cone',
+    site: 'math',
+    name: 'Cone Generator',
+    path: '/cone',
+    blurb: 'Right and oblique cones with their radius, height and slant height labeled.',
+    description:
+      'Make a printable cone drawn to scale for your class. Give its radius or diameter and its height or slant height, make it right or oblique, label each with its measure or with x, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'cone', 'cones', 'oblique cone', 'radius', 'diameter', 'height', 'slant height', 'lateral area', 'circle',
+      'hidden edges', 'dashed', 'pythagorean theorem', 'to scale', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+  },
+  {
+    id: 'sphere',
+    site: 'math',
+    name: 'Sphere Generator',
+    path: '/sphere',
+    blurb: 'Spheres and hemispheres with their radius or diameter labeled.',
+    description:
+      'Make a printable sphere or hemisphere for your class. Give its radius or diameter, label it with its measure or with x, turn a hemisphere into a dome or a bowl, then copy it into a worksheet or test on volume and surface area.',
+    keywords: [
+      '3d', 'three dimensional', 'solid', 'solids', 'geometric solids', '3d shape', '3d figure', 'volume', 'surface area', 'sphere', 'spheres', 'ball', 'hemisphere', 'hemispheres', 'half sphere', 'dome', 'bowl', 'radius', 'diameter',
+      'great circle', 'circle', 'hidden edges', 'dashed', 'diagram', 'geometry', 'labels', 'printable',
+    ],
+  },
+  {
     id: 'box-plot',
     site: 'math',
     name: 'Box Plot Generator',
@@ -64,6 +204,20 @@ export const MATH: CatalogEntry[] = [
       'five-number summary', 'quartile', 'quartiles', 'q1', 'q3', 'median', 'minimum', 'maximum', 'range', 'interquartile range',
       'iqr', 'outlier', 'outliers', 'statistics', 'stats', 'data', 'data set', 'data display', 'compare data', 'distribution',
       'spread', 'center', 'printable',
+    ],
+  },
+  {
+    id: 'mapping-diagram',
+    site: 'math',
+    name: 'Mapping Diagram Generator',
+    path: '/mapping-diagram',
+    blurb: 'Mapping diagrams from a list of inputs and outputs, with arrows between them.',
+    description:
+      'Make a printable mapping diagram for your class. Type or paste the inputs and outputs, or ordered pairs, click to draw arrows between them for a function or a relation that isn’t one, title each side, then copy it into a worksheet or test.',
+    keywords: [
+      'mapping diagram', 'mapping diagrams', 'mapping', 'arrow diagram', 'function', 'functions', 'relation', 'relations',
+      'is it a function', 'not a function', 'function or not', 'one-to-one', 'many-to-one', 'input', 'output', 'inputs',
+      'outputs', 'domain', 'range', 'codomain', 'ordered pairs', 'pairs', 'arrows', 'ovals', 'algebra', 'printable',
     ],
   },
 ]

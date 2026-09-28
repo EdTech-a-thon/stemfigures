@@ -128,22 +128,22 @@ _Avoid_: Discontinuity, break, limit line
 The letter written at a point, typed before it in textbook notation: A(1, 2) on a coordinate grid, P(0.35) on a number line. It's one letter, with primes or a subscript allowed (A′, A₁), and it belongs to its point, so it stays when the point's numbers change and goes when the point is deleted. A points row's style shows just the labels or the labels with their coordinates or values, A or A(0.35). On a number line a labeled point's value is never written, since it would give the answer away; endpoints and sequence terms aren't labeled.
 _Avoid_: Point name, vertex name (that's a triangle's), letter, tag
 
-### Triangles
+### Shapes
 
-**Triangle**:
-A figure of one triangle, drawn to scale from the measures the teacher gives and labeled for students. Its generator is the Triangle Generator.
-_Avoid_: Shape, polygon, diagram, drawing
+**Shape**:
+A figure of straight sides meeting at named vertices, drawn to scale from its measures and labeled for students: a triangle, a quadrilateral or a regular polygon. Each has its own generator.
+_Avoid_: Polygon (alone; say regular polygon for that figure), diagram, drawing
 
 **Part**:
-Any vertex, side, angle or extra line of a triangle, or any of a box plot's five-number summary: something that can carry a label or a marking.
+Any vertex, side, angle or extra line of a shape, or any of a box plot's five-number summary: something that can carry a label or a marking.
 _Avoid_: Element, component, piece
 
 **Vertex name**:
-The letter at a corner, such as A, B or C. Each can be renamed or left blank, and the triangle's measures are named after them (∠B, AB).
+The letter at a corner, such as A, B or C. Each can be renamed or left blank, and the shape's measures are named after them (∠B, AB).
 _Avoid_: Point, corner label
 
 **Measure**:
-A side's length or an angle's size, in degrees. A **given** measure is one the teacher types; any three that make a triangle are enough. A **solved** measure is worked out from the givens. Drawing to scale means proportional, not true size on paper.
+A side's length or an angle's size, in degrees. A **given** measure is one the teacher types; a **solved** measure is worked out from the givens. Drawing to scale means proportional, not true size on paper.
 _Avoid_: Value, dimension, size
 
 **Part label**:
@@ -151,24 +151,66 @@ What's written at a part: nothing, its measure (such as 12 or 24°, with the fig
 _Avoid_: Text box, caption, annotation, label (alone; axes have their own labels)
 
 **Unit**:
-One optional unit for the whole triangle, such as cm or ft, added to every length shown as its measure.
+One optional unit for the whole shape, such as cm or ft, added to every length shown as its measure.
 _Avoid_: Scale
 
 **Extra line**:
-A line drawn onto a triangle that isn't one of its sides. For now the only one is a height: dropped from a vertex to the opposite side, which is extended when the height lands outside the triangle. The point where it lands can be given a name, such as D. It can be solid, dashed or dotted, like a graphed line.
+A line drawn onto a shape that isn't one of its sides: a height, dropped from a vertex to a side, which is extended when the height lands outside the shape, a quadrilateral's diagonal, joining opposite vertices, or a regular polygon's apothem or radius. The point where a height lands, or where the diagonals cross, can be given a name, such as E. It can be solid, dashed or dotted, like a graphed line.
 _Avoid_: Auxiliary line, segment, construction
 
 **Marking**:
-A standard geometry symbol on a part: congruence ticks on sides, congruence arcs on angles, or a right-angle square. The teacher sets congruence marks by hand, never from equal measures, so they don't give answers away. An angle gets an arc only when it has a label or congruence arcs. A right-angle square appears on its own at every 90° angle, including where a height meets a side, and can be turned off.
+A standard geometry symbol on a part: congruence ticks on sides, parallel arrows on sides, congruence arcs on angles, or a right-angle square. The teacher sets congruence marks and parallel arrows by hand, never from the measures or the kind of shape, so they don't give answers away. An angle gets an arc only when it has a label or congruence arcs. A right-angle square appears on its own at every 90° angle, including where a height meets a side and where diagonals cross at right angles, and can be turned off.
 _Avoid_: Symbol, annotation, tick (a number line's tick is different)
 
+**Parallel arrows**:
+One, two or three arrowheads in the middle of a side; sides with the same number are parallel.
+_Avoid_: Parallel marks, chevrons
+
 **Base side**:
-The side that sits flat along the bottom before any flip or rotation, AB unless the teacher picks another.
+The side that sits flat along the bottom before any flip or rotation.
 _Avoid_: Bottom, base (alone; a height's base is the side it meets)
+
+### Triangles
+
+**Triangle**:
+A shape with three vertices, drawn from any three measures that make one. Its generator is the Triangle Generator.
+_Avoid_: Shape (alone), polygon
 
 **Other triangle**:
 The second triangle two sides and a non-included angle can make (the ambiguous case). The generator draws the one whose unknown angle is acute unless the teacher switches to the other.
 _Avoid_: Second solution, alternate
+
+### Quadrilaterals
+
+**Quadrilateral**:
+A shape with four vertices, A, B, C and D in order around it. Each family of quadrilaterals has its own generator: the Rectangle, Parallelogram, Trapezoid and Kite Generators.
+_Avoid_: Quad, four-sided polygon
+
+**Kind**:
+Which quadrilateral a generator draws, which decides the measures the teacher gives. The Rectangle Generator draws rectangles and squares, the Parallelogram Generator parallelograms and rhombi, the Trapezoid Generator trapezoids, isosceles trapezoids and right trapezoids, and the Kite Generator kites.
+_Avoid_: Type, shape (alone), category
+
+**Trapezoid**:
+A quadrilateral with exactly one pair of parallel sides, its **bases**; the other two are its **legs**. A right trapezoid has a leg at right angles to both bases.
+_Avoid_: Trapezium (what UK teachers call it; fine as a search word)
+
+### Regular polygons
+
+**Regular polygon**:
+A shape with 3 to 20 equal sides and equal angles around a center, sized by its side, radius or apothem. Its generator is the Regular Polygon Generator. Past 12 sides it's named by its count, such as a 15-gon.
+_Avoid_: Polygon (alone), n-sided shape
+
+**Center**:
+The point a regular polygon is drawn around, the same distance from every vertex. It can be shown as a dot and named, such as O.
+_Avoid_: Centre, midpoint, origin
+
+**Apothem**:
+The line from a regular polygon's center to the middle of a side, at right angles to it, and its length. The generator draws it to the bottom side.
+_Avoid_: Inradius, height
+
+**Radius**:
+The line from a regular polygon's center to a vertex, and its length; together, the **radii**. The generator draws one to the bottom right vertex, so with the apothem it makes the right triangle used for area.
+_Avoid_: Circumradius
 
 ### Data displays
 
@@ -203,3 +245,66 @@ _Avoid_: Count (fine in speech), tally
 **Line plot**:
 A number line with a mark stacked above each value of a data set, as grades 3–6 use the name. No generator makes one yet.
 _Avoid_: Dot plot is the same figure; line graph (points joined across a coordinate grid) is a different one
+
+### 3D shapes
+
+**3D Shape**:
+Any of the three-dimensional figures below — a prism, cylinder, pyramid, cone or sphere — drawn to scale from the measures the teacher gives and labeled for students. Each has its own generator; the words in this section belong to all of them. A 3D shape isn’t a **Shape**, which is flat.
+_Avoid_: Solid (fine as a search word), 3D figure, volume diagram, shape (alone)
+
+**Prism**:
+A 3D shape with two matching bases joined by flat sides: a rectangle (a box), a right or isosceles triangle, or a regular polygon of 3 to 8 sides. It stands on its base or lies on its side; a triangular prism lies down unless the teacher stands it up. Its generator is the Prism Generator.
+_Avoid_: Box (fine as a search word), cuboid
+
+**Cylinder**:
+A 3D shape with two matching circles joined by a curved side. Its generator is the Cylinder Generator.
+_Avoid_: Can, tube
+
+**Pyramid**:
+A 3D shape with a base, a rectangle or a regular polygon, whose sides meet at a tip. Its generator is the Pyramid Generator.
+_Avoid_: Tetrahedron (fine as a search word)
+
+**Cone**:
+A 3D shape with a circle for its base and a curved side that meets at a tip. Its generator is the Cone Generator.
+
+**Sphere**:
+A 3D shape that is round all over, every point on it the same distance from its middle. Its generator, the Sphere Generator, also draws a **hemisphere**: half a sphere, its flat face down like a dome or up like a bowl.
+_Avoid_: Ball, half sphere
+
+**Oblique**:
+A 3D shape that leans: its top slides sideways from above its base, so its side edges slant and its height is shorter than them. The opposite, standing straight up, is **right**, as in right prism.
+_Avoid_: Slanted, tilted, leaning, skewed
+
+**Hidden edge**:
+An edge a viewer couldn't see through the front of a 3D shape, drawn dashed. Hidden edges can be turned off to leave only the outline.
+_Avoid_: Back edge, dotted edge, invisible line
+
+**Height** (of a 3D shape):
+The straight-up distance from a 3D shape's base to its top or tip, drawn dashed with a right-angle square where it meets the base. On an oblique shape it lands outside the shape, so the base's line is extended out to meet it. It can be shown or hidden.
+_Avoid_: Altitude, perpendicular height (fine in a label), vertical
+
+**Slant height**:
+On a right pyramid or cone, the distance from the tip down the middle of a sloping face (on a cone, down its side) to the base's edge.
+_Avoid_: Slant, lateral height, side length
+
+**Lean**:
+How far an oblique shape's top slides sideways past its base, measured along the base's extended line. Any two of the height, the lean and the slanted side edge are enough; the third is worked out.
+_Avoid_: Offset, shift, overhang
+
+### Mapping diagrams
+
+**Mapping diagram**:
+A figure of two lists side by side, the inputs on the left and the outputs on the right, each in an oval (or a box, or nothing) under its title, with an arrow from each input to each output it maps to. It shows a function, or a relation that isn't one. Its generator is the Mapping Diagram Generator.
+_Avoid_: Arrow diagram, mapping (fine as search words, not as the name)
+
+**Input**, **Output**:
+One item on a mapping diagram's left side, or its right. Each is a number, math like 2x or 1/2, or a word, typed or pasted as a list, and shown once however often it's typed. The sides are titled Input and Output unless the teacher writes something else, such as x and y.
+_Avoid_: Domain and range (a graphed line's domain and an axis's range are different things here), element, value
+
+**Arrow** (on a mapping diagram):
+A straight line with an arrowhead from one input to one output, saying that input maps to it. It's kept by what its two ends say, so reordering a list keeps it. An input can have several arrows, or none, for students to draw.
+_Avoid_: Line, connection, link
+
+**Function** (on a mapping diagram):
+A mapping diagram where every input has exactly one arrow. The generator tells the teacher whether theirs is one, and why not (an input with two outputs, or one with none), but never writes it on the figure.
+_Avoid_: Well-defined, valid

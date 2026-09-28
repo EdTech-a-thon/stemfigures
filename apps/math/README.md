@@ -19,6 +19,20 @@ and `docs/adr/` for decisions.
   Each side and angle is labeled with its measure, typed math like x, or
   nothing, with congruence marks; heights, right-angle squares, a unit,
   rounding, base side, flip and turn. Labels can be dragged on the figure.
+- `/rectangle`, `/parallelogram`, `/trapezoid`, `/kite` **Rectangle,
+  Parallelogram, Trapezoid and Kite Generators**: one page each, drawing its
+  own kinds (rectangles and squares; parallelograms and rhombi; trapezoids,
+  isosceles and right trapezoids; kites) to scale from the measures the kind
+  asks for. The same labels and markings as the triangle, plus parallel arrows,
+  heights to AB and diagonals with a named crossing point.
+- `/regular-polygon` **Regular Polygon Generator**: a regular polygon of 3 to
+  20 sides, sized by its side, radius or apothem, with the apothem, a radius or
+  all the radii drawn from its center, and marks on every side and angle.
+- `/mapping-diagram` **Mapping Diagram Generator**: inputs and outputs typed or
+  pasted as lists (or as ordered pairs), and arrows chosen per input, so it can
+  show a function or a relation that isn't one; the panel says which, and why.
+  Each side is titled (Input and Output, or text, a blank line or nothing) and
+  drawn in an oval, a box or nothing.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
@@ -36,15 +50,31 @@ Saved presets stay in the browser's localStorage.
 ```
 src/routes/            SvelteKit pages
 src/lib/site/          top bar, directory dialogs, Help, footer, SEO
-src/lib/shared/        pieces every generator uses: figure card and toolbar,
-                       undo history, presets, dialogs, fields, end-cap picker
-$shared/               ../../packages/shared: pieces shared with the other sites
+src/lib/shared/        pieces Math's generators use: math fields and their
+                       SVG layout, sections, help tips, end-cap and row-style pickers
+$shared/               ../../packages/shared: pieces shared with the other sites,
+                       including the generator page, figure card and toolbar,
+                       undo history, presets and the generator catalog
+src/lib/shapes/        the shape layer the triangle, quadrilaterals and regular
+                       polygon share:
+                       laying out and drawing a shape's parts, labels and
+                       markings, the label popup and extra-line options;
+                       quadrilateral/ holds the kinds and the page all four
+                       quadrilateral generators use, each generator's folder
+                       only naming its family (its kinds and opening figure)
 src/lib/generators/    index.ts lists every generator; one folder each
 ```
 
+A shape generator works out where its corners go and what each part says,
+and hands that to `shapes/layout.ts`; every mark and label is placed there.
+Every part has an id (a corner "B", a side "AB", an extra line "hB" or
+"dAC"), which a future click-to-label canvas can use to pick parts out.
+
 To add a generator: make a folder under `src/lib/generators/` with its
-builder and preview, add one entry to `generators/index.ts`, and add its route
-under `src/routes/`. The directory, search and sitemap pick it up from the list.
+builder and preview, add its entry to `$shared/catalog/math.ts` and its preview
+to `generators/index.ts`, add its route under `src/routes/`, and retake the
+preview pictures (see `packages/shared/README.md`). The directory, search and
+sitemap pick it up from the list.
 
 ## Development
 

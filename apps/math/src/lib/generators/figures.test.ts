@@ -3,12 +3,25 @@
 // `npx vitest run -u` after a change that is meant to move the drawing.
 
 import { describe, expect, test } from 'vitest'
+import { buildShape } from './3d-shape/layout.js'
+import * as shape from './3d-shape/settings.js'
+import { readShape } from './3d-shape/solve.js'
 import { buildPlot } from './box-plot/boxplot.js'
 import * as box from './box-plot/settings.js'
 import { buildGraph } from './coordinate-grid/graph.js'
 import * as grid from './coordinate-grid/settings.js'
 import { buildLine } from './number-line/numberline.js'
 import * as line from './number-line/settings.js'
+import { buildDiagram } from './mapping-diagram/layout.js'
+import * as mapping from './mapping-diagram/settings.js'
+import { buildQuadrilateral } from '$lib/shapes/quadrilateral/layout.js'
+import { readQuadrilateral } from '$lib/shapes/quadrilateral/settings.js'
+import { family as kite } from './kite/family.js'
+import { family as parallelogram } from './parallelogram/family.js'
+import { family as rectangle } from './rectangle/family.js'
+import { buildPolygon } from './regular-polygon/layout.js'
+import * as polygon from './regular-polygon/settings.js'
+import { family as trapezoid } from './trapezoid/family.js'
 import { buildTriangle } from './triangle/layout.js'
 import * as triangle from './triangle/settings.js'
 
@@ -90,6 +103,49 @@ const TRIANGLE = [
   'A=20',
 ]
 
+const QUADRILATERALS = {
+  rectangle: [
+    '',
+    'unit=cm&BCLabel=measure&dAC=1&dACLabel=measure',
+    'kind=square&ABTicks=1&BCTicks=1&CDTicks=1&DATicks=1',
+    'kind=square&AB=x',
+    'ABTicks=1&CDTicks=1&labelSize=large&moved=AB%3A4%2C-6%3BvC%3A0%2C3',
+  ],
+  parallelogram: [
+    '',
+    'AArcs=1&CArcs=1&hD=1&hDFoot=E',
+    'kind=rhombus&dAC=1&dBD=1&cross=E&ABTicks=1&BCTicks=1&CDTicks=1&DATicks=1',
+    'nameA=P&nameB=Q&nameC=R&nameD=S&unit=cm&ALabel=measure&BLabel=text&BText=2x%2B1&hD=1&hDLabel=measure&base=CD&flip=1&rotate=20',
+  ],
+  trapezoid: [
+    '',
+    'kind=trapezoid',
+    'kind=trapezoid&AB=4&CD=9&h=3&A=30&hD=1&hC=1&hDLabel=text&hDText=h&hDFoot=E&hCFoot=F',
+    'kind=trapezoid&ALabel=measure&ABArrows=2&CDArrows=2&dAC=1&dBD=1&cross=E&hDFoot=F',
+    'kind=isosceles-trapezoid&DATicks=1&BCTicks=1&AArcs=1&BArcs=1&round=2',
+    'base=BC&flip=1&rotate=45&hC=1&hCStyle=dotted',
+    'ABTicks=1&ABArrows=2&CDTicks=1&labelSize=large',
+    'kind=trapezoid&AB=7&CD=7',
+  ],
+  kite: [
+    '',
+    'dAC=1&dBD=1&cross=E&BLabel=measure',
+    'base=AB&square=0&dAC=1&dBD=1',
+    'DA=2',
+  ],
+}
+
+const POLYGON = [
+  '',
+  'n=3&sideLabel=measure&angleLabel=measure&angleArcs=1&sideTicks=1',
+  'n=4&apothem=0&radii=1&centerName=O',
+  'n=5&radius=1&radiusLabel=text&radiusText=r&apothemLabel=measure&centerName=O&letters=1',
+  'n=8&sizeBy=apothem&size=6&radius=1&radiusLabel=measure&apothemLabel=measure&sideLabel=measure&unit=cm',
+  'n=12&sizeBy=radius&size=4sqrt(2)&dot=0&apothem=0&sideTicks=2&rotate=15',
+  'n=20&letters=1&labelSize=large&moved=apothem%3A4%2C-6',
+  'size=x',
+]
+
 const data = (...rows: string[]) => rows.map((r) => `data=${encodeURIComponent(r)}`).join('&')
 
 const BOX = [
@@ -104,6 +160,48 @@ const BOX = [
   `from=0&to=1&step=1%2F4&${data('0.1, 0.3, 0.5, 0.6, 0.9')}`,
   `from=0&to=100&step=1&every=10&${data('12, 40, 55, 90')}`,
   `from=abc&step=-1&${data('1, 2, x', '3, 400')}`,
+]
+
+const arrows = (...pairs: [string, string][]) => pairs.map(([a, b]) => `arrow=${encodeURIComponent(`${a}→${b}`)}`).join('&')
+
+const MAPPING = [
+  '',
+  `inputs=-2%2C+-1%2C+0%2C+1%2C+2&outputs=0%2C+1%2C+4&${arrows(['-2', '4'], ['-1', '1'], ['0', '0'], ['1', '1'], ['2', '4'])}`,
+  `inputs=4%2C+9&outputs=-3%2C+-2%2C+2%2C+3&${arrows(['4', '-2'], ['4', '2'], ['9', '-3'], ['9', '3'])}`,
+  'inputs=1%2C+2%2C+3&outputs=a%2C+b',
+  `inputs=Ana%0ABo%0ACy&outputs=red%0Ablue&inputTitle=Student&outputTitle=Favorite+color&${arrows(['Ana', 'red'], ['Bo', 'blue'], ['Cy', 'red'])}`,
+  `inputs=x%2C+2x%2C+1%2F2&outputs=sqrt(2)%2C+x%5E2&shape=box&title=Relation+R&titleMode=text&${arrows(['x', 'x^2'], ['1/2', 'sqrt(2)'])}`,
+  'inputs=1%2C+2&outputs=3&shape=none&inputTitleMode=blank&outputTitleMode=none&titleMode=blank&labelSize=large',
+  `inputs=1&outputs=2&${arrows(['1', '2'], ['5', '2'])}`,
+]
+
+const SHAPE = [
+  '',
+  'depth=left&names=1',
+  'hidden=0&unit=in&labelSize=large',
+  'oblique=1&height=4&lean=3&edgeLabel=measure',
+  'oblique=1&leanTo=left&height=&lean=3&edge=5',
+  'base=right',
+  'base=right&pose=stand&oblique=1',
+  'base=isosceles&triHeightLabel=text&triHeightText=h&hypLabel=measure&names=1',
+  'base=regular&sides=6&side=3&height=6&apothemLabel=measure',
+  'base=regular&sides=5&pose=lie&names=1&depth=left&nameList=P+Q',
+  'shape=pyramid&slantLabel=measure&names=1',
+  'shape=pyramid&base=regular&sides=3&side=4&height=&slant=5&apothemLabel=measure',
+  'shape=pyramid&oblique=1&lean=3&square=0',
+  'shape=cylinder',
+  'shape=cylinder&oblique=1&leanTo=left&edgeLabel=measure',
+  'shape=cylinder&diameter=1&radius=6&radiusLabel=text&radiusText=d',
+  'shape=cone&slantLabel=measure&showHeight=0',
+  'shape=cone&oblique=1&lean=4',
+  'shape=cone&radius=10&height=1',
+  'shape=sphere',
+  'shape=hemisphere&diameter=1&radius=8',
+  'shape=hemisphere&bowl=1&hidden=0',
+  'length=1&width=1&height=100',
+  'moved=length%3A4%2C-6%3BvC%3A0%2C3&names=1',
+  'length=abc',
+  'oblique=1&height=4&lean=3&edge=9',
 ]
 
 const params = (q: string) => new URLSearchParams(q)
@@ -131,11 +229,50 @@ describe('box plot', () => {
   })
 })
 
+describe('mapping diagram', () => {
+  test.each(MAPPING)('%s', (q) => {
+    const s = mapping.settingsFromParams(params(q))
+    const { verdict, repeated } = mapping.readMapping(s)
+    expect({ query: mapping.settingsToQuery(s), verdict, repeated, diagram: buildDiagram(s) }).toMatchSnapshot()
+  })
+})
+
 describe('triangle', () => {
   test.each(TRIANGLE)('%s', (q) => {
     const s = triangle.settingsFromParams(params(q))
     const read = triangle.readTriangle(s)
     const figure = read.triangle ? buildTriangle(s, read.triangle, read.given) : null
     expect({ query: triangle.settingsToQuery(s), read, figure }).toMatchSnapshot()
+  })
+})
+
+describe('regular polygon', () => {
+  test.each(POLYGON)('%s', (q) => {
+    const s = polygon.settingsFromParams(params(q))
+    const read = polygon.readPolygon(s)
+    const figure = read.polygon ? buildPolygon(s, read.polygon) : null
+    expect({ query: polygon.settingsToQuery(s), read, figure }).toMatchSnapshot()
+  })
+})
+
+describe('3D shape', () => {
+  test.each(SHAPE)('%s', (q) => {
+    const kind = shape.settingsFor(shape.kindOf(params(q).get('shape')))
+    const s = kind.settingsFromParams(params(q))
+    const read = readShape(s)
+    const figure = read.values ? buildShape(s, { ...read, values: read.values }) : null
+    expect({ query: kind.settingsToQuery(s), read, figure }).toMatchSnapshot()
+  })
+})
+
+const FAMILIES = { rectangle, parallelogram, trapezoid, kite }
+
+describe.each(Object.keys(FAMILIES) as (keyof typeof FAMILIES)[])('%s', (name) => {
+  const family = FAMILIES[name]
+  test.each(QUADRILATERALS[name])('%s', (q) => {
+    const s = family.settingsFromParams(params(q))
+    const read = readQuadrilateral(s)
+    const figure = read.shape ? buildQuadrilateral(s, read.shape, read.given) : null
+    expect({ query: family.settingsToQuery(s), read, figure }).toMatchSnapshot()
   })
 })
