@@ -21,7 +21,17 @@ export const CHEMISTRY: CatalogEntry[] = [
     blurb: 'A graduated cylinder before and after an object is dropped in.',
     description:
       'Make printable water displacement figures for chemistry tests. Type the before and after readings and get two graduated cylinders, with an object in the second, for students to find its volume.',
-    keywords: ['water', 'displacement', 'displaced', 'graduated', 'cylinder', 'object', 'marble', 'rock', 'cube', 'irregular', 'solid', 'volume', 'density', 'mL', 'measurement', 'lab'],
+    keywords: ['water', 'displacement', 'displaced', 'graduated', 'cylinder', 'object', 'marble', 'rock', 'cube', 'metal', 'irregular', 'solid', 'volume', 'density', 'mL', 'measurement', 'lab'],
+  },
+  {
+    id: 'gas-syringe',
+    site: 'chemistry',
+    name: 'Gas Syringe',
+    path: '/gas-syringe',
+    blurb: 'A gas syringe showing the volume of gas you type, alone or collecting from a flask.',
+    description:
+      'Make printable gas syringe figures for chemistry tests. Type a volume of gas in cm³ or mL and students read it from the plunger of a 50 or 100 cm³ syringe, alone or set up with a conical flask and stand, with a magnified view for the estimated digit.',
+    keywords: ['gas', 'syringe', 'plunger', 'collecting', 'collection', 'rate', 'reaction', 'volume', 'cm3', 'mL', 'conical', 'flask', 'delivery', 'tube', 'measurement', 'lab', 'apparatus'],
   },
   {
     id: 'mass-reading',
@@ -31,7 +41,7 @@ export const CHEMISTRY: CatalogEntry[] = [
     blurb: 'A triple beam or digital balance showing the mass you type.',
     description:
       'Make printable balance figures for chemistry tests. Type a mass and get a digital, analytical or triple beam balance showing it, for students to read.',
-    keywords: ['balance', 'scale', 'digital', 'analytical', 'electronic', 'triple', 'beam', 'mass', 'grams', 'weigh', 'weight', 'marble', 'rock', 'cube', 'object', 'density', 'measurement', 'lab'],
+    keywords: ['balance', 'scale', 'digital', 'analytical', 'electronic', 'triple', 'beam', 'mass', 'grams', 'weigh', 'weight', 'marble', 'rock', 'cube', 'metal', 'object', 'density', 'measurement', 'lab'],
   },
   {
     id: 'temperature-reading',
@@ -70,10 +80,10 @@ export const CHEMISTRY: CatalogEntry[] = [
     site: 'chemistry',
     name: 'Bohr Model',
     path: '/bohr-model',
-    blurb: 'An atom’s protons, neutrons and electrons on their shells.',
+    blurb: 'An atom or ion’s protons, neutrons and electrons on their shells.',
     description:
-      'Make printable Bohr model diagrams for chemistry tests. Set the protons, neutrons and electrons on each shell, or fill the shells for any element, and get the nucleus and rings in your colors, with empty rings or a blank nucleus for students to complete.',
-    keywords: ['bohr', 'atom', 'atomic', 'model', 'structure', 'proton', 'protons', 'neutron', 'neutrons', 'electron', 'electrons', 'nucleus', 'shell', 'shells', 'energy', 'level', 'orbit', 'isotope', 'ion', 'diagram'],
+      'Make printable Bohr model diagrams for chemistry tests. Pick any element and charge, or set the protons, neutrons and electrons on each shell, and get the nucleus and rings in your colors, with an ion’s gained and lost electrons marked, empty rings or a blank nucleus for students to complete.',
+    keywords: ['bohr', 'atom', 'atomic', 'model', 'structure', 'proton', 'protons', 'neutron', 'neutrons', 'electron', 'electrons', 'nucleus', 'shell', 'shells', 'energy', 'level', 'orbit', 'isotope', 'ion', 'ions', 'cation', 'anion', 'charge', 'element', 'periodic', 'gained', 'lost', 'valence', 'diagram'],
   },
   {
     id: 'lewis-structures',

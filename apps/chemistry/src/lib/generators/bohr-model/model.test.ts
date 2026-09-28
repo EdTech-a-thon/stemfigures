@@ -74,8 +74,34 @@ describe('rings and electrons', () => {
     expect(angles(4)).toEqual([-90, 0, 90, 180])
     const five = angles(5)
     expect(five).toHaveLength(5)
-    expect(five.slice(0, 2).every((a) => Math.abs(a + 90) < 10)).toBe(true)
+    // in filling order: the fifth pairs with the first, at the top
+    expect([five[0], five[4]].every((a) => Math.abs(a + 90) < 10)).toBe(true)
+    expect(five.slice(1, 4)).toEqual([0, 90, 180])
     expect(angles(8)).toHaveLength(8)
+  })
+
+  it('places a shell’s electrons the same whether some are gained or lost', () => {
+    const at = (ring: { electrons: { x: number; y: number }[] }) => ring.electrons.map((e) => `${e.x},${e.y}`)
+    // Cl⁻ against Cl: the gained electron completes the last pair
+    const [, , cl] = rings([2, 8, 8], 'paired', false, [2, 8, 7])
+    expect(cl.electrons.map((e) => e.change)).toEqual([...Array(7).fill(undefined), 'gained'])
+    expect(at(cl)).toEqual(at(rings([2, 8, 8], 'paired', false)[2]))
+    // Mg²⁺ against Mg: both of the third shell's electrons lost, their ring kept
+    const mg = rings([2, 8], 'even', false, [2, 8, 2])
+    expect(mg).toHaveLength(3)
+    expect(mg[2].electrons.map((e) => e.change)).toEqual(['lost', 'lost'])
+    expect(at(mg[2])).toEqual(at(rings([2, 8, 2], 'even', false)[2]))
+    expect(mg.slice(0, 2).every((r) => r.electrons.every((e) => !e.change))).toBe(true)
+  })
+
+  it('shows an excited atom losing on one shell and gaining on another', () => {
+    const drawn = rings([2, 7, 2], 'even', false, [2, 8, 1])
+    expect(drawn[1].electrons.filter((e) => e.change === 'lost')).toHaveLength(1)
+    expect(drawn[2].electrons.map((e) => e.change)).toEqual([undefined, 'gained'])
+  })
+
+  it('marks nothing without the neutral atom', () => {
+    expect(rings([2, 8], 'even', false).flatMap((r) => r.electrons).some((e) => e.change)).toBe(false)
   })
 
   it('pairs a full first shell at the top, as He is drawn', () => {

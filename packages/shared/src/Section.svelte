@@ -12,10 +12,14 @@
     open?: boolean
     children: Snippet
   }
-  let { title, summary, icon: Icon, open = false, children }: Props = $props()
+  let { title, summary, icon: Icon, open: startOpen = false, children }: Props = $props()
+  // Its own state, bound to the element, so a changing summary doesn't
+  // re-apply the starting value and close a section the user opened.
+  // svelte-ignore state_referenced_locally
+  let open = $state(startOpen)
 </script>
 
-<details class="section" {open}>
+<details class="section" bind:open>
   <summary>
     <span class="icon"><Icon size={18} aria-hidden="true" /></span>
     <span class="text">

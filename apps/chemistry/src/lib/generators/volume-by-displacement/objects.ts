@@ -4,16 +4,16 @@
 // grows with the displaced volume, and it always rests on the bottom, inside
 // the tube and under the water.
 
-export const OBJECTS = ['marbles', 'rock', 'cube'] as const
+export const OBJECTS = ['marbles', 'rock', 'cube', 'cylinder'] as const
 export type ObjectKind = (typeof OBJECTS)[number]
 
-export const OBJECT_NAMES: Record<ObjectKind, string> = { marbles: 'Marbles', rock: 'Rock', cube: 'Cube' }
+export const OBJECT_NAMES: Record<ObjectKind, string> = { marbles: 'Marbles', rock: 'Rock', cube: 'Cube', cylinder: 'Metal cylinder' }
 
 export const MARBLE_COUNTS = [1, 2, 3, 4, 5] as const
 
-/** The object in a sentence: "a marble", "3 marbles", "a rock". */
+/** The object in a sentence: "a marble", "3 marbles", "a rock", "a metal cylinder". */
 export const objectName = (kind: ObjectKind, marbles: number) =>
-  kind === 'marbles' ? (marbles === 1 ? 'a marble' : `${marbles} marbles`) : `a ${kind}`
+  kind === 'marbles' ? (marbles === 1 ? 'a marble' : `${marbles} marbles`) : `a ${OBJECT_NAMES[kind].toLowerCase()}`
 
 /** The space the object may fill, in drawing units: the inside of the tube
  *  from the bottom up to just under the water's surface. */
@@ -39,6 +39,10 @@ export type Placed =
    *  face `front` wide with a darker face `side` wide beside it, their top
    *  and bottom edges level. */
   | { kind: 'cube'; x: number; y: number; a: number; front: number; side: number }
+  /** the box it fills, standing on end: `d` across and `h` high. Seen
+   *  level with the bottom it rests on, like the cube, so its top and bottom
+   *  edges are straight and its whole base sits on the pan or the glass. */
+  | { kind: 'cylinder'; x: number; y: number; d: number; h: number }
 
 /** Drawn area per unit of tube width times the height the water rose, which
  *  makes the classic 2 marbles in 2 mL of a 10 mL cylinder about as wide as
@@ -57,6 +61,18 @@ const CUBE_FRONT = Math.cos(CUBE_TURN)
 const CUBE_SIDE = Math.sin(CUBE_TURN)
 /** The area a cube with side `a` covers: its two faces. */
 export const cubeArea = (a: number) => a ** 2 * (CUBE_FRONT + CUBE_SIDE)
+/** a metal cylinder's height over its width, like the slugs in a density kit */
+export const CYLINDER_ASPECT = 2
+/** its height over its width, at most, once it's as wide as the tube */
+const CYLINDER_LONGEST = 3.5
+/** how round its machined edges are, over its width: enough to sit in the
+ *  rounded bottom of the glass */
+export const CYLINDER_EDGE = 0.1
+/** What its rounded edges take off its box, over its width squared */
+const CYLINDER_ROUNDING = (4 - Math.PI) * CYLINDER_EDGE ** 2
+/** The area a cylinder `d` wide and `h` high covers: its box less the
+ *  rounded corners. */
+export const cylinderArea = (d: number, h: number) => d * h - CYLINDER_ROUNDING * d ** 2
 
 /** Where `kind` goes in `room` when drawn with about `area` square units. */
 export function placeObject(kind: ObjectKind, count: number, room: Room, area: number): Placed {
@@ -92,6 +108,17 @@ export function placeObject(kind: ObjectKind, count: number, room: Room, area: n
     return { kind, x: cx - w / 2, y: room.bottom - h, w, h }
   }
 
+  if (kind === 'cylinder') {
+    // Standing on end at its usual shape, until it's as wide as the tube;
+    // then longer, as a thinner slug of the same metal would be. Too tall
+    // for the water, it's drawn smaller all over.
+    const d0 = Math.min(W, Math.sqrt(area / cylinderArea(1, CYLINDER_ASPECT)))
+    const h0 = Math.min(CYLINDER_LONGEST * d0, area / d0 + CYLINDER_ROUNDING * d0)
+    const k = fit(d0, h0)
+    const [d, h] = [d0 * k, h0 * k]
+    return { kind, x: cx - d / 2, y: room.bottom - h, d, h }
+  }
+
   const a0 = Math.sqrt(area / cubeArea(1))
   const a = a0 * fit(a0 * (CUBE_FRONT + CUBE_SIDE), a0)
   const [front, side] = [a * CUBE_FRONT, a * CUBE_SIDE]
@@ -109,6 +136,7 @@ export function objectBounds(p: Placed): Room {
     }
   }
   if (p.kind === 'rock') return { left: p.x, right: p.x + p.w, top: p.y, bottom: p.y + p.h }
+  if (p.kind === 'cylinder') return { left: p.x, right: p.x + p.d, top: p.y, bottom: p.y + p.h }
   return { left: p.x, right: p.x + p.front + p.side, top: p.y, bottom: p.y + p.a }
 }
 
@@ -116,6 +144,7 @@ export function objectBounds(p: Placed): Room {
 export function drawnArea(p: Placed) {
   if (p.kind === 'marbles') return p.marbles.reduce((sum, m) => sum + Math.PI * m.r ** 2, 0)
   if (p.kind === 'rock') return ROCK_FILL * p.w * p.h
+  if (p.kind === 'cylinder') return cylinderArea(p.d, p.h)
   return cubeArea(p.a)
 }
 

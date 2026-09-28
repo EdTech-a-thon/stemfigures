@@ -55,24 +55,6 @@ export function magnifierLayout(view: MagnifierView, width: number, height: numb
   }
 }
 
-/** The same for a long, low drawing lying on its side (a gas syringe): the
- *  magnifier sits above the drawing instead, over the region as far as the
- *  drawing's width allows. */
-export function magnifierAboveLayout(view: MagnifierView, width: number, height: number, source: Circle) {
-  if (view !== 'both') return magnifierLayout(view, width, height, source)
-  const R = RADIUS
-  const left = Math.max(0, source.r - source.x)
-  const right = Math.max(0, source.x + source.r - width)
-  const above = Math.max(0, source.r - source.y)
-  const below = Math.max(0, source.y + source.r - height)
-  const wide = left + width + right
-  // A drawing narrower than the magnifier is centered under it.
-  const origin = { x: Math.max(0, R - wide / 2) + left, y: 2 * R + GAP + above }
-  const total = Math.max(wide, 2 * R)
-  const x = Math.min(Math.max(origin.x + source.x, R), Math.max(R, total - R))
-  return { width: total, height: origin.y + height + below, origin, magnifier: { x, y: R, r: R } }
-}
-
 /** The two lines touching both circles on the outside, joining the region on
  *  the drawing to the magnifier. */
 export function outerTangents(a: Circle, b: Circle): [number, number, number, number][] {

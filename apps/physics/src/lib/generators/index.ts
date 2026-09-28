@@ -14,6 +14,7 @@ import FreeBodyPreview from './free-body-diagram/Preview.svelte'
 import InclinedPlanePreview from './inclined-plane/Preview.svelte'
 import ProjectileMotionPreview from './projectile-motion/Preview.svelte'
 import PulleyPreview from './pulley/Preview.svelte'
+import SpringScalePreview from './spring-scale/Preview.svelte'
 import VectorDiagramPreview from './vector-diagram/Preview.svelte'
 
 /** Each generator's directory preview, by id. */
@@ -23,6 +24,7 @@ export const PREVIEWS: Record<string, Component> = {
   'inclined-plane': InclinedPlanePreview,
   'pulley': PulleyPreview,
   'projectile-motion': ProjectileMotionPreview,
+  'spring-scale': SpringScalePreview,
 }
 
 export const GENERATORS = generatorsOn(SITE_ID, PREVIEWS)

@@ -1,7 +1,10 @@
-// The elements by atomic number, and each neutral atom's real ground-state
-// electrons per shell, which is what Fill sets (see CONTEXT.md "Shell"). This
-// is the one place the generator knows any chemistry; nothing it draws is
-// checked against it.
+// The elements by atomic number, each one's mass number, and an atom or
+// ion's real ground-state electrons per shell, which is what Fill and Charge
+// set (see CONTEXT.md "Bohr models"). This, with the neutral atom's shells
+// the gained and lost electrons are worked out against, is all the chemistry
+// the generator knows; nothing it draws is checked against it.
+
+import { SUBLEVELS, ionConfiguration } from '../orbital-diagram/configuration'
 
 const TABLE = `H Hydrogen,He Helium,Li Lithium,Be Beryllium,B Boron,C Carbon,N Nitrogen,O Oxygen,F Fluorine,Ne Neon,
 Na Sodium,Mg Magnesium,Al Aluminum,Si Silicon,P Phosphorus,S Sulfur,Cl Chlorine,Ar Argon,K Potassium,Ca Calcium,
@@ -32,54 +35,43 @@ export const MAX_Z = ELEMENTS.length
 /** The element with `z` protons, if there is one. */
 export const element = (z: number): Element | undefined => ELEMENTS[z - 1]
 
-/** Every sublevel up to 7p in filling order (lower n + l first, then lower
- *  n), as [n, capacity]. */
-const FILLING_ORDER: { name: string; n: number; capacity: number }[] = (() => {
-  const all = []
-  for (let n = 1; n <= 7; n++) for (let l = 0; l < Math.min(n, 4); l++) if (n + l <= 8) all.push({ n, l })
-  all.sort((a, b) => a.n + a.l - (b.n + b.l) || a.n - b.n)
-  return all.map(({ n, l }) => ({ name: `${n}${'spdf'[l]}`, n, capacity: 2 * (2 * l + 1) }))
-})()
+/** Each element's mass number, by atomic number: its standard atomic weight
+ *  rounded to a whole number, or for an element with no stable isotope the
+ *  bracketed mass number periodic tables show (IUPAC). */
+const MASS_NUMBERS = [
+  1, 4, 7, 9, 11, 12, 14, 16, 19, 20, 23, 24, 27, 28, 31, 32, 35, 40, 39, 40,
+  45, 48, 51, 52, 55, 56, 59, 59, 64, 65, 70, 73, 75, 79, 80, 84, 85, 88, 89, 91,
+  93, 96, 98, 101, 103, 106, 108, 112, 115, 119, 122, 128, 127, 131, 133, 137, 139, 140, 141, 144,
+  145, 150, 152, 157, 159, 163, 165, 167, 169, 173, 175, 178, 181, 184, 186, 190, 192, 195, 197, 201,
+  204, 207, 209, 209, 210, 222, 223, 226, 227, 232, 231, 238, 237, 244, 243, 247, 247, 251, 252, 257,
+  258, 259, 266, 267, 268, 269, 270, 269, 278, 281, 282, 285, 286, 289, 290, 293, 294, 294,
+]
 
-/** Ground states that differ from the filling order, as the sublevels that
- *  differ from it (NIST). */
-const EXCEPTIONS: Record<number, Record<string, number>> = {
-  24: { '4s': 1, '3d': 5 }, // Cr
-  29: { '4s': 1, '3d': 10 }, // Cu
-  41: { '5s': 1, '4d': 4 }, // Nb
-  42: { '5s': 1, '4d': 5 }, // Mo
-  44: { '5s': 1, '4d': 7 }, // Ru
-  45: { '5s': 1, '4d': 8 }, // Rh
-  46: { '5s': 0, '4d': 10 }, // Pd
-  47: { '5s': 1, '4d': 10 }, // Ag
-  57: { '4f': 0, '5d': 1 }, // La
-  58: { '4f': 1, '5d': 1 }, // Ce
-  64: { '4f': 7, '5d': 1 }, // Gd
-  78: { '6s': 1, '5d': 9 }, // Pt
-  79: { '6s': 1, '5d': 10 }, // Au
-  89: { '5f': 0, '6d': 1 }, // Ac
-  90: { '5f': 0, '6d': 2 }, // Th
-  91: { '5f': 2, '6d': 1 }, // Pa
-  92: { '5f': 3, '6d': 1 }, // U
-  93: { '5f': 4, '6d': 1 }, // Np
-  96: { '5f': 7, '6d': 1 }, // Cm
-  103: { '6d': 0, '7p': 1 }, // Lr
-}
+/** The mass number of the element with `z` protons (Cl is 35), if there is one. */
+export const massNumber = (z: number): number | undefined => (element(z) ? MASS_NUMBERS[z - 1] : undefined)
 
-/** The neutral atom's electrons per shell, innermost first, up to its
- *  outermost occupied shell (Fe is [2, 8, 14, 2]). Undefined when no element
+/** The charges Charge can be set to. */
+export const MIN_CHARGE = -4
+export const MAX_CHARGE = 8
+
+/** The charge nearest `charge` that an ion of the element with `z` protons
+ *  can have: at least 0 electrons, and no more than the heaviest element's. */
+export const ionCharge = (z: number, charge: number) =>
+  Math.min(z, MAX_CHARGE, Math.max(z - MAX_Z, MIN_CHARGE, Math.round(charge)))
+
+/** An atom or ion's ground-state electrons per shell, innermost first, up to
+ *  its outermost occupied shell, from the same configuration an orbital
+ *  diagram draws (Fe is [2, 8, 14, 2] and Fe²⁺ [2, 8, 14]; Na⁺ is [2, 8]).
+ *  An ion with no electrons has one empty shell. Undefined when no element
  *  has `z` protons. */
-export function groundStateShells(z: number): number[] | undefined {
+export function groundStateShells(z: number, charge = 0): number[] | undefined {
   if (!element(z)) return undefined
-  const sublevels: Record<string, number> = {}
-  let left = z
-  for (const s of FILLING_ORDER) {
-    sublevels[s.name] = Math.min(left, s.capacity)
-    left -= sublevels[s.name]
+  const shells: number[] = [0]
+  for (const [name, electrons] of Object.entries(ionConfiguration(z, ionCharge(z, charge)))) {
+    const n = SUBLEVELS[name].n
+    while (shells.length < n) shells.push(0)
+    shells[n - 1] += electrons
   }
-  Object.assign(sublevels, EXCEPTIONS[z])
-  const shells: number[] = []
-  for (const s of FILLING_ORDER) shells[s.n - 1] = (shells[s.n - 1] ?? 0) + sublevels[s.name]
   while (shells.length > 1 && !shells[shells.length - 1]) shells.pop()
   return shells
 }

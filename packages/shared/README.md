@@ -11,7 +11,9 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `LabelField`                                                                                | chemistry, biology, engineering           |
 | `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics |
 | `labelSize`                                                                                 | math                                      |
-| `FigureFrame`, `HelpTip`, `Section`, `settings`, `figureText`                               | none yet                                  |
+| `FigureFrame`, `figureAlign`, `Section`, `settings`, `figureText`, `FigureTextSettings`      | physics (Spring Scale)                    |
+| `Magnifier`, `MagnifierSettings`, `magnify`, `marks`, `ReadingField`                        | physics (Spring Scale)                    |
+| `HelpTip`                                                                                   | none yet                                  |
 
 `catalog/` lists every generator on every site. Each lives on one site
 (`site`), the only address it has; `alsoOn` names other sites whose
@@ -46,5 +48,9 @@ other options:
 presets as a third argument, for a site whose teachers already have them
 saved under other names (Math and Physics do).
 
-Every site keeps the rest in its own `src/lib/`. When changing a file here, run `npm run check` and `npm run build`
+Every site keeps the rest in its own `src/lib/`, except Physics' Spring
+Scale, which uses the instrument-reading pieces above. Chemistry keeps its own
+copies of those reading pieces (the magnifier, marks, reading box, figure
+frame and title settings) for now; they started as copies of its files and
+match them. When changing a file here, run `npm run check` and `npm run build`
 in every app that imports it.

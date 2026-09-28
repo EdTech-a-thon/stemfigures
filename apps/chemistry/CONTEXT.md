@@ -57,6 +57,18 @@ _Avoid_: Cup, jar
 **Meniscus**:
 The curved top surface of a liquid; a volume reading is taken at its bottom.
 
+**Gas syringe**:
+A volume instrument for collecting gas: a glass barrel lying on its side, 50 or 100 mL, marked every 1 and numbered every 10 from 0 at its nozzle end, read to 0.1 at the plunger's face. Its scale is printed in cm³ or mL, which are the same size, so changing the unit never changes the reading. Both sizes are drawn the same length; the 50 is thinner.
+_Avoid_: Syringe (alone), gas burette
+
+**Plunger**:
+The glass piston the gas pushes out of a gas syringe, with a knob on its outside end. The reading is taken at its flat face, the end nearest the nozzle.
+_Avoid_: Piston (fine in help text), stopper
+
+**Setup**:
+What can be drawn around a gas syringe to show it collecting gas: a conical flask of liquid with a bung and delivery tube, a rubber sleeve joining the tube to the nozzle, and a stand clamping the barrel past its last mark. It isn't an instrument; nothing is read from it.
+_Avoid_: Apparatus (fine in search keywords), equipment
+
 **Digital balance**:
 A mass instrument with a numeric display showing 1 to 4 decimal places of grams; at 3 or 4 it is drawn as an analytical balance inside a draft shield.
 _Avoid_: Scale, electronic balance
@@ -110,7 +122,7 @@ The short line under each cylinder in a volume by displacement figure, "Before" 
 _Avoid_: Label, subtitle
 
 **Magnifier**:
-An enlarged circle showing a small stretch of an instrument's scale around the reading, beside or instead of the whole instrument. In a volume by displacement figure it's optional, with one beside each cylinder, and never replaces the cylinders.
+An enlarged circle showing a small stretch of an instrument's scale around the reading, beside or instead of the whole instrument (above it, for a gas syringe lying on its side). In a volume by displacement figure it's optional, with one beside each cylinder, and never replaces the cylinders.
 _Avoid_: Zoom, callout, inset
 
 **Answer key**:
@@ -224,7 +236,7 @@ _Avoid_: Error, problem, issue
 ### Bohr models
 
 **Bohr model**:
-A figure of one atom or ion: a nucleus of protons and neutrons with electrons as dots on rings around it. The generator is Bohr Model. The teacher sets every count, and nothing is checked, so "wrong" atoms (an overfilled shell, an empty inner shell, 0 protons) draw exactly as set. There is no answer key; the chart title can name the atom. Its nucleus and ring spacing never change, so every Bohr model with the same number of shells is the same size and answer choices made one at a time line up.
+A figure of one atom or ion: a nucleus of protons and neutrons with electrons as dots on rings around it. The generator is Bohr Model. The teacher picks an element or sets every count by hand, and nothing is checked, so "wrong" atoms (an overfilled shell, an empty inner shell, 0 protons) draw exactly as set. There is no answer key; the chart title can name the atom. Its nucleus and ring spacing never change, so every Bohr model with the same number of shells is the same size and answer choices made one at a time line up.
 _Avoid_: Atom (that's a particle diagram's disc), atomic model (fine in search keywords), atom builder
 
 **Nucleus**:
@@ -239,7 +251,22 @@ _Avoid_: Particle (that's a particle diagram's), nucleon (fine in help text)
 One ring of a Bohr model, numbered from the nucleus out, holding 0 to 32 electrons. The teacher sets how many shells there are (1 to 7) and the electrons on each; a shell may be empty even with electrons outside it. Fill sets them to the neutral atom's real ground-state counts for its proton count (K is 2, 8, 8, 1; Fe is 2, 8, 14, 2). Electrons sit evenly spaced around the ring, or paired at the four compass points as in Lewis structures (up to 8; more are spaced evenly). The rings can be drawn empty for "draw the electrons" questions, and can be labeled n = 1, n = 2….
 _Avoid_: Orbit, energy level (fine in help text), orbital (a different idea)
 
-A Bohr model can have a **key** like a particle diagram's: one proton, neutron and electron drawn exactly as in the figure, with its name.
+**Element**:
+Picking one sets a Bohr model's protons to its atomic number, its neutrons to its mass number minus that, and its shells as Fill does. The mass number is the element's atomic mass rounded to a whole number (Cl is 35.45, so 35 and 18 neutrons), or for an element with no stable isotope the bracketed mass number periodic tables show (Tc is [98]). The element isn't stored: it is whichever element has the proton count, so every count can still be changed afterwards.
+_Avoid_: Atom (that's a particle diagram's disc), isotope (fine in help text)
+
+**Charge**:
+A Bohr model's protons minus its electrons, never stored: fewer electrons than protons is a cation, more is an anion. Setting it (−4 to 8) sets the shells to that ion's ground state, losing and gaining electrons as an orbital diagram's ion does, so Fe²⁺ loses its two 4s electrons (2, 8, 14) and Fe³⁺ one 3d as well (2, 8, 13). A shell the ion empties is left out (Na⁺ is 2, 8), as textbooks draw it.
+_Avoid_: Oxidation number, ion charge
+
+**Gained electron** / **Lost electron**:
+How a Bohr model's shells differ from its neutral atom's, which the teacher can choose to show. On each shell, electrons beyond the neutral atom's count are gained and drawn in their own color; electrons short of it are lost and drawn as empty dashed spots where they were, on a ring kept for them even when nothing else is left on it (Na⁺ keeps its third ring). The electrons are placed as for whichever of the two has more, so the ones that stay don't move and a gained one takes the next place in filling order (Cl⁻'s completes the last pair). It is worked out from the counts, so a model set by hand shows it too, including one that has lost on one shell and gained on another. It is shown only when the proton count is an element's, and not with empty rings.
+_Avoid_: Added electron, removed electron, missing electron, hole
+
+**Brackets**:
+Square brackets around an ion's Bohr model with its charge at the top right, as a polyatomic ion's Lewis structure has. A neutral atom is never bracketed.
+
+A Bohr model can have a **key** like a particle diagram's: one proton, neutron and electron drawn exactly as in the figure, with its name, and a gained and a lost electron when the figure shows them.
 
 ### Orbital diagrams
 

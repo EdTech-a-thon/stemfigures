@@ -116,7 +116,7 @@
         {/if}
       </p>
       <p class="note">
-        Tip: <a href={massLink} target="_blank" rel="noopener">Mass Reading<ArrowUpRight size={13} aria-hidden="true" /><span class="visually-hidden"> (opens in a new tab)</span></a> can put the same {s.object} on a balance, for a density question.
+        Tip: <a href={massLink} target="_blank" rel="noopener">Mass Reading<ArrowUpRight size={13} aria-hidden="true" /><span class="visually-hidden"> (opens in a new tab)</span></a> can put the same {OBJECT_NAMES[s.object].toLowerCase()} on a balance, for a density question.
       </p>
     </Section>
     <Section title="Magnifiers" summary={DISPLACEMENT_VIEW_NAMES[s.view]} icon={ZoomIn}>
