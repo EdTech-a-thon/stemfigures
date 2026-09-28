@@ -11,9 +11,11 @@
     figure: Figure
     svg?: SVGSVGElement
     selected?: Selection | null
+    /** bumped to flash the selection again */
+    flash?: number
     onselect?: (selection: Selection) => void
   }
-  let { figure, svg = $bindable(), selected = null, onselect }: Props = $props()
+  let { figure, svg = $bindable(), selected = null, flash = 0, onselect }: Props = $props()
 
   const INK = '#111'
   // As drawn: a changed structure is always one structure in full.
@@ -39,7 +41,7 @@
 {#snippet row(r: Row, pick?: (selection: Selection) => void)}
   {#each r.drawings as d, i (i)}
     <g transform="translate({d.x} {d.y})">
-      <StructureDrawing drawing={d.item} selected={pick ? selected : null} onselect={pick} />
+      <StructureDrawing drawing={d.item} selected={pick ? selected : null} {flash} onselect={pick} />
     </g>
   {/each}
   {#each r.arrows as a, i (i)}

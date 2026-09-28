@@ -1,45 +1,53 @@
 <script lang="ts">
   // One structure, drawn from its worked-out drawing with its top left
   // corner at (0, 0). With `onselect`, clicking an atom or bond selects it
-  // for changing; the selection and click targets are left out of exports.
+  // for changing. The selection flashes briefly each time `flash` changes,
+  // then fades, so a projected figure doesn't give away what was changed;
+  // it and the click targets are left out of exports.
   import { CHARGE_FONT, DOT_R, FONT, LABEL_FONT, type Drawing } from './drawing'
   import type { Selection } from './figureLayout'
 
   interface Props {
     drawing: Drawing
     selected?: Selection | null
+    /** bumped to flash the selection again */
+    flash?: number
     onselect?: (selection: Selection) => void
   }
-  let { drawing, selected = null, onselect }: Props = $props()
+  let { drawing, selected = null, flash = 0, onselect }: Props = $props()
 
   const INK = '#111'
   const selectedAtom = $derived(selected?.kind === 'atom' ? drawing.symbols.find((t) => t.atom === selected!.index) : undefined)
   const selectedBond = $derived(selected?.kind === 'bond' ? drawing.bondSpots.find((b) => b.bond === selected!.index) : undefined)
 </script>
 
-{#if selectedAtom}
-  <rect
-    data-no-export
-    x={selectedAtom.x - selectedAtom.w / 2 - 7}
-    y={selectedAtom.y - selectedAtom.h / 2 - 7}
-    width={selectedAtom.w + 14}
-    height={selectedAtom.h + 14}
-    rx="7"
-    fill="#dbeafe"
-  />
-{/if}
-{#if selectedBond}
-  <rect
-    data-no-export
-    x={-Math.max(selectedBond.length, 12) / 2 - 3}
-    y="-9"
-    width={Math.max(selectedBond.length, 12) + 6}
-    height="18"
-    rx="6"
-    fill="#dbeafe"
-    transform="translate({selectedBond.x} {selectedBond.y}) rotate({selectedBond.angle})"
-  />
-{/if}
+{#key flash}
+  {#if selectedAtom}
+    <rect
+      data-no-export
+      class="flash"
+      x={selectedAtom.x - selectedAtom.w / 2 - 7}
+      y={selectedAtom.y - selectedAtom.h / 2 - 7}
+      width={selectedAtom.w + 14}
+      height={selectedAtom.h + 14}
+      rx="7"
+      fill="#dbeafe"
+    />
+  {/if}
+  {#if selectedBond}
+    <rect
+      data-no-export
+      class="flash"
+      x={-Math.max(selectedBond.length, 12) / 2 - 3}
+      y="-9"
+      width={Math.max(selectedBond.length, 12) + 6}
+      height="18"
+      rx="6"
+      fill="#dbeafe"
+      transform="translate({selectedBond.x} {selectedBond.y}) rotate({selectedBond.angle})"
+    />
+  {/if}
+{/key}
 {#each drawing.lines as l, i (i)}
   <line x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke={INK} stroke-width="2" stroke-linecap="round" />
 {/each}
@@ -90,3 +98,11 @@
     {/each}
   </g>
 {/if}
+
+<style>
+  .flash { animation: flash 1.4s ease-in forwards; }
+  @keyframes flash {
+    0%, 45% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+</style>

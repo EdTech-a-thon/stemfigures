@@ -27,6 +27,9 @@
   const s = gen.s
   let svg = $state<SVGSVGElement>()
   let selected = $state<Selection | null>(null)
+  /** Bumped to flash the selection in the figure, which then fades so that
+   *  a projected figure doesn't show students what was changed. */
+  let flash = $state(0)
   let changesBox = $state<HTMLElement>()
 
   const SHAPE_NAMES: Record<Shape, string> = { flat: 'Flat', shaped: 'Shaped' }
@@ -126,8 +129,17 @@
     clearing = { message: `This clears your other ${plural(n, 'change')} to the structure.`, then: () => (s.central = central) }
   }
 
+  /** Selects an atom or bond and flashes it in the figure. */
+  function highlight(selection: Selection) {
+    selected = selection
+    flash++
+  }
+
   function change(c: Change) {
-    if (result.start) s.changes = setChange(s.changes, c, result.start)
+    if (!result.start) return
+    s.changes = setChange(s.changes, c, result.start)
+    if (c.kind === 'bond') highlight({ kind: 'bond', index: c.bond })
+    else if (c.kind === 'lone' || c.kind === 'label') highlight({ kind: 'atom', index: c.atom })
   }
 
   function reset() {
@@ -137,7 +149,7 @@
   }
 
   async function select(selection: Selection) {
-    selected = selection
+    highlight(selection)
     const details = changesBox?.closest('details')
     if (details) details.open = true
     await tick()
@@ -327,7 +339,7 @@
                 id="lewis-atom-{i}"
                 role="group"
                 aria-label={atomName(i)}
-                onfocusin={() => (selected = { kind: 'atom', index: i })}
+                onfocusin={() => highlight({ kind: 'atom', index: i })}
               >
                 <strong>{atomName(i)}</strong>
                 <span class="stepper">
@@ -358,7 +370,7 @@
                 id="lewis-bond-{k}"
                 role="group"
                 aria-label="Bond {atomName(bond.a)} to {atomName(bond.b)}"
-                onfocusin={() => (selected = { kind: 'bond', index: k })}
+                onfocusin={() => highlight({ kind: 'bond', index: k })}
               >
                 <strong>{atomName(bond.a)}–{atomName(bond.b)}</strong>
                 <div class="segmented orders" role="radiogroup" aria-label="Bond {atomName(bond.a)} to {atomName(bond.b)}">
@@ -423,7 +435,7 @@
     </Section>
   {/snippet}
   {#snippet figure()}
-    <LewisFigure figure={result} bind:svg {selected} onselect={canChange ? select : undefined} />
+    <LewisFigure figure={result} bind:svg {selected} {flash} onselect={canChange ? select : undefined} />
   {/snippet}
 </GeneratorPage>
 
