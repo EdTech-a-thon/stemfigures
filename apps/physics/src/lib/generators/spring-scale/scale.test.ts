@@ -50,7 +50,7 @@ describe('spring scales', () => {
   })
 
   it('puts zero at the top and the capacity 480 units down', () => {
-    const at = springLayout(springScale('20'), 'both')
+    const at = springLayout(springScale('20'))
     expect(at.yOf(0)).toBe(at.zeroY)
     expect(at.yOf(20) - at.yOf(0)).toBe(480)
     // the pointer resting as far above zero as it can still has spring above it

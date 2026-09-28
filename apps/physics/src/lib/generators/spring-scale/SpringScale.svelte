@@ -21,7 +21,7 @@
   }
   let { scale, units, pointer, color, hanging = 'none', masses = 1, blockLabel = '', marksAbove = false, zoom = 1 }: Props = $props()
 
-  const at = $derived(springLayout(scale, units))
+  const at = $derived(springLayout(scale))
   const load = $derived(loadLayout(at, hanging, masses))
   const k = $derived(sizeAt(zoom))
   const font = $derived(11 * k)
@@ -50,13 +50,10 @@
   /** a mark's height on the scale: gram values are 100 times the newtons they sit level with */
   const yOfGrams = (g: number) => at.yOf(g / (grams.capacity / scale.capacity))
 
-  // One unit: marks left of the slot, numbers right. Both: newtons all on the
-  // left, grams all on the right.
-  const both = $derived(units === 'both')
+  // Newtons always on the left of the slot, grams always on the right,
+  // whichever are printed.
   const leftNumbersX = $derived(at.tickLeft - tick.major - 4)
-  const rightNumbersX = $derived(both ? at.tickRight + tick.major + 4 : at.tickRight + 4)
-  const single = $derived(units === 'grams' ? gramMarks : newtonMarks)
-  const singleY = (v: number) => (units === 'grams' ? yOfGrams(v) : at.yOf(v))
+  const rightNumbersX = $derived(at.tickRight + tick.major + 4)
 
   const y = $derived(at.yOf(pointer))
   const tabH = 10
@@ -104,37 +101,25 @@
   <rect x={at.cx - at.slot.half + 1} y={y} width={2 * at.slot.half - 2} height={tabH} fill={color ? scale.color : '#8a8a8a'} stroke={INK} stroke-width={0.8 * k} />
 
   <!-- marks and numbers -->
-  {#if both}
-    {#each newtonMarks as m (m.value)}
-      {@const my = at.yOf(m.value)}
-      <line x1={at.tickLeft - tick[m.kind]} x2={at.tickLeft} y1={my} y2={my} stroke={INK} stroke-width={(m.kind === 'major' ? 1.5 : 1) * k} />
-      {#if m.label}<text x={leftNumbersX} y={my} dy="0.35em" text-anchor="end" font-size={font} fill={INK}>{labelOf(m.label)}</text>{/if}
-    {/each}
-    {#each gramMarks as m (m.value)}
-      {@const my = yOfGrams(m.value)}
-      <line x1={at.tickRight} x2={at.tickRight + tick[m.kind]} y1={my} y2={my} stroke={INK} stroke-width={(m.kind === 'major' ? 1.5 : 1) * k} />
-      {#if m.label}<text x={rightNumbersX} y={my} dy="0.35em" font-size={font} fill={INK}>{labelOf(m.label)}</text>{/if}
-    {/each}
+  {#each newtonMarks as m (m.value)}
+    {@const my = at.yOf(m.value)}
+    <line x1={at.tickLeft - tick[m.kind]} x2={at.tickLeft} y1={my} y2={my} stroke={INK} stroke-width={(m.kind === 'major' ? 1.5 : 1) * k} />
+    {#if m.label}<text x={leftNumbersX} y={my} dy="0.35em" text-anchor="end" font-size={font} fill={INK}>{labelOf(m.label)}</text>{/if}
+  {/each}
+  {#each gramMarks as m (m.value)}
+    {@const my = yOfGrams(m.value)}
+    <line x1={at.tickRight} x2={at.tickRight + tick[m.kind]} y1={my} y2={my} stroke={INK} stroke-width={(m.kind === 'major' ? 1.5 : 1) * k} />
+    {#if m.label}<text x={rightNumbersX} y={my} dy="0.35em" font-size={font} fill={INK}>{labelOf(m.label)}</text>{/if}
+  {/each}
+  {#if units !== 'grams'}
     <text x={leftNumbersX} y={at.headerY} dy="0.35em" text-anchor="end" font-size={font * 1.1} font-weight="700" fill={INK}>N</text>
+  {/if}
+  {#if units !== 'newtons'}
     <text x={rightNumbersX} y={at.headerY} dy="0.35em" font-size={font * 1.1} font-weight="700" fill={INK}>g</text>
-  {:else}
-    {#each single as m (m.value)}
-      {@const my = singleY(m.value)}
-      <line x1={at.tickLeft - tick[m.kind]} x2={at.tickLeft} y1={my} y2={my} stroke={INK} stroke-width={(m.kind === 'major' ? 1.5 : 1) * k} />
-      {#if m.label}<text x={rightNumbersX} y={my} dy="0.35em" font-size={font} fill={INK}>{labelOf(m.label)}</text>{/if}
-    {/each}
-    <text x={rightNumbersX} y={at.headerY} dy="0.35em" font-size={font * 1.1} font-weight="700" fill={INK}>{units === 'grams' ? 'g' : 'N'}</text>
   {/if}
 
-  <!-- the pointer: its line runs across the marks on both sides of the slot -->
-  <line
-    x1={at.tickLeft - tick.major}
-    x2={both ? at.tickRight + tick.major : at.tickRight}
-    y1={y}
-    y2={y}
-    stroke={pointerColor}
-    stroke-width={1.6 * k}
-  />
+  <!-- the pointer: its line runs the same way out on both sides of the slot, whichever units are printed -->
+  <line x1={at.tickLeft - tick.major} x2={at.tickRight + tick.major} y1={y} y2={y} stroke={pointerColor} stroke-width={1.6 * k} />
 
   <!-- the load -->
   {#if load.kind === 'block'}

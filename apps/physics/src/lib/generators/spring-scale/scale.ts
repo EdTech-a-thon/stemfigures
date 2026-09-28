@@ -7,7 +7,8 @@
 export const CAPACITIES = ['1', '2.5', '5', '10', '20', '30', '50'] as const
 export type Capacity = (typeof CAPACITIES)[number]
 
-/** What the scale is printed in: newtons, grams, or newtons on the left and grams on the right. */
+/** What the scale is printed in: newtons, grams, or both. Newtons are always
+ *  left of the slot and grams right of it. */
 export const SCALE_UNITS = ['newtons', 'grams', 'both'] as const
 export type ScaleUnits = (typeof SCALE_UNITS)[number]
 
@@ -109,12 +110,11 @@ const HEADROOM = SCALE_H / 10
 /** Where things sit on the drawn spring scale, in drawing units. The scale
  *  runs 480 units from zero down to its capacity, whatever that is. A ring
  *  to hold it by sits on the colored cap, and the body below it has a slot
- *  down the middle where the spring pulls the pointer down. With one unit,
- *  the marks run left from the slot and the numbers sit right of it, as on a
- *  thermometer; with both, newtons are on the left and grams on the right. A
- *  rod comes out the bottom to the hook. */
-export function springLayout(scale: SpringScale, units: ScaleUnits) {
-  const half = units === 'both' ? 66 : 46
+ *  down the middle where the spring pulls the pointer down. Newtons are
+ *  printed left of it and grams right of it, so the body is as wide for one
+ *  unit as for both. A rod comes out the bottom to the hook. */
+export function springLayout(scale: SpringScale) {
+  const half = 66
   const width = 2 * half + 4
   const cx = width / 2
   const capTop = 26

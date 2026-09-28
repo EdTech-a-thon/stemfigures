@@ -14,7 +14,7 @@
 
   const GAP = 40
   const scale = $derived(springScale(settings.capacity))
-  const at = $derived(springLayout(scale, settings.units))
+  const at = $derived(springLayout(scale))
   const pointer = $derived(pointerAt(settings))
   // Both scales alike, whichever pointer rests above zero.
   const marksAbove = $derived(settings.zero < 0)
@@ -23,13 +23,15 @@
   const shift = $derived(twin ? at.width + GAP : 0)
   const height = $derived(loadLayout(at, settings.hanging, settings.masses).bottom)
   // Around the pointer, spanning the numbered marks asked for, and never so
-  // small the numbers beside the slot fall outside it. With one unit the
-  // numbers are all on the right, so it's centered a little right of the slot.
+  // small the numbers beside the slot fall outside it. With one unit its
+  // numbers are all on one side (newtons left, grams right), so it's centered
+  // toward that side, still reaching the pointer line's far end.
   const both = $derived(settings.units === 'both')
+  const toward = $derived(settings.units === 'newtons' ? -17 : settings.units === 'grams' ? 17 : 0)
   const source = $derived({
-    x: shift + at.cx + (both ? 0 : 6),
+    x: shift + at.cx + toward,
     y: at.yOf(pointer),
-    r: Math.max((settings.span * scale.labelEvery * at.perNewton) / 2, both ? 62 : 38),
+    r: Math.max((settings.span * scale.labelEvery * at.perNewton) / 2, both ? 62 : 45),
   })
   const layout = $derived(magnifierLayout(settings.view, shift + at.width, height, source))
   const label = $derived(
