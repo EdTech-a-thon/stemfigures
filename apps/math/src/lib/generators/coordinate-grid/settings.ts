@@ -4,60 +4,30 @@
 // Each axis's range is kept as the text the teacher typed ("-2", "2pi", "pi/4");
 // readAxes() works out what it means.
 
-import { CAPS, type Cap } from '$lib/shared/caps.js'
+import {
+  CAP_KEYS, EVERY, LABEL_MODES, MINOR, TITLE_MODES, readAxes as readRanges, type Axis, type AxisName, type GridSettings, type LabelMode,
+  type NumberReader, type RangeSettings, type TitleMode,
+} from '$shared/graph/axes'
+import { CAPS, type Cap } from '$shared/graph/caps'
 import { parseNumber } from '$lib/shared/math.js'
-import { fmt, niceText, numberingOf, type Numbering } from '$lib/shared/numbering.js'
+import { fmt } from '$shared/graph/numbering'
 import { cleanRow, rowFromParam, rowToParam, type Row } from './equations.js'
 import type { AngleUnit } from './evaluate.js'
-import { cleanLabelSize, type LabelSize } from '$shared/labelSize'
+import { cleanLabelSize } from '$shared/labelSize'
 
-export { CAPS, fmt }
+export { CAPS, EVERY, MINOR, TITLE_MODES, LABEL_MODES, fmt }
+export type { Axis, AxisName, TitleMode, LabelMode }
 
-export const MAX_BLOCKS = 50
-export const EVERY = [1, 2, 5, 10, 0] // number every nth line; 0 = no numbers
-export const MINOR = [0, 2, 4, 5] // minor gridlines: how many parts each block splits into; 0 = none
 export const ANGLE_UNITS = { radians: 'Radians', degrees: 'Degrees' } // what trig functions read x in
-export const TITLE_MODES = ['text', 'blank', 'none'] as const // written title, write-on line for students, nothing
-export const LABEL_MODES = ['text', 'none'] as const // the letter at an axis arrow, like x or y
-const CAP_KEYS = ['xStartCap', 'xEndCap', 'yStartCap', 'yEndCap'] as const
 
-export type TitleMode = (typeof TITLE_MODES)[number]
-export type LabelMode = (typeof LABEL_MODES)[number]
-export type AxisName = 'x' | 'y'
+export type Settings = RangeSettings &
+  GridSettings & {
+    angle: AngleUnit
+    equations: Row[]
+  }
 
-export type Settings = {
-  xFrom: string
-  xTo: string
-  xStep: string
-  yFrom: string
-  yTo: string
-  yStep: string
-  xEvery: number
-  yEvery: number
-  title: string
-  titleMode: TitleMode
-  xTitle: string
-  xTitleMode: TitleMode
-  yTitle: string
-  yTitleMode: TitleMode
-  xLabel: string
-  xLabelMode: LabelMode
-  yLabel: string
-  yLabelMode: LabelMode
-  xStartCap: Cap
-  xEndCap: Cap
-  yStartCap: Cap
-  yEndCap: Cap
-  minor: number
-  angle: AngleUnit
-  labelSize: LabelSize
-  equations: Row[]
-}
 /** Settings as they may arrive: from a form, a link, or a preset stored by an older version. */
 export type RawSettings = Record<string, any>
-
-/** One axis's range as numbers, and how its numbers are written. */
-export type Axis = { start: number; step: number; blocks: number; numbering: Numbering }
 
 export const DEFAULT_SETTINGS: Settings = {
   xFrom: '0',
@@ -200,37 +170,11 @@ export function settingsFromParams(params: URLSearchParams): Settings {
   return cleanSettings(s)
 }
 
-/**
- * Each axis's range as numbers, how to write them, and anything the teacher should fix, as
- * messages for the settings panel. An axis whose range can't be used falls
- * back to 0 to 15 by 1, so there is always a figure.
- */
-export function readAxes(s: Settings): { x: Axis; y: Axis; problems: Record<string, string | null> } {
-  const problems: Record<string, string | null> = {}
-  const out = {} as { x: Axis; y: Axis }
-  for (const axis of ['x', 'y'] as const) {
-    const key = <K extends 'From' | 'To' | 'Step'>(k: K) => `${axis}${k}` as const
-    const from = parseNumber(s[key('From')])
-    const to = parseNumber(s[key('To')])
-    const step = parseNumber(s[key('Step')])
-    const numbering = numberingOf(s[key('From')], s[key('To')], s[key('Step')])
-    const n = (v: number) => niceText(v, numbering)
-    const p: Record<'From' | 'To' | 'Step', string | null> = { From: null, To: null, Step: null }
-    if (from === null) p.From = 'Type a number, like −10, 2.5, 1/2 or −2π.'
-    if (to === null) p.To = 'Type a number, like 10, 2.5, 1/2 or 2π.'
-    if (step === null) p.Step = 'Type a number, like 1, 0.5, 1/4 or π/6.'
-    else if (step <= 0) p.Step = 'Count by a number bigger than 0.'
-    if (from !== null && to !== null && from >= to) p.To = `The axis has to end after it starts, so make this bigger than ${n(from)}.`
-    let blocks = 15
-    if (!p.From && !p.To && !p.Step) {
-      const exact = (to! - from!) / step!
-      blocks = Math.ceil(exact - 1e-9)
-      if (blocks > MAX_BLOCKS) p.Step = `That makes ${blocks} blocks. Count by a bigger number (${MAX_BLOCKS} blocks at most).`
-      else if (Math.abs(exact - Math.round(exact)) > 1e-9) p.To = `Counting by ${n(step!)} from ${n(from!)} doesn't land on ${n(to!)}, so the grid runs on to ${n(from! + blocks * step!)}.`
-    }
-    const ok = !p.From && !(p.To && !p.To.startsWith('Counting')) && !p.Step
-    out[axis] = ok ? { start: from!, step: step!, blocks, numbering } : { start: 0, step: 1, blocks: 15, numbering: 'decimal' }
-    for (const [k, v] of Object.entries(p)) problems[`${axis}${k}`] = v
-  }
-  return { ...out, problems }
+// Ranges are typed in Caret, so they can be fractions and multiples of π.
+const MATH_NUMBERS: NumberReader = {
+  parse: parseNumber,
+  examples: { From: '−10, 2.5, 1/2 or −2π', To: '10, 2.5, 1/2 or 2π', Step: '1, 0.5, 1/4 or π/6' },
 }
+
+/** Each axis's range as numbers, how to write them, and anything the teacher should fix. */
+export const readAxes = (s: Settings) => readRanges(s, MATH_NUMBERS)

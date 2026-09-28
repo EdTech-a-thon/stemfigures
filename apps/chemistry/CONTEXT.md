@@ -317,3 +317,37 @@ _Avoid_: Edit, error
 **Mistake**:
 One way a changed diagram differs from the ground state, written as a sentence naming the rule ("Hund's rule: 2p has a pair while one of its orbitals is empty"). A changed diagram with the right number of electrons and no Pauli exclusion mistake is an **excited state**; one breaking Pauli exclusion is **not allowed**.
 _Avoid_: Error, violation (fine in help text)
+
+### Titration curves
+
+**Titration curve**:
+A graph of the flask's pH (up the side) against the volume of titrant added in mL (along the bottom), for one monoprotic acid or base titrated with a strong base or acid. The grid, axes and titles are the same as Math's coordinate grid, from `$shared/graph`.
+_Avoid_: pH curve, titration graph (fine in search keywords)
+
+**Analyte**:
+What's in the flask: a strong or weak acid, or a strong or weak base. An acid is titrated with NaOH and its pH rises; a base is titrated with HCl and its pH falls.
+_Avoid_: Sample, unknown
+
+**Titrant**:
+The strong base or acid added from the buret.
+_Avoid_: Reagent
+
+**Concentrations**:
+The first way to give a curve: the analyte's molarity and volume, the titrant's molarity, and pKa for a weak acid or pKb for a weak base. The pH at each volume is solved exactly from the charge balance, so a weak acid's half-equivalence point lands on its pKa. A **common titration** (HCl, CH₃COOH, HCOOH or HF with NaOH, or NaOH or NH₃ with HCl, 25.0 mL of 0.100 M with 0.100 M) fills these in.
+_Avoid_: Chemistry mode, calculated
+
+**Key points**:
+The second way to give a curve: the starting pH, the equivalence point's volume and pH, and the ending pH, which is the pH at the end of the x-axis. The curve is a real titration curve close to these, stretched on each side of the equivalence point to pass through each exactly.
+_Avoid_: Manual mode, custom points
+
+**Equivalence point**:
+Where the titrant added has exactly neutralized the analyte: the middle of the steep part of the curve.
+_Avoid_: End point (that's where an indicator changes color)
+
+**Half-equivalence point**:
+Halfway to the equivalence point, where a weak acid's pH equals its pKa (for a weak base, 14 − pKb). Marked only for weak acids and bases.
+_Avoid_: Midpoint, buffer point
+
+**Marked point**:
+The equivalence or half-equivalence point drawn as a dot, alone or with dashed lines to both axes, with a label, a blank line for students, or nothing.
+_Avoid_: Marker, annotation

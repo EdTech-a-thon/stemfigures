@@ -6,9 +6,9 @@
 // works out what they mean.
 
 import { cleanLabelSize, type LabelSize } from '$shared/labelSize'
-import { CAPS, type Cap } from '$lib/shared/caps.js'
+import { CAPS, type Cap } from '$shared/graph/caps'
 import { parseNumber } from '$lib/shared/math.js'
-import { fmt, niceText, numberingOf, type Numbering } from '$lib/shared/numbering.js'
+import { fmt, niceText, numberingOf, type Numbering } from '$shared/graph/numbering'
 import { SUMMARY_KEYS, looksLikeSummary, niceRange, parseData, summarize, withOutliers, type Summary, type SummaryKey } from './stats.js'
 
 export { CAPS, SUMMARY_KEYS, fmt }

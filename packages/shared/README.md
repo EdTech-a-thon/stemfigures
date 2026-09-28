@@ -8,12 +8,15 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `catalog/`, `GeneratorDirectory`                                                            | math, physics, chemistry, biology, engineering |
 | `request.svelte.ts`                                                                         | math, physics, chemistry, biology, engineering |
 | `Modal`                                                                                     | math, chemistry, physics, biology, engineering |
-| `LabelField`                                                                                | chemistry, biology, engineering           |
+| `LabelField`                                                                                | math, chemistry, biology, engineering     |
 | `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics |
-| `labelSize`                                                                                 | math                                      |
-| `FigureFrame`, `figureAlign`, `Section`, `settings`, `figureText`, `FigureTextSettings`      | physics (Spring Scale)                    |
+| `labelSize`                                                                                 | math, chemistry (Titration Curve)         |
+| `graph/`: `Grid`, `grid`, `axes`, `AxisSettings`, `TitleSettings`, `GridlineSettings`       | math (Coordinate Grid), chemistry (Titration Curve) |
+| `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve)         |
+| `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve) |
+| `HelpTip`                                                                                   | math                                      |
+| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale)                    |
 | `Magnifier`, `MagnifierSettings`, `magnify`, `marks`, `ReadingField`                        | physics (Spring Scale)                    |
-| `HelpTip`                                                                                   | none yet                                  |
 
 `catalog/` lists every generator on every site. Each lives on one site
 (`site`), the only address it has; `alsoOn` names other sites whose
@@ -47,6 +50,18 @@ other options:
 `generatorState` takes the browser storage names for undo history and
 presets as a third argument, for a site whose teachers already have them
 saved under other names (Math and Physics do).
+
+`graph/` is a graph on a square grid, the one Math's Coordinate Grid and
+Chemistry's Titration Curve both draw on. `axes` holds its settings: each
+axis's range as typed (read by `readAxes` with the site's number reader, since
+Math's are typed in Caret and can be 3π/2), numbering, labels, end caps,
+titles and minor gridlines, plus `gridFields` for a generator using
+`defineSettings`. `layoutGrid` lays the grid out and gives `px`, which places
+a point of the graph on the drawing; `Grid.svelte` draws it with the
+generator's own marks as its children. `AxisSettings`, `TitleSettings` and
+`GridlineSettings` are its settings groups; `AxisSettings` takes a `field` for
+the range boxes (a plain text box unless given) and children for fields of the
+generator's own. `clipPath` cuts a line to the grid.
 
 Every site keeps the rest in its own `src/lib/`, except Physics' Spring
 Scale, which uses the instrument-reading pieces above. Chemistry keeps its own

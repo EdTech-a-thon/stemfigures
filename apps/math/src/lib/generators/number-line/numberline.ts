@@ -2,7 +2,7 @@
 // line is always LINE units long, whatever its range, so every figure pastes
 // into a worksheet at the same width; the SVG scales to fit wherever it's shown.
 
-import { niceLabel, niceText, numberLabel, type Label } from '$lib/shared/numbering.js'
+import { niceLabel, niceText, numberLabel, type Label } from '$shared/graph/numbering'
 import { LABEL_SCALE } from '$shared/labelSize'
 import { COLORS } from '$lib/shared/rowStyle.js'
 import { readLine, type Settings } from './settings.js'

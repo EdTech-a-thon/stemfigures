@@ -4,7 +4,7 @@
 // The range and the equations are kept as the text the teacher typed ("π/4",
 // "-2 < x <= 5", "P(3), -1", "aₙ = 1/n"); readLine() works out what they mean.
 
-import { niceText, numberingOf, type Numbering } from '$lib/shared/numbering.js'
+import { niceText, numberingOf, type Numbering } from '$shared/graph/numbering'
 import { cleanLabelSize, type LabelSize } from '$shared/labelSize'
 import { splitLabels } from '$lib/shared/pointLabels.js'
 import {

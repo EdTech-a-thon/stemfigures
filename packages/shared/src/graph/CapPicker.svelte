@@ -5,7 +5,7 @@
   // opens upward when there isn't room below.
   import { tick } from 'svelte'
   import { ChevronDown } from '@lucide/svelte'
-  import type { Cap } from './caps.js'
+  import type { Cap } from './caps'
 
   // options: { cap id: display name }, e.g. { triangle: 'Triangle arrow', none: 'None' }
   let {
