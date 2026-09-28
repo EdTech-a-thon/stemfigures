@@ -8,6 +8,7 @@ import { generatorsOn, matches } from '$shared/catalog/index'
 import { SITE_ID } from '$lib/site/config'
 import BohrModelPreview from './bohr-model/Preview.svelte'
 import GasSyringePreview from './gas-syringe/Preview.svelte'
+import LengthReadingPreview from './length-reading/Preview.svelte'
 import LewisStructuresPreview from './lewis-structures/Preview.svelte'
 import MassReadingPreview from './mass-reading/Preview.svelte'
 import OrbitalDiagramPreview from './orbital-diagram/Preview.svelte'
@@ -21,6 +22,7 @@ import VolumeReadingPreview from './volume-reading/Preview.svelte'
 /** Each generator's directory preview, by id. */
 export const PREVIEWS: Record<string, Component> = {
   'bohr-model': BohrModelPreview,
+  'length-reading': LengthReadingPreview,
   'lewis-structures': LewisStructuresPreview,
   'mass-reading': MassReadingPreview,
   'orbital-diagram': OrbitalDiagramPreview,

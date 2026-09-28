@@ -38,6 +38,11 @@ describe('searching the directory', () => {
       expect(ids(query), query).toContain('titration-curve')
   })
 
+  it('finds Length Reading the ways teachers ask for it', () => {
+    for (const query of ['ruler', 'length', 'measuring length', 'centimeter', 'millimeter', 'inches', 'metric ruler'])
+      expect(ids(query), query).toContain('length-reading')
+  })
+
   it('finds a generator by its path', () => {
     expect(findGenerator('/volume-by-displacement')?.name).toBe('Volume by Displacement')
   })
