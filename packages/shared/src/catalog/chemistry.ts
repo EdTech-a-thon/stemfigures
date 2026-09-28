@@ -21,7 +21,7 @@ export const CHEMISTRY: CatalogEntry[] = [
     blurb: 'A graduated cylinder before and after an object is dropped in.',
     description:
       'Make printable water displacement figures for chemistry tests. Type the before and after readings and get two graduated cylinders, with an object in the second, for students to find its volume.',
-    keywords: ['water', 'displacement', 'displaced', 'graduated', 'cylinder', 'object', 'marble', 'rock', 'cube', 'irregular', 'solid', 'volume', 'density', 'mL', 'measurement', 'lab'],
+    keywords: ['water', 'displacement', 'displaced', 'graduated', 'cylinder', 'object', 'marble', 'rock', 'cube', 'metal', 'irregular', 'solid', 'volume', 'density', 'mL', 'measurement', 'lab'],
   },
   {
     id: 'mass-reading',
@@ -31,7 +31,7 @@ export const CHEMISTRY: CatalogEntry[] = [
     blurb: 'A triple beam or digital balance showing the mass you type.',
     description:
       'Make printable balance figures for chemistry tests. Type a mass and get a digital, analytical or triple beam balance showing it, for students to read.',
-    keywords: ['balance', 'scale', 'digital', 'analytical', 'electronic', 'triple', 'beam', 'mass', 'grams', 'weigh', 'weight', 'marble', 'rock', 'cube', 'object', 'density', 'measurement', 'lab'],
+    keywords: ['balance', 'scale', 'digital', 'analytical', 'electronic', 'triple', 'beam', 'mass', 'grams', 'weigh', 'weight', 'marble', 'rock', 'cube', 'metal', 'object', 'density', 'measurement', 'lab'],
   },
   {
     id: 'temperature-reading',
