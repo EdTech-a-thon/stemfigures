@@ -13,7 +13,9 @@ import {
   PLACEMENTS,
   PROTON_SYMBOLS,
   nucleusBalls,
+  shellPlaces,
 } from './model'
+import { groundStateShells } from './elements'
 
 /** How the nucleus is drawn: proton and neutron balls, the counts as text,
  *  or an empty circle for students to fill in. */
@@ -54,6 +56,9 @@ export const bohrSettings = defineSettings(
     neutronSymbol: choice(NEUTRON_SYMBOLS, ''),
     electronColor: choice(COLORS, 'blue'),
     electronSymbol: choice(ELECTRON_SYMBOLS, ''),
+    gainedLost: bool(false),
+    gainedColor: choice(COLORS, 'green'),
+    brackets: bool(false),
     key: bool(false),
     shellLabels: bool(false),
     titleMode: choice(['none', 'text'] as const, 'none'),
@@ -74,5 +79,14 @@ export const drawnNucleus = (s: BohrSettings): NucleusStyle =>
 /** The balls of a ball nucleus, or none when it isn't drawn as balls. */
 export const ballsFor = (s: BohrSettings) => (drawnNucleus(s) === 'balls' ? (nucleusBalls(s.protons, s.neutrons, s.seed) ?? []) : [])
 
+/** The protons minus the electrons: positive for a cation, negative for an
+ *  anion (CONTEXT.md "Charge"). */
+export const chargeOf = (s: Pick<BohrSettings, 'protons' | 'electrons'>) => s.protons - s.electrons.reduce((sum, e) => sum + e, 0)
+
+/** The neutral atom's shells that gained and lost electrons are drawn
+ *  against, when they are shown and can be: the proton count is an
+ *  element's and the rings have electrons. */
+export const neutralShells = (s: BohrSettings) => (s.gainedLost && !s.emptyRings ? groundStateShells(s.protons) : undefined)
+
 /** Whether some shell has too many electrons to pair, and so is spaced evenly. */
-export const pairingSkipped = (s: BohrSettings) => s.placement === 'paired' && s.electrons.some((e) => e > MAX_PAIRED)
+export const pairingSkipped = (s: BohrSettings) => s.placement === 'paired' && shellPlaces(s.electrons, neutralShells(s)).some((e) => e > MAX_PAIRED)
