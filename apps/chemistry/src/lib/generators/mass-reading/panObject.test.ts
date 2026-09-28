@@ -9,7 +9,7 @@ const fromQuery = (query: string) => massSettings.fromParams(new URLSearchParams
 const tripleBeamPan = { cx: 98, top: 142, width: 160 }
 
 describe('an object on the pan', () => {
-  it.each(['marbles', 'rock', 'cube'] as const)('%s rests on the pan, within its edges', (kind) => {
+  it.each(['marbles', 'rock', 'cube', 'cylinder'] as const)('%s rests on the pan, within its edges', (kind) => {
     for (const marbles of [1, 3, 5]) {
       const b = objectBounds(objectOnPan(kind, marbles, tripleBeamPan))
       expect(b.bottom).toBeCloseTo(tripleBeamPan.top)
@@ -26,7 +26,7 @@ describe('an object on the pan', () => {
     expect(five.marbles.every((m) => Math.abs(m.r - one.marbles[0].r) < 1e-9)).toBe(true)
   })
 
-  it.each(['marbles', 'rock', 'cube'] as const)('makes room above a digital balance for %s', (kind) => {
+  it.each(['marbles', 'rock', 'cube', 'cylinder'] as const)('makes room above a digital balance for %s', (kind) => {
     const top = objectBounds(objectOnPan(kind, 2, DIGITAL_PAN)).top
     expect(digitalBalanceSize(false, 'boat', top).top).toBeLessThan(top)
   })

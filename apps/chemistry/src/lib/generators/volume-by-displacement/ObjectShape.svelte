@@ -2,7 +2,7 @@
   // The object as placed in the cylinder, in the same line art as the
   // glass: black outlines and flat grays that photocopy well. `k` scales
   // line widths the way the cylinder's do inside a magnifier.
-  import { rockPath, type Placed } from './objects'
+  import { cylinderPaths, rockPath, type Placed } from './objects'
 
   let { placed, k = 1 }: { placed: Placed; k?: number } = $props()
 </script>
@@ -19,6 +19,14 @@
     <!-- facets: a ridge across the top and a crease down the side -->
     <path d="M {x + 0.18 * w} {y + 0.36 * h} Q {x + 0.45 * w} {y + 0.26 * h} {x + 0.7 * w} {y + 0.42 * h} L {x + 0.9 * w} {y + 0.46 * h}" fill="none" stroke-width={1.1 * k} />
     <path d="M {x + 0.7 * w} {y + 0.42 * h} Q {x + 0.64 * w} {y + 0.68 * h} {x + 0.72 * w} {y + 0.92 * h}" fill="none" stroke-width={1.1 * k} />
+  {:else if placed.kind === 'cylinder'}
+    {@const { top, side, band } = cylinderPaths(placed)}
+    <!-- a bright streak and a dark one down its side make it read as metal -->
+    <path d={side} fill="#a8a8a8" stroke="none" />
+    <path d={band(0.16, 0.32)} fill="#e2e2e2" stroke="none" />
+    <path d={band(0.72, 0.9)} fill="#7a7a7a" stroke="none" />
+    <path d={side} fill="none" />
+    <ellipse cx={top.cx} cy={top.cy} rx={top.rx} ry={top.ry} fill="#cdcdcd" />
   {:else}
     {@const { x, y, a, front, side } = placed}
     <rect {x} {y} width={front} height={a} fill="#b8b8b8" />
