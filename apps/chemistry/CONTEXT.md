@@ -337,7 +337,7 @@ The first way to give a curve: the analyte's molarity and volume, the titrant's 
 _Avoid_: Chemistry mode, calculated
 
 **Key points**:
-The second way to give a curve: the starting pH, the equivalence point's volume and pH, and the ending pH, which is the pH at the end of the x-axis. The curve is a real titration curve close to these, stretched on each side of the equivalence point to pass through each exactly.
+The second way to give a curve: the starting pH, the equivalence point's volume and pH, and the ending pH, which is the pH at the end of the x-axis. The curve is the real titration whose own curve comes closest to these, stretched on each side of the equivalence point the rest of the way through each. Going back to concentrations fills in that titration's (to 3 significant figures), unless the key points still come from the concentrations already there; a note says which key points its curve misses, and why when it can.
 _Avoid_: Manual mode, custom points
 
 **Equivalence point**:

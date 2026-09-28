@@ -15,9 +15,9 @@
   import LabelField from '$shared/LabelField.svelte'
   import Section from '$shared/Section.svelte'
   import HelpTip from '$lib/shared/HelpTip.svelte'
-  import { ANALYTES, isBase, isWeak, keyPointsOf, type Analyte, type Chemistry } from './curve'
-  import { buildTitration, pointsNote } from './figure'
-  import { ANALYTE_NAMES, COMMON, MARKS, MARK_NAMES, chemistryOf, titrationSettings } from './settings'
+  import { ANALYTES, chemistryFor, isBase, isWeak, keyPointsOf, type Analyte, type Chemistry, type KeyPoints } from './curve'
+  import { buildTitration, missedPoints, pointsNote } from './figure'
+  import { ANALYTE_NAMES, COMMON, MARKS, MARK_NAMES, chemistryOf, keyPointsIn, titrationSettings } from './settings'
   import TitrationFigure from './TitrationFigure.svelte'
 
   const gen = generatorState(titrationSettings, 'titration-curve')
@@ -65,10 +65,37 @@
     if (clean.source === 'points') takePoints({ analyte: c.analyte, analyteM: 0.1, analyteMl: 25, titrantM: 0.1, pK: c.pK })
   }
 
+  // The concentrations last worked out from key points, and those key points,
+  // while the teacher hasn't changed them: for the note under the fields.
+  let fitted = $state<{ chemistry: string; from: KeyPoints } | null>(null)
+  const chemistryKey = (c: Chemistry) => JSON.stringify(c)
+
+  /** Concentrations for the key points typed: kept if they still give those points, else worked out. */
+  function takeChemistry() {
+    const endMl = axisEnd(axes.x)
+    const typed = keyPointsIn(clean)
+    const had = keyPointsOf(chemistryOf(clean), endMl)
+    const same = (['startPH', 'eqMl', 'eqPH', 'endPH'] as const).every((k) => round2(had[k]) === typed[k])
+    if (same) return
+    const c = chemistryFor(clean.analyte, typed, endMl)
+    const sig = (v: number) => Number(v.toPrecision(3))
+    Object.assign(s, { analyteM: sig(c.analyteM), analyteMl: sig(c.analyteMl), titrantM: sig(c.titrantM) })
+    if (isWeak(clean.analyte)) s[isBase(clean.analyte) ? 'pKb' : 'pKa'] = round2(c.pK)
+    fitted = { chemistry: chemistryKey(chemistryOf(titrationSettings.tidy($state.snapshot(s)))), from: typed }
+  }
+
   function chooseSource(source: 'chemistry' | 'points') {
-    if (source === 'points' && clean.source === 'chemistry') takePoints(chemistryOf(clean))
+    if (source === clean.source) return
+    if (source === 'points') takePoints(chemistryOf(clean))
+    else takeChemistry()
     s.source = source
   }
+
+  // Shown until the teacher changes the concentrations worked out for them.
+  const fitNote = $derived.by(() => {
+    if (!fitted || clean.source !== 'chemistry' || chemistryKey(chemistryOf(clean)) !== fitted.chemistry) return null
+    return missedPoints(chemistryOf(clean), fitted.from, axisEnd(axes.x)) ?? 'Worked out from your key points.'
+  })
 
   const pName = $derived(isBase(clean.analyte) ? 'pKb' : 'pKa')
   const readout = $derived.by(() => {
@@ -139,6 +166,7 @@
           {/if}
         </div>
         {#if g.problems.amounts}<p class="help problem">{g.problems.amounts}</p>{/if}
+        {#if fitNote}<p class="help">{fitNote}</p>{/if}
         {#if isWeak(clean.analyte) && isBase(clean.analyte)}
           <p class="help">Halfway to the equivalence point, pH = 14 − {pName} = {two(14 - clean.pKb)}.</p>
         {/if}

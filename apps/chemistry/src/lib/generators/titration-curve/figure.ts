@@ -5,7 +5,7 @@
 import { axisEnd, readAxes } from '$shared/graph/axes'
 import { COLORS } from '$shared/graph/colors'
 import { clipPath, layoutGrid, pathOf, round, type Point } from '$shared/graph/grid'
-import { curveThrough, isBase, isWeak, phAt, sampleVolumes } from './curve'
+import { curveThrough, isBase, isWeak, keyPointsOf, phAt, sampleVolumes, type Analyte, type Chemistry, type KeyPoints } from './curve'
 import { chemistryOf, eqMlOf, keyPointsIn, type TitrationSettings } from './settings'
 
 const DOT_R = 5.5
@@ -43,13 +43,35 @@ export function checkTitration(s: TitrationSettings, endMl: number): Record<stri
   return problems
 }
 
-/** A gentle word when key points aren't what this kind of titration does. */
-export function pointsNote(s: TitrationSettings): string | null {
-  if (s.source !== 'points') return null
-  if (!isWeak(s.analyte)) return Math.abs(s.eqPH - 7) > 0.05 ? 'A strong acid and a strong base reach equivalence at pH 7.' : null
-  if (!isBase(s.analyte) && s.eqPH <= 7) return 'A weak acid titrated with a strong base reaches equivalence above pH 7.'
-  if (isBase(s.analyte) && s.eqPH >= 7) return 'A weak base titrated with a strong acid reaches equivalence below pH 7.'
+/** Why no real titration of this kind has these key points, if one of them says. */
+export function impossibleReason(analyte: Analyte, p: KeyPoints): string | null {
+  if (!isWeak(analyte)) return Math.abs(p.eqPH - 7) > 0.05 ? 'A strong acid and a strong base reach equivalence at pH 7.' : null
+  if (!isBase(analyte) && p.eqPH <= 7) return 'A weak acid titrated with a strong base reaches equivalence above pH 7.'
+  if (isBase(analyte) && p.eqPH >= 7) return 'A weak base titrated with a strong acid reaches equivalence below pH 7.'
   return null
+}
+
+/** A gentle word when key points aren't what this kind of titration does. */
+export const pointsNote = (s: TitrationSettings) => (s.source === 'points' ? impossibleReason(s.analyte, keyPointsIn(s)) : null)
+
+/**
+ * Where a titration's curve misses the key points it was worked out from,
+ * as a sentence ("…starts at pH 3.53 (not 3) and ends at pH 10.47 (not 12)"),
+ * or null when it meets them all to within a tenth of a pH.
+ */
+export function missedPoints(c: Chemistry, wanted: KeyPoints, endMl: number): string | null {
+  const got = keyPointsOf(c, endMl)
+  const pH = (v: number) => `pH ${Math.round(v * 100) / 100}`
+  const off = (a: number, b: number) => Math.abs(a - b) > 0.1
+  const parts: string[] = []
+  if (off(got.startPH, wanted.startPH)) parts.push(`starts at ${pH(got.startPH)} (not ${wanted.startPH})`)
+  const eqMoved = Math.abs(got.eqMl - wanted.eqMl) > wanted.eqMl * 0.01
+  if (eqMoved || off(got.eqPH, wanted.eqPH))
+    parts.push(`reaches equivalence at ${eqMoved ? `${round(got.eqMl)} mL, ` : ''}${pH(got.eqPH)} (not ${eqMoved ? `${wanted.eqMl} mL, ` : ''}${wanted.eqPH})`)
+  if (off(got.endPH, wanted.endPH)) parts.push(`ends at ${pH(got.endPH)} (not ${wanted.endPH})`)
+  if (!parts.length) return null
+  const list = parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join(', ')} and ${parts.at(-1)}`
+  return `${impossibleReason(c.analyte, wanted) ?? 'No real titration has exactly those key points.'} From these concentrations, the curve ${list}.`
 }
 
 export function buildTitration(s: TitrationSettings) {

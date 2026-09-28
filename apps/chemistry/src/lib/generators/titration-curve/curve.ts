@@ -72,13 +72,13 @@ export function keyPointsOf(c: Chemistry, endMl: number): KeyPoints {
 }
 
 /**
- * A real titration close to these key points, in acid terms (a base's pH
- * already turned into pOH), found from the textbook approximations:
+ * A first guess at a titration with these key points, in acid terms (a
+ * base's pH already turned into pOH), from the textbook approximations:
  *   start pH ≈ ½(pKa − log Ca), equivalence pH ≈ 7 + ½(pKa + log Ceq),
  *   and past it, [OH⁻] ≈ the excess base.
  * r is how much the flask's volume grows by the equivalence point (Veq/Va).
  */
-function fitFlask(weak: boolean, p: KeyPoints, endMl: number): AcidFlask {
+function guessFlask(weak: boolean, p: KeyPoints, endMl: number): AcidFlask {
   const fEnd = endMl / p.eqMl
   const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
   // The end of the graph: [OH⁻] = Ca(fEnd − 1)/(1 + r·fEnd), solved for r.
@@ -98,9 +98,99 @@ function fitFlask(weak: boolean, p: KeyPoints, endMl: number): AcidFlask {
   return { ca, va, cb: (ca * va) / p.eqMl, ka }
 }
 
+// What a teacher can type for the chemistry (the fields' limits).
+const LIMITS = { molarity: [1e-4, 10], volume: [0.1, 1000], pK: [0, 14] } as const
+
+/** x solved from a·x = b, for a small square a (Gaussian elimination). */
+function solve(a: number[][], b: number[]): number[] {
+  const n = b.length
+  const m = a.map((row, i) => [...row, b[i]])
+  for (let c = 0; c < n; c++) {
+    const pivot = m.slice(c).reduce((best, row, k) => (Math.abs(row[c]) > Math.abs(m[best][c]) ? k + c : best), c)
+    ;[m[c], m[pivot]] = [m[pivot], m[c]]
+    for (let r = 0; r < n; r++) {
+      if (r === c || !m[c][c]) continue
+      const f = m[r][c] / m[c][c]
+      for (let k = c; k <= n; k++) m[r][k] -= f * m[c][k]
+    }
+  }
+  return m.map((row, i) => (row[i] ? row[n] / row[i] : 0))
+}
+
 /**
- * A curve through the key points: a fitted titration, with each side of the
- * equivalence point stretched to meet them. Returns pH after v mL.
+ * The real titration, in acid terms, whose own curve comes closest to these
+ * key points, within what the teacher could type for the chemistry. From the
+ * first guess, it's refined (Levenberg–Marquardt) in log Ca, log r and pKa
+ * until the starting, equivalence and ending pH match. A strong acid's
+ * equivalence point is always at 7, so only its start and end are matched.
+ */
+function fitFlask(weak: boolean, p: KeyPoints, endMl: number): AcidFlask {
+  const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
+  const [mLo, mHi] = LIMITS.molarity.map(Math.log10)
+  const [vLo, vHi] = LIMITS.volume
+  // u = [log Ca, log r, pKa], kept where every field stays within its limits.
+  const keep = ([lca, lr, pka]: number[]) => {
+    const ca = clamp(lca, mLo, mHi)
+    // Va = Veq/r within its limits, and Cb = Ca/r within the molarity limits.
+    const lrLo = Math.max(Math.log10(p.eqMl / vHi), ca - mHi)
+    const lrHi = Math.min(Math.log10(p.eqMl / vLo), ca - mLo)
+    return [ca, clamp(lr, lrLo, Math.max(lrLo, lrHi)), clamp(pka, LIMITS.pK[0], LIMITS.pK[1])]
+  }
+  const flaskOf = ([lca, lr, pka]: number[]): AcidFlask => {
+    const ca = 10 ** lca
+    const r = 10 ** lr
+    return { ca, va: p.eqMl / r, cb: ca / r, ka: weak ? 10 ** -pka : Infinity }
+  }
+  const misses = (u: number[]) => {
+    const f = flaskOf(u)
+    const out = [acidPH(f, 0) - p.startPH, acidPH(f, endMl) - p.endPH]
+    if (weak) out.push(acidPH(f, p.eqMl) - p.eqPH)
+    return out
+  }
+  const size = (r: number[]) => r.reduce((sum, v) => sum + v * v, 0)
+
+  const g = guessFlask(weak, p, endMl)
+  let u = keep([Math.log10(g.ca), Math.log10(p.eqMl / g.va), weak ? -Math.log10(g.ka) : 7])
+  const n = weak ? 3 : 2
+  let r = misses(u)
+  let damping = 1e-2
+  for (let i = 0; i < 80 && size(r) > 1e-10; i++) {
+    // How each miss changes with each unknown, measured.
+    const jac = r.map(() => Array(n).fill(0))
+    for (let k = 0; k < n; k++) {
+      const h = 1e-5
+      const bumped = misses(u.map((v, j) => (j === k ? v + h : v)))
+      bumped.forEach((b, row) => (jac[row][k] = (b - r[row]) / h))
+    }
+    const jtj = Array.from({ length: n }, (_, a) => Array.from({ length: n }, (_, b) => jac.reduce((sum, row) => sum + row[a] * row[b], 0)))
+    const jtr = Array.from({ length: n }, (_, a) => jac.reduce((sum, row, k) => sum + row[a] * r[k], 0))
+    const step = solve(jtj.map((row, a) => row.map((v, b) => (a === b ? v * (1 + damping) + 1e-12 : v))), jtr.map((v) => -v))
+    const next = keep(u.map((v, k) => v + (step[k] ?? 0)))
+    const nextR = misses(next)
+    if (size(nextR) < size(r)) {
+      u = next
+      r = nextR
+      damping = Math.max(damping / 3, 1e-9)
+    } else if ((damping *= 4) > 1e8) break
+  }
+  return flaskOf(u)
+}
+
+/**
+ * The chemistry of the real titration closest to these key points, to fill
+ * the concentrations in with when a teacher goes back to them.
+ */
+export function chemistryFor(analyte: Analyte, p: KeyPoints, endMl: number): Chemistry {
+  const base = isBase(analyte)
+  const acidTerms = (ph: number) => (base ? PKW - ph : ph)
+  const f = fitFlask(isWeak(analyte), { ...p, startPH: acidTerms(p.startPH), eqPH: acidTerms(p.eqPH), endPH: acidTerms(p.endPH) }, endMl)
+  return { analyte, analyteM: f.ca, analyteMl: f.va, titrantM: f.cb, pK: Number.isFinite(f.ka) ? -Math.log10(f.ka) : 0 }
+}
+
+/**
+ * A curve through the key points: the closest real titration, with each side
+ * of the equivalence point stretched the rest of the way to meet them.
+ * Returns pH after v mL.
  */
 export function curveThrough(analyte: Analyte, p: KeyPoints, endMl: number): (v: number) => number {
   const base = isBase(analyte)

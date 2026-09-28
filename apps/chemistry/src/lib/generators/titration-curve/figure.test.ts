@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildTitration } from './figure'
+import { buildTitration, missedPoints } from './figure'
 import { titrationSettings } from './settings'
 
 const build = (query: string) => buildTitration(titrationSettings.fromParams(new URLSearchParams(query)))
@@ -49,5 +49,22 @@ describe('a titration curve figure', () => {
     const ys = g.curve.join(' ').match(/,-?[\d.]+/g)!.map((t) => Number(t.slice(1)))
     expect(Math.min(...ys)).toBeGreaterThanOrEqual(g.grid.y - 0.01)
     expect(Math.max(...ys)).toBeLessThanOrEqual(g.grid.y + g.grid.h + 0.01)
+  })
+})
+
+describe('the note after working concentrations out from key points', () => {
+  const chem = { analyte: 'weak-acid' as const, analyteM: 0.1, analyteMl: 25, titrantM: 0.1, pK: 4.76 }
+
+  it('says nothing when the curve meets the key points', () => {
+    expect(missedPoints(chem, { startPH: 2.88, eqMl: 25, eqPH: 8.73, endPH: 12.52 }, 50)).toBeNull()
+  })
+
+  it('names each key point the curve misses, and why when it can', () => {
+    expect(missedPoints(chem, { startPH: 2.9, eqMl: 25, eqPH: 6.5, endPH: 12 }, 50)).toBe(
+      'A weak acid titrated with a strong base reaches equivalence above pH 7. From these concentrations, the curve reaches equivalence at pH 8.73 (not 6.5) and ends at pH 12.52 (not 12).',
+    )
+    expect(missedPoints(chem, { startPH: 2.88, eqMl: 30, eqPH: 8.73, endPH: 12.52 }, 50)).toBe(
+      'No real titration has exactly those key points. From these concentrations, the curve reaches equivalence at 25 mL, pH 8.73 (not 30 mL, 8.73).',
+    )
   })
 })

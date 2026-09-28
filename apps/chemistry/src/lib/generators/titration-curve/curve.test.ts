@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { curveThrough, equivalenceMl, keyPointsOf, phAt, sampleVolumes, type Analyte, type Chemistry, type KeyPoints } from './curve'
+import { chemistryFor, curveThrough, equivalenceMl, keyPointsOf, phAt, sampleVolumes, type Analyte, type Chemistry, type KeyPoints } from './curve'
 
 const chem = (analyte: Analyte, pK = 0, analyteM = 0.1, analyteMl = 25, titrantM = 0.1): Chemistry => ({ analyte, analyteM, analyteMl, titrantM, pK })
 
@@ -64,5 +64,50 @@ describe('a curve through key points', () => {
     const c = chem('weak-acid', 4.76)
     const ph = curveThrough('weak-acid', keyPointsOf(c, 50), 50)
     for (const v of [5, 12.5, 20, 24, 26, 35]) expect(ph(v)).toBeCloseTo(phAt(c, v), 0)
+  })
+})
+
+describe('the chemistry behind key points', () => {
+  const realistic: [Analyte, KeyPoints][] = [
+    ['weak-acid', { startPH: 2.9, eqMl: 25, eqPH: 8.7, endPH: 12.3 }],
+    ['weak-acid', { startPH: 3.5, eqMl: 18, eqPH: 9.2, endPH: 11.8 }],
+    ['weak-acid', { startPH: 2, eqMl: 20, eqPH: 8, endPH: 13 }],
+    ['strong-acid', { startPH: 1, eqMl: 25, eqPH: 7, endPH: 12.5 }],
+    ['strong-base', { startPH: 12.5, eqMl: 30, eqPH: 7, endPH: 1.8 }],
+    ['weak-base', { startPH: 11.1, eqMl: 25, eqPH: 5.3, endPH: 1.5 }],
+  ]
+  it.each(realistic)('%s: a real titration with the key points %j', (analyte, p) => {
+    const c = chemistryFor(analyte, p, 50)
+    expect(equivalenceMl(c)).toBeCloseTo(p.eqMl, 6)
+    const got = keyPointsOf(c, 50)
+    expect(got.startPH).toBeCloseTo(p.startPH, 2)
+    expect(got.eqPH).toBeCloseTo(p.eqPH, 2)
+    expect(got.endPH).toBeCloseTo(p.endPH, 2)
+  })
+
+  it('finds the concentrations again from a titration’s own key points', () => {
+    const c = chemistryFor('weak-acid', keyPointsOf(chem('weak-acid', 4.76), 50), 50)
+    expect(c.analyteM).toBeCloseTo(0.1, 3)
+    expect(c.analyteMl).toBeCloseTo(25, 1)
+    expect(c.titrantM).toBeCloseTo(0.1, 3)
+    expect(c.pK).toBeCloseTo(4.76, 2)
+  })
+
+  it('keeps to what can be typed when no titration has the key points', () => {
+    for (const p of [
+      { startPH: 3, eqMl: 25, eqPH: 6.5, endPH: 12 },
+      { startPH: 2.9, eqMl: 25, eqPH: 8.7, endPH: 13.9 },
+      { startPH: 0.1, eqMl: 5, eqPH: 13, endPH: 13.5 },
+    ]) {
+      const c = chemistryFor('weak-acid', p, 50)
+      for (const m of [c.analyteM, c.titrantM]) {
+        expect(m).toBeGreaterThanOrEqual(1e-4 - 1e-12)
+        expect(m).toBeLessThanOrEqual(10 + 1e-9)
+      }
+      expect(c.analyteMl).toBeGreaterThanOrEqual(0.1 - 1e-9)
+      expect(c.analyteMl).toBeLessThanOrEqual(1000 + 1e-6)
+      expect(c.pK).toBeGreaterThanOrEqual(0)
+      expect(c.pK).toBeLessThanOrEqual(14)
+    }
   })
 })
