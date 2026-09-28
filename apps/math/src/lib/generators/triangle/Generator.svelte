@@ -7,9 +7,9 @@
   import { MoveDown, RotateCw, Tag } from '@lucide/svelte'
   import GeneratorPage from '$shared/GeneratorPage.svelte'
   import { generatorState } from '$shared/generatorState.svelte'
-  import HelpTip from '$lib/shared/HelpTip.svelte'
+  import HelpTip from '$shared/HelpTip.svelte'
   import MathInput from '$lib/shared/MathInput.svelte'
-  import Section from '$lib/shared/Section.svelte'
+  import Section from '$shared/Section.svelte'
   import { buildTriangle } from './layout.js'
   import PartLabel from './PartLabel.svelte'
   import {

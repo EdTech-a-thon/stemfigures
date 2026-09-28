@@ -7,7 +7,7 @@
 import type { TreeNode } from '@caret-js/core'
 import { CommaListNode, ComparisonNode, ParenthesesChildTag, VariableNode } from '@caret-js/math'
 import { fromText, parsers } from '$lib/shared/math.js'
-import { fmt } from '$lib/shared/numbering.js'
+import { fmt } from '$shared/graph/numbering'
 import { FunctionNameNode } from '$lib/shared/functions.js'
 import { splitLabels } from '$lib/shared/pointLabels.js'
 import { divisors, evaluate, type AngleUnit } from './evaluate.js'

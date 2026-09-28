@@ -4,22 +4,20 @@
   // scrolls; only the settings column does. Settings are mirrored into the
   // page address so a bookmark or shared link brings back exactly this grid,
   // and the server renders that same grid on first load.
-  import { Grid3x3, Heading, MoveRight, MoveUp, Plus, X } from '@lucide/svelte'
+  import { Plus, X } from '@lucide/svelte'
   import GeneratorPage from '$shared/GeneratorPage.svelte'
   import { generatorState } from '$shared/generatorState.svelte'
   import { untrack } from 'svelte'
-  import CapPicker from '$lib/shared/CapPicker.svelte'
-  import type { Cap } from '$lib/shared/caps.js'
-  import HelpTip from '$lib/shared/HelpTip.svelte'
-  import LabelField from '$lib/shared/LabelField.svelte'
+  import AxisSettings from '$shared/graph/AxisSettings.svelte'
+  import GridlineSettings from '$shared/graph/GridlineSettings.svelte'
+  import TitleSettings from '$shared/graph/TitleSettings.svelte'
+  import HelpTip from '$shared/HelpTip.svelte'
   import MathInput from '$lib/shared/MathInput.svelte'
-  import { niceText } from '$lib/shared/numbering.js'
   import RowStyle from '$lib/shared/RowStyle.svelte'
-  import Section from '$lib/shared/Section.svelte'
   import { ROW_DEFAULTS, readEquations, type Row } from './equations.js'
   import Graph from './Graph.svelte'
   import {
-    ANGLE_UNITS, CAPS, GRAPH_KEYS, cleanSettings, readAxes, settingsFromParams, settingsToQuery, type AxisName, type RawSettings, type Settings,
+    ANGLE_UNITS, GRAPH_KEYS, cleanSettings, readAxes, settingsFromParams, settingsToQuery, type RawSettings, type Settings,
   } from './settings.js'
 
   // There's always a row to type the next equation in.
@@ -73,64 +71,6 @@
     if (!s.equations.length) s.equations.push(blankRow())
   }
 
-  const EVERY_OPTIONS: [number, string][] = [
-    [1, 'Every line'],
-    [2, 'Every 2nd line'],
-    [5, 'Every 5th line'],
-    [10, 'Every 10th line'],
-    [0, 'No numbers'],
-  ]
-  const MINOR_OPTIONS: [number, string][] = [
-    [0, 'None'],
-    [2, '2 per block'],
-    [4, '4 per block'],
-    [5, '5 per block'],
-  ]
-  const gridSummary = $derived(clean.minor ? `${clean.minor} minor gridlines per block` : 'No minor gridlines')
-  // Each axis runs from its start end (left/bottom) to its end end (right/top).
-  const AXES = [
-    { axis: 'x', heading: 'x-axis', icon: MoveRight, ends: [['Start', 'Left end', 'left'], ['End', 'Right end', 'right']] },
-    { axis: 'y', heading: 'y-axis', icon: MoveUp, ends: [['Start', 'Bottom end', 'down'], ['End', 'Top end', 'up']] },
-  ] as const
-
-  // Named the way Excel and Sheets name them: a chart title and axis titles.
-  const TITLES = [
-    { key: 'title', name: 'Chart title', placeholder: 'Distance over time' },
-    { key: 'xTitle', name: 'x-axis title', placeholder: 'Time (hours)' },
-    { key: 'yTitle', name: 'y-axis title', placeholder: 'Distance (km)' },
-  ] as const
-  const RANGE_FIELDS = [
-    ['From', 'From'],
-    ['To', 'To'],
-    ['Step', 'Count by'],
-  ] as const
-  function axisSummary(axis: AxisName) {
-    const { start, step, blocks, numbering } = axes[axis]
-    const every = clean[`${axis}Every` as const]
-    const n = (v: number) => niceText(v, numbering)
-    return [
-      `${n(start)} to ${n(start + blocks * step)}`,
-      `by ${n(step)}`,
-      axis === 'x' && usesTrig ? `trig in ${clean.angle}` : '',
-      every ? (every === 1 ? 'numbered' : `numbered every ${every}`) : 'unnumbered',
-      clean[`${axis}LabelMode` as const] === 'text' && clean[`${axis}Label` as const].trim() ? `“${clean[`${axis}Label` as const].trim()}”` : 'no label',
-      endsSummary(clean[`${axis}StartCap` as const], clean[`${axis}EndCap` as const]),
-    ]
-      .filter(Boolean)
-      .join(' · ')
-  }
-  function endsSummary(start: Cap, end: Cap) {
-    if (start === end) return start === 'none' ? 'plain ends' : `${CAPS[start].toLowerCase()}s`
-    return `${CAPS[start].toLowerCase()} / ${CAPS[end].toLowerCase()}`
-  }
-  const titlesSummary = $derived.by(() => {
-    const shown = (key: (typeof TITLES)[number]['key']) => (clean[`${key}Mode` as const] === 'text' ? clean[key].trim() : '')
-    const parts = TITLES.map(({ key, name }) =>
-      clean[`${key}Mode` as const] === 'blank' ? `${name}: blank line` : shown(key) ? `“${shown(key)}”` : '',
-    )
-    return parts.filter(Boolean).join(' · ') || 'None'
-  })
-
   let svg = $state<SVGSVGElement>()
   const filename = $derived(
     (clean.titleMode === 'text' && clean.title.trim() ? clean.title.trim() : 'coordinate-grid')
@@ -175,71 +115,33 @@
   {/snippet}
 
   {#snippet settings()}
-    <Section title="Titles" icon={Heading} summary={titlesSummary}>
-      {#each TITLES as { key, name, placeholder }}
-        <div class="field">
-          <span>{name}</span>
-          <LabelField {name} {placeholder} bind:mode={s[`${key}Mode` as const]} bind:text={s[key]} />
-        </div>
-      {/each}
-    </Section>
+    <TitleSettings
+      bind:title={s.title} bind:titleMode={s.titleMode} bind:xTitle={s.xTitle} bind:xTitleMode={s.xTitleMode}
+      bind:yTitle={s.yTitle} bind:yTitleMode={s.yTitleMode}
+      placeholders={{ title: 'Distance over time', xTitle: 'Time (hours)', yTitle: 'Distance (km)' }}
+    />
 
-    {#each AXES as { axis, heading, icon, ends }}
-      <Section title={heading} {icon} summary={axisSummary(axis)}>
-        <div class="grid-fields">
-          {#each RANGE_FIELDS as [key, name]}
-            <div class="range-field">
-              <label for="{axis}-{key}">{name}</label>
-              <MathInput id="{axis}-{key}" aria-invalid={!!axes.problems[`${axis}${key}`]} bind:value={s[`${axis}${key}` as const]} />
-            </div>
-          {/each}
-        </div>
-        {#each RANGE_FIELDS as [key]}
-          {#if axes.problems[`${axis}${key}`]}<p class="help problem">{axes.problems[`${axis}${key}`]}</p>{/if}
-        {/each}
-        {#if axis === 'x' && (usesTrig || clean.angle !== 'radians')}
-          <label class="field">
-            <span>Trig reads x in <span class="hint">type ° (or deg) in the range for degrees</span></span>
-            <select bind:value={s.angle}>
-              {#each Object.entries(ANGLE_UNITS) as [v, label]}<option value={v}>{label}</option>{/each}
-            </select>
-          </label>
-        {/if}
+    <AxisSettings
+      axis="x" read={axes.x} problems={axes.problems} field={MathInput} extras={usesTrig ? [`trig in ${clean.angle}`] : []}
+      bind:from={s.xFrom} bind:to={s.xTo} bind:step={s.xStep} bind:every={s.xEvery}
+      bind:labelMode={s.xLabelMode} bind:label={s.xLabel} bind:startCap={s.xStartCap} bind:endCap={s.xEndCap}
+    >
+      {#if usesTrig || clean.angle !== 'radians'}
         <label class="field">
-          Numbers
-          <select bind:value={s[`${axis}Every` as const]}>
-            {#each EVERY_OPTIONS as [v, label]}<option value={v}>{label}</option>{/each}
+          <span>Trig reads x in <span class="hint">type ° (or deg) in the range for degrees</span></span>
+          <select bind:value={s.angle}>
+            {#each Object.entries(ANGLE_UNITS) as [v, label]}<option value={v}>{label}</option>{/each}
           </select>
         </label>
-        <div class="field">
-          <span>Label <span class="hint">at the {axis === 'x' ? 'right' : 'top'} end</span></span>
-          <LabelField
-            name="{heading} label"
-            placeholder={axis}
-            blank={false}
-            bind:mode={s[`${axis}LabelMode` as const]}
-            bind:text={s[`${axis}Label` as const]}
-          />
-        </div>
-        <div class="ends">
-          {#each ends as [key, name, direction]}
-            <div class="field">
-              <span>{name}</span>
-              <CapPicker options={CAPS} label="{heading} {name.toLowerCase()}" {direction} bind:value={s[`${axis}${key}Cap` as const]} />
-            </div>
-          {/each}
-        </div>
-      </Section>
-    {/each}
+      {/if}
+    </AxisSettings>
+    <AxisSettings
+      axis="y" read={axes.y} problems={axes.problems} field={MathInput}
+      bind:from={s.yFrom} bind:to={s.yTo} bind:step={s.yStep} bind:every={s.yEvery}
+      bind:labelMode={s.yLabelMode} bind:label={s.yLabel} bind:startCap={s.yStartCap} bind:endCap={s.yEndCap}
+    />
 
-    <Section title="Grid" icon={Grid3x3} summary={gridSummary}>
-      <label class="field">
-        Minor gridlines
-        <select bind:value={s.minor}>
-          {#each MINOR_OPTIONS as [v, label]}<option value={v}>{label}</option>{/each}
-        </select>
-      </label>
-    </Section>
+    <GridlineSettings bind:minor={s.minor} />
   {/snippet}
 
   {#snippet figure()}
@@ -261,13 +163,7 @@
   }
   .add:hover { background: var(--blue-soft); }
 
-  .grid-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; margin-bottom: 0.75rem; }
-  .range-field { display: flex; flex-direction: column; gap: 0.3rem; font-weight: 600; font-size: 0.88rem; min-width: 0; }
-  .grid-fields ~ .help { margin: -0.3rem 0 0.75rem; font-size: 0.84rem; }
   .help.problem { color: var(--red); font-weight: 600; }
   .field { display: flex; flex-direction: column; gap: 0.35rem; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.75rem; }
-  .field:last-child { margin-bottom: 0; }
   .field .hint { font-weight: 400; color: var(--muted); }
-  .ends { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
-  .ends .field { margin-bottom: 0; }
 </style>

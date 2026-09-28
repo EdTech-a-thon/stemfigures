@@ -33,6 +33,11 @@ describe('searching the directory', () => {
       expect(ids(query), query).toContain('gas-syringe')
   })
 
+  it('finds Titration Curve the ways teachers ask for it', () => {
+    for (const query of ['titration curve', 'titration', 'equivalence point', 'half equivalence', 'pKa', 'weak acid', 'buffer'])
+      expect(ids(query), query).toContain('titration-curve')
+  })
+
   it('finds a generator by its path', () => {
     expect(findGenerator('/volume-by-displacement')?.name).toBe('Volume by Displacement')
   })

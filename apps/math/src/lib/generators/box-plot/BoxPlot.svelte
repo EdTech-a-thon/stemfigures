@@ -1,7 +1,7 @@
 <script lang="ts">
   // The box plot itself, as a self-contained SVG that prints crisply and
   // exports cleanly to PNG/SVG (fonts and colors are inline, no page CSS).
-  import type { Cap } from '$lib/shared/caps.js'
+  import type { Cap } from '$shared/graph/caps'
   import { SERIF } from '$lib/shared/mathSvg.js'
   import { buildPlot } from './boxplot.js'
   import { INK, type Settings } from './settings.js'

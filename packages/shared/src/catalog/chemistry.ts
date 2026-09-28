@@ -66,6 +66,16 @@ export const CHEMISTRY: CatalogEntry[] = [
     keywords: ['pH', 'meter', 'electrode', 'probe', 'digital', 'analog', 'needle', 'dial', 'paper', 'litmus', 'universal', 'indicator', 'color', 'chart', 'acid', 'base', 'acidic', 'basic', 'neutral', 'measurement', 'lab'],
   },
   {
+    id: 'titration-curve',
+    site: 'chemistry',
+    name: 'Titration Curve',
+    path: '/titration-curve',
+    blurb: 'An acid–base titration curve from molarities and pKa, or from the pH values you type.',
+    description:
+      'Make printable titration curves for chemistry tests. Pick a strong or weak acid or base, type the molarities, volume and pKa, or just the starting, equivalence and ending pH, and get the curve with its equivalence and half-equivalence points marked.',
+    keywords: ['titration', 'titrate', 'curve', 'graph', 'pH', 'equivalence', 'half-equivalence', 'endpoint', 'end', 'point', 'pKa', 'pKb', 'Ka', 'buffer', 'acid', 'base', 'strong', 'weak', 'neutralization', 'NaOH', 'HCl', 'acetic', 'ammonia', 'molarity', 'buret', 'AP'],
+  },
+  {
     id: 'particle-diagram',
     site: 'chemistry',
     name: 'Particle Diagram',
