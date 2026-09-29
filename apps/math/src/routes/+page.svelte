@@ -4,13 +4,14 @@
   import { PREVIEWS } from '$lib/generators/index.js'
   import { SITE_ID } from '$lib/site/config.js'
   import Seo from '$lib/site/Seo.svelte'
+  import { homeJsonLd } from '$lib/site/structuredData'
   import GeneratorDirectory from '$shared/GeneratorDirectory.svelte'
+
+  const description =
+    'Free generators for clean, printable math figures. Make a coordinate grid and more, then copy it straight into a test, worksheet or slide.'
 </script>
 
-<Seo
-  description="Free generators for clean, printable math figures. Make a coordinate grid and more, then copy it straight into a test, worksheet or slide."
-  path="/"
-/>
+<Seo {description} path="/" jsonLd={homeJsonLd(description)} />
 
 <div class="page">
   <header class="hero">

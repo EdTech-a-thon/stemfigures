@@ -1,0 +1,634 @@
+// The words under each generator: what its figures show and how teachers use
+// them, what can be set, and frequently asked questions, for the section below
+// the figure (GeneratorAbout) and the page's structured data. Everything here
+// should be true of the generator's code; check it when a generator changes.
+// Plain text only: the same strings go into JSON-LD.
+
+export interface Faq {
+  q: string
+  a: string
+}
+
+export interface GeneratorCopy {
+  /** the section's visible heading */
+  heading: string
+  /** one or two short paragraphs */
+  intro: string[]
+  /** "What you can set", one line each */
+  settings: string[]
+  faqs: Faq[]
+  /** what the generator's social card image (/og/<id>.png) shows */
+  imageAlt: string
+  /** schema.org educationalLevel */
+  educationalLevel: string[]
+}
+
+export const COPY: Record<string, GeneratorCopy> = {
+  'coordinate-grid': {
+    heading: 'Coordinate grids and graph paper for graphing',
+    intro: [
+      'The Coordinate Grid Generator draws a grid of square blocks with an x-axis and a y-axis, numbered along each axis over the range you set. Leave it blank as graph paper, or type equations and points to graph on it: straight lines like y = 2x + 1, curves like y = x² − 4 or y = sin(x), and labeled points like A(2, 3).',
+      'Teachers use it for plotting points, graphing linear equations, reading slope and intercepts, and graphing functions in Algebra and beyond. Type a range with fractions or π for a trig graph, or with ° for degrees, and give each axis a title or a blank line for students.',
+    ],
+    settings: [
+      'Equations to graph, one per row: lines, curves, points, and pieces of a piecewise function with open or closed endpoints',
+      'Each row’s style: its color, a solid, dashed or dotted line, which ends have arrows, endpoints and asymptotes shown or hidden, and a dot or cross for points',
+      'Each axis’s range (From, To and Count by), typed as whole numbers, decimals, fractions, multiples of π or degrees, and how often it is numbered',
+      'A chart title and axis titles, as text or a blank line for students, and the x and y labels at the arrow tips',
+      'How each end of each axis finishes: a triangle arrow, a line arrow, a circle or nothing',
+      'Minor gridlines splitting each block into 2, 4 or 5, and small, medium or large labels',
+    ],
+    faqs: [
+      {
+        q: 'How do I make a blank coordinate plane?',
+        a: 'Leave the Equations row empty and set each axis’s From and To, like −10 to 10 for a four-quadrant grid or 0 to 15 for the first quadrant only. It prints as plain graph paper with numbered axes.',
+      },
+      {
+        q: 'What equations can I graph?',
+        a: 'Anything that can be written as y = …, such as y = 2x + 1, 2x + 3y = 6, y = −(x − 2)² + 3, y = 2ˣ or y = |x|, plus up-and-down lines like x = 4. Trig, log and ln functions work too. Circles, sideways curves and shaded inequalities aren’t drawn yet.',
+      },
+      {
+        q: 'How do I plot and label points?',
+        a: 'Type points in a row, like (1, 2), (3, 4), or give each a letter first, like A(1, 2), B(−3, 4). The row’s style chooses a dot or a cross and whether the label shows just the letter or the letter with its coordinates.',
+      },
+      {
+        q: 'Can I graph a piecewise function?',
+        a: 'Yes. Put each piece in its own row with its domain after a comma, like y = 3x, −5 ≤ x < 2. Use ≤ for a closed circle at the end and < for an open one.',
+      },
+      {
+        q: 'How do I number the x-axis in π for trig graphs?',
+        a: 'Type the range with pi, like From −2pi to 2pi, counting by pi/2. The numbers are written in π, and Numbers set to Every 2nd line keeps them from crowding. Type ° in the range to graph trig in degrees instead.',
+      },
+    ],
+    imageAlt: 'A printable four-quadrant coordinate grid from −10 to 10 with the line y = 2x + 1 graphed on it, made with the Coordinate Grid Generator',
+    educationalLevel: ['Middle school', 'High school', 'Algebra 1', 'Algebra 2'],
+  },
+
+  'number-line': {
+    heading: 'Number lines for inequalities, fractions and points',
+    intro: [
+      'The Number Line Generator draws a horizontal number line over the range you type, with a tick at every step and numbers under them. Type an inequality to graph it with open and closed circles and a thick line, or type numbers to mark as points, lettered for students to identify, or a sequence like aₙ = 1/n.',
+      'Teachers use it for graphing inequalities and compound inequalities, placing integers, fractions and decimals, and questions on reading a point’s value. Type the range in fractions or π and the numbers follow, so a line counting by 1/4 is numbered in fractions.',
+    ],
+    settings: [
+      'Equations to graph, one per row: an inequality or equation in one letter, like −2 < x ≤ 5, x < −1 or x ≥ 3, or x = 2, a list of points, lettered points like P(0.35), or a sequence',
+      'Each row’s color, whether values are written above the line, and for points a dot or cross and how their labels show',
+      'The range (From, To and Count by), typed as whole numbers, decimals, fractions or multiples of π',
+      'How often the ticks are numbered: every tick, every 2nd, 4th, 5th or 10th, or not at all',
+      'For a sequence, which terms are shown, n from one whole number to another',
+      'Small, medium or large labels',
+    ],
+    faqs: [
+      {
+        q: 'How do I graph an inequality on a number line?',
+        a: 'Type it in an Equations row, like x ≥ −2 (type >= for ≥). The generator draws a closed circle where the number is included and an open circle where it isn’t, with a thick line over every number that makes it true.',
+      },
+      {
+        q: 'Can it graph compound inequalities?',
+        a: 'Yes. Type an “and” inequality as −3 < x ≤ 4, or with the word and, and an “or” inequality with the word or, like x < −1 or x ≥ 3. You can also type x ≠ 2, all real numbers or no solution.',
+      },
+      {
+        q: 'Can I make a fraction number line?',
+        a: 'Yes. Type the step as a fraction, like 1/4, and the ticks are numbered as fractions. To have students name the fractions, set Numbers to number fewer ticks, such as every 4th, so only the whole numbers are written.',
+      },
+      {
+        q: 'How do I mark points for students to identify?',
+        a: 'Type the points with a letter before each, like P(3/4), Q(3/2). They’re drawn as dots with only their letters, since writing the value would give the answer away. A point typed without a letter that doesn’t sit on a numbered tick has its value written above it, unless you turn Values off in the row’s style.',
+      },
+      {
+        q: 'Why is the graph in two colors?',
+        a: 'Each row has its own color, set from the button before it. Rows of the same color join into one graph; rows of different colors are drawn separately, so you can show two inequalities on one line.',
+      },
+    ],
+    imageAlt: 'A printable number line from −5 to 5 with x ≥ −2 graphed as a closed circle at −2 and a thick line running right, made with the Number Line Generator',
+    educationalLevel: ['Elementary school', 'Middle school', 'High school', 'Algebra 1'],
+  },
+
+  'triangle': {
+    heading: 'Triangles drawn to scale, labeled for students',
+    intro: [
+      'The Triangle Generator draws a triangle to scale from any three of its measures: three sides, two sides and an angle, or two angles and a side. It works out the rest, so the picture always matches the numbers. Measures can be typed with fractions, square roots and π, like 5/2 or 3√2.',
+      'Label each side and angle with its measure, with math like x or 2y + 1, or with nothing, and add congruence marks, heights and right-angle squares. Teachers use it for the Pythagorean theorem, special right triangles, trigonometry, the laws of sines and cosines, and area.',
+    ],
+    settings: [
+      'Any three sides and angles, typed as numbers, fractions, square roots or π',
+      'A label on each side and angle: its measure, text like x, or nothing',
+      'Congruence ticks on sides and congruence arcs on angles, one to three of each',
+      'A height from any corner, solid, dashed or dotted, labeled and with the point where it lands named',
+      'Corner names, a unit such as cm or ft, and solved measures rounded to whole numbers, tenths or hundredths',
+      'Right-angle squares on or off, which side sits at the bottom, flip and turn, and labels dragged where you want them',
+    ],
+    faqs: [
+      {
+        q: 'Which measures do I need to give?',
+        a: 'Any three that make a triangle: three sides (SSS), two sides and an angle (SAS or SSA), or two angles and a side (ASA or AAS). Three angles alone fix the shape but not the size, so no side lengths are shown. If the measures don’t make a triangle, the settings say why and the last good triangle stays on screen.',
+      },
+      {
+        q: 'How do I label a side x for students to find?',
+        a: 'Leave that side’s measure blank so the generator solves it, then set its label to text and type x, or any math like 2y + 1. A side or angle you gave shows its measure; one the generator solved shows nothing unless you ask for its measure.',
+      },
+      {
+        q: 'Is the triangle really drawn to scale?',
+        a: 'Yes. Its sides and angles are in proportion to the measures, so a 3-4-5 triangle looks like one. It isn’t true size on paper; it is fitted to the figure.',
+      },
+      {
+        q: 'What about the ambiguous case?',
+        a: 'When two sides and an angle not between them make two different triangles, the generator draws the one whose unknown angle is acute and offers Show the other triangle to switch to the second.',
+      },
+      {
+        q: 'Can I type a square root or a fraction?',
+        a: 'Yes. Type sqrt for √, / for a fraction and pi for π, so 5√2 or 7/2 are drawn at their true length and labeled as typed.',
+      },
+    ],
+    imageAlt: 'A printable right triangle with legs labeled 3 and 4 and the hypotenuse labeled x, made with the Triangle Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'rectangle': {
+    heading: 'Rectangle and square figures drawn to scale',
+    intro: [
+      'The Rectangle Generator draws a rectangle from its length and width, or a square from its side, to scale, with its corners named A, B, C and D and a right-angle square in each. Each side and angle can be labeled with its measure, with text you type such as x or 2x + 3, or with nothing.',
+      'Teachers use it for area and perimeter questions, for writing and solving expressions from a rectangle’s sides, and for the Pythagorean theorem with a diagonal drawn. Add a unit such as cm or ft to every length, draw one or both diagonals and name where they cross, and mark equal sides with congruence ticks.',
+    ],
+    settings: [
+      'Kind: a rectangle from sides AB and BC, or a square from side AB, typed as numbers, fractions or square roots',
+      'A label on each side and angle: its measure, text you type such as x, or nothing',
+      'Congruence ticks and parallel arrows on sides, and congruence arcs on angles',
+      'Diagonals AC and BD, solid, dashed or dotted, each labeled with its length, text or nothing, and a name for where they cross',
+      'A unit for every length (cm, m, mm, in, ft, yd, units or your own), rounded to whole numbers, tenths or hundredths',
+      'Corner names, right-angle squares on or off, which side sits at the bottom, flip and turn',
+    ],
+    faqs: [
+      {
+        q: 'Is the rectangle drawn to scale?',
+        a: 'Yes. It is drawn in proportion to the lengths you type, so a 12 by 5 rectangle is more than twice as long as it is wide. It is sized to fit the figure, not drawn at its true size on paper.',
+      },
+      {
+        q: 'Can I label a side with x or an expression?',
+        a: 'Yes. Click the button after the side’s measure, choose Text and type x, 2x + 3 or anything else. The side is still drawn to the length you typed, so the rectangle keeps its shape.',
+      },
+      {
+        q: 'How do I draw a diagonal for a Pythagorean theorem question?',
+        a: 'Open Diagonals and tick Diagonal AC or Diagonal BD. Label it with its length, with text such as x, or with nothing, and draw it solid, dashed or dotted.',
+      },
+      {
+        q: 'Can it draw a square?',
+        a: 'Yes. Choose Square under Kind and type one side; the other three are the same length. Congruence marks are never added for you, so tick each side with the button after it to show they are equal.',
+      },
+      {
+        q: 'Can I move a label that’s in the way?',
+        a: 'Yes. Drag any label on the figure to move it. Reset label positions, under Labels, puts them all back.',
+      },
+    ],
+    imageAlt: 'A printable rectangle drawn to scale, labeled 12 cm and 5 cm, with a right-angle square at each corner, made with the Rectangle Generator',
+    educationalLevel: ['Elementary school', 'Middle school', 'High school'],
+  },
+
+  'parallelogram': {
+    heading: 'Parallelogram and rhombus figures drawn to scale',
+    intro: [
+      'The Parallelogram Generator draws a parallelogram from two sides and the angle between them, or a rhombus from its side and one angle, to scale. Each side and angle can be labeled with its measure, with text you type such as x, or with nothing, and opposite sides can be marked parallel with arrows.',
+      'Teachers use it for area from a base and height, for finding missing angles and sides from a parallelogram’s properties, and for a rhombus’s diagonals. Draw the height from D or C to side AB, dashed, with a right-angle square where it lands, and draw the diagonals with a name for where they cross.',
+    ],
+    settings: [
+      'Kind: a parallelogram from sides AB and DA and ∠A, or a rhombus from side AB and ∠A',
+      'A label on each side and angle: its measure, text you type such as x, or nothing',
+      'Parallel arrows and congruence ticks on sides, and congruence arcs on angles',
+      'Heights from D and C to AB, and diagonals AC and BD, each solid, dashed or dotted and labeled with its length, text or nothing',
+      'Names for where a height lands and where the diagonals cross',
+      'A unit for every length, rounding, corner names, right-angle squares, which side sits at the bottom, flip and turn',
+    ],
+    faqs: [
+      {
+        q: 'How do I show the height for an area question?',
+        a: 'Open Heights and tick Height from D to AB. It is drawn dashed, with a right-angle square where it meets AB, and can be labeled with its length or with text such as h. Its length is worked out from the sides and angle you gave.',
+      },
+      {
+        q: 'Are the parallel arrows added for me?',
+        a: 'The parallelogram opens with one arrow on AB and CD and two on BC and DA, but arrows and congruence marks are otherwise set by hand, never worked out from the measures, so they don’t give answers away. Change them with the button after each side.',
+      },
+      {
+        q: 'Can it draw a rhombus?',
+        a: 'Yes. Choose Rhombus under Kind and give its side and ∠A; all four sides are the same length. Draw both diagonals to show they cross at right angles: a right-angle square appears where they do.',
+      },
+      {
+        q: 'Can I label the angles x, y and z?',
+        a: 'Yes. The button after each angle sets its label: its measure, text such as x, or nothing. An angle gets an arc when it has a label or congruence arcs.',
+      },
+    ],
+    imageAlt: 'A printable parallelogram with base 12 cm, a dashed height of 5 cm and parallel arrows on its opposite sides, made with the Parallelogram Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'trapezoid': {
+    heading: 'Trapezoid figures drawn to scale: right, isosceles and any other',
+    intro: [
+      'The Trapezoid Generator draws a trapezoid to scale from its bases AB and CD: a right trapezoid from the bases and leg DA, an isosceles trapezoid from the bases and height, or any other trapezoid from the bases, height and ∠A. Each side and angle can be labeled with its measure, with text you type such as x, or with nothing, and the bases can be marked parallel with arrows.',
+      'Teachers use it for the area of a trapezoid, for finding a slanted leg with the Pythagorean theorem, and for angles between parallel lines. The height is drawn dashed, with a right-angle square where it lands, and the diagonals can be drawn with a name for where they cross.',
+    ],
+    settings: [
+      'Kind: a right trapezoid (bases and leg DA), an isosceles trapezoid (bases and height) or a trapezoid (bases, height and ∠A)',
+      'A label on each side, angle and extra line: its measure, text you type such as x, or nothing',
+      'Parallel arrows and congruence ticks on sides, and congruence arcs on angles',
+      'Heights from D and C to AB, and diagonals AC and BD, each solid, dashed or dotted',
+      'Names for where a height lands and where the diagonals cross',
+      'A unit for every length (cm, m, mm, in, ft, yd, units or your own), rounded to whole numbers, tenths or hundredths',
+      'Corner names, right-angle squares, which side sits at the bottom, flip and turn',
+    ],
+    faqs: [
+      {
+        q: 'Is it a trapezoid or a trapezium?',
+        a: 'The same shape: a quadrilateral with exactly one pair of parallel sides, its bases. Teachers in the US call it a trapezoid, and teachers in the UK a trapezium.',
+      },
+      {
+        q: 'How do I make a trapezoid for an area question?',
+        a: 'Choose Isosceles trapezoid or Trapezoid under Kind and type the two bases and the height h. The height is drawn from D, dashed, with a right-angle square where it meets AB, labeled with its measure; change the label to text such as h, or to nothing.',
+      },
+      {
+        q: 'Why is one leg labeled x when it opens?',
+        a: 'It opens on a right trapezoid with its slanted leg BC labeled x, ready for a Pythagorean theorem question. Change the label with the button after BC.',
+      },
+      {
+        q: 'Can I type a side like 3√2 or 7/2?',
+        a: 'Yes. Type sqrt for √, / for a fraction and pi for π. The side is drawn to that length, and labeled the way you typed it.',
+      },
+      {
+        q: 'What if my measures don’t make a trapezoid?',
+        a: 'The settings say which measure to fix and why, and the figure keeps the last trapezoid your measures made until they work again.',
+      },
+    ],
+    imageAlt: 'A printable isosceles trapezoid with bases 14 cm and 8 cm, a dashed height of 4 cm and a tick on each leg, made with the Trapezoid Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'kite': {
+    heading: 'Kite figures drawn to scale',
+    intro: [
+      'The Kite Generator draws a kite to scale from its short side AB, its long side DA and the angle at B between the short sides. It stands upright on its line of symmetry, with B at the top and D at the bottom, and opens with its short sides marked with one tick and its long sides with two.',
+      'Teachers use it for the area of a kite from its diagonals, for finding missing angles from its symmetry, and for the Pythagorean theorem. Draw either diagonal solid, dashed or dotted, label each side, angle and diagonal with its measure, text such as x, or nothing, and name the point where the diagonals cross.',
+    ],
+    settings: [
+      'Short side AB, long side DA and ∠B, typed as numbers, fractions or square roots',
+      'A label on each side and angle: its measure, text you type such as x, or nothing',
+      'Congruence ticks on sides and congruence arcs on angles',
+      'Diagonals AC and BD, solid, dashed or dotted, labeled with their lengths, text or nothing, and a name for where they cross',
+      'A unit for every length, rounding, corner names, right-angle squares, which side sits at the bottom, flip and turn',
+    ],
+    faqs: [
+      {
+        q: 'Why does the kite stand upright?',
+        a: 'It is drawn on its line of symmetry, the diagonal from B to D, so its equal sides mirror each other. Under Position, pick a side to sit at the bottom instead, or turn it.',
+      },
+      {
+        q: 'How do I set up a kite area question?',
+        a: 'Open Diagonals, tick both and label each with its measure. They cross at right angles, with a right-angle square there, and the area is half their product. Diagonals 6 and 12, say, come from AB = 3√2, DA = 3√10 and ∠B = 90°.',
+      },
+      {
+        q: 'Are the equal sides marked for me?',
+        a: 'The kite opens with one tick on each short side and two on each long side, but marks are otherwise set by hand, never worked out from the measures. Change them with the button after each side.',
+      },
+      {
+        q: 'Can I type a side like 3√2?',
+        a: 'Yes. Type sqrt for √, / for a fraction and pi for π. The side is drawn to that length, and labeled the way you typed it.',
+      },
+    ],
+    imageAlt: 'A printable kite standing upright with its diagonals drawn and labeled 6 and 12, crossing at a right angle, made with the Kite Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'regular-polygon': {
+    heading: 'Regular polygons with their apothem and radius',
+    intro: [
+      'The Regular Polygon Generator draws a regular polygon with 3 to 20 sides, from an equilateral triangle to a 20-gon, sized by its side, its radius or its apothem. Give one of the three and it works out the other two, the interior angle and the central angle.',
+      'Draw the apothem to the bottom side and a radius to the bottom right corner to make the right triangle used for area, or every radius to split the polygon into matching triangles. Mark every side and angle as equal, letter the corners, and label the side, angle, apothem and radius with their measures or with x.',
+    ],
+    settings: [
+      'Number of sides: 3 to 20',
+      'Size from its side, radius or apothem, typed as a number, fraction or square root',
+      'A label on the sides and the angles, the bottom side and bottom left angle standing for them all, with congruence marks on every one',
+      'A center dot and its name, the apothem, a radius and all the radii, each solid, dashed or dotted and labeled',
+      'Corners lettered A, B, C…, a unit, and solved lengths rounded to whole numbers, tenths or hundredths',
+      'Right-angle squares on or off, a turn, and labels dragged where you want them',
+    ],
+    faqs: [
+      {
+        q: 'What is the apothem of a regular polygon?',
+        a: 'The line from the center to the middle of a side, at right angles to it, and its length. The area of a regular polygon is half its apothem times its perimeter.',
+      },
+      {
+        q: 'Can I size the polygon by its radius or apothem instead of its side?',
+        a: 'Yes. Under Size from, pick Side, Radius or Apothem and type its length. The other lengths are worked out and shown faintly in the settings, and any of them can be labeled on the figure.',
+      },
+      {
+        q: 'Which side and angle get the labels?',
+        a: 'The side’s label goes on the bottom side and the angle’s in the bottom left corner. Congruence marks go on every side and every angle, to show they are all equal.',
+      },
+      {
+        q: 'What are the polygons past 12 sides called?',
+        a: 'The generator names polygons up to the dodecagon (12 sides) and calls the rest by their number of sides, like a 15-gon.',
+      },
+    ],
+    imageAlt: 'A printable regular hexagon with its side labeled 10 cm and a dashed apothem labeled 8.7 cm, made with the Regular Polygon Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'prism': {
+    heading: 'Rectangular, triangular and other prisms, drawn to scale',
+    intro: [
+      'The Prism Generator draws a prism to scale from the measures you type: a rectangular prism (a box), a prism on a right or isosceles triangle, or one on a regular polygon of 3 to 8 sides. Each measure can be labeled with its number and unit, with text like x, or left off, and the edges round the back are dashed.',
+      'Teachers use it for volume and surface area questions, from counting a box’s dimensions to finding a missing edge from a given volume. A triangular prism lies on its side, the way textbooks draw it, unless you stand it up, and any prism standing on its base can lean as an oblique prism.',
+    ],
+    settings: [
+      'Base: a rectangle, a right triangle, an isosceles triangle, or a regular polygon of 3 to 8 sides',
+      'Standing on its base or lying on its side, for a triangular or polygon base',
+      'Right or oblique, leaning left or right, with any two of the height, the lean and the slanted edge',
+      'Each measure typed as a number, a fraction or with √, and labeled with its measure, text like x, or nothing',
+      'The hypotenuse or slanted side of a triangle base, and the apothem of a polygon base, worked out and labeled if you want',
+      'Hidden edges dashed or left off, the height, and right-angle squares',
+      'A unit (cm, m, mm, in, ft, yd, units or your own), rounding for worked-out measures, and corner names',
+      'Which way the depth goes back, and labels you can drag on the figure',
+    ],
+    faqs: [
+      {
+        q: 'How do I label the height as x instead of a number?',
+        a: 'Type a height so the prism is drawn to scale, then click the label button beside Height and choose Text, and type x. The figure shows x while the prism keeps its shape.',
+      },
+      {
+        q: 'Can I show the hypotenuse of a triangular prism?',
+        a: 'Yes. With a right triangle base, the hypotenuse is worked out from the base and the triangle’s height. It isn’t labeled at first; click its label button and choose Measure to show it, or Text to label it x.',
+      },
+      {
+        q: 'How do I draw an oblique prism?',
+        a: 'Under Stands, choose Oblique, then give any two of the height, the lean and the slanted edge; the third is worked out. The height is drawn dashed from the top straight down to the base’s extended line. A prism lying on its side can’t be oblique.',
+      },
+      {
+        q: 'Does it work out the volume?',
+        a: 'No. It works out missing measures, such as a hypotenuse, an apothem or a slanted edge, but never writes the volume or surface area, so the figure doesn’t give the answer away.',
+      },
+      {
+        q: 'Can I turn off the dashed hidden edges?',
+        a: 'Yes. Under Lines, turn off Hidden edges to leave only the edges you would see from the front.',
+      },
+    ],
+    imageAlt: 'A printable rectangular prism labeled 8 cm, 3 cm and 5 cm with its hidden edges dashed, made with the Prism Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'cylinder': {
+    heading: 'Right and oblique cylinders for volume and surface area',
+    intro: [
+      'The Cylinder Generator draws a cylinder to scale from its radius, or its diameter, and its height. The radius or diameter is drawn across the top circle, the back of the bottom circle is dashed, and each measure is labeled with its number and unit, with text like r or x, or not at all.',
+      'Teachers use it for volume and surface area questions, and for formula sheets with the radius labeled r and the height h. Make it oblique to show that a leaning cylinder has the same volume as a right one with the same base and height.',
+    ],
+    settings: [
+      'The radius, or the diameter instead, drawn right across the circle',
+      'The height, or for an oblique cylinder any two of the height, the lean and the slanted edge',
+      'Right or oblique, leaning left or right',
+      'Each measure typed as a number, a fraction or with √, and labeled with its measure, text like r, or nothing',
+      'The back of the bottom circle dashed or left off, the height of an oblique cylinder, and right-angle squares',
+      'A unit (cm, m, mm, in, ft, yd, units or your own), rounding for worked-out measures, and labels you can drag on the figure',
+    ],
+    faqs: [
+      {
+        q: 'Can I label the diameter instead of the radius?',
+        a: 'Yes. Tick Give the diameter instead, and type the diameter. It is drawn right across the top circle through its center and labeled with the number you type.',
+      },
+      {
+        q: 'How do I make a formula diagram with r and h?',
+        a: 'Set the unit to None, then click the label button beside each measure, choose Text, and type r for the radius and h for the height. The cylinder keeps the shape of the numbers you typed.',
+      },
+      {
+        q: 'How do I draw an oblique cylinder?',
+        a: 'Under Stands, choose Oblique and give any two of the height, the lean and the slanted edge; the third is worked out. The height is drawn dashed from the top’s center down to the base’s extended line, with a right-angle square.',
+      },
+      {
+        q: 'Is it drawn to scale?',
+        a: 'Yes, in proportion: a cylinder with a height twice its radius looks it. It isn’t true size on paper; it fits the page however big the numbers are.',
+      },
+    ],
+    imageAlt: 'A printable cylinder with its radius labeled 4 cm and its height 10 cm, made with the Cylinder Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'pyramid': {
+    heading: 'Square, rectangular and polygon pyramids with height and slant height',
+    intro: [
+      'The Pyramid Generator draws a pyramid to scale on a rectangle or a regular polygon of 3 to 8 sides. Give a right pyramid its height or its slant height, and the other is worked out; the height is drawn dashed from the tip down to the base, and the slant height down the middle of the front face.',
+      'Teachers use it for volume and surface area questions, and for the Pythagorean theorem inside a pyramid: label the height x and give the slant height and base, or the other way round. Each measure can show its number, text like x, or nothing.',
+    ],
+    settings: [
+      'Base: a rectangle (a square when its sides are equal) or a regular polygon of 3 to 8 sides',
+      'The height or the slant height of a right pyramid, the other worked out',
+      'Right or oblique, leaning left or right, with the height and the lean',
+      'Each measure typed as a number, a fraction or with √, and labeled with its measure, text like x, or nothing',
+      'The apothem of a polygon base, worked out and labeled if you want',
+      'Hidden edges dashed or left off, the dashed height, and right-angle squares',
+      'A unit (cm, m, mm, in, ft, yd, units or your own), rounding, corner names, and which way the depth goes back',
+    ],
+    faqs: [
+      {
+        q: 'What is the difference between the height and the slant height?',
+        a: 'The height goes straight down from the tip to the middle of the base. The slant height goes down the middle of a sloping face to the base’s edge. The generator draws both dashed. Together with half the base’s width, they make a right triangle.',
+      },
+      {
+        q: 'Can I give the slant height and have the height worked out?',
+        a: 'Yes. On a right pyramid, type either the height or the slant height and leave the other empty; it is worked out and shown faintly in the settings. A worked-out measure isn’t labeled until you choose Measure or Text on its label button.',
+      },
+      {
+        q: 'Can I hide the height and show only the slant height?',
+        a: 'Yes. Under Lines, turn off Height. The slant height stays, for surface area questions.',
+      },
+      {
+        q: 'Why does a rectangular pyramid only show one slant height?',
+        a: 'Its front and side faces slope differently, so they have different slant heights. The generator draws the one down the front face, to the middle of the front edge.',
+      },
+    ],
+    imageAlt: 'A printable square pyramid with base edges of 12 cm and a slant height of 10 cm, made with the Pyramid Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'cone': {
+    heading: 'Right and oblique cones with radius, height and slant height',
+    intro: [
+      'The Cone Generator draws a cone to scale from its radius, or its diameter, and its height or its slant height, working out the other. The height and radius are drawn dashed with a right-angle square between them, so the right triangle inside the cone is there to see.',
+      'Teachers use it for volume and surface area questions and for the Pythagorean theorem: label the slant height x and give the height and radius. Label each measure with its number and unit, with text like r or x, or nothing.',
+    ],
+    settings: [
+      'The radius, or the diameter instead, drawn across the base',
+      'The height or the slant height of a right cone, the other worked out',
+      'Right or oblique, leaning left or right, with the height and the lean',
+      'Each measure typed as a number, a fraction or with √, and labeled with its measure, text like x, or nothing',
+      'The back of the base circle dashed or left off, the dashed height, and right-angle squares',
+      'A unit (cm, m, mm, in, ft, yd, units or your own), rounding for worked-out measures, and labels you can drag on the figure',
+    ],
+    faqs: [
+      {
+        q: 'How do I label the slant height as x?',
+        a: 'Type the radius and the height, then click the label button beside Slant height, choose Text and type x. The slant height is worked out to draw the cone, but the figure shows only x.',
+      },
+      {
+        q: 'Can I give the slant height instead of the height?',
+        a: 'Yes. Type the slant height and leave the height empty, and the height is worked out. The slant height has to be longer than the radius.',
+      },
+      {
+        q: 'How do I draw an oblique cone?',
+        a: 'Under Stands, choose Oblique, then give the height and the lean. The height is drawn dashed from the tip down to the base’s extended line, and the lean along that line from the base’s center. An oblique cone has no single slant height, so it has none to label.',
+      },
+      {
+        q: 'Can I show just the diameter?',
+        a: 'Yes. Tick Give the diameter instead and type the diameter. It is drawn right across the base through its center.',
+      },
+    ],
+    imageAlt: 'A printable cone with its dashed height labeled 9 cm and its radius 4 cm, made with the Cone Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'sphere': {
+    heading: 'Spheres and hemispheres with the radius or diameter labeled',
+    intro: [
+      'The Sphere Generator draws a sphere with a circle round its middle, its back half dashed, and the radius drawn from the center to the edge, or the diameter right across. It also draws a hemisphere, with its flat face down like a dome or up like a bowl.',
+      'Teachers use it for volume and surface area questions on spheres and hemispheres, such as how much a bowl holds or how much paint covers a dome. Label the radius or diameter with its number and unit, with text like r, or nothing.',
+    ],
+    settings: [
+      'A whole sphere or a hemisphere',
+      'The radius, or the diameter instead',
+      'A hemisphere’s flat face down, like a dome, or up, like a bowl',
+      'The radius or diameter labeled with its measure, text like r, or nothing',
+      'The dashed back of the middle circle, or left off',
+      'A unit (cm, m, mm, in, ft, yd, units or your own), and a label you can drag on the figure',
+    ],
+    faqs: [
+      {
+        q: 'How do I draw a hemisphere?',
+        a: 'Under Draw, choose A hemisphere. Under Position, choose whether its flat face is down, like a dome, or up, like a bowl.',
+      },
+      {
+        q: 'Can I label the diameter instead of the radius?',
+        a: 'Yes. Tick Give the diameter instead and type the diameter. It is drawn right across the sphere through its center.',
+      },
+      {
+        q: 'Why is part of the middle circle dashed?',
+        a: 'The circle round the sphere’s middle is drawn like an ellipse seen from a little above, and its back half, which you couldn’t see through the front, is dashed. Turn off Hidden edges under Lines to leave it off.',
+      },
+    ],
+    imageAlt: 'A printable sphere with its radius labeled 6 cm, made with the Sphere Generator',
+    educationalLevel: ['Middle school', 'High school', 'Geometry'],
+  },
+
+  'box-plot': {
+    heading: 'Box plots from your data',
+    intro: [
+      'The Box Plot Generator draws a box plot from the numbers you type or paste: a box from Q1 to Q3 split at the median, with whiskers out to the minimum and maximum, over a number line. Five numbers in order are read as a five-number summary instead, so you can draw a box plot straight from one. Quartiles are worked out as the TI-84 does, leaving out the median when the count is odd.',
+      'Nothing on the figure gives the five-number summary away unless you ask, so students read it from the number line. Give Q1, the median or Q3 a label with its value, or a letter for students to name. Add more data sets to compare box plots over the same number line, each with its name beside it.',
+    ],
+    settings: [
+      'One or more data sets, typed or pasted as numbers, or as a five-number summary, each with an optional name',
+      'A label on the minimum, Q1, the median, Q3 or the maximum: its value, typed text like x or A, or nothing',
+      'Outliers drawn as dots of their own, with the whiskers stopping at the last value that isn’t one',
+      'The number line’s range and count-by, worked out from the data unless you type them, and which ticks are numbered',
+      'A chart title and an axis title, as text or a blank line for students',
+      'How each end of the number line finishes: an arrow, a circle or nothing',
+    ],
+    faqs: [
+      {
+        q: 'How are the quartiles worked out?',
+        a: 'Q1 is the median of the lower half of the data and Q3 the median of the upper half. When there is an odd number of values, the median itself is left out of both halves. That is how the TI-84 and most US textbooks do it.',
+      },
+      {
+        q: 'Can I make a box plot from a five-number summary?',
+        a: 'Yes. Type the minimum, Q1, median, Q3 and maximum in order, like 12, 18, 25, 31, 40, and it is read as a five-number summary. If those five numbers are really your data, click Read as data instead.',
+      },
+      {
+        q: 'How do I compare two box plots?',
+        a: 'Click Add data set and type the second set of numbers. Every box plot is drawn over the same number line, top to bottom, so students can compare medians and spreads straight down. Name each data set, like Class A and Class B, to label it.',
+      },
+      {
+        q: 'Does it show outliers?',
+        a: 'Only when you turn on Show outliers. A value more than 1.5 times the box’s width past either end of the box is then drawn as its own dot, and the whisker stops at the last value that isn’t an outlier. Otherwise the whiskers reach the minimum and maximum.',
+      },
+      {
+        q: 'Are the median and quartiles written on the figure?',
+        a: 'Not unless you give them a label, so the figure doesn’t give the answers away. The settings panel shows each data set’s five-number summary for you to check, and the Box plot settings can label any of the five with its value or with text.',
+      },
+    ],
+    imageAlt: 'A printable box plot of 15 test scores over a number line from 60 to 100, titled Test scores, made with the Box Plot Generator',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'mapping-diagram': {
+    heading: 'Mapping diagrams for functions and relations',
+    intro: [
+      'The Mapping Diagram Generator draws two lists side by side, the inputs on the left and the outputs on the right, with an arrow from each input to each output you choose. Type or paste each list, or paste ordered pairs to fill in both lists and the arrows at once. Items can be numbers, math like 2x or 1/2, or words.',
+      'It can show a function or a relation that isn’t one. The settings panel tells you which, and why not, but nothing on the figure says so, so students can decide. Leave the arrows off for students to draw them from a rule or a table.',
+    ],
+    settings: [
+      'The inputs and outputs, typed or pasted as lists, or as ordered pairs',
+      'The arrows: click the outputs each input goes to, match them in order, or clear them',
+      'A title over each side (Input and Output unless you change them) and a diagram title, as text or a blank line for students',
+      'Each side drawn in an oval, a box or nothing',
+    ],
+    faqs: [
+      {
+        q: 'How can you tell from a mapping diagram if it is a function?',
+        a: 'A mapping diagram shows a function when every input has exactly one arrow. If an input has two arrows, or none, it isn’t a function. Two inputs can share an output; that is still a function, just not a one-to-one one.',
+      },
+      {
+        q: 'Can I type ordered pairs instead of two lists?',
+        a: 'Yes. Open Or paste ordered pairs, type pairs like (1, 3), (2, 5), (3, 7), and click Use these pairs. It fills in both lists and the arrows, replacing what was there.',
+      },
+      {
+        q: 'Can I make a mapping diagram with no arrows?',
+        a: 'Yes. Type the inputs and outputs and leave the arrows off, or click Clear arrows. Students draw the arrows from a rule or a list of ordered pairs.',
+      },
+      {
+        q: 'Can the inputs and outputs be words?',
+        a: 'Yes. Items can be numbers, math like 2x, or words such as names and sports. Each side shows an item once, in the order you typed it, even if you typed it twice.',
+      },
+    ],
+    imageAlt: 'A printable mapping diagram with inputs 1, 2, 3 and 4 in an oval, outputs 3, 5, 7 and 9 in another, and one arrow from each input, made with the Mapping Diagram Generator',
+    educationalLevel: ['Middle school', 'High school', 'Algebra 1'],
+  },
+
+  'length-reading': {
+    heading: 'Ruler figures for measuring length',
+    intro: [
+      'The Length Reading Generator draws a centimeter or inch ruler with an object lying along it: marbles, a rock, a cube or a metal cylinder. You type the object’s length and where its left end sits, and students measure it, either lined up with 0 or starting partway along so they read both ends and subtract.',
+      'An inch ruler is read in fractions of an inch, marked down to halves, quarters, eighths or sixteenths, for measuring to the nearest quarter or eighth inch. A metric ruler can be marked in millimeters or only in centimeters, and read to the nearest mark or to one estimated digit past it. Magnifiers on the object’s ends keep the marks readable in print, and the answer key prints the length.',
+    ],
+    settings: [
+      'An inch ruler, 6, 8, 12 or 20 in long, marked every 1, 1/2, 1/4, 1/8 or 1/16 in',
+      'A metric ruler, 15, 20, 30, 50 or 100 cm long, marked every 1 mm, 0.5 cm or 1 cm (or 5 or 10 cm on the long ones)',
+      'Metric lengths read to the nearest mark or to one estimated digit',
+      'The object’s length and left end, typed, picked at random, or set by dragging the object along the ruler',
+      'The object: 1 to 5 marbles in a row, a rock, a cube or a metal cylinder, with dashed lines down from its ends if you like',
+      'Magnifiers on its ends, a chart title, and an answer key line',
+    ],
+    faqs: [
+      {
+        q: 'Can I make questions for measuring to the nearest quarter inch?',
+        a: 'Yes. Choose Imperial (in) and mark the ruler every 1/4 in. Lengths land on a mark and are read as fractions of an inch, so an object can be 3 1/4 in long. Mark it every 1/8 or 1/16 in for finer measuring.',
+      },
+      {
+        q: 'Can the object start somewhere other than 0?',
+        a: 'Yes. Type where its left end sits, or drag the object along the ruler in the figure. Students then read both ends and subtract, and the answer key gives both ends as well as the length.',
+      },
+      {
+        q: 'Can I show a ruler marked only in centimeters?',
+        a: 'Yes. Under Ruler, choose Metric (cm) and mark it every 1 cm, then read to the nearest mark for whole centimeters. Mark it every 1 mm for lengths like 8.4 cm, or 84 mm.',
+      },
+      {
+        q: 'What are the dashed lines at the object’s ends for?',
+        a: 'A marble or a rock touches the ruler below its widest point, so its ends sit above the marks they line up with. The dashed lines drop from each end down to the ruler to show where to read.',
+      },
+    ],
+    imageAlt: 'A printable 6 inch ruler marked in quarter inches with a metal cylinder lying along it and a magnified view of its right end, made with the Length Reading Generator',
+    educationalLevel: ['Elementary school', 'Middle school'],
+  },
+}
+
+/** The copy for a generator; every generator on the site has some. */
+export function copyFor(id: string): GeneratorCopy {
+  const copy = COPY[id]
+  if (!copy) throw new Error(`No page copy for the ${id} generator`)
+  return copy
+}
