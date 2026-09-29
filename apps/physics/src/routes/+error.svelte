@@ -10,7 +10,7 @@
 
 <div class="page">
   <h1>{heading}</h1>
-  <p>Try the search box above, or <a href="/">see every figure</a>.</p>
+  <p><a href="/">See every figure</a> and search them for the one you want.</p>
 </div>
 
 <style>

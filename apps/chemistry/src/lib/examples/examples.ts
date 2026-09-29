@@ -10,12 +10,16 @@
 // Captions say only what the figure shows; readings and answer keys come
 // from the generators' own logic (./details.server.ts), never typed here.
 
+import { CATALOG } from '$shared/catalog/index'
+import { SITE_ID } from '$lib/site/config'
 import sizes from './sizes.json'
 import type { Example, ExampleGeneratorId, ExampleSpec } from './types'
 
 const SIZES = sizes as Record<string, number[]>
 
+/** A generator's examples, or none while it is turned off (see $shared/catalog). */
 function examplesOf<G extends ExampleGeneratorId>(generator: G, specs: ExampleSpec<G>[]): Example[] {
+  if (!CATALOG.some((g) => g.site === SITE_ID && g.id === generator)) return []
   return specs.map((spec) => {
     const image = `/examples/${generator}/${spec.slug}.png`
     const [width, height] = SIZES[image] ?? [0, 0]

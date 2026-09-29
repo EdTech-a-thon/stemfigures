@@ -1,5 +1,5 @@
 // The words under each generator: what its figures show and how teachers use
-// them, what can be set, and questions teachers ask, for the section below
+// them, what can be set, and frequently asked questions, for the section below
 // the figure (GeneratorAbout) and the page's structured data. Everything here
 // should be true of the generator's code; check it when a generator changes.
 // Plain text only: the same strings go into JSON-LD.

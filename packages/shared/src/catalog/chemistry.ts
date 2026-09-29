@@ -129,6 +129,7 @@ export const CHEMISTRY: CatalogEntry[] = [
   {
     id: 'line-spectrum',
     site: 'chemistry',
+    off: true,
     name: 'Line Spectrum',
     path: '/line-spectrum',
     blurb: 'Bright-line or absorption spectra of elements, your own lines, or an unknown mixture.',
@@ -139,6 +140,7 @@ export const CHEMISTRY: CatalogEntry[] = [
   {
     id: 'photoelectron-spectrum',
     site: 'chemistry',
+    off: true,
     name: 'Photoelectron Spectrum',
     path: '/photoelectron-spectrum',
     blurb: 'Any element’s photoelectron spectrum, H to Xe, one peak per sublevel.',
@@ -149,6 +151,7 @@ export const CHEMISTRY: CatalogEntry[] = [
   {
     id: 'structure-editor',
     site: 'chemistry',
+    off: true,
     kind: 'editor',
     name: 'Organic Structure Editor',
     path: '/structure-editor',

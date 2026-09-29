@@ -10,6 +10,10 @@
 // An editor (`kind: 'editor'`) is listed like a generator, but the teacher
 // draws its figure by hand, so there are no settings in its address.
 //
+// A generator turned off (`off: true`) keeps its entry and its code, but is
+// left out of CATALOG, so no directory, search, sitemap or docs page lists
+// it and its page is a 404. Delete the flag to turn it back on.
+//
 // Adding a generator means adding its entry to its site's file here, its
 // preview to that app's src/lib/generators/index.ts, and a preview snapshot
 // (see previews.ts).
@@ -50,9 +54,11 @@ export interface CatalogEntry {
   /** 'editor' for a figure drawn by hand rather than generated from
    *  settings: its address carries no settings, so it has no link parameters */
   kind?: 'editor'
+  /** turned off for now: kept in the code, but listed nowhere and a 404 */
+  off?: true
 }
 
-export const CATALOG: CatalogEntry[] = [...MATH, ...PHYSICS, ...CHEMISTRY]
+export const CATALOG: CatalogEntry[] = [...MATH, ...PHYSICS, ...CHEMISTRY].filter((g) => !g.off)
 
 /** The generators living on `site`, each with its preview component from
  *  `previews` (keyed by id). A generator without one fails the build. */

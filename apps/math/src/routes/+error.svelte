@@ -1,7 +1,7 @@
 <script lang="ts">
   // Shown for a missing page or an error, with a way back to the directory.
   import { page } from '$app/state'
-  import { SITE_NAME } from '$lib/site/config.js'
+  import { SITE_NAME } from '$lib/site/config'
 
   const heading = $derived(page.status === 404 ? 'We couldn’t find that page' : 'Something went wrong')
 </script>
@@ -10,7 +10,7 @@
 
 <div class="page">
   <h1>{heading}</h1>
-  <p>Try the search box above, or <a href="/">see every figure</a>.</p>
+  <p><a href="/">See every figure</a> and search them for the one you want.</p>
 </div>
 
 <style>

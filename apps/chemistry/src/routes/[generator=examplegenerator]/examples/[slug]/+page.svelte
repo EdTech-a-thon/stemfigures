@@ -77,8 +77,8 @@
   </figure>
 
   <div class="actions no-print">
-    <a class="btn-primary btn-big" href={details.editPath}><Pencil size={20} aria-hidden="true" />Edit this figure</a>
-    <a class="btn-ghost btn-big" href={example.image} download={downloadName}><Download size={20} aria-hidden="true" />Download PNG</a>
+    <a class="btn-primary" href={details.editPath}><Pencil size={16} aria-hidden="true" />Edit this figure</a>
+    <a class="btn-ghost" href={example.image} download={downloadName}><Download size={16} aria-hidden="true" />Download PNG</a>
   </div>
   <p class="edit-note no-print">
     Editing opens it in {generator.name} with these settings, to change anything and copy or download your own.
@@ -121,7 +121,13 @@
   .pic img { display: block; max-width: 100%; max-height: 72vh; width: auto; height: auto; }
   figcaption { padding: 1rem 1.25rem 1.15rem; color: #374151; }
 
-  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .actions a { padding: 0.5rem 0.95rem; border-radius: 10px; font-size: 0.92rem; }
+  /* Phones: the two share a row, splitting it. */
+  @media (max-width: 420px) {
+    .actions { gap: 0.5rem; }
+    .actions a { flex: 1 1 auto; padding: 0.5rem 0.6rem; }
+  }
   .edit-note { margin: 0.6rem 0 1.25rem; color: var(--muted); font-size: 0.92rem; }
 
   .answer { padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
