@@ -126,4 +126,15 @@ export const CHEMISTRY: CatalogEntry[] = [
       'Make printable orbital diagrams for chemistry tests. Pick an element and charge and get its electron configuration drawn as arrows in boxes, following the aufbau principle, Pauli exclusion and Hund’s rule, with exceptions, noble gas cores, blanks for students and deliberate mistakes.',
     keywords: ['electron', 'configuration', 'orbital', 'orbitals', 'notation', 'box', 'boxes', 'arrows', 'spin', 'aufbau', 'hund', 'hunds', 'pauli', 'exclusion', 'sublevel', 'subshell', 'noble', 'gas', 'core', 'shorthand', 'excited', 'ground', 'state', 'ion', 'AP'],
   },
+  {
+    id: 'structure-editor',
+    site: 'chemistry',
+    kind: 'editor',
+    name: 'Organic Structure Editor',
+    path: '/structure-editor',
+    blurb: 'Draw an organic molecule yourself, atom by atom and bond by bond.',
+    description:
+      'Draw organic structures for chemistry tests. Drag carbon, hydrogen, oxygen and other atoms onto a grid, join them with single, double and triple bonds, and copy the finished structural formula into your worksheet.',
+    keywords: ['organic', 'structural', 'formula', 'structure', 'draw', 'drawing', 'editor', 'sketch', 'molecule', 'carbon', 'hydrocarbon', 'alkane', 'alkene', 'alkyne', 'alcohol', 'isomer', 'isomers', 'functional', 'group', 'bond', 'bonds', 'double', 'triple', 'chain'],
+  },
 ]

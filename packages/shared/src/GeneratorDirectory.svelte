@@ -3,7 +3,8 @@
   // the site's generators as small cards with a live preview of their figure,
   // then those it lists from other sites, and a last card for requesting one
   // we don't have. While searching, matches from every other site follow
-  // under their site's name.
+  // under their site's name. An editor's card says so: it opens a page to
+  // draw on, not a generator.
   import { ArrowUpRight, Plus, Search } from '@lucide/svelte'
   import type { Component } from 'svelte'
   import { directory, hrefFrom, SITES, type CatalogEntry, type SiteId } from './catalog'
@@ -71,7 +72,7 @@
         </div>
       {/if}
       <div class="text">
-        <h3>{g.name}</h3>
+        <h3>{g.name}{#if g.kind === 'editor'}<span class="kind">Editor</span>{/if}</h3>
         <p>{g.blurb}</p>
         {#if g.site !== site}
           <span class="from">{SITES[g.site].name}<ArrowUpRight size={13} aria-hidden="true" /></span>
@@ -127,6 +128,7 @@
   .snapshot img { width: 100%; height: 100%; object-fit: contain; }
   .text { padding: 0.7rem 0.9rem 0.85rem; }
   h3 { font-size: 0.98rem; font-weight: 800; }
+  .kind { display: inline-block; margin-left: 0.4rem; padding: 0.1rem 0.45rem; border-radius: 999px; background: var(--blue-soft); color: var(--blue-dark); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.02em; vertical-align: 0.1rem; }
   .text p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.85rem; line-height: 1.35; }
   .from { display: inline-flex; align-items: center; gap: 0.15rem; margin-top: 0.4rem; color: var(--blue-dark); font-size: 0.78rem; font-weight: 700; }
 

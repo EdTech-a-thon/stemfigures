@@ -16,6 +16,10 @@ _Avoid_: Graphic, image, visual, resource
 A page that makes one kind of figure from a teacher's settings, named for what its figures show without the word "Generator" (e.g. "Volume Reading").
 _Avoid_: Maker, tool, builder, app
 
+**Editor**:
+A page where the teacher draws a figure by hand instead of setting it up, listed in the directory like a generator but tagged Editor. Nothing about the figure goes in its address; it's kept in the teacher's browser. The one so far is the Organic Structure Editor, for full structural formulas: atoms dragged onto a grid and joined by single, double or triple bonds. It doesn't take a Lewis structure from Lewis Structures (yet).
+_Avoid_: Drawing tool, sketchpad, canvas
+
 **Directory**:
 The home page, which lists every generator with a live preview of its figure.
 _Avoid_: Catalog, gallery, index

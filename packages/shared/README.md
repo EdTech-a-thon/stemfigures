@@ -38,6 +38,11 @@ one so far. Its two copies are kept in step by hand (see
 To add a generator: its entry in its site's `catalog/` file, its preview in
 that app's `src/lib/generators/index.ts`, and a snapshot.
 
+An editor (`kind: 'editor'`, so far Chemistry's Organic Structure Editor) is
+listed the same way, and its directory card is tagged Editor. The teacher
+draws its figure by hand, so there are no settings in its address, and
+Chemistry's link parameter docs (`/linking`, `llms.txt`) leave it out.
+
 `GeneratorPage` is the page every generator is meant to use: presets and
 settings down the left, the figure card on the right. Its `settingsWidth` is
 the settings column's width in rem on wide screens (24 unless a generator

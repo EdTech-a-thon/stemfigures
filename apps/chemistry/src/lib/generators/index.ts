@@ -1,7 +1,8 @@
 // Every generator on the site. Their names, addresses and search words are
 // in the STEM Figures catalog ($shared/catalog), with every other site's;
 // here each gets the component drawing its directory preview. Page titles,
-// the sitemap and the top bar read GENERATORS.
+// the sitemap and the top bar read GENERATORS. It includes the site's editor
+// (src/lib/editors/), listed and shown like a generator.
 
 import type { Component } from 'svelte'
 import { generatorsOn, matches } from '$shared/catalog/index'
@@ -18,6 +19,7 @@ import TitrationCurvePreview from './titration-curve/Preview.svelte'
 import TemperatureReadingPreview from './temperature-reading/Preview.svelte'
 import VolumeByDisplacementPreview from './volume-by-displacement/Preview.svelte'
 import VolumeReadingPreview from './volume-reading/Preview.svelte'
+import StructureEditorPreview from '$lib/editors/structure-editor/Preview.svelte'
 
 /** Each generator's directory preview, by id. */
 export const PREVIEWS: Record<string, Component> = {
@@ -33,6 +35,7 @@ export const PREVIEWS: Record<string, Component> = {
   'volume-by-displacement': VolumeByDisplacementPreview,
   'gas-syringe': GasSyringePreview,
   'volume-reading': VolumeReadingPreview,
+  'structure-editor': StructureEditorPreview,
 }
 
 export const GENERATORS = generatorsOn(SITE_ID, PREVIEWS)
