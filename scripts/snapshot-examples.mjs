@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 // Takes the picture of each example figure a site lists in its sitemap
-// (Chemistry Figures' examples: apps/chemistry/src/lib/examples/examples.ts),
+// (e.g. Chemistry Figures' examples: apps/chemistry/src/lib/examples/examples.ts),
 // for search engines to index as images, and each generator's social card.
-// Start the site first, then pass its address:
+// Start the site first, then pass its address, and --app=<name> for a site
+// other than chemistry:
 //
 //   ./scripts/agent-dev.mjs stemfigures/apps/chemistry     (from the workspace root)
 //   node scripts/snapshot-examples.mjs http://localhost:10003/
 //   node scripts/snapshot-examples.mjs http://localhost:10003/ buret   (only examples whose page matches "buret")
+//   node scripts/snapshot-examples.mjs --app=math http://localhost:10004/
 //
 // For every example page in the sitemap it opens the page's "Edit this
 // figure" link, the generator with the example's settings, and exports the
@@ -24,13 +26,15 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { chromium } from 'playwright-core'
 
-const [base, only] = process.argv.slice(2)
+const args = process.argv.slice(2)
+const appName = args.find((a) => a.startsWith('--app='))?.slice('--app='.length) ?? 'chemistry'
+const [base, only] = args.filter((a) => !a.startsWith('--app='))
 if (!base) {
-  console.error('Usage: node scripts/snapshot-examples.mjs <site URL> [part of an example page address]')
+  console.error('Usage: node scripts/snapshot-examples.mjs [--app=<name>] <site URL> [part of an example page address]')
   process.exit(1)
 }
 
-const app = path.resolve(import.meta.dirname, '../apps/chemistry')
+const app = path.resolve(import.meta.dirname, '../apps', appName)
 const staticDir = path.join(app, 'static')
 const sizesFile = path.join(app, 'src/lib/examples/sizes.json')
 
