@@ -1,10 +1,12 @@
 // Where everything in an orbital diagram figure goes: the symbol on the left,
-// the noble gas core and sublevels in rows that wrap between sublevels, the
-// sublevel labels under their orbitals and the configuration line under it
-// all. Text widths are estimated, since the server can't measure text.
+// the noble gas core and sublevels either in rows that wrap between sublevels
+// or stacked by energy, the sublevel labels under their orbitals and the
+// configuration line under it all. Text widths are estimated, since the
+// server can't measure text.
 
+import { SUBLEVELS, fillingIndex } from './configuration'
 import type { Diagram } from './diagram'
-import type { OrbitalStyle, TextMode } from './settings'
+import type { Arrangement, OrbitalStyle, TextMode } from './settings'
 
 /** An orbital square's side, and a line orbital's width. */
 export const ORBITAL = 34
@@ -23,6 +25,8 @@ export const SUPERSCRIPT = 0.62
 
 const LABEL_ROOM = 26
 const ROW_SPACING = 18
+/** Space between one energy step's sublevel and the next one up. */
+const STEP_SPACING = 10
 const SYMBOL_GAP = 22
 const CORE_GAP = 12
 const CONFIG_GAP = 16
@@ -75,6 +79,7 @@ export interface FigureLayout {
 
 export interface LayoutOptions {
   style: OrbitalStyle
+  arrangement: Arrangement
   labels: TextMode
   symbol: TextMode
   /** the symbol as it's drawn, e.g. [{ text: 'Fe' }, { text: '2+', sup: true }] */
@@ -90,30 +95,11 @@ export function layoutFigure(diagram: Diagram, o: LayoutOptions): FigureLayout {
   const left = symbolWidth ? symbolWidth + SYMBOL_GAP : 0
   const rowHeight = ORBITAL + (o.labels === 'none' ? 0 : LABEL_ROOM)
 
-  // Fill rows left to right, starting a new row before a sublevel that
-  // won't fit, never splitting one.
-  const sublevels: PlacedSublevel[] = []
-  let row = 0
-  let x = 0
-  let widest = 0
-  let core: FigureLayout['core']
-  if (diagram.core) {
-    core = { x: left, y: 0 }
-    x = textWidth(`[${diagram.core}]`, CORE_SIZE) + CORE_GAP
-  }
-  for (const s of diagram.sublevels) {
-    const width = sublevelWidth(s.orbitals.length, o.style)
-    if (x > 0 && x + width > MAX_ROW) {
-      row++
-      x = 0
-    }
-    sublevels.push({ name: s.name, x: left + x, y: row * (rowHeight + ROW_SPACING), width })
-    x += width
-    widest = Math.max(widest, x)
-    x += SUBLEVEL_GAP
-  }
-  const rows = Array.from({ length: row + 1 }, (_, i) => i * (rowHeight + ROW_SPACING))
-  let height = rows.at(-1)! + rowHeight
+  const coreWidth = diagram.core ? textWidth(`[${diagram.core}]`, CORE_SIZE) : 0
+  const placed = o.arrangement === 'energy' ? byEnergy(diagram, o.style, left, rowHeight) : inRows(diagram, o.style, left, rowHeight, coreWidth)
+  const { sublevels, core, rows } = placed
+  let widest = Math.max(placed.widest, core ? coreWidth : 0)
+  let height = placed.height
 
   let config: FigureLayout['config']
   if (o.configLine !== 'none') {
@@ -132,6 +118,70 @@ export function layoutFigure(diagram: Diagram, o: LayoutOptions): FigureLayout {
     sublevels,
     rows,
     config,
+  }
+}
+
+interface Placed {
+  sublevels: PlacedSublevel[]
+  core?: { x: number; y: number }
+  rows: number[]
+  /** the right edge of the orbitals, from `left` */
+  widest: number
+  height: number
+}
+
+/** Fill rows left to right after the core, starting a new row before a
+ *  sublevel that won't fit, never splitting one. */
+function inRows(diagram: Diagram, style: OrbitalStyle, left: number, rowHeight: number, coreWidth: number): Placed {
+  const sublevels: PlacedSublevel[] = []
+  let row = 0
+  let x = coreWidth ? coreWidth + CORE_GAP : 0
+  let widest = 0
+  for (const s of diagram.sublevels) {
+    const width = sublevelWidth(s.orbitals.length, style)
+    if (x > 0 && x + width > MAX_ROW) {
+      row++
+      x = 0
+    }
+    sublevels.push({ name: s.name, x: left + x, y: row * (rowHeight + ROW_SPACING), width })
+    x += width
+    widest = Math.max(widest, x)
+    x += SUBLEVEL_GAP
+  }
+  const rows = Array.from({ length: row + 1 }, (_, i) => i * (rowHeight + ROW_SPACING))
+  return { sublevels, core: coreWidth ? { x: left, y: 0 } : undefined, rows, widest, height: rows.at(-1)! + rowHeight }
+}
+
+/** Stack the sublevels by energy: one step up for each in filling order,
+ *  1s at the bottom, and the core under them all. Each letter gets its own
+ *  column, s on the left, so a p sublevel sits to the right of the s below
+ *  it and the 3d beside the 4s under it. */
+function byEnergy(diagram: Diagram, style: OrbitalStyle, left: number, rowHeight: number): Placed {
+  const upward = [...diagram.sublevels].sort((a, b) => fillingIndex(a.name) - fillingIndex(b.name))
+  const letters = [...new Set(upward.map((s) => SUBLEVELS[s.name].l))].sort((a, b) => a - b)
+  const columns = new Map<number, number>()
+  let x = 0
+  for (const l of letters) {
+    columns.set(l, x)
+    x += sublevelWidth(2 * l + 1, style) + SUBLEVEL_GAP
+  }
+  const steps = upward.length + (diagram.core ? 1 : 0)
+  const stepY = (step: number) => (steps - 1 - step) * (rowHeight + STEP_SPACING)
+  const first = diagram.core ? 1 : 0
+  const sublevels = upward.map((s, i) => ({
+    name: s.name,
+    x: left + columns.get(SUBLEVELS[s.name].l)!,
+    y: stepY(first + i),
+    width: sublevelWidth(s.orbitals.length, style),
+  }))
+  const rows = Array.from({ length: Math.max(steps, 1) }, (_, i) => i * (rowHeight + STEP_SPACING))
+  return {
+    sublevels,
+    core: diagram.core ? { x: left, y: stepY(0) } : undefined,
+    rows,
+    widest: Math.max(0, x - SUBLEVEL_GAP),
+    // the core at the bottom has no label under it
+    height: rows.at(-1)! + (diagram.core ? ORBITAL : rowHeight),
   }
 }
 

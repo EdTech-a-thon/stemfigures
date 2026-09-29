@@ -8,6 +8,7 @@ const settings = (changes: Partial<OrbitalSettings> = {}) => orbitalSettings.tid
 const layoutOf = (s: OrbitalSettings, answer: string[] = []) =>
   layoutFigure(drawnDiagram(s), {
     style: s.orbitals,
+    arrangement: s.arrangement,
     labels: s.labels,
     symbol: s.symbol,
     symbolRuns: symbolRuns(s),
@@ -102,6 +103,26 @@ describe('the figure', () => {
   it('puts short diagrams on one row and long ones on several', () => {
     expect(layoutOf(settings({ z: 8 })).rows).toHaveLength(1)
     expect(layoutOf(settings({ z: 79 })).rows.length).toBeGreaterThan(1)
+  })
+
+  it('stacks sublevels by energy, each letter in its own column', () => {
+    const layout = layoutOf(settings({ z: 26, arrangement: 'energy', symbol: 'none' }))
+    const at = Object.fromEntries(layout.sublevels.map((sub) => [sub.name, sub]))
+    const upward = ['1s', '2s', '2p', '3s', '3p', '4s', '3d']
+    for (let i = 1; i < upward.length; i++) expect(at[upward[i]].y).toBeLessThan(at[upward[i - 1]].y)
+    expect(new Set(layout.sublevels.map((sub) => sub.y)).size).toBe(upward.length)
+    expect(at['1s'].x).toBe(at['4s'].x)
+    expect(at['2p'].x).toBe(at['3p'].x)
+    expect(at['2p'].x).toBeGreaterThan(at['2s'].x + at['2s'].width)
+    expect(at['3d'].x).toBeGreaterThan(at['3p'].x + at['3p'].width)
+    expect(layout.rows).toHaveLength(upward.length)
+  })
+
+  it('stacks by energy the same in shell order, and puts the core at the bottom', () => {
+    const tops = (s: OrbitalSettings) => Object.fromEntries(layoutOf(s).sublevels.map((sub) => [sub.name, sub.y]))
+    expect(tops(settings({ z: 26, arrangement: 'energy', order: 'shell' }))).toEqual(tops(settings({ z: 26, arrangement: 'energy' })))
+    const layout = layoutOf(settings({ z: 26, arrangement: 'energy', core: true }))
+    expect(layout.core!.y).toBeGreaterThan(Math.max(...layout.sublevels.map((sub) => sub.y)))
   })
 
   it('is at least as wide as its answer key', () => {

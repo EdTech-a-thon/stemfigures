@@ -294,6 +294,10 @@ _Avoid_: Electron arrangement, notation
 The order sublevels fill in by the aufbau principle: 1s 2s 2p 3s 3p 4s 3d 4p 5s 4d 5p 6s 4f 5d 6p 7s 5f 6d 7p. The diagram draws sublevels in this order unless the teacher picks shell order (3d before 4s).
 _Avoid_: Aufbau order (fine in help text), energy order, Madelung order
 
+**Arrangement**:
+How the sublevels are laid out: in a row, side by side and wrapping onto more rows (the default), or by energy, each sublevel a step higher than the one before it in filling order with s, p, d and f in their own columns, and the noble gas core at the bottom. Stacked by energy, the sublevel order only changes the written configuration.
+_Avoid_: Energy diagram, energy-level diagram, layout
+
 **Exception**:
 An element whose real ground state doesn't follow the filling order, such as Cr ([Ar] 4s¹ 3d⁵) or Cu ([Ar] 4s¹ 3d¹⁰).
 _Avoid_: Anomaly, irregular element
