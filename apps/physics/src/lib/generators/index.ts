@@ -33,5 +33,8 @@ export type Generator = (typeof GENERATORS)[number]
 
 export const findGenerator = (path: string) => GENERATORS.find((g) => g.path === path)
 
+/** What a generator's figures are called: its name without "Generator", like "Free Body Diagram". */
+export const figureName = (g: { name: string }) => g.name.replace(/ Generator$/, '')
+
 /** The site's own generators matching a search. */
 export const searchGenerators = (query: string) => GENERATORS.filter((g) => matches(g, query))
