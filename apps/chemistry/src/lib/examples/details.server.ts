@@ -13,10 +13,15 @@ import { syringeSettings, answerLine as syringeAnswer } from '$lib/generators/ga
 import { lengthSettings, answerLine as lengthAnswer } from '$lib/generators/length-reading/settings'
 import { figureOf, lewisSettings } from '$lib/generators/lewis-structures/settings'
 import { formalCharge, valenceElectrons, type Structure } from '$lib/generators/lewis-structures/structure'
+import { answerLines as spectrumAnswer, buildSpectrum } from '$lib/generators/line-spectrum/figure'
+import { spectrumSettings } from '$lib/generators/line-spectrum/settings'
+import { stripName } from '$lib/generators/line-spectrum/strips'
 import { massSettings, answerLine as massAnswer } from '$lib/generators/mass-reading/settings'
 import { answerLines as orbitalAnswer, orbitalSettings } from '$lib/generators/orbital-diagram/settings'
 import { describeKind } from '$lib/generators/particle-diagram/particles'
 import { boxContents, particleSettings } from '$lib/generators/particle-diagram/settings'
+import { answerLines as pesAnswer, pesSettings } from '$lib/generators/photoelectron-spectrum/settings'
+import { energyText, peaksOf } from '$lib/generators/photoelectron-spectrum/spectrum'
 import { phSettings, answerLine as phAnswer } from '$lib/generators/ph-reading/settings'
 import { temperatureSettings, answerLine as temperatureAnswer } from '$lib/generators/temperature-reading/settings'
 import { buildTitration } from '$lib/generators/titration-curve/figure'
@@ -104,6 +109,22 @@ function titrationAnswer(s: SettingsById['titration-curve']): ExampleDetails['an
   return { heading: 'Answer key', lines: out }
 }
 
+function lineSpectrumAnswer(s: SettingsById['line-spectrum']): ExampleDetails['answer'] {
+  const layout = buildSpectrum(s)
+  const out = s.strips.flatMap((strip, i) => {
+    if (strip.type === 'mixture') return []
+    const drawn = layout.strips[i].lines
+    if (!drawn.length) throw new Error(`The line spectrum example draws no lines for ${stripName(strip)}`)
+    return [`${stripName(strip)}: ${drawn.map((l) => l.nm.toFixed(1)).join(', ')} nm`]
+  })
+  return { heading: 'Answer key', lines: [...out, ...spectrumAnswer(s)] }
+}
+
+function pesAnswerKey(s: SettingsById['photoelectron-spectrum']): ExampleDetails['answer'] {
+  const peaks = peaksOf(s.z, s.unit).map((p) => `${p.sublevel} ${energyText(p.energy)}`)
+  return { heading: 'Answer key', lines: [...pesAnswer(s), `Peaks (${s.unit}, left to right): ${peaks.join(', ')}`] }
+}
+
 const GENERATORS: { [G in ExampleGeneratorId]: { definition: Definition<SettingsById[G]>; answer: Answer<SettingsById[G]> } } = {
   'volume-reading': { definition: volumeSettings, answer: (s) => lines(volumeAnswer(s)) },
   'volume-by-displacement': { definition: displacementSettings, answer: (s) => lines(displacementAnswer(s)) },
@@ -117,6 +138,8 @@ const GENERATORS: { [G in ExampleGeneratorId]: { definition: Definition<Settings
   'bohr-model': { definition: bohrSettings, answer: bohrAnswer },
   'lewis-structures': { definition: lewisSettings, answer: lewisAnswer },
   'orbital-diagram': { definition: orbitalSettings, answer: (s) => ({ heading: 'Answer key', lines: orbitalAnswer(s) }) },
+  'line-spectrum': { definition: spectrumSettings, answer: lineSpectrumAnswer },
+  'photoelectron-spectrum': { definition: pesSettings, answer: pesAnswerKey },
 }
 
 function detailsOf<G extends ExampleGeneratorId>(generator: G, example: Example): ExampleDetails {

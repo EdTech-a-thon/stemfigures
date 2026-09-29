@@ -612,6 +612,142 @@ export const EXAMPLES: Example[] = [
       settings: { z: 7, changes: { '2p': ['ud', 'u', ''] } },
     },
   ]),
+  ...examplesOf('line-spectrum', [
+    {
+      slug: 'emission-spectra-hydrogen-helium-sodium-unknown-mixture',
+      title: 'Emission spectra of hydrogen, helium and sodium with an unknown to identify',
+      alt: 'Bright-line emission spectra of hydrogen, helium and sodium stacked on one 400–700 nm wavelength scale, with an unknown spectrum under them made of two of the three',
+      caption:
+        'Three bright-line emission spectra, hydrogen, helium and sodium, drawn as colored lines on black and stacked on one wavelength scale from 400 to 700 nm, so a line at the same wavelength sits at the same place in every strip. The fourth strip, labeled Unknown, is a mixture: it shows every line of hydrogen and of sodium, for students to match against the three above.',
+      settings: {
+        strips: [
+          { type: 'element', id: 1, element: 'H' },
+          { type: 'element', id: 2, element: 'He' },
+          { type: 'element', id: 3, element: 'Na' },
+          { type: 'mixture', id: 4, name: 'Unknown', of: [1, 3] },
+        ],
+      },
+    },
+    {
+      slug: 'hydrogen-emission-spectrum-balmer-series',
+      title: 'Hydrogen emission spectrum: the Balmer series',
+      alt: 'The bright-line emission spectrum of hydrogen from 400 to 700 nm: four lines, violet, blue-violet, cyan and red',
+      caption:
+        'The visible emission spectrum of hydrogen, the Balmer series, as four colored lines on black on a 400 to 700 nm scale: a violet line, a blue-violet line, a cyan line and a red line. Each is light given off as hydrogen’s electron falls to the second energy level, the lines students connect to the Bohr model.',
+      settings: { strips: [{ type: 'element', id: 1, element: 'H' }] },
+    },
+    {
+      slug: 'absorption-spectra-hydrogen-helium',
+      title: 'Absorption spectra of hydrogen and helium',
+      alt: 'Absorption spectra of hydrogen and helium: dark lines across a continuous rainbow from 400 to 700 nm',
+      caption:
+        'The absorption spectra of hydrogen and helium, each a continuous rainbow from violet at 400 nm to red at 700 nm crossed by black lines where the gas absorbs light. The dark lines sit at exactly the wavelengths of each element’s bright emission lines, the way elements are identified in the light of stars.',
+      settings: {
+        style: 'absorption',
+        strips: [
+          { type: 'element', id: 1, element: 'H' },
+          { type: 'element', id: 2, element: 'He' },
+        ],
+      },
+    },
+    {
+      slug: 'flame-test-metals-emission-spectra-lithium-sodium-strontium-copper',
+      title: 'Emission spectra of flame test metals: lithium, sodium, strontium and copper',
+      alt: 'Bright-line emission spectra of lithium, sodium, strontium and copper on one wavelength scale, with an unknown made of two of them',
+      caption:
+        'Bright-line emission spectra of four metals used in flame tests, lithium, sodium, strontium and copper, each with a few of its strongest visible lines, on one 400 to 700 nm scale. Under them, an unknown shows every line of sodium and of strontium for students to identify.',
+      settings: {
+        strips: [
+          { type: 'element', id: 1, element: 'Li' },
+          { type: 'element', id: 2, element: 'Na' },
+          { type: 'element', id: 3, element: 'Sr' },
+          { type: 'element', id: 4, element: 'Cu' },
+          { type: 'mixture', id: 5, name: 'Unknown', of: [2, 3] },
+        ],
+      },
+    },
+    {
+      slug: 'identify-the-element-line-spectra-black-and-white',
+      title: 'Identify the element: black-and-white line spectra with blank labels',
+      alt: 'Three line spectra drawn as black lines on white, each with a blank line in place of the element’s name',
+      caption:
+        'Three line spectra, mercury, neon and helium, printed as black lines on white for a black-and-white copier, each with a blank line where the element’s name would be. Students match the line positions on the 400 to 700 nm scale to a reference chart to name each element.',
+      settings: {
+        style: 'print',
+        labels: 'blank',
+        strips: [
+          { type: 'element', id: 1, element: 'Hg' },
+          { type: 'element', id: 2, element: 'Ne' },
+          { type: 'element', id: 3, element: 'He' },
+        ],
+      },
+    },
+    {
+      slug: 'made-up-elements-line-spectra-unknown-mixture',
+      title: 'Line spectra of made-up elements X, Y and Z with an unknown',
+      alt: 'Emission spectra of three made-up elements, X, Y and Z, each with three lines, and an unknown made of two of them',
+      caption:
+        'Emission spectra of three made-up elements, X, Y and Z, each drawn with three lines typed in by the teacher, so students can’t look the answer up. The Unknown strip under them shows every line of Element X and Element Z, and students identify it by matching lines.',
+      settings: {
+        strips: [
+          { type: 'custom', id: 1, name: 'Element X', lines: '425, 510, 630' },
+          { type: 'custom', id: 2, name: 'Element Y', lines: '455, 545, 600' },
+          { type: 'custom', id: 3, name: 'Element Z', lines: '480, 575, 665' },
+          { type: 'mixture', id: 4, name: 'Unknown', of: [1, 3] },
+        ],
+      },
+    },
+  ]),
+  ...examplesOf('photoelectron-spectrum', [
+    {
+      slug: 'photoelectron-spectrum-of-sodium',
+      title: 'Photoelectron spectrum (PES) of sodium',
+      alt: 'The photoelectron spectrum of sodium: four peaks labeled 1s², 2s², 2p⁶ and 3s¹, binding energy in MJ/mol decreasing from left to right on a logarithmic axis',
+      caption:
+        'The photoelectron spectrum of a sodium atom, as in AP Chemistry: one peak for each sublevel, labeled 1s², 2s², 2p⁶ and 3s¹, each as tall as its number of electrons, so the 2p peak is three times as tall as the 1s. Binding energy in MJ/mol falls from left to right on a logarithmic axis, so the tightly held 1s electrons are at the far left and the single valence 3s electron at the far right.',
+      settings: { z: 11, counts: true },
+    },
+    {
+      slug: 'photoelectron-spectrum-of-neon-with-binding-energies',
+      title: 'PES of neon with binding energies',
+      alt: 'The photoelectron spectrum of neon with three peaks, 1s², 2s² and 2p⁶, each labeled with its binding energy in MJ/mol',
+      caption:
+        'The photoelectron spectrum of neon: three peaks, 1s², 2s² and 2p⁶, with each peak’s binding energy in MJ/mol written over it. The 2p peak is three times as tall as the others because it holds six electrons, and the 1s peak is far to the left because those electrons are held most tightly.',
+      settings: { z: 10, counts: true, energies: true },
+    },
+    {
+      slug: 'pes-comparing-sodium-and-magnesium',
+      title: 'PES comparing magnesium and sodium',
+      alt: 'Photoelectron spectra of magnesium, solid, and sodium, dashed and gray behind it, with a key naming each',
+      caption:
+        'The photoelectron spectrum of magnesium drawn solid, with sodium’s dashed and gray behind it and a key naming each. Every magnesium peak sits to the left of the matching sodium peak, because magnesium’s extra proton holds each sublevel’s electrons more tightly, and its 3s peak is twice as tall, holding two electrons to sodium’s one.',
+      settings: { z: 12, compare: 11 },
+    },
+    {
+      slug: 'identify-the-element-from-its-photoelectron-spectrum',
+      title: 'Identify the element from its photoelectron spectrum',
+      alt: 'An unnamed element’s photoelectron spectrum with five peaks and blank lines in place of the sublevel labels',
+      caption:
+        'The photoelectron spectrum of an unnamed element, for students to identify: five peaks with blank lines where the sublevel labels go, on a numbered electrons axis so each peak’s height can be read. The peaks hold 2, 2, 6, 2 and 5 electrons from left to right, 17 in all, which is chlorine.',
+      settings: { z: 17, names: false, sublevels: 'blank' },
+    },
+    {
+      slug: 'photoelectron-spectrum-of-calcium-broken-axis-ev',
+      title: 'Photoelectron spectrum of calcium on a broken axis, in eV',
+      alt: 'The photoelectron spectrum of calcium drawn as bars on a broken binding energy axis in eV, with six sublevel labels',
+      caption:
+        'The photoelectron spectrum of calcium, 1s² 2s² 2p⁶ 3s² 3p⁶ 4s², drawn as bars. The binding energy axis, in electronvolts, is broken into a linear stretch for each group of nearby peaks, with break marks between them, so the core and valence peaks can all be read.',
+      settings: { z: 20, unit: 'eV', scale: 'broken', peaks: 'bars' },
+    },
+    {
+      slug: 'photoelectron-spectrum-of-iron',
+      title: 'Photoelectron spectrum of iron',
+      alt: 'The photoelectron spectrum of iron with seven peaks from 1s² to 4s², the 3d⁶ peak just left of the 4s² peak',
+      caption:
+        'The photoelectron spectrum of an iron atom, 1s² 2s² 2p⁶ 3s² 3p⁶ 3d⁶ 4s², on a broken binding energy axis in MJ/mol, each group of nearby peaks given its own stretch. The 3d peak sits just to the left of the 4s peak: although 4s fills first, its electrons are held less tightly, which is why iron loses its 4s electrons first when it forms ions.',
+      settings: { z: 26, counts: true, scale: 'broken' },
+    },
+  ]),
 ]
 
 /** A generator's examples, in order; the first is its best. */

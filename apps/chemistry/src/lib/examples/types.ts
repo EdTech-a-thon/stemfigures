@@ -6,10 +6,12 @@ import type { BohrSettings } from '$lib/generators/bohr-model/settings'
 import type { SyringeSettings } from '$lib/generators/gas-syringe/settings'
 import type { LengthSettings } from '$lib/generators/length-reading/settings'
 import type { LewisSettings } from '$lib/generators/lewis-structures/settings'
+import type { SpectrumSettings } from '$lib/generators/line-spectrum/settings'
 import type { MassSettings } from '$lib/generators/mass-reading/settings'
 import type { OrbitalSettings } from '$lib/generators/orbital-diagram/settings'
 import type { ParticleSettings } from '$lib/generators/particle-diagram/settings'
 import type { PhSettings } from '$lib/generators/ph-reading/settings'
+import type { PesSettings } from '$lib/generators/photoelectron-spectrum/settings'
 import type { TemperatureSettings } from '$lib/generators/temperature-reading/settings'
 import type { TitrationSettings } from '$lib/generators/titration-curve/settings'
 import type { DisplacementSettings } from '$lib/generators/volume-by-displacement/settings'
@@ -29,6 +31,8 @@ export interface SettingsById {
   'bohr-model': BohrSettings
   'lewis-structures': LewisSettings
   'orbital-diagram': OrbitalSettings
+  'line-spectrum': SpectrumSettings
+  'photoelectron-spectrum': PesSettings
 }
 
 export type ExampleGeneratorId = keyof SettingsById

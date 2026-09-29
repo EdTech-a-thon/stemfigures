@@ -469,6 +469,84 @@ export const COPY: Record<string, GeneratorCopy> = {
     imageAlt: 'A printable orbital diagram with electrons as arrows in orbital boxes, made with Orbital Diagram',
     educationalLevel: ['High school', 'AP Chemistry'],
   },
+  'line-spectrum': {
+    heading: 'Bright-line emission and absorption spectra',
+    intro: [
+      'Line Spectrum stacks the visible line spectra of elements on one wavelength scale in nanometers, so a line at the same wavelength sits at the same place in every strip. Each element shows a few of its strongest visible lines (three to eight) from the NIST Atomic Spectra Database, not every line it has, so the spectra stay easy to read and compare. Type your own lines instead for a made-up Element X, or edit an element’s lines to trim them.',
+      'For an “identify the unknown” question, add a mixture strip: it shows every line of the strips you tick, labeled Unknown or whatever you call it, and the answer key names what it is made of. Draw the spectra as colored lines on black, as dark lines across a rainbow, or as black lines on white for a black-and-white copier, and leave the element names blank for students to fill in.',
+    ],
+    settings: [
+      'Up to 8 strips: an element (hydrogen, helium, lithium, sodium, potassium, calcium, strontium, barium, copper, zinc, cadmium, mercury, neon, argon or krypton), lines you type, or a mixture of the other strips',
+      'Emission (bright lines on black), absorption (dark lines across a rainbow) or print (black lines on white)',
+      'Every line equally bright, or as bright as NIST’s relative intensities',
+      'Element names, symbols, blank lines for students, or no labels',
+      'The wavelength range (anywhere from 380 to 780 nm), tick and number spacing, and the scale under the last strip, under every strip, or left off',
+      'A chart title, and an answer key naming what’s in each mixture',
+    ],
+    faqs: [
+      {
+        q: 'Why does each element give off its own lines?',
+        a: 'An atom’s electrons can only have certain energies. When an electron falls from a higher energy level to a lower one, the atom gives off light of exactly the energy difference, which is one exact wavelength. Each element has its own energy levels, so its lines are a fingerprint.',
+      },
+      {
+        q: 'How do you identify the elements in an unknown spectrum?',
+        a: 'A mixture’s spectrum has every line of every element in it. Match each line of the unknown to a reference spectrum: an element is present if all of its lines appear in the unknown. The generator’s mixture strip is made exactly this way, from the strips you tick.',
+      },
+      {
+        q: 'What’s the difference between an emission and an absorption spectrum?',
+        a: 'An emission (bright-line) spectrum is light given off by a hot gas: colored lines on black. An absorption spectrum is what’s left when white light passes through a cool gas: a rainbow with dark lines missing. An element’s dark absorption lines are at the same wavelengths as its bright emission lines.',
+      },
+      {
+        q: 'Why doesn’t each element show all of its lines?',
+        a: 'Real spectra have many lines, some very faint (iron has thousands), which makes worksheets hard to read. Each element here has its strongest few visible lines, the ones textbooks usually show. If you want different lines, edit the element’s lines or type your own.',
+      },
+      {
+        q: 'Where do the wavelengths come from?',
+        a: 'The NIST Atomic Spectra Database, for neutral atoms, as wavelengths in air rounded to 0.1 nm. Some lines of potassium and helium are past 700 nm, so widen the range to see them.',
+      },
+    ],
+    imageAlt: 'Printable bright-line emission spectra of several elements and an unknown mixture on one wavelength scale, made with Line Spectrum',
+    educationalLevel: ['High school', 'AP Chemistry'],
+  },
+  'photoelectron-spectrum': {
+    heading: 'Photoelectron spectra (PES) for AP Chemistry',
+    intro: [
+      'Photoelectron Spectrum draws the photoelectron spectrum of any neutral atom from hydrogen to xenon: one peak for each sublevel of its ground-state electron configuration, as tall as that sublevel’s electrons, at its binding energy. Binding energy falls from left to right, as AP Chemistry draws it, in MJ/mol or eV. Exceptions like chromium and copper are drawn with their real configurations.',
+      'Core electrons are held a thousand times more tightly than valence electrons, so the energy axis is logarithmic, or broken into a stretch for each group of peaks, or linear if you want the crowding to show. Label peaks with their sublevels, electron counts and energies, or leave the labels blank; hide the element for “which element is this?”, and draw a second element dashed behind the first to ask why its peaks have moved.',
+    ],
+    settings: [
+      'The element, hydrogen to xenon, and a second element to compare, drawn dashed behind it',
+      'Binding energy in MJ/mol or eV, on a logarithmic, broken or linear axis',
+      'Peaks drawn as smooth peaks or as bars',
+      'Sublevel labels written, as blank lines, or left off, with electron counts and binding energies over the peaks',
+      'A numbered electrons axis and gridlines, element names shown or hidden, and the label size',
+      'A chart title, and an answer key line with each element’s electron configuration',
+    ],
+    faqs: [
+      {
+        q: 'How do you read a photoelectron spectrum?',
+        a: 'Each peak is one sublevel. Its height is the number of electrons in that sublevel, and its position is how much energy it takes to remove one of them. The peak furthest left is 1s; the one furthest right holds the valence electrons.',
+      },
+      {
+        q: 'Why is binding energy higher on the left?',
+        a: 'That’s how AP Chemistry and most textbooks draw photoelectron spectra, with the axis running from high energy to low. The generator follows it, so its figures match what students see on the exam.',
+      },
+      {
+        q: 'Why do one element’s peaks sit to the left of another’s?',
+        a: 'An element with more protons pulls every sublevel’s electrons more tightly, so each of its peaks is at a higher binding energy, further left. Compare magnesium with sodium to show it.',
+      },
+      {
+        q: 'Why is the axis logarithmic or broken?',
+        a: 'A 1s electron can be held thousands of times more tightly than a valence electron (calcium’s 1s is about 390 MJ/mol, its 4s about 0.6), so on an even axis the valence peaks crowd together at the right. A logarithmic or broken axis keeps every peak readable.',
+      },
+      {
+        q: 'Where do the binding energies come from?',
+        a: 'Hydrogen to calcium use the textbook table AP materials quote (neon: 84.0, 4.68 and 2.08 MJ/mol). Scandium to xenon use Lotz’s 1970 table of electron binding energies in free atoms, converted from eV.',
+      },
+    ],
+    imageAlt: 'A printable photoelectron spectrum with a peak for each sublevel and binding energy falling from left to right, made with Photoelectron Spectrum',
+    educationalLevel: ['High school', 'AP Chemistry'],
+  },
 }
 
 /** The copy for a generator; every generator on the site has some. */
