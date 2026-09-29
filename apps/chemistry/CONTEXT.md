@@ -355,3 +355,48 @@ _Avoid_: Midpoint, buffer point
 **Marked point**:
 The equivalence or half-equivalence point drawn as a dot, alone or with dashed lines to both axes, with a label, a blank line for students, or nothing.
 _Avoid_: Marker, annotation
+
+### Line spectra
+
+**Line spectrum**:
+A figure of one or more strips stacked on one wavelength axis, each showing the lines of the light an element gives off or takes in, so students can match an unknown's lines to known elements. The generator is Line Spectrum.
+_Avoid_: Bright-line spectrum (that's the emission style; fine in search keywords), spectrograph, spectral chart
+
+**Strip**:
+One horizontal band of a line spectrum with its label to its left: an element strip, a custom strip or a mixture strip. Every strip is the same width whatever the range, and a wavelength sits at the same place on every strip, so lines can be matched straight down. A figure has one to eight.
+_Avoid_: Row, band, bar, spectrum (alone)
+
+**Line**:
+One thin vertical mark on a strip at one wavelength, in nm to 0.1. Lines outside the axis's range aren't drawn, and the page says how many are hidden.
+_Avoid_: Peak, band, spectral line (fine in help text)
+
+**Element strip**:
+A strip showing a few of one element's strongest visible lines (3 to 8), not every line it has, taken from the NIST Atomic Spectra Database for the neutral atom (see `elements.ts`): H, He, Li, Na, K, Ca, Sr, Ba, Cu, Zn, Cd, Hg, Ne, Ar and Kr. Flame test colors can differ from these lines, since some come from molecules in the flame. Editing its lines makes it a custom strip with the same lines.
+_Avoid_: Preset (that's a teacher's saved settings), reference spectrum
+
+**Custom strip**:
+A strip of wavelengths the teacher types, with a name of their own such as "Element X", for elements students can't look up or for trimmed-down spectra. Anything typed that isn't a wavelength from 100 to 2000 nm is left out and named on the page.
+_Avoid_: Own lines (fine as the button), made-up element
+
+**Mixture strip**:
+A strip showing every line of the element and custom strips the teacher ticks, named "Unknown" unless the teacher renames it, for students to work out what's in it. Where two parts share a wavelength, it is one line. A mixture can't include another mixture.
+_Avoid_: Unknown (that's its default name), combined spectrum, sample
+
+**Style**:
+How strips are drawn: emission (colored lines on black, as a glowing gas gives off), absorption (black lines across a rainbow, as a cool gas takes out of white light) or print (black lines on white, for a black-and-white copier). Each wavelength's color is Dan Bruton's approximation, dimming toward 380 and 780 nm.
+_Avoid_: Mode, theme, bright-line/dark-line (fine in help text)
+
+**Brightness**:
+All lines equally bright, the default, so only where they are matters; or relative, each element line as bright as NIST's intensity for it against the element's strongest line, never under 30%. NIST's intensities are rough and come from a different source for each element, so they compare lines of one element only. Custom lines are always full strength.
+_Avoid_: Intensity (fine in help text), opacity
+
+**Strip labels**:
+What's written left of each element strip: its name, its symbol, a blank line for students, or nothing. Custom and mixture strips show the names the teacher gave them, except when labels are off altogether.
+_Avoid_: Legend, key, caption
+
+**Wavelength axis**:
+The scale in nm under the last strip, under every strip, or left off, from 400 to 700 nm unless the teacher changes it (within 380 to 780, at least 20 nm wide), with ticks and numbers at multiples of their spacing and the title "Wavelength (nm)". Shortest wavelength (violet) is on the left.
+_Avoid_: x-axis, ruler
+
+**Answer key** (line spectra):
+The lines under the figure naming what's in each mixture ("Unknown: hydrogen and sodium") and, when element strips' labels are blank, the elements from the top down. A mixture's parts are never in the figure's description for screen readers.

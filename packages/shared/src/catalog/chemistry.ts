@@ -126,4 +126,14 @@ export const CHEMISTRY: CatalogEntry[] = [
       'Make printable orbital diagrams for chemistry tests. Pick an element and charge and get its electron configuration drawn as arrows in boxes, following the aufbau principle, Pauli exclusion and Hund’s rule, with exceptions, noble gas cores, blanks for students and deliberate mistakes.',
     keywords: ['electron', 'configuration', 'orbital', 'orbitals', 'notation', 'box', 'boxes', 'arrows', 'spin', 'aufbau', 'hund', 'hunds', 'pauli', 'exclusion', 'sublevel', 'subshell', 'noble', 'gas', 'core', 'shorthand', 'excited', 'ground', 'state', 'ion', 'AP'],
   },
+  {
+    id: 'line-spectrum',
+    site: 'chemistry',
+    name: 'Line Spectrum',
+    path: '/line-spectrum',
+    blurb: 'Bright-line or absorption spectra of elements, your own lines, or an unknown mixture.',
+    description:
+      'Make printable line spectra for chemistry tests. Stack hydrogen, helium, sodium and other elements’ strongest visible lines, or lines you type, on one wavelength scale, and add an unknown mixture of them for students to identify, as emission, absorption or print-friendly black-and-white spectra.',
+    keywords: ['line', 'spectrum', 'spectra', 'bright-line', 'bright', 'emission', 'absorption', 'atomic', 'AAS', 'spectroscope', 'spectroscopy', 'flame', 'test', 'Bohr', 'hydrogen', 'Balmer', 'element', 'elements', 'mystery', 'unknown', 'mixture', 'wavelength', 'nm', 'nanometers', 'light', 'color', 'visible', 'star', 'fingerprint', 'electron', 'energy', 'level'],
+  },
 ]
