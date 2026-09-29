@@ -136,4 +136,14 @@ export const CHEMISTRY: CatalogEntry[] = [
       'Make printable line spectra for chemistry tests. Stack hydrogen, helium, sodium and other elements’ strongest visible lines, or lines you type, on one wavelength scale, and add an unknown mixture of them for students to identify, as emission, absorption or print-friendly black-and-white spectra.',
     keywords: ['line', 'spectrum', 'spectra', 'bright-line', 'bright', 'emission', 'absorption', 'atomic', 'AAS', 'spectroscope', 'spectroscopy', 'flame', 'test', 'Bohr', 'hydrogen', 'Balmer', 'element', 'elements', 'mystery', 'unknown', 'mixture', 'wavelength', 'nm', 'nanometers', 'light', 'color', 'visible', 'star', 'fingerprint', 'electron', 'energy', 'level'],
   },
+  {
+    id: 'photoelectron-spectrum',
+    site: 'chemistry',
+    name: 'Photoelectron Spectrum',
+    path: '/photoelectron-spectrum',
+    blurb: 'Any element’s photoelectron spectrum, H to Xe, one peak per sublevel.',
+    description:
+      'Make printable photoelectron spectra (PES) for AP Chemistry tests. Pick an element from H to Xe and get a peak for each sublevel, as tall as its electrons, at its binding energy in MJ/mol or eV, on a logarithmic or broken axis, with a second element to compare and labels left blank or the element hidden for students.',
+    keywords: ['PES', 'photoelectron', 'spectrum', 'spectra', 'spectroscopy', 'binding', 'energy', 'ionization', 'MJ/mol', 'eV', 'subshell', 'sublevel', 'electron', 'configuration', 'peak', 'peaks', 'core', 'valence', 'shielding', 'Coulomb', 'nuclear', 'charge', 'AP'],
+  },
 ]

@@ -15,6 +15,7 @@ import MassReadingPreview from './mass-reading/Preview.svelte'
 import OrbitalDiagramPreview from './orbital-diagram/Preview.svelte'
 import ParticleDiagramPreview from './particle-diagram/Preview.svelte'
 import PhReadingPreview from './ph-reading/Preview.svelte'
+import PhotoelectronSpectrumPreview from './photoelectron-spectrum/Preview.svelte'
 import TitrationCurvePreview from './titration-curve/Preview.svelte'
 import TemperatureReadingPreview from './temperature-reading/Preview.svelte'
 import VolumeByDisplacementPreview from './volume-by-displacement/Preview.svelte'
@@ -30,6 +31,7 @@ export const PREVIEWS: Record<string, Component> = {
   'orbital-diagram': OrbitalDiagramPreview,
   'particle-diagram': ParticleDiagramPreview,
   'ph-reading': PhReadingPreview,
+  'photoelectron-spectrum': PhotoelectronSpectrumPreview,
   'temperature-reading': TemperatureReadingPreview,
   'titration-curve': TitrationCurvePreview,
   'volume-by-displacement': VolumeByDisplacementPreview,

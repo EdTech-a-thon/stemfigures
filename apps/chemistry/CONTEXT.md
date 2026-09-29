@@ -400,3 +400,25 @@ _Avoid_: x-axis, ruler
 
 **Answer key** (line spectra):
 The lines under the figure naming what's in each mixture ("Unknown: hydrogen and sodium") and, when element strips' labels are blank, the elements from the top down. A mixture's parts are never in the figure's description for screen readers.
+
+### Photoelectron spectra
+
+**Photoelectron spectrum**:
+A graph of how many electrons an atom gives up at each binding energy, as in AP Chemistry: one peak for each sublevel of the element's ground state, as tall as that sublevel's electrons, binding energy along the bottom falling from left to right. The generator is Photoelectron Spectrum, for neutral atoms from H to Xe.
+_Avoid_: PES (fine in search keywords and help text), photoelectron graph
+
+**Peak**:
+One sublevel's electrons on a photoelectron spectrum, drawn as a narrow smooth peak or a bar. Its height is the sublevel's number of electrons; where it sits is the sublevel's binding energy. Its label is the sublevel (2p), with its electrons (2p⁶) or its energy over it if the teacher wants, or a blank line for students.
+_Avoid_: Spike, line, band
+
+**Binding energy**:
+The energy it takes to remove one electron from a sublevel of the free atom, in MJ/mol (the default, as AP writes it) or eV (1 MJ/mol is 10.36 eV). H to Ca are the textbook table AP materials quote (Ne: 84.0, 4.68, 2.08); Sc to Xe are Lotz (1970), with a p or d sublevel's two values averaged into one peak (ADR 0006).
+_Avoid_: Ionization energy (that's the lowest one only; fine in help text), energy level
+
+**Energy axis**:
+The binding energy scale along the bottom: logarithmic (each step ten times the last, the default), broken into a linear stretch for each group of peaks with break marks between, or linear from 0. Core and valence energies differ a thousandfold, so only the first two show every peak apart (ADR 0006).
+_Avoid_: x-axis (fine in help text), scale (that's how it's spaced)
+
+**Compared element**:
+A second element drawn dashed and gray behind the first, for "why are magnesium's peaks to the left of sodium's?" questions. The key names both, or calls them Element A and Element B when names are hidden.
+_Avoid_: Overlay, second spectrum
