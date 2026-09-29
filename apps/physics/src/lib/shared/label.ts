@@ -3,9 +3,9 @@
 // written in a page address, for people to read: "m_1", "F_N", "30deg",
 // "theta", "mu_k". A subscript is _x or _{0x}, a superscript ^2 or ^{-1}.
 
-import { charTokenType, createDocToken, defineSchema, getStrandById, traverseStrands } from '@caret-js/core'
+import { charTokenType, createDocToken, defineSchema, getStrandById, templateFromTokens, traverseStrands } from '@caret-js/core'
 import type { Doc, DocStrand, EditorCommand } from '@caret-js/core'
-import { mathCommands, subSupTokenType } from '@caret-js/math'
+import { subSupTokenType } from '@caret-js/math'
 
 export type LabelMode = 'text' | 'blank' | 'none'
 
@@ -73,6 +73,12 @@ function parse(text: string): Part[] {
         const box = chars[i] === '{' ? (i++, readStrand('}')) : i < chars.length ? [{ char: chars[i++] }] : []
         const last = parts.at(-1)
         const key = char === '_' ? 'sub' : 'sup'
+        // A raised o is how a degree sign is often faked: 30^o is 30°.
+        if (key === 'sup' && box.length === 1 && 'char' in box[0] && box[0].char === 'o') {
+          parts.push({ char: '°' })
+          typed = ''
+          continue
+        }
         if (last && 'sub' in last && last[key] === null) last[key] = box
         else parts.push({ sub: key === 'sub' ? box : null, sup: key === 'sup' ? box : null })
         typed = ''
@@ -163,13 +169,13 @@ const UNITS = new Set(['kg', 'cm', 'mm', 'km', 'ms', 'Hz', 'kJ', 'kW', 'kN', 'eV
  * A run of label text split into pieces to set in italics or upright, the way
  * physics sets quantities in italics (m, v, F, θ, mg) and words and units
  * upright (kg, cm, "block"). A short word after a number and a space is a
- * unit too: 12 V, 2 A, 5 N.
+ * unit too: 12 V, 2 A, 5 N, and so is one after a degree sign: 30 °C.
  */
 export function italicPieces(text: string): { text: string; italic: boolean }[] {
   const pieces = text.match(/\p{L}+|[^\p{L}]+/gu) ?? []
   return pieces.map((t, i) => ({
     text: t,
-    italic: /^\p{L}{1,2}$/u.test(t) && !UNITS.has(t) && !/\d\s+$/.test(pieces[i - 1] ?? ''),
+    italic: /^\p{L}{1,2}$/u.test(t) && !UNITS.has(t) && !/\d\s+$|°$/.test(pieces[i - 1] ?? ''),
   }))
 }
 
@@ -213,14 +219,53 @@ function owner(editor: Parameters<EditorCommand<any>>[0]) {
   return null
 }
 
-/** "_" makes a subscript after the cursor and puts the cursor in it: F_N is F with N below. */
-const subscriptCommand: EditorCommand<any> = (editor) => {
+type Box = 'subscript' | 'superscript'
+
+/** A subscript or superscript after the cursor, with the cursor in it: "_"
+ *  makes F_N, F with N below. With text selected, the box goes around it. */
+function makeBox(editor: Parameters<EditorCommand<any>>[0], box: Box): boolean {
   const s = editor.selection
   if (!s) return false
   const at = Math.min(s.anchorIndex, s.headIndex)
-  editor.insert([{ type: subSupTokenType.type, props: { hasSubscript: true, hasSuperscript: false }, children: new Map([['subscript', []]]) }])
+  const inside = editor.hasRange ? templateFromTokens(editor.selectedTokens) : []
+  editor.insert([{ type: subSupTokenType.type, props: { hasSubscript: box === 'subscript', hasSuperscript: box === 'superscript' }, children: new Map([[box, inside]]) }])
   const strand = getStrandById(editor.doc, s.strandId)
-  if (strand) editor.select({ strandId: [strand.tokens[at].id, 'subscript'], tokenIndex: 0 })
+  if (!strand) return true
+  editor.select(inside.length ? { strandId: s.strandId, tokenIndex: at + 1 } : { strandId: [strand.tokens[at].id, box], tokenIndex: 0 })
+  return true
+}
+
+/** Google Docs' shortcuts, Ctrl+. for a superscript and Ctrl+, for a
+ *  subscript. The field is sent them as these characters (see LabelInput). */
+export const SHORTCUTS: Record<Box, string> = { superscript: '\uE000', subscript: '\uE001' }
+
+/** A shortcut switches its box on and off the way Google Docs does: inside a
+ *  superscript, Ctrl+. steps out of it; inside a subscript, it steps out and
+ *  starts a superscript. */
+const toggleBox =
+  (box: Box): EditorCommand<any> =>
+  (editor) => {
+    const head = editor.head
+    if (!head) return false
+    const o = editor.hasRange ? null : owner(editor)
+    if (o) {
+      editor.select({ strandId: o.strand.id, tokenIndex: o.index + 1 })
+      if ((head.strand.id as [string, string])[1] === box) return true
+    }
+    // A raised o just became °, so the Ctrl+. that ends it has nothing left to do.
+    const before = editor.head?.before as any
+    if (!editor.hasRange && box === 'superscript' && before?.props?.char === '°') return true
+    return makeBox(editor, box)
+  }
+
+/** An "o" typed into an empty superscript is a degree sign instead: 30^o is 30°. */
+const degreeCommand: EditorCommand<any> = (editor) => {
+  const head = editor.head
+  if (!head || editor.hasRange || head.strand.tokens.length > 0 || !Array.isArray(head.strand.id) || head.strand.id[1] !== 'superscript') return false
+  const o = owner(editor)
+  if (!o || (o.strand.tokens[o.index] as any).props.hasSubscript) return false
+  editor.select({ strandId: o.strand.id, anchorIndex: o.index, headIndex: o.index + 1 })
+  editor.insert([{ type: charTokenType.type, props: { char: '°' }, children: new Map() }])
   return true
 }
 
@@ -236,8 +281,11 @@ const spaceCommand: EditorCommand<any> = (editor) => {
 }
 
 export const commands: Record<string, EditorCommand<any>> = {
-  '^': mathCommands['^'],
-  _: subscriptCommand,
+  '^': (editor) => makeBox(editor, 'superscript'),
+  _: (editor) => makeBox(editor, 'subscript'),
+  o: degreeCommand,
+  [SHORTCUTS.superscript]: toggleBox('superscript'),
+  [SHORTCUTS.subscript]: toggleBox('subscript'),
   [FIELD_SPACE]: spaceCommand,
 }
 

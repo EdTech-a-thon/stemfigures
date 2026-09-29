@@ -15,6 +15,7 @@
   import { MAX_EXTRA, buildDiagram, tidyChanges, type OrbitalFill } from './diagram'
   import { ELEMENTS, element } from './elements'
   import {
+    ARRANGEMENTS,
     ARROW_STYLES,
     MAX_CHARGE,
     MIN_CHARGE,
@@ -29,6 +30,7 @@
     orbitalSettings,
     species,
     teacherDiagram,
+    type Arrangement,
     type ArrowStyle,
     type OrbitalStyle,
     type TextMode,
@@ -42,6 +44,7 @@
   const ORDER_NAMES: Record<SublevelOrder, string> = { filling: 'Filling order', shell: 'By shell' }
   const ARROW_NAMES: Record<ArrowStyle, string> = { full: 'Full arrows', half: 'Half arrows' }
   const ORBITAL_NAMES: Record<OrbitalStyle, string> = { squares: 'Squares', lines: 'Lines' }
+  const ARRANGEMENT_NAMES: Record<Arrangement, string> = { row: 'In a row', energy: 'By energy' }
   const SYMBOL_NAMES: Record<TextMode, string> = { text: 'Symbol', blank: 'Blank line', none: 'None' }
   const LABEL_NAMES: Record<TextMode, string> = { text: 'Shown', blank: 'Blank lines', none: 'None' }
   const LINE_NAMES: Record<TextMode, string> = { text: 'Written', blank: 'Blank line', none: 'None' }
@@ -54,7 +57,9 @@
 
   const atomSummary = $derived(`${species(s)}, ${element(s.z).name.toLowerCase()}${s.charge ? ' ion' : ''}, ${electrons} electron${electrons === 1 ? '' : 's'}`)
   const configSummary = $derived(writtenConfiguration(ground, s.order, s.core) || 'No electrons')
-  const lookSummary = $derived(`${ARROW_NAMES[s.arrows]}, ${ORBITAL_NAMES[s.orbitals].toLowerCase()}`)
+  const lookSummary = $derived(
+    `${ARROW_NAMES[s.arrows]}, ${ORBITAL_NAMES[s.orbitals].toLowerCase()}${s.arrangement === 'energy' ? ', by energy' : ''}`,
+  )
   const studentSummary = $derived.by(() => {
     const parts = [
       s.symbol === 'blank' && 'blank symbol',
@@ -135,7 +140,10 @@
         </span>
       </label>
       {@render radios('Order', SUBLEVEL_ORDERS, ORDER_NAMES, s.order, (order) => (s.order = order))}
-      <p class="note">{s.order === 'filling' ? '4s comes before 3d, in the order they fill.' : '3d comes before 4s, grouped by shell.'}</p>
+      <p class="note">
+        {s.order === 'filling' ? '4s comes before 3d, in the order they fill.' : '3d comes before 4s, grouped by shell.'}
+        {s.arrangement === 'energy' ? 'Stacked by energy, the order changes only the written configuration.' : ''}
+      </p>
       {@render radios('Exceptions', CONFIGURATION_RULES, RULE_NAMES, s.rule, (rule) => setAtom(s.z, s.charge, rule))}
       <p class="note">
         {s.rule === 'real'
@@ -146,6 +154,12 @@
     <Section title="Look" summary={lookSummary} icon={Palette}>
       {@render radios('Arrows', ARROW_STYLES, ARROW_NAMES, s.arrows, (arrows) => (s.arrows = arrows))}
       {@render radios('Orbitals', ORBITAL_STYLES, ORBITAL_NAMES, s.orbitals, (orbitals) => (s.orbitals = orbitals))}
+      {@render radios('Arrangement', ARRANGEMENTS, ARRANGEMENT_NAMES, s.arrangement, (arrangement) => (s.arrangement = arrangement))}
+      <p class="note">
+        {s.arrangement === 'row'
+          ? 'Sublevels side by side, wrapping onto more rows.'
+          : 'Each sublevel a step higher than the one before it in filling order, with s, p, d and f in their own columns.'}
+      </p>
     </Section>
     <Section title="For the student" summary={studentSummary} icon={PencilLine}>
       {@render radios('Symbol', TEXT_MODES, SYMBOL_NAMES, s.symbol, (symbol) => (s.symbol = symbol))}

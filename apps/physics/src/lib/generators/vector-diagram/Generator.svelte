@@ -2,6 +2,7 @@
   // The Vector Diagram Generator: the vectors, their resultant and the grid on
   // the left, the figure on the right. Settings live in the page address.
   import { ChevronDown, Grid3x3, MoveUpRight, Plus, Sigma, Trash2 } from '@lucide/svelte'
+  import { SvelteSet } from 'svelte/reactivity'
   import Choice from '$lib/shared/Choice.svelte'
   import DirectionField from '$lib/shared/DirectionField.svelte'
   import { createGenerator } from '$lib/shared/generator.svelte'
@@ -35,11 +36,16 @@
 
   const full = $derived(s.vectors.length >= MAX_VECTORS)
   // Each vector folds up to a one-line summary. They start folded, except one just added.
-  let added = $state<unknown>(null)
+  // The rows' open state is kept here, since the row is redrawn whenever its summary changes.
+  const unfolded = new SvelteSet<unknown>()
   const add = () => {
     if (full) return
     gen.s.vectors.push(newVector(gen.s.vectors.length))
-    added = gen.s.vectors.at(-1)
+    unfolded.add(gen.s.vectors.at(-1))
+  }
+  const toggle = (e: Event, vector: unknown) => {
+    if ((e.currentTarget as HTMLDetailsElement).open) unfolded.add(vector)
+    else unfolded.delete(vector)
   }
   const remove = (e: Event, i: number) => {
     // The button is inside the row's summary, so don't let the click fold it too.
@@ -64,7 +70,7 @@
     <Section title="Vectors" icon={MoveUpRight} summary={vectorsSummary}>
       <p class="note">Drawn to scale, head to tail, in order. One grid square is a magnitude of 1.</p>
       {#each gen.s.vectors as vector, i (vector)}
-        <details class="row" open={added === vector}>
+        <details class="row" open={unfolded.has(vector)} ontoggle={(e) => toggle(e, vector)}>
           <summary class="row-head">
             <span class="chevron"><ChevronDown size={16} aria-hidden="true" /></span>
             <span class="row-text">

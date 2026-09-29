@@ -36,10 +36,12 @@
     width: 38px;
     height: 38px;
     padding: 0;
-    border: 0;
+    border: 1px solid var(--border);
     border-radius: 50%;
     color: var(--muted);
-    background: transparent;
+    /* Solid, so it reads as a button over whatever scrolls under it on a phone. */
+    background: #fff;
+    box-shadow: 0 2px 8px rgb(17 24 39 / 14%);
   }
   .help-button :global(svg) { width: 22px; height: 22px; }
   .help-button:hover, .help-button:focus-visible { color: var(--blue-dark); background: var(--blue-soft); }

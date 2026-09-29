@@ -126,4 +126,38 @@ export const CHEMISTRY: CatalogEntry[] = [
       'Make printable orbital diagrams for chemistry tests. Pick an element and charge and get its electron configuration drawn as arrows in boxes, following the aufbau principle, Pauli exclusion and Hund’s rule, with exceptions, noble gas cores, blanks for students and deliberate mistakes.',
     keywords: ['electron', 'configuration', 'orbital', 'orbitals', 'notation', 'box', 'boxes', 'arrows', 'spin', 'aufbau', 'hund', 'hunds', 'pauli', 'exclusion', 'sublevel', 'subshell', 'noble', 'gas', 'core', 'shorthand', 'excited', 'ground', 'state', 'ion', 'AP'],
   },
+  {
+    id: 'line-spectrum',
+    site: 'chemistry',
+    off: true,
+    name: 'Line Spectrum',
+    path: '/line-spectrum',
+    blurb: 'Bright-line or absorption spectra of elements, your own lines, or an unknown mixture.',
+    description:
+      'Make printable line spectra for chemistry tests. Stack hydrogen, helium, sodium and other elements’ strongest visible lines, or lines you type, on one wavelength scale, and add an unknown mixture of them for students to identify, as emission, absorption or print-friendly black-and-white spectra.',
+    keywords: ['line', 'spectrum', 'spectra', 'bright-line', 'bright', 'emission', 'absorption', 'atomic', 'AAS', 'spectroscope', 'spectroscopy', 'flame', 'test', 'Bohr', 'hydrogen', 'Balmer', 'element', 'elements', 'mystery', 'unknown', 'mixture', 'wavelength', 'nm', 'nanometers', 'light', 'color', 'visible', 'star', 'fingerprint', 'electron', 'energy', 'level'],
+  },
+  {
+    id: 'photoelectron-spectrum',
+    site: 'chemistry',
+    off: true,
+    name: 'Photoelectron Spectrum',
+    path: '/photoelectron-spectrum',
+    blurb: 'Any element’s photoelectron spectrum, H to Xe, one peak per sublevel.',
+    description:
+      'Make printable photoelectron spectra (PES) for AP Chemistry tests. Pick an element from H to Xe and get a peak for each sublevel, as tall as its electrons, at its binding energy in MJ/mol or eV, on a logarithmic or broken axis, with a second element to compare and labels left blank or the element hidden for students.',
+    keywords: ['PES', 'photoelectron', 'spectrum', 'spectra', 'spectroscopy', 'binding', 'energy', 'ionization', 'MJ/mol', 'eV', 'subshell', 'sublevel', 'electron', 'configuration', 'peak', 'peaks', 'core', 'valence', 'shielding', 'Coulomb', 'nuclear', 'charge', 'AP'],
+  },
+  {
+    id: 'structure-editor',
+    site: 'chemistry',
+    off: true,
+    kind: 'editor',
+    name: 'Organic Structure Editor',
+    path: '/structure-editor',
+    blurb: 'Draw an organic molecule yourself, atom by atom and bond by bond.',
+    description:
+      'Draw organic structures for chemistry tests. Drag carbon, hydrogen, oxygen and other atoms onto a grid, join them with single, double and triple bonds, and copy the finished structural formula into your worksheet.',
+    keywords: ['organic', 'structural', 'formula', 'structure', 'draw', 'drawing', 'editor', 'sketch', 'molecule', 'carbon', 'hydrocarbon', 'alkane', 'alkene', 'alkyne', 'alcohol', 'isomer', 'isomers', 'functional', 'group', 'bond', 'bonds', 'double', 'triple', 'chain'],
+  },
 ]

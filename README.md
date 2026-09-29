@@ -38,8 +38,11 @@ npm run build -w apps/math     # or just one
 Each Vercel project points at this repo with its **Root Directory** set to its
 app (table above), and keeps its own domains and environment variables
 (`CF_BEACON_TOKEN` for Cloudflare Web Analytics). Each app's `vercel.json`
-installs from the repo root and skips a build when nothing in that app,
-`packages/`, or the root package files changed.
+installs from the repo root and only deploys `main` (production) and `dev`
+(preview); pushes to other branches create no deployments. Its ignore step,
+`scripts/vercel-ignore.sh`, skips a build when nothing in that app,
+`packages/`, or the root package files changed since that project's last
+deployment on the branch.
 
 `apps/math` and `apps/physics` vendor different builds of Caret, so
 `apps/physics/vendor` stamps its copies `0.0.0-physics`, and `.npmrc` sets

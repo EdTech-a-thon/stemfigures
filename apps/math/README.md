@@ -33,6 +33,8 @@ and `docs/adr/` for decisions.
   show a function or a relation that isn't one; the panel says which, and why.
   Each side is titled (Input and Output, or text, a blank line or nothing) and
   drawn in an oval, a box or nothing.
+- `/<generator>/examples/<slug>` **Example figures** (see below), and
+  `/reuse`, how teachers may reuse them.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
@@ -40,6 +42,13 @@ Every page has the top bar: the site name, the current generator, and a
 you type, and its last card is **Request a generator**. Generators fill the
 window with no footer. The help button in the corner opens the same kind of
 email dialog.
+
+Each generator's settings column opens with a card saying what it makes and
+a Start from an example button, which loads an example figure's settings
+(`src/lib/site/GeneratorLead.svelte`); the top bar's About button opens a
+drawer with what its figures are for, what can be set, its examples and
+frequently asked questions, from `src/lib/site/generatorCopy.ts`, which also
+goes into the page's structured data.
 
 A generator's settings live in the page address, so a link opens the same
 figure, and the server renders that figure on first load (see ADR 0001).
@@ -49,7 +58,9 @@ Saved presets stay in the browser's localStorage.
 
 ```
 src/routes/            SvelteKit pages
-src/lib/site/          top bar, directory dialogs, Help, footer, SEO
+src/lib/site/          top bar, directory dialogs, Help, footer, SEO, each
+                       generator's About drawer and its words (generatorCopy.ts)
+src/lib/examples/      example figures, their answer keys and gallery
 src/lib/shared/        pieces Math's generators use: math fields and their
                        SVG layout, sections, help tips, end-cap and row-style pickers
 $shared/               ../../packages/shared: pieces shared with the other sites,
@@ -75,6 +86,48 @@ builder and preview, add its entry to `$shared/catalog/math.ts` and its preview
 to `generators/index.ts`, add its route under `src/routes/`, and retake the
 preview pictures (see `packages/shared/README.md`). The directory, search and
 sitemap pick it up from the list.
+
+## Example figures
+
+Each generator has a handful of example figures, so search engines have real
+pictures to index. Each one has:
+
+- its settings, title, alt text and caption in `src/lib/examples/examples.ts`
+  (the first of each generator is its best);
+- a static page at `/<generator>/examples/<slug>`, built by
+  `src/routes/[generator=examplegenerator]/examples/[slug]/`, with the picture,
+  its answer key (worked out by the generator's own code in
+  `src/lib/examples/details.server.ts`), an "Edit this figure" link that opens
+  the generator with those settings, and a PNG download;
+- its picture at `static/examples/<generator>/<slug>.png`, listed in
+  `sitemap.xml` as an image of both its page and its generator's page.
+
+A generator's first example is also its social card, `static/og/<generator>.png`
+(1200×630). `src/lib/examples/ExampleGallery.svelte` shows a generator's
+examples as a grid of thumbnails. Who may reuse the pictures, and how, is in
+`src/lib/examples/license.ts` and the `/reuse` page.
+
+The build fails if an example's settings aren't ones its generator keeps as
+written (a misspelled choice, measures that make no triangle), so a picture
+can't show a different figure than its page describes.
+
+### Redoing the pictures
+
+After adding or changing an example, or changing how a generator draws, take
+the pictures again. With the site running:
+
+```sh
+./scripts/agent-dev.mjs stemfigures/apps/math                          # from the workspace root; prints its address
+node scripts/snapshot-examples.mjs --app=math http://localhost:10003/  # from stemfigures/, with that address
+node scripts/snapshot-examples.mjs --app=math http://localhost:10003/ triangle   # just the examples whose page matches "triangle"
+```
+
+It opens each example's generator, exports the figure as the Download buttons
+do (about 1600 pixels on its longest side, on white), saves it and the social
+cards under `static/`, and records each picture's size in
+`src/lib/examples/sizes.json`. It needs the Chromium Playwright installs
+(`npx playwright install chromium`). Look at the pictures before committing
+them, and delete the PNG of an example you removed or renamed.
 
 ## Development
 

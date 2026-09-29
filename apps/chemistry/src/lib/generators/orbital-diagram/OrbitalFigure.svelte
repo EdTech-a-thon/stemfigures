@@ -1,7 +1,8 @@
 <script lang="ts">
   // The Orbital Diagram figure: the symbol on the left, then the noble gas
   // core and each sublevel's orbitals with their electrons as arrows, labeled
-  // under them, and the configuration line under it all. It draws whatever
+  // under them, in rows or stacked by energy, and the configuration line
+  // under it all. It draws whatever
   // diagram it's given, right or wrong.
   import FigureFrame from '$lib/shared/FigureFrame.svelte'
   import type { OrbitalFill } from './diagram'
@@ -27,6 +28,7 @@
   const layout = $derived(
     layoutFigure(diagram, {
       style: s.orbitals,
+      arrangement: s.arrangement,
       labels: s.labels,
       symbol: s.symbol,
       symbolRuns: symbolRuns(s),

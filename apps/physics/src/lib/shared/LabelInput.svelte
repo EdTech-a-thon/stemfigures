@@ -1,13 +1,14 @@
 <script lang="ts">
   // A label typed in Caret's math field (docs/adr/0003-caret-for-labels.md):
-  // "theta" → θ, "deg" → °, "_" for a subscript and "^" for a superscript.
+  // "theta" → θ, "deg" or "^o" → °, "_" for a subscript and "^" for a
+  // superscript, or Google Docs' Ctrl+, and Ctrl+. (⌘ on a Mac).
   // `value` is the label's text as it is written in the page address ("m_1").
   //
   // Caret's field drops typed spaces, so before it reads the keyboard or a
   // paste, spaces are swapped for FIELD_SPACE, a blank character it keeps.
   import { MathField } from '@caret-js/svelte'
   import type { Doc } from '@caret-js/core'
-  import { FIELD_SPACE, commands, labelFromText, labelToText, schema, typingRules } from './label'
+  import { FIELD_SPACE, SHORTCUTS, commands, labelFromText, labelToText, schema, typingRules } from './label'
 
   interface Props {
     value: string
@@ -36,11 +37,23 @@
     area.dispatchEvent(new Event('input', { bubbles: true }))
   }
 
+  // Google Docs' shortcuts for a subscript and a superscript, typed into the
+  // field as characters its commands turn into boxes.
+  function onkeydowncapture(event: KeyboardEvent) {
+    if (!(event.ctrlKey || event.metaKey) || event.altKey || event.shiftKey) return
+    const box = event.key === '.' || event.code === 'Period' ? 'superscript' : event.key === ',' || event.code === 'Comma' ? 'subscript' : null
+    if (!box || !(event.target instanceof HTMLTextAreaElement)) return
+    event.preventDefault()
+    event.stopPropagation()
+    event.target.value = ZERO_WIDTH + SHORTCUTS[box]
+    event.target.dispatchEvent(new Event('input', { bubbles: true }))
+  }
+
   const classify = (doc: Doc<any>) =>
     new Map((doc.root.tokens as any[]).filter((t) => t.props?.char === FIELD_SPACE).map((t) => [t.id, 'label-space']))
 </script>
 
-<div class="label-input" {oninputcapture} {onpastecapture}>
+<div class="label-input" {oninputcapture} {onpastecapture} {onkeydowncapture}>
   <MathField {schema} bind:value fromText={labelFromText} toText={labelToText} {typingRules} {commands} {classify} {...rest} />
 </div>
 

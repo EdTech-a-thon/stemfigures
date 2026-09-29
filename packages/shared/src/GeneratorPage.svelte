@@ -5,12 +5,14 @@
   // column's width in rem on wide screens, so a generator with long settings
   // can take more room from the figure, or give it back. `inputs`, when given,
   // is a card of its own between the presets and the settings groups, for
-  // what the teacher types first (Math's equations). What prints is just the
-  // figure, `printWidth` inches wide, or fitted into `printWidth` by
-  // `printHeight` inches when a height is given.
+  // what the teacher types first (Math's equations). A site can put a card of
+  // its own at the top and move presets to the bottom (see generatorLead).
+  // What prints is just the figure, `printWidth` inches wide, or fitted into
+  // `printWidth` by `printHeight` inches when a height is given.
   import type { Snippet } from 'svelte'
   import FigureCanvas from './FigureCanvas.svelte'
   import Presets from './Presets.svelte'
+  import { getGeneratorLead } from './generatorLead'
   import type { generatorState } from './generatorState.svelte'
   import type { LabelSize } from './labelSize'
 
@@ -32,7 +34,15 @@
   let {
     name, filename, gen, svg, settingsWidth = 24, printWidth = 7.5, printHeight, labelSize = $bindable(), inputs, settings, figure,
   }: Props = $props()
+
+  const Lead = getGeneratorLead()
 </script>
+
+{#snippet presets()}
+  <div class="card">
+    <Presets store={gen.presets} same={gen.same} settings={gen.snapshot()} onapply={gen.apply} />
+  </div>
+{/snippet}
 
 <div
   class="generator"
@@ -46,11 +56,14 @@
   <aside class="settings-side no-print">
     <!-- The top bar shows the name; this keeps the page's heading for screen readers. -->
     <h1 class="visually-hidden">{name}</h1>
-    <div class="card">
-      <Presets store={gen.presets} same={gen.same} settings={gen.snapshot()} onapply={gen.apply} />
-    </div>
+    {#if Lead}
+      <div class="card"><Lead apply={(next) => gen.apply(next as S)} /></div>
+    {:else}
+      {@render presets()}
+    {/if}
     {#if inputs}<div class="card">{@render inputs()}</div>{/if}
     <div class="card">{@render settings()}</div>
+    {#if Lead}{@render presets()}{/if}
   </aside>
 </div>
 

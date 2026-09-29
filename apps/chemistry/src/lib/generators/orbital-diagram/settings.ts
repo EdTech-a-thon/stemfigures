@@ -30,6 +30,10 @@ export type ArrowStyle = (typeof ARROW_STYLES)[number]
 export const ORBITAL_STYLES = ['squares', 'lines'] as const
 export type OrbitalStyle = (typeof ORBITAL_STYLES)[number]
 
+/** The sublevels side by side in rows, or stacked by energy. */
+export const ARRANGEMENTS = ['row', 'energy'] as const
+export type Arrangement = (typeof ARRANGEMENTS)[number]
+
 /** Text on the figure: written out, a blank line for students, or none. */
 export const TEXT_MODES = ['text', 'blank', 'none'] as const
 export type TextMode = (typeof TEXT_MODES)[number]
@@ -43,6 +47,7 @@ export const orbitalSettings = defineSettings(
     core: bool(false),
     arrows: choice(ARROW_STYLES, 'full'),
     orbitals: choice(ORBITAL_STYLES, 'squares'),
+    arrangement: choice(ARRANGEMENTS, 'row'),
     symbol: choice(TEXT_MODES, 'text'),
     labels: choice(TEXT_MODES, 'text'),
     electrons: bool(true),
@@ -134,5 +139,6 @@ export function figureLabel(s: OrbitalSettings): string {
   const labels = s.labels === 'blank' ? ' Sublevel labels are blank.' : ''
   const line =
     s.configLine === 'text' ? ` Written under it: ${drawnConfigurationText(s)}.` : s.configLine === 'blank' ? ' A blank line for the configuration.' : ''
-  return `An orbital diagram${who}:${core} ${orbitals}.${labels}${line}`
+  const stacked = s.arrangement === 'energy' ? ', its sublevels stacked by energy' : ''
+  return `An orbital diagram${who}${stacked}:${core} ${orbitals}.${labels}${line}`
 }
