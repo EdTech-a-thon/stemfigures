@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { decodeLabel, encodeLabel, italicPieces, labelFromText, labelRuns, labelToText, typeLabel, type Label } from './label'
+import { Editor } from '@caret-js/core'
+import { SHORTCUTS, commands, decodeLabel, encodeLabel, italicPieces, labelFromText, labelRuns, labelToText, schema, typeLabel, typingRules, type Label } from './label'
 
 describe('typing a label', () => {
   test.each([
@@ -28,10 +29,46 @@ describe('label text for the page address', () => {
     ['2.0 m/s^2', '2.0 m/s^2'],
     ['x^{-1}', 'x^{-1}'],
     ['Δx', 'Deltax'],
+    ['30^o', '30deg'],
+    ['E^{o}', 'Edeg'],
+    ['x^2', 'x^2'],
   ])('%s', (text, expected) => {
     const once = labelToText(labelFromText(text))
     expect(once).toBe(expected)
     expect(labelToText(labelFromText(once))).toBe(once)
+  })
+})
+
+describe('typing in the field', () => {
+  const SUP = SHORTCUTS.superscript
+  const SUB = SHORTCUTS.subscript
+  const typed = (keys: string, start = '') => {
+    const editor = new Editor<any>(schema, { typingRules, commands })
+    editor.load(labelFromText(start))
+    editor.type(keys)
+    return labelToText(editor.doc)
+  }
+
+  test.each([
+    ['30^o', '30deg'],
+    ['30^oC', '30degC'],
+    ['x^2', 'x^2'],
+    ['F_N', 'F_N'],
+    // Google Docs' Ctrl+. and Ctrl+, switch a box on, and off again.
+    [`x${SUP}2${SUP}+1`, 'x^2+1'],
+    [`v${SUB}0${SUB}t`, 'v_0t'],
+    [`F${SUB}N${SUP}2`, 'F_N^2'],
+    [`30${SUP}o${SUP}C`, '30degC'],
+  ])('%s', (keys, text) => {
+    expect(typed(keys)).toBe(text)
+  })
+
+  test('a shortcut with text selected puts the selection in the box', () => {
+    const editor = new Editor<any>(schema, { typingRules, commands })
+    editor.load(labelFromText('Fair'))
+    editor.select({ strandId: '[ROOT]', anchorIndex: 1, headIndex: 4 })
+    editor.type(`${SUB}x`)
+    expect(labelToText(editor.doc)).toBe('F_{air}x')
   })
 })
 
@@ -95,6 +132,7 @@ describe('italics', () => {
     expect(italic('4Ω')).toEqual([])
     expect(italic('I = 2 A')).toEqual(['I'])
     expect(italic('V = 5 N')).toEqual(['V'])
+    expect(italic('T = 30°C')).toEqual(['T'])
     // With no space it's still a product of quantities.
     expect(italic('2mg')).toEqual(['mg'])
     expect(italic('R_x')).toEqual(['R', 'x'])
