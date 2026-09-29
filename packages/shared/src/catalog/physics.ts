@@ -78,6 +78,7 @@ export const PHYSICS: CatalogEntry[] = [
   {
     id: 'spring-scale',
     site: 'physics',
+    alsoOn: ['chemistry'],
     name: 'Spring Scale Generator',
     path: '/spring-scale',
     blurb: 'A spring scale with its pointer at any force, for reading practice.',
