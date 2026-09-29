@@ -126,4 +126,14 @@ export const CHEMISTRY: CatalogEntry[] = [
       'Make printable orbital diagrams for chemistry tests. Pick an element and charge and get its electron configuration drawn as arrows in boxes, following the aufbau principle, Pauli exclusion and Hund’s rule, with exceptions, noble gas cores, blanks for students and deliberate mistakes.',
     keywords: ['electron', 'configuration', 'orbital', 'orbitals', 'notation', 'box', 'boxes', 'arrows', 'spin', 'aufbau', 'hund', 'hunds', 'pauli', 'exclusion', 'sublevel', 'subshell', 'noble', 'gas', 'core', 'shorthand', 'excited', 'ground', 'state', 'ion', 'AP'],
   },
+  {
+    id: 'photoelectron-spectrum',
+    site: 'chemistry',
+    name: 'Photoelectron Spectrum',
+    path: '/photoelectron-spectrum',
+    blurb: 'Any element’s photoelectron spectrum, H to Xe, one peak per sublevel.',
+    description:
+      'Make printable photoelectron spectra (PES) for AP Chemistry tests. Pick an element from H to Xe and get a peak for each sublevel, as tall as its electrons, at its binding energy in MJ/mol or eV, on a logarithmic or broken axis, with a second element to compare and labels left blank or the element hidden for students.',
+    keywords: ['PES', 'photoelectron', 'spectrum', 'spectra', 'spectroscopy', 'binding', 'energy', 'ionization', 'MJ/mol', 'eV', 'subshell', 'sublevel', 'electron', 'configuration', 'peak', 'peaks', 'core', 'valence', 'shielding', 'Coulomb', 'nuclear', 'charge', 'AP'],
+  },
 ]
