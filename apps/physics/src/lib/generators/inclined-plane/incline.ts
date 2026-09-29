@@ -5,7 +5,7 @@
 
 import type { Point } from '$lib/shared/field'
 import { labelRuns, type Label } from '$lib/shared/label'
-import { objectHeight, objectWidth, type ObjectKind } from '$lib/shared/objects'
+import { objectHeight, objectLabelHeight, objectWidth, type ObjectKind } from '$lib/shared/objects'
 import { labelPoint, type LabeledVector, type Segment } from '$lib/shared/vector'
 import type { InclineSettings } from './settings'
 
@@ -42,6 +42,8 @@ export interface InclineFigure {
     at: Point
     tilt: number
     middle: Point
+    /** Where its label goes (the middle of its body). */
+    labelAt: Point
     height: number
     width: number
   }
@@ -207,7 +209,7 @@ function layout(s: InclineSettings, base: number): InclineFigure {
     width: WIDTH,
     height: HEIGHT,
     ramp: { foot, corner, top },
-    object: { kind, size: s.objectSize, at, tilt: -s.angle, middle, height: oh, width: ow },
+    object: { kind, size: s.objectSize, at, tilt: -s.angle, middle, labelAt: along(at, objectLabelHeight(kind, s.objectSize), n), height: oh, width: ow },
     arc,
     angleLabelAt,
     lengthMark,
@@ -236,7 +238,7 @@ function shifted(f: InclineFigure, dx: number, dy: number): InclineFigure {
   return {
     ...f,
     ramp: { foot: p(f.ramp.foot), corner: p(f.ramp.corner), top: p(f.ramp.top) },
-    object: { ...f.object, at: p(f.object.at), middle: p(f.object.middle) },
+    object: { ...f.object, at: p(f.object.at), middle: p(f.object.middle), labelAt: p(f.object.labelAt) },
     arc: f.arc, // drawn relative to the foot
     angleLabelAt: p(f.angleLabelAt),
     lengthMark: f.lengthMark && sg(f.lengthMark),

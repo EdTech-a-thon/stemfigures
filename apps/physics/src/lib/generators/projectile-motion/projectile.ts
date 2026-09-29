@@ -7,8 +7,8 @@
 //
 // The path is worked out with v₀ = 1 and g = 1, so a cliff height is in units
 // of v₀²/g. The ball's middle follows the path. On level ground it starts and
-// lands with its middle on the ground line; from a cliff it starts resting on
-// the edge, its middle the cliff's height above the line.
+// lands with its middle on the ground line; from a cliff it starts centered on
+// the cliff's top corner, its middle the cliff's height above the line.
 
 import { labelRuns, type Label } from '$lib/shared/label'
 import { objectHeight } from '$lib/shared/objects'
@@ -103,9 +103,9 @@ function layout(s: ProjectileSettings, k: number): ProjectileFigure {
   const kind = s.object as 'ball' | 'dot'
   const r = kind === 'ball' ? objectHeight('ball', s.objectSize) / 2 : DOT_R
 
-  // On the ground line, or resting on the cliff with its front at the edge.
-  const launch = pt(cliff ? -r : 0, -h * k)
-  const top = launch.y + r
+  // On the ground line, or centered on the cliff's top corner.
+  const launch = pt(0, -h * k)
+  const top = launch.y
   const flight = sin + Math.sqrt(sin * sin + 2 * h)
   const at = (t: number) => pt(launch.x + k * cos * t, launch.y - k * (sin * t - (t * t) / 2))
   const landing = at(flight)

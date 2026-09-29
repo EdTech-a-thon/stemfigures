@@ -26,6 +26,8 @@ const TABLE_LEFT = 50
 const TABLE_EDGE = 400
 const TABLE_THICK = 16
 const LEG = 14
+/** The gap between the table's edge and its pulley, bridged by the bracket. */
+const BRACKET_GAP = 14
 /** How far below the wheel a hanging object's top is, when there's room. */
 const HANG_DROP = 110
 const MAX_RAMP_BASE = 380
@@ -177,7 +179,7 @@ function table(s: PulleySettings): PulleyFigure {
   const tableTop = Math.max(TABLE_TOP, FIT_MARGIN + ha + aboveFor(s))
   const stringY = tableTop - ha / 2
   const r = WHEEL_R
-  const wheel: Wheel = { cx: TABLE_EDGE + r * 0.6, cy: stringY + r, r }
+  const wheel: Wheel = { cx: TABLE_EDGE + BRACKET_GAP + r, cy: stringY + r, r }
   const a = resting('a', kind, s.aSize, pt(TABLE_EDGE - 90 - wa / 2, tableTop), 0, { x: 0, y: -1 })
   const b = hangBelow('b', wheel, s.bSize, belowFor(s))
   // And the floor drops (the figure growing) when the hanging object still needs more room.

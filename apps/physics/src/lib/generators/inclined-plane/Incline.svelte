@@ -54,7 +54,7 @@
   </g>
 
   <FigureLabel label={settings.angleLabel} x={mx(fig.angleLabelAt.x)} y={fig.angleLabelAt.y + SIZE * 0.35} size={SIZE} color={p.ink} />
-  <FigureLabel label={settings.objectLabel} x={mx(fig.object.middle.x)} y={fig.object.middle.y + SIZE * 0.35} size={SIZE} color={p.ink} halo={false} blank={30} />
+  <FigureLabel label={settings.objectLabel} x={mx(fig.object.labelAt.x)} y={fig.object.labelAt.y + SIZE * 0.35} size={SIZE} color={p.ink} halo={false} blank={30} />
   {#each fig.vectors as v}
     <FigureLabel label={v.label} x={mx(v.labelAt.x)} y={v.labelAt.y + SIZE * 0.35} size={SIZE} color={p.vector} />
   {/each}

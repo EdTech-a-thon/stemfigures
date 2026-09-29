@@ -55,8 +55,9 @@ describe('the path', () => {
     const f = make({ start: 'cliff', angle: 30, positions: 2 })
     expect(f.landing.y).toBeCloseTo(f.ground.y1, 1)
     expect(f.landing.x).toBeGreaterThan(f.cliff![3].x)
-    // The ball starts on the cliff's top, at its edge.
-    expect(f.cliff![2].y - f.launch.y).toBeCloseTo(f.object.r, 1)
+    // The ball starts centered on the cliff's top corner.
+    expect(f.launch.x).toBeCloseTo(f.cliff![2].x)
+    expect(f.launch.y).toBeCloseTo(f.cliff![2].y)
   })
 
   test('a horizontal launch has no peak, and drops as the square of the distance', () => {
