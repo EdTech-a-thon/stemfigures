@@ -146,4 +146,15 @@ export const CHEMISTRY: CatalogEntry[] = [
       'Make printable photoelectron spectra (PES) for AP Chemistry tests. Pick an element from H to Xe and get a peak for each sublevel, as tall as its electrons, at its binding energy in MJ/mol or eV, on a logarithmic or broken axis, with a second element to compare and labels left blank or the element hidden for students.',
     keywords: ['PES', 'photoelectron', 'spectrum', 'spectra', 'spectroscopy', 'binding', 'energy', 'ionization', 'MJ/mol', 'eV', 'subshell', 'sublevel', 'electron', 'configuration', 'peak', 'peaks', 'core', 'valence', 'shielding', 'Coulomb', 'nuclear', 'charge', 'AP'],
   },
+  {
+    id: 'structure-editor',
+    site: 'chemistry',
+    kind: 'editor',
+    name: 'Organic Structure Editor',
+    path: '/structure-editor',
+    blurb: 'Draw an organic molecule yourself, atom by atom and bond by bond.',
+    description:
+      'Draw organic structures for chemistry tests. Drag carbon, hydrogen, oxygen and other atoms onto a grid, join them with single, double and triple bonds, and copy the finished structural formula into your worksheet.',
+    keywords: ['organic', 'structural', 'formula', 'structure', 'draw', 'drawing', 'editor', 'sketch', 'molecule', 'carbon', 'hydrocarbon', 'alkane', 'alkene', 'alkyne', 'alcohol', 'isomer', 'isomers', 'functional', 'group', 'bond', 'bonds', 'double', 'triple', 'chain'],
+  },
 ]

@@ -1,0 +1,479 @@
+// The words under each generator: what its figures show and how teachers use
+// them, what can be set, and questions teachers ask, for the section below
+// the figure (GeneratorAbout) and the page's structured data. Everything here
+// should be true of the generator's code; check it when a generator changes.
+// Plain text only: the same strings go into JSON-LD.
+
+export interface Faq {
+  q: string
+  a: string
+}
+
+export interface GeneratorCopy {
+  /** the section's visible heading */
+  heading: string
+  /** one or two short paragraphs */
+  intro: string[]
+  /** "What you can set", one line each */
+  settings: string[]
+  faqs: Faq[]
+  /** what the generator's social card image (/og/<id>.png) shows */
+  imageAlt: string
+  /** schema.org educationalLevel */
+  educationalLevel: string[]
+}
+
+export const COPY: Record<string, GeneratorCopy> = {
+  'volume-reading': {
+    heading: 'Graduated cylinder, buret and beaker figures',
+    intro: [
+      'Volume Reading draws a graduated cylinder, a 50 mL buret or a beaker holding the volume you type, with the meniscus drawn so students read the volume at its bottom. On the cylinder and the buret, readings go one digit past the smallest mark (the estimated digit), so the same figure works for reading glassware and for significant figures. A beaker, with its coarse marks, is read to the whole mL.',
+      'Teachers use it for measurement questions on tests, worksheets and lab practicals. Add a magnified view of the scale around the meniscus so the marks stay readable in print, and turn on the answer key to print the reading under the figure for your key.',
+    ],
+    settings: [
+      'Instrument: a 10, 25, 50, 100, 250 or 1000 mL graduated cylinder, a 50 mL buret, or a 50, 250 or 600 mL beaker',
+      'The reading, typed or picked at random',
+      'Liquid color: gray, which photocopies well, or blue, red or green',
+      'A magnifier beside the instrument or in place of it, spanning 1 to 6 numbered marks',
+      'A chart title, and an answer key line with the reading',
+    ],
+    faqs: [
+      {
+        q: 'How do you read a graduated cylinder?',
+        a: 'Read at the bottom of the meniscus, with your eye level with it. Work out what each small mark is worth, find the last mark below the meniscus, then estimate one more digit between marks. On a 100 mL cylinder marked every 1 mL, that means reading to 0.1 mL, like 43.6 mL.',
+      },
+      {
+        q: 'Why does a buret read from the top down?',
+        a: 'A buret measures the liquid let out through its stopcock, so 0 is at the top and the numbers grow downward to 50 mL. It is marked every 0.1 mL, so students read it to 0.01 mL at the bottom of the meniscus.',
+      },
+      {
+        q: 'Can a beaker be read as precisely as a graduated cylinder?',
+        a: 'No. A beaker is marked only every 10, 25 or 50 mL, depending on its size, so it is read to the whole mL. Putting a beaker and a graduated cylinder side by side makes a good question on precision.',
+      },
+      {
+        q: 'Can I show just the magnified view?',
+        a: 'Yes. Under Magnifier, choose Magnifier only to show just the enlarged stretch of scale around the meniscus, or Instrument only to leave the magnifier out.',
+      },
+    ],
+    imageAlt: 'A printable graduated cylinder figure with a magnified view of the meniscus, made with Volume Reading',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'volume-by-displacement': {
+    heading: 'Water displacement figures for finding an object’s volume',
+    intro: [
+      'Volume by Displacement draws the same graduated cylinder twice, side by side: before and after an object is dropped in. You type the before and after readings, and students read both and subtract to find the displaced volume, which is the object’s volume.',
+      'It suits density units and irregular-solid labs. Mass Reading can put the same marbles, rock, cube or metal cylinder on a balance, so a pair of figures gives students the mass and the volume they need to work out density. Turn on the answer key to print both readings and the object’s volume under the figure.',
+    ],
+    settings: [
+      'Graduated cylinder: 10, 25, 50 or 100 mL',
+      'The before and after readings, typed or picked at random (the after reading is always higher)',
+      'The object: 1 to 5 marbles, a rock, a cube or a metal cylinder',
+      'Liquid color: gray, blue, red or green',
+      'A magnifier beside each cylinder, spanning 1 to 6 numbered marks',
+      'The caption under each cylinder (Before and After unless you change them), a chart title, and an answer key line',
+    ],
+    faqs: [
+      {
+        q: 'How do you find an object’s volume by water displacement?',
+        a: 'Read the water level before the object goes in, then after. The after reading minus the before reading is the displaced volume, which equals the object’s volume. For example, 32.0 mL before and 38.5 mL after gives 6.5 mL, or 6.5 cm³.',
+      },
+      {
+        q: 'Is the object drawn to scale?',
+        a: 'No. It is drawn at a plausible size rather than exactly to its volume, always resting on the bottom and fully under water. If there is too little water to cover it, it is drawn smaller; raising the readings fixes that.',
+      },
+      {
+        q: 'Can I make a density question with this?',
+        a: 'Yes. Make the displacement figure, then open Mass Reading and put the same object on a balance; it is drawn alike in both. Students find the volume from one figure and the mass from the other, then divide mass by volume.',
+      },
+      {
+        q: 'Why are there no 250 mL or 1000 mL cylinders?',
+        a: 'A displacement question needs the smaller cylinders, so this generator offers 10, 25, 50 and 100 mL. Volume Reading has the 250 and 1000 mL cylinders for a single reading.',
+      },
+    ],
+    imageAlt: 'A printable water displacement figure: two graduated cylinders, before and after an object is dropped in, made with Volume by Displacement',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'gas-syringe': {
+    heading: 'Gas syringe figures for collecting gas',
+    intro: [
+      'Gas Syringe draws a 50 or 100 cm³ glass gas syringe lying on its side, with the plunger pushed out to the volume of gas you type. Students read the volume at the plunger’s flat face, to 0.1 cm³, one digit past its 1 cm³ marks.',
+      'Show the syringe alone, or set up to collect gas from a reaction: a conical flask with a bung and delivery tube, a rubber sleeve joining the tube to the nozzle, and a stand clamping the barrel. Teachers use it for rate of reaction questions, where students read the volume of gas collected, and for questions on reading lab apparatus.',
+    ],
+    settings: [
+      'The syringe alone, or set up with a conical flask, delivery tube and stand',
+      'Size: 50 or 100, with the scale in cm³ or mL',
+      'The volume of gas, typed or picked at random',
+      'A magnifier above the syringe or in place of it, spanning 1 to 6 numbered marks',
+      'A chart title, and an answer key line with the volume',
+    ],
+    faqs: [
+      {
+        q: 'How do you read a gas syringe?',
+        a: 'Read the scale at the flat face of the plunger, the end nearest the nozzle, not at its knob. The syringe is marked every 1 cm³ and numbered every 10, so read to the last mark and estimate one more digit, like 37.4 cm³.',
+      },
+      {
+        q: 'Should the scale be in cm³ or mL?',
+        a: 'Either: 1 cm³ is the same as 1 mL, so changing the unit relabels the scale without changing the reading. Pick whichever your course uses.',
+      },
+      {
+        q: 'Why do the 50 and 100 cm³ syringes look the same length?',
+        a: 'Both are drawn the same length so the scale stays easy to read; the 50 cm³ syringe is drawn thinner.',
+      },
+      {
+        q: 'Can I show the syringe connected to a reaction flask?',
+        a: 'Yes. Choose the setup under Syringe to draw a conical flask of liquid with a bung and delivery tube, a rubber sleeve joining the tube to the syringe’s nozzle, and a stand clamping the barrel.',
+      },
+    ],
+    imageAlt: 'A printable gas syringe figure with a magnified view of the scale at the plunger, made with Gas Syringe',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'length-reading': {
+    heading: 'Ruler figures for measuring length',
+    intro: [
+      'Length Reading draws a centimeter or inch ruler with an object lying along it: marbles, a rock, a cube or a metal cylinder. You type the object’s length and where its left end sits, and students measure it from the ruler, either lined up with 0 or starting partway along so they have to read both ends and subtract.',
+      'On a metric ruler, lengths can go one estimated digit past the smallest mark, for significant figures practice, or land on the nearest mark. An inch ruler is read in fractions of an inch. Magnifiers on the object’s ends keep the marks readable in print, and the answer key prints the length, and both ends when the object doesn’t start at 0.',
+    ],
+    settings: [
+      'A metric ruler, 15, 20, 30, 50 or 100 cm long, marked every 1 mm, 0.5 cm or 1 cm (or 5 or 10 cm on the long ones)',
+      'An inch ruler, 6, 8, 12 or 20 in long, marked every 1, 1/2, 1/4, 1/8 or 1/16 in',
+      'Metric lengths read to one estimated digit or to the nearest mark',
+      'The object’s length and left end, typed, picked at random, or set by dragging the object along the ruler',
+      'The object: 1 to 5 marbles in a row, a rock, a cube or a metal cylinder, with dashed lines down from its ends if you like',
+      'Magnifiers on its ends, a chart title, and an answer key line',
+    ],
+    faqs: [
+      {
+        q: 'How do you measure with a ruler to the right number of significant figures?',
+        a: 'Read to the smallest mark, then estimate one more digit. On a ruler marked in millimeters, that means reading to 0.01 cm, like 4.37 cm. On a ruler marked only every centimeter, read to 0.1 cm.',
+      },
+      {
+        q: 'Can the object start somewhere other than 0?',
+        a: 'Yes. Type where its left end sits, or drag the object along the ruler in the figure. Students then read both ends and subtract, and the answer key gives both ends as well as the length.',
+      },
+      {
+        q: 'What are the dashed lines at the object’s ends for?',
+        a: 'A marble or a rock touches the ruler below its widest point, so its ends sit above the marks they line up with. The dashed lines drop from each end down to the ruler to show where to read.',
+      },
+      {
+        q: 'Can I make inch ruler questions with fractions?',
+        a: 'Yes. Choose Imperial (in). Lengths land on a mark and are read as fractions of an inch, down to 1/16 in on the finest ruler.',
+      },
+    ],
+    imageAlt: 'A printable ruler figure with an object lying along it and magnified views of its ends, made with Length Reading',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'mass-reading': {
+    heading: 'Triple beam balance and digital balance figures',
+    intro: [
+      'Mass Reading draws a triple beam balance or a digital balance showing the mass you type. On the triple beam balance the three riders are placed for that mass, and students add up the 100 g, 10 g and 0–10 g beams, reading to 0.01 g. A digital balance shows the mass to 1, 2, 3 or 4 decimal places; at 3 or 4 places it is drawn as an analytical balance inside a draft shield.',
+      'Put a weigh boat or a beaker on the digital balance’s pan, or one of the objects from Volume by Displacement (marbles, a rock, a cube or a metal cylinder) on either balance, so a mass figure and a volume figure together make a density question. The answer key prints the reading under the figure.',
+    ],
+    settings: [
+      'A triple beam balance, weighing up to 610 g and read to 0.01 g',
+      'A digital balance showing 1 decimal place (up to 1000 g), 2 places (up to 400 g), or 3 or 4 places as an analytical balance (up to 200 g)',
+      'On the pan: nothing, a weigh boat or a beaker (digital balance), or 1 to 5 marbles, a rock, a cube or a metal cylinder',
+      'The mass, typed or picked at random',
+      'For the triple beam balance, a magnifier on its front beam, or the beams alone',
+      'A chart title, and an answer key line with the mass',
+    ],
+    faqs: [
+      {
+        q: 'How do you read a triple beam balance?',
+        a: 'Add the positions of the three riders: one on a beam marked in 100 g steps, one on a beam marked in 10 g steps, and one that slides along a beam marked every 0.1 g from 0 to 10 g. Estimate one more digit on that last beam, so a reading looks like 347.26 g.',
+      },
+      {
+        q: 'Why does the balance look different at 3 and 4 decimal places?',
+        a: 'A balance that reads to 0.001 g or 0.0001 g is an analytical balance, which sits inside a glass draft shield so air currents don’t disturb the reading. The generator draws one when you pick 3 or 4 decimal places.',
+      },
+      {
+        q: 'Is the last digit on a digital balance estimated?',
+        a: 'No. A digital balance’s reading is exactly what its display shows, so students copy every digit, including trailing zeros. On the triple beam balance the last digit is estimated.',
+      },
+      {
+        q: 'Can I weigh the same object I used in a displacement figure?',
+        a: 'Yes. Pick the same marbles, rock, cube or metal cylinder under On the pan. It is drawn alike in both generators, so students can find its mass here and its volume in Volume by Displacement, then work out its density.',
+      },
+    ],
+    imageAlt: 'A printable triple beam balance figure with its riders placed for a mass, made with Mass Reading',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'temperature-reading': {
+    heading: 'Thermometer figures in °C, K and °F',
+    intro: [
+      'Temperature Reading draws a liquid-in-glass thermometer or a digital thermometer showing the temperature you type, in Celsius, Kelvin or Fahrenheit. On the liquid-in-glass thermometer students read the flat top of the colored column against marks every 1 °C, 1 K or 2 °F, estimating to 0.1, with an optional magnified view of the scale around the reading.',
+      'The digital thermometer is a handheld meter wired to a steel probe standing in a beaker, showing 0, 1 or 2 decimal places. Changing the unit converts the reading, so the same temperature can be shown in °C, K and °F for unit conversion practice, alongside questions on reading instruments in labs.',
+    ],
+    settings: [
+      'A liquid-in-glass thermometer from −10 to 110 °C, 260 to 390 K, or 10 to 230 °F, with red, blue or gray liquid',
+      'A digital probe thermometer from −50 to 150 °C (or the same range in K or °F), showing 0 to 2 decimal places',
+      'The temperature, typed or picked at random',
+      'A magnifier beside the liquid-in-glass thermometer or in place of it',
+      'A chart title, and an answer key line with the temperature',
+    ],
+    faqs: [
+      {
+        q: 'How do you read a liquid-in-glass thermometer?',
+        a: 'Read at the flat top of the liquid column, with your eye level with it. Find the last mark below the top, then estimate one more digit: on a thermometer marked every 1 °C, read to 0.1 °C, like 23.4 °C.',
+      },
+      {
+        q: 'Why is the Fahrenheit thermometer marked every 2 °F?',
+        a: 'There isn’t room for 1 °F marks over the thermometer’s range, so it is marked every 2 °F. Readings are still estimated to 0.1 °F.',
+      },
+      {
+        q: 'Why is Kelvin written K and not °K?',
+        a: 'The kelvin is an absolute unit, written K with no degree sign. The generator writes it that way on the scale and in the answer key.',
+      },
+      {
+        q: 'Does changing the unit change the temperature?',
+        a: 'No. Changing between °C, K and °F converts the reading you typed, so the thermometer shows the same temperature in the new unit.',
+      },
+    ],
+    imageAlt: 'A printable liquid-in-glass thermometer figure with a magnified view of the scale, made with Temperature Reading',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'ph-reading': {
+    heading: 'pH meter and pH paper figures',
+    intro: [
+      'pH Reading draws a pH meter wired to a glass electrode standing in a beaker, or a strip of pH paper above its color chart, showing the pH you type. A digital pH meter shows 1 or 2 decimal places. An analog meter swings a needle over a dial from 0 to 14, marked every 0.2 and read to 0.01, with an optional magnified view of the dial.',
+      'The pH paper is universal indicator paper: its wet end turns the color of the reading, and students match it to the chart’s swatch for each whole pH from 0 to 14. Teachers use these figures in acids and bases units, indicator labs, and questions comparing how precisely each instrument reads.',
+    ],
+    settings: [
+      'Instrument: a digital pH meter, an analog pH meter, or pH paper with its color chart',
+      'Decimal places on the digital meter: 1 or 2',
+      'The pH, from 0 to 14, typed or picked at random',
+      'A magnifier beside the analog meter’s dial or in place of it',
+      'A chart title, and an answer key line with the pH',
+    ],
+    faqs: [
+      {
+        q: 'Is pH paper the same as litmus paper?',
+        a: 'No. Litmus only tells an acid from a base. Universal indicator paper, which this figure shows, turns a range of colors, so the pH can be read to the whole number from its color chart.',
+      },
+      {
+        q: 'Will the pH paper figure work in black and white?',
+        a: 'No. Students match the strip’s color to the chart, so print it in color or show it on a slide. The pH meters are read from numbers and a needle, not color.',
+      },
+      {
+        q: 'How do you read an analog pH meter?',
+        a: 'The dial is numbered every 1 and marked every 0.2. Find the last mark the needle has passed, then estimate where it sits in the next 0.2 and read to 0.01, like 6.47.',
+      },
+      {
+        q: 'How precise is each instrument?',
+        a: 'The digital meter shows 1 or 2 decimal places, the analog meter is read to 0.01 with the last digit estimated, and pH paper is read to the whole number.',
+      },
+    ],
+    imageAlt: 'A printable pH meter figure with its electrode in a beaker, made with pH Reading',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'titration-curve': {
+    heading: 'Acid–base titration curves',
+    intro: [
+      'Titration Curve graphs the pH in the flask against the volume of titrant added, for a strong or weak acid titrated with NaOH, or a strong or weak base titrated with HCl. Give it the molarities, the volume in the flask and the pKa or pKb, and it solves the pH at every volume exactly, so a weak acid’s half-equivalence point lands on its pKa. Or type just the starting pH, the equivalence point’s volume and pH, and the ending pH, and it draws a real titration curve bent to pass through them.',
+      'Teachers use it for AP Chemistry and general chemistry questions on equivalence points, buffers and pKa. Mark the equivalence and half-equivalence points with a dot, with dashed lines to the axes, and with a label or a blank line for students to fill in, then set the titles, axes and gridlines to match the rest of your test.',
+    ],
+    settings: [
+      'What’s titrated: a strong acid, weak acid, strong base or weak base',
+      'A common titration in one step: HCl, CH₃COOH, HCOOH or HF with NaOH, or NaOH or NH₃ with HCl (25.0 mL of 0.100 M, with 0.100 M)',
+      'The curve from concentrations (molarities, volume, and pKa or pKb) or from key points (starting, equivalence and ending pH)',
+      'The equivalence and half-equivalence points marked with a dot, a dot with lines to the axes, or not at all, each with a label, a blank line or nothing',
+      'The curve’s color, the chart and axis titles (or blank lines), the axis ranges and numbering, gridlines, and label size',
+    ],
+    faqs: [
+      {
+        q: 'Where is the half-equivalence point on a titration curve?',
+        a: 'Halfway to the equivalence point’s volume. For a weak acid, the pH there equals the pKa; for a weak base, it equals 14 − pKb. The generator marks it only for weak acids and bases.',
+      },
+      {
+        q: 'Why isn’t the equivalence point at pH 7 for a weak acid?',
+        a: 'At the equivalence point of a weak acid with NaOH, the flask holds the acid’s conjugate base, which makes the solution basic, so the pH is above 7. For a weak base with HCl it is below 7. Only a strong acid with a strong base reaches pH 7 there.',
+      },
+      {
+        q: 'Can I draw a curve through the pH values from a textbook or lab?',
+        a: 'Yes. Choose Key points and type the starting pH, the equivalence point’s volume and pH, and the ending pH. The curve is the real titration that comes closest, stretched to pass through your points, and a note says if it misses one.',
+      },
+      {
+        q: 'What’s the difference between the equivalence point and the end point?',
+        a: 'The equivalence point is where the titrant added has exactly neutralized the analyte, in the middle of the steep part of the curve. The end point is where an indicator changes color, which should be close to it. The generator marks the equivalence point.',
+      },
+      {
+        q: 'Can it draw polyprotic acids?',
+        a: 'No. It draws one monoprotic acid or base titrated with a strong base or acid, so each curve has one equivalence point.',
+      },
+    ],
+    imageAlt: 'A printable acid–base titration curve with its equivalence point marked, made with Titration Curve',
+    educationalLevel: ['High school', 'AP Chemistry'],
+  },
+
+  'particle-diagram': {
+    heading: 'Particle diagrams of atoms, ions and molecules',
+    intro: [
+      'Particle Diagram draws the particulate-level pictures used in AP Chemistry: atoms, ions and molecules scattered at random in a box, for a gas, liquid or solution, or packed in a lattice, for a solid. Choose up to four kinds of particle and how many of each. Each atom has a size and a gray shade, an ion carries its charge written in its middle, and a molecule is a center atom with outer atoms touching it, in shapes like Cl₂, H₂O or CCl₄.',
+      'Scattered particles always go in the same size box, so four answer choices made one at a time line up on the page. A key beside the box shows each kind with the name you type, and it can go with the box, be left off, or be shown alone, so several answer choices can share one key.',
+    ],
+    settings: [
+      'Layout: scattered in a box, or a lattice of up to 12 rows and 12 columns',
+      'Up to four kinds of particle, 0 to 60 of each, each alone or joined as a pair, bent, in a line, three around or four around',
+      'Each atom’s size (XS to XL), shade (white to black) and charge (+, −, 2+, 2−, 3+ or 3−)',
+      'Lattice patterns: one kind (a pure metal), alternating (an ionic solid), substitutional or interstitial (alloys), touching or spaced',
+      'A key with your names and a note line, the box’s border (single, double or none), and a chart title',
+    ],
+    faqs: [
+      {
+        q: 'What is a particle diagram in chemistry?',
+        a: 'A drawing of the atoms, ions or molecules in a sample, showing how many there are and how they are arranged. AP Chemistry uses them to ask students to represent a gas, a solution or a solid, or to pick which picture matches a substance.',
+      },
+      {
+        q: 'How do I make four answer choices that line up?',
+        a: 'Make each choice one at a time and copy it into your document. Scattered particles always go in the same square box, so the choices come out the same size. Set the key to Key only to make one shared key for all of them.',
+      },
+      {
+        q: 'Can I show an ionic solid or an alloy?',
+        a: 'Yes. Choose Lattice, then Alternating for an ionic solid like NaCl, Substitutional for an alloy like brass, or Interstitial for one like steel, with small atoms in some of the gaps.',
+      },
+      {
+        q: 'Can I put element symbols on the atoms?',
+        a: 'No. Atoms are drawn as plain shaded discs, and ions show only their charge. Put names like “Na⁺ ion” or “CCl₄ molecule” in the key instead.',
+      },
+      {
+        q: 'Can a kind of particle appear in the key but not in the box?',
+        a: 'Yes. Give it a count of 0 and it is listed in the key only. The key’s note line can say what isn’t drawn, like “H₂O molecules are not shown”.',
+      },
+    ],
+    imageAlt: 'A printable particle diagram of atoms and molecules in a box, with a key, made with Particle Diagram',
+    educationalLevel: ['High school', 'AP Chemistry'],
+  },
+
+  'bohr-model': {
+    heading: 'Bohr model diagrams of atoms and ions',
+    intro: [
+      'Bohr Model draws one atom or ion as a nucleus with its electrons as dots on rings. Pick any of the 118 elements and it sets the protons, the neutrons from the mass number, and the electrons on each shell; set a charge and the shells change to that ion’s ground state, so Na⁺ is drawn 2, 8 and Cl⁻ 2, 8, 8. You can also set every count by hand. Nothing is checked, so a wrong model for a “what’s wrong?” question draws exactly as set.',
+      'For questions students complete, leave the nucleus blank or draw the rings without electrons. An ion can show its gained electrons in their own color and its lost electrons as empty dashed spots, and can go in square brackets with its charge. Every model with the same number of shells is drawn the same size, so answer choices line up.',
+    ],
+    settings: [
+      'The element and charge, or the protons and neutrons (0 to 200 each) and 1 to 7 shells of up to 32 electrons, set by hand',
+      'Fill, which sets the neutral atom’s real ground-state shells',
+      'The nucleus drawn as proton and neutron balls (up to 40 in all), as written counts, or blank',
+      'Electrons evenly spaced or paired at the four sides as in Lewis structures, or empty rings',
+      'Gained and lost electrons, and each particle’s color and symbol (such as p⁺, n⁰ and e⁻)',
+      'A key, n = 1, n = 2… shell labels, brackets for an ion, and a chart title',
+    ],
+    faqs: [
+      {
+        q: 'How many electrons go in each shell of a Bohr model?',
+        a: 'Fill uses each element’s real ground state. For the first 20 elements that means shells of up to 2, 8, 8 and 2 (potassium is 2, 8, 8, 1). Past calcium the third shell keeps filling after the fourth has started, so iron is 2, 8, 14, 2.',
+      },
+      {
+        q: 'How does it work out the number of neutrons?',
+        a: 'From the mass number, the element’s atomic mass rounded to a whole number, minus its atomic number: chlorine’s 35.45 rounds to 35, giving 18 neutrons. For an element with no stable isotope it uses the bracketed mass number on periodic tables, like [98] for technetium. Change the neutron count to draw another isotope.',
+      },
+      {
+        q: 'Can I draw a Bohr model of an ion?',
+        a: 'Yes. Set the charge and the shells change to that ion’s ground state. Turn on Gained and lost electrons to mark how it differs from the neutral atom, and Brackets to put it in square brackets with its charge.',
+      },
+      {
+        q: 'Can I make a blank Bohr model for students to fill in?',
+        a: 'Yes. Set the nucleus to Blank for a “how many protons?” question, or turn on Empty rings to draw the shells without electrons for students to add them.',
+      },
+      {
+        q: 'Is there an answer key?',
+        a: 'Not a separate line. Use the chart title to name the atom, like “Carbon-12”, or leave it off so students identify it.',
+      },
+    ],
+    imageAlt: 'A printable Bohr model diagram of an atom, with its nucleus and electrons on shells, made with Bohr Model',
+    educationalLevel: ['Middle school', 'High school'],
+  },
+
+  'lewis-structures': {
+    heading: 'Lewis dot structures for molecules and polyatomic ions',
+    intro: [
+      'Lewis Structures draws the Lewis structure of a molecule or polyatomic ion from its formula. Type H2O, CH4, NO3- or SO4 2- and it builds the correct structure around the central atom, with lone electrons as dots, formal charges if you want them, and its resonance structures. Molecules with more than one central atom, like ethanol, acetic acid, HNO₃ or N₂H₄, come from a list you can pick from or type by name or formula.',
+      'Teachers use it for three kinds of question: draw the structure, complete it from the skeleton or from the bonds, or find the mistakes in a wrong one. Change a bond, an atom’s lone electrons or its formal charge by clicking the figure, and the generator checks the result and lists its mistakes as sentences, like “O has 10 electrons around it”, for the answer key.',
+    ],
+    settings: [
+      'The formula or name: main-group elements through period 5 with one central atom, or a molecule from the list',
+      'A flat, textbook-style drawing, or shaped to hint at the real shape (like bent H₂O)',
+      'Bonds as lines or as pairs of dots, and formal charges shown or not',
+      'The octet rule or fewest formal charges, for ions like SO₄²⁻ where textbooks disagree',
+      'One resonance structure, or all of them joined by ↔',
+      'The question: the full structure, bonds only, or the skeleton, or changes for a find-the-mistake question; a chart title and an answer key',
+    ],
+    faqs: [
+      {
+        q: 'How do I type a formula with a charge?',
+        a: 'Put a space or ^ before a charge of 2 or more, like SO4 2- or PO4^3-. A charge of 1 can go straight after the formula, like NO3- or NH4+.',
+      },
+      {
+        q: 'Which structure does it draw for SO₄²⁻?',
+        a: 'Textbooks disagree, so you choose. The octet rule, the default, gives every atom eight electrons, with formal charges where needed. Fewest formal charges lets atoms in period 3 and lower have more than eight, adding double bonds until the formal charges are as small as they can be. The mistake check follows whichever rule you pick.',
+      },
+      {
+        q: 'Can it draw resonance structures?',
+        a: 'Yes. For a molecule or ion like O₃ or NO₃⁻, show one resonance structure and pick which, or show all of them in a row joined by ↔.',
+      },
+      {
+        q: 'How do I make a find-the-mistake question?',
+        a: 'Open Changes, then click an atom or bond in the figure, or use the list, to change a bond’s order, an atom’s lone electrons or formal charge, the brackets or the central atom. The generator lists what is now wrong, and the answer key prints those mistakes under the figure. A change that leaves the structure correct, such as one that makes another resonance structure, isn’t a mistake.',
+      },
+      {
+        q: 'What can’t it draw?',
+        a: 'Transition metals, and ionic compounds like NaCl, which aren’t one Lewis structure. A molecule with more than one central atom has to be on the list; if yours isn’t, the Request it button asks us to add it.',
+      },
+    ],
+    imageAlt: 'A printable Lewis dot structure of a molecule, with bonds and lone electrons, made with Lewis Structures',
+    educationalLevel: ['High school', 'AP Chemistry'],
+  },
+
+  'orbital-diagram': {
+    heading: 'Orbital diagrams and electron configurations',
+    intro: [
+      'Orbital Diagram draws an atom or ion’s electrons as up and down arrows in orbital boxes, with each sublevel labeled underneath, following the aufbau principle, Pauli exclusion and Hund’s rule. Pick any element and charge. Exceptions like Cr and Cu are drawn as they really are unless you switch to the filling order, and a noble gas core like [Ar] can stand in for the inner electrons.',
+      'For students to complete, the symbol, the sublevel labels or the written configuration can be blank lines, or the orbitals can be drawn empty. For a “which rule is broken?” question, click an orbital to change its electrons: the generator says whether the result is an excited state or not allowed and names the rule it breaks, and the answer key prints that with the configuration.',
+    ],
+    settings: [
+      'The element (hydrogen to oganesson) and charge',
+      'A noble gas core, and sublevels in filling order (4s before 3d) or by shell',
+      'Exceptions drawn as they really are, or as the filling order predicts',
+      'Full or half arrows, in squares or on lines',
+      'The symbol, sublevel labels and configuration line shown, as blank lines, or left off, and electrons shown or orbitals empty',
+      'Changed orbitals, extra empty sublevels, a chart title, and an answer key line',
+    ],
+    faqs: [
+      {
+        q: 'How do you fill in an orbital diagram?',
+        a: 'Fill sublevels in aufbau order (1s, 2s, 2p, 3s, 3p, 4s, 3d…). An orbital holds at most two electrons, with opposite spins (Pauli exclusion), and within a sublevel each orbital gets one electron before any gets a second (Hund’s rule).',
+      },
+      {
+        q: 'Why are chromium and copper different?',
+        a: 'Their real ground states don’t follow the filling order: Cr is [Ar] 4s¹ 3d⁵ and Cu is [Ar] 4s¹ 3d¹⁰. The generator draws them as they really are, or as the filling order predicts (Cr as [Ar] 4s² 3d⁴) if your class doesn’t teach exceptions.',
+      },
+      {
+        q: 'Which electrons does a transition metal ion lose first?',
+        a: 'Its 4s electrons, before any 3d, so Fe²⁺ is [Ar] 3d⁶ rather than [Ar] 4s² 3d⁴. Set the charge and the generator draws the ion this way.',
+      },
+      {
+        q: 'Can I make a diagram with a mistake for students to find?',
+        a: 'Yes. Click any orbital to make it empty, one up, one down, a pair, or two with the same spin. The generator calls the result an excited state, not allowed, or the wrong number of electrons, and names each mistake, like “Hund’s rule: 2p has a pair while one of its orbitals is empty”.',
+      },
+      {
+        q: 'Should 4s be written before 3d?',
+        a: 'Both are used. Choose Filling order to put 4s before 3d, in the order they fill, or By shell to put 3d with the other n = 3 sublevels.',
+      },
+    ],
+    imageAlt: 'A printable orbital diagram with electrons as arrows in orbital boxes, made with Orbital Diagram',
+    educationalLevel: ['High school', 'AP Chemistry'],
+  },
+}
+
+/** The copy for a generator; every generator on the site has some. */
+export function copyFor(id: string): GeneratorCopy {
+  const copy = COPY[id]
+  if (!copy) throw new Error(`No page copy for the ${id} generator`)
+  return copy
+}

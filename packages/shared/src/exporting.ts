@@ -1,7 +1,11 @@
 // Saving the figure as a picture, for pasting into Docs, Slides or a worksheet.
 
+/** The figure as SVG text, without anything marked data-no-export (a
+ *  selection highlight, say, which is only there while editing). */
 function svgText(svg: SVGSVGElement) {
-  return new XMLSerializer().serializeToString(svg)
+  const copy = svg.cloneNode(true) as SVGSVGElement
+  for (const el of copy.querySelectorAll('[data-no-export]')) el.remove()
+  return new XMLSerializer().serializeToString(copy)
 }
 
 function download(blob: Blob, filename: string) {

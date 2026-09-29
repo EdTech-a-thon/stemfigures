@@ -7,6 +7,9 @@
 // its own address (Length Reading, on Math and Chemistry): it has an entry
 // on each, with the same id. See docs/adr/0001-a-generator-on-two-sites.md.
 //
+// An editor (`kind: 'editor'`) is listed like a generator, but the teacher
+// draws its figure by hand, so there are no settings in its address.
+//
 // Adding a generator means adding its entry to its site's file here, its
 // preview to that app's src/lib/generators/index.ts, and a preview snapshot
 // (see previews.ts).
@@ -44,6 +47,9 @@ export interface CatalogEntry {
   description: string
   /** words teachers might search for instead of the name */
   keywords: string[]
+  /** 'editor' for a figure drawn by hand rather than generated from
+   *  settings: its address carries no settings, so it has no link parameters */
+  kind?: 'editor'
 }
 
 export const CATALOG: CatalogEntry[] = [...MATH, ...PHYSICS, ...CHEMISTRY]

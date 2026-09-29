@@ -1,0 +1,626 @@
+// Example figures: real figures from each generator, each with its own page
+// (/<generator>/examples/<slug>) and a PNG in static/examples/, so search
+// engines can index them as images. Each is the generator's own settings, so
+// "Edit this figure" opens exactly the figure shown.
+//
+// After adding or changing one, redo the pictures with
+// scripts/snapshot-examples.mjs (see the app's README). The first example of
+// each generator is also its social card (static/og/<generator>.png).
+//
+// Captions say only what the figure shows; readings and answer keys come
+// from the generators' own logic (./details.server.ts), never typed here.
+
+import sizes from './sizes.json'
+import type { Example, ExampleGeneratorId, ExampleSpec } from './types'
+
+const SIZES = sizes as Record<string, number[]>
+
+function examplesOf<G extends ExampleGeneratorId>(generator: G, specs: ExampleSpec<G>[]): Example[] {
+  return specs.map((spec) => {
+    const image = `/examples/${generator}/${spec.slug}.png`
+    const [width, height] = SIZES[image] ?? [0, 0]
+    return { ...spec, generator, settings: spec.settings as Record<string, unknown>, path: `/${generator}/examples/${spec.slug}`, image, width, height }
+  })
+}
+
+export const EXAMPLES: Example[] = [
+  ...examplesOf('volume-reading', [
+    {
+      slug: 'graduated-cylinder-reading-34-5-ml',
+      title: 'Graduated cylinder reading 34.5 mL',
+      alt: 'A 100 mL graduated cylinder filled to 34.5 mL, with a magnified view of the meniscus between the 30 and 40 mL marks',
+      caption:
+        'A 100 mL graduated cylinder marked every 1 mL and numbered every 10 mL, holding gray liquid. The bottom of the meniscus sits halfway between the 34 and 35 mL marks, so the reading is 34.5 mL, with the tenths digit estimated. A magnified circle beside the cylinder shows the meniscus against the marks.',
+      settings: { size: '100', reading: 34.5 },
+    },
+    {
+      slug: '10-ml-graduated-cylinder-reading-7-36-ml',
+      title: '10 mL graduated cylinder reading 7.36 mL',
+      alt: 'A 10 mL graduated cylinder with blue liquid reading 7.36 mL, with a magnified view of the meniscus',
+      caption:
+        'A 10 mL graduated cylinder marked every 0.1 mL and numbered every 1 mL, holding blue liquid. The bottom of the meniscus is a little past halfway from the 7.3 to the 7.4 mL mark, read as 7.36 mL with the hundredths digit estimated. A magnified circle shows the marks around the meniscus.',
+      settings: { size: '10', reading: 7.36, tint: 'blue' },
+    },
+    {
+      slug: 'meniscus-close-up-50-ml-graduated-cylinder-26-0-ml',
+      title: 'Meniscus close-up: 50 mL graduated cylinder at 26.0 mL',
+      alt: 'A magnified view of a meniscus in a 50 mL graduated cylinder, its bottom resting on the 26 mL mark',
+      caption:
+        'Only the magnified view of a 50 mL graduated cylinder, marked every 1 mL, with the bottom of the meniscus resting exactly on the 26 mL mark. Because the liquid is on a mark, the estimated digit is 0 and the reading is 26.0 mL. Use it to show students where on the curved surface to read.',
+      settings: { size: '50', reading: 26, view: 'magnifier', span: 4 },
+    },
+    {
+      slug: '1000-ml-graduated-cylinder-reading-640-ml',
+      title: '1000 mL graduated cylinder reading 640 mL',
+      alt: 'A 1000 mL graduated cylinder with green liquid filled to 640 mL, marked every 10 mL',
+      caption:
+        'A 1 L (1000 mL) graduated cylinder marked every 10 mL and numbered every 100 mL, holding green liquid. The bottom of the meniscus is on the 640 mL mark, so the reading is 640 mL, the ones digit being the estimated one. There is no magnifier, so students read it from the whole cylinder.',
+      settings: { size: '1000', reading: 640, tint: 'green', view: 'whole' },
+    },
+    {
+      slug: 'buret-reading-12-35-ml',
+      title: 'Buret reading 12.35 mL',
+      alt: 'A 50 mL buret reading 12.35 mL, with a magnified view of the meniscus between the 12 and 13 mL marks',
+      caption:
+        'A 50 mL buret, numbered from 0 at the top down to 50 and marked every 0.1 mL, with a stopcock at the bottom. The bottom of the meniscus is halfway between the 12.3 and 12.4 mL marks, so the reading is 12.35 mL. A buret reads downward, so the numbers grow toward the bottom of the magnified view.',
+      settings: { instrument: 'buret', reading: 12.35 },
+    },
+    {
+      slug: 'beaker-reading-160-ml',
+      title: '250 mL beaker reading 160 mL',
+      alt: 'A 250 mL beaker with red liquid at 160 mL, between its 150 and 175 mL marks',
+      caption:
+        'A 250 mL beaker marked every 25 mL and numbered every 50 mL, holding red liquid a little under halfway from the 150 mL mark to the next mark, 175 mL. Beaker marks are coarse, so the volume is estimated to the whole mL: 160 mL. Use it to compare how precisely a beaker and a graduated cylinder measure.',
+      settings: { instrument: 'beaker', beaker: 'medium', reading: 160, tint: 'red' },
+    },
+  ]),
+
+  ...examplesOf('volume-by-displacement', [
+    {
+      slug: 'water-displacement-rock-100-ml-graduated-cylinder',
+      title: 'Volume of a rock by water displacement',
+      alt: 'Two 100 mL graduated cylinders: water at 50.0 mL before, and at 63.5 mL after a rock is added',
+      caption:
+        'Two 100 mL graduated cylinders side by side, labeled Before and After. The first holds water at 50.0 mL; in the second a rock rests on the bottom and the water has risen to 63.5 mL. The rock’s volume is the difference, 13.5 mL.',
+      settings: { size: '100', before: 50, after: 63.5, object: 'rock' },
+    },
+    {
+      slug: 'water-displacement-marbles-25-ml-graduated-cylinder',
+      title: 'Volume of 3 marbles by water displacement',
+      alt: 'Two 25 mL graduated cylinders: water at 12.00 mL before, and at 15.50 mL after three marbles are added',
+      caption:
+        'Two 25 mL graduated cylinders, marked every 0.25 mL. Before, the water is at 12.00 mL; after three marbles are dropped in, it is at 15.50 mL. The three marbles together have a volume of 3.50 mL.',
+      settings: { size: '25', before: 12, after: 15.5, object: 'marbles', marbles: 3 },
+    },
+    {
+      slug: 'water-displacement-metal-cube-50-ml-graduated-cylinder',
+      title: 'Volume of a metal cube by water displacement',
+      alt: 'Two 50 mL graduated cylinders with magnified views: water at 20.0 mL before, and at 28.0 mL after a cube is added',
+      caption:
+        'Two 50 mL graduated cylinders, each with a magnified view of its meniscus. The water reads 20.0 mL before and 28.0 mL after a cube is dropped in, so the cube’s volume is 8.0 mL (8.0 cm³). Pair it with the cube’s mass for a density question.',
+      settings: { size: '50', before: 20, after: 28, object: 'cube', view: 'both' },
+    },
+    {
+      slug: 'water-displacement-metal-cylinder-10-ml-graduated-cylinder',
+      title: 'Volume of a metal cylinder by water displacement',
+      alt: 'Two 10 mL graduated cylinders: water at 5.20 mL before, and at 7.45 mL after a small metal cylinder is added',
+      caption:
+        'Two 10 mL graduated cylinders, marked every 0.1 mL. The water reads 5.20 mL before and 7.45 mL after a small metal cylinder is added. The metal cylinder’s volume is 2.25 mL, read to the hundredth of a mL.',
+      settings: { size: '10', before: 5.2, after: 7.45, object: 'cylinder' },
+    },
+  ]),
+
+  ...examplesOf('gas-syringe', [
+    {
+      slug: 'gas-syringe-collecting-gas-64-cm3',
+      title: 'Gas syringe collecting gas: 64.0 cm³',
+      alt: 'A conical flask joined by a delivery tube to a 100 cm³ gas syringe on a stand, reading 64.0 cm³, with a magnified view of the plunger',
+      caption:
+        'A conical flask of liquid, closed with a bung and joined by a delivery tube to a 100 cm³ gas syringe clamped on a stand. The gas has pushed the plunger out to the 64 cm³ mark, so 64.0 cm³ of gas has been collected. A magnified view above the syringe shows the plunger’s face against the marks.',
+      settings: { reading: 64 },
+    },
+    {
+      slug: '50-cm3-gas-syringe-reading-23-5-cm3',
+      title: '50 cm³ gas syringe reading 23.5 cm³',
+      alt: 'A 50 cm³ gas syringe on its own, its plunger at 23.5 cm³, with a magnified view',
+      caption:
+        'A 50 cm³ gas syringe on its own, marked every 1 cm³ and numbered every 10 cm³ from 0 at the nozzle. The plunger’s face is halfway between 23 and 24 cm³, so the reading is 23.5 cm³. A magnified view above shows the face against the marks.',
+      settings: { size: '50', reading: 23.5, setup: 'syringe' },
+    },
+    {
+      slug: 'gas-syringe-reading-in-ml-31-8-ml',
+      title: 'Gas syringe reading in mL: 31.8 mL',
+      alt: 'A conical flask joined by a delivery tube to a 50 mL gas syringe on a stand, its scale in mL, the plunger at 31.8 mL',
+      caption:
+        'A conical flask joined by a delivery tube to a 50 mL gas syringe clamped on a stand, its scale printed in mL and drawn without a magnifier. The plunger’s face is most of the way from the 31 to the 32 mL mark, read as 31.8 mL of gas. mL and cm³ are the same size, so this is also 31.8 cm³.',
+      settings: { size: '50', unit: 'mL', reading: 31.8, view: 'whole' },
+    },
+    {
+      slug: 'gas-syringe-plunger-close-up-37-6-cm3',
+      title: 'Gas syringe plunger close-up: 37.6 cm³',
+      alt: 'A magnified view of a gas syringe’s scale, the plunger’s face at 37.6 cm³',
+      caption:
+        'Only the magnified view of a 100 cm³ gas syringe, showing the plunger’s flat face between the 37 and 38 cm³ marks. It is a little past halfway, so the reading is 37.6 cm³. Use it to practice reading at the plunger’s face rather than its knob.',
+      settings: { reading: 37.6, setup: 'syringe', view: 'magnifier', span: 3 },
+    },
+  ]),
+
+  ...examplesOf('length-reading', [
+    {
+      slug: 'metric-ruler-reading-7-45-cm',
+      title: 'Metric ruler reading 7.45 cm',
+      alt: 'A 15 cm ruler marked in millimeters with a metal cylinder lying along it from 0 to 7.45 cm, with a magnified view of its right end',
+      caption:
+        'A 15 cm ruler marked every millimeter, with a metal cylinder lying along it, its left end on 0. Its right end falls halfway between 7.4 and 7.5 cm, so its length is 7.45 cm, the hundredths digit estimated. A magnified view shows the right end against the marks.',
+      settings: { length: 7.45, object: 'cylinder' },
+    },
+    {
+      slug: 'ruler-measuring-not-from-zero-rock',
+      title: 'Measuring with a ruler not starting at zero',
+      alt: 'A 15 cm ruler with a rock lying along it from 2.00 cm to 8.35 cm, with magnified views of both ends',
+      caption:
+        'A 15 cm millimeter ruler with a rock lying along it, starting at the 2 cm mark rather than 0, with dashed lines dropped from its ends to the ruler. Magnified views show its left end at 2.00 cm and its right end at 8.35 cm. Its length is the difference, 6.35 cm.',
+      settings: { object: 'rock', start: 2, length: 6.35, guides: true },
+    },
+    {
+      slug: 'centimeter-ruler-without-millimeters-5-3-cm',
+      title: 'Ruler marked only in centimeters: 5.3 cm',
+      alt: 'A 15 cm ruler marked only every centimeter, with a cube lying along it from 0 to 5.3 cm',
+      caption:
+        'A 15 cm ruler with marks only every whole centimeter and a cube lying along it from 0. Its right end is about three tenths of the way from 5 to 6 cm, so its length is 5.3 cm, with the tenths digit estimated. Compare it with a millimeter ruler to show how the marks set the significant figures.',
+      settings: { metricMarks: 'cm', object: 'cube', length: 5.3 },
+    },
+    {
+      slug: 'inch-ruler-reading-3-5-16-inches',
+      title: 'Inch ruler reading 3 5/16 inches',
+      alt: 'A 6 inch ruler marked in sixteenths with a row of marbles from 0 to 3 5/16 inches',
+      caption:
+        'A 6 inch ruler marked every sixteenth of an inch, with marks shortening from halves down to sixteenths. A row of three marbles lies along it from 0, with dashed guide lines down from its ends. Its right end is on the 3 5/16 inch mark, so the row is 3 5/16 inches long.',
+      settings: { system: 'imperial', imperialMarks: '16', object: 'marbles', marbles: 3, guides: true, length: 3.3125, span: 1 },
+    },
+    {
+      slug: 'meter-stick-reading-62-4-cm',
+      title: 'Meter stick reading 62.4 cm',
+      alt: 'A meter stick marked every centimeter with a long metal cylinder lying along it from 0 to 62.4 cm',
+      caption:
+        'A meter stick (100 cm) marked every centimeter and numbered every 5 cm, with a long metal cylinder lying along it from 0. Its right end falls between 62 and 63 cm, read as 62.4 cm with the tenths digit estimated. A magnified view shows the right end against the marks.',
+      settings: { cm: '100', metricMarks: 'cm', object: 'cylinder', length: 62.4 },
+    },
+  ]),
+
+  ...examplesOf('mass-reading', [
+    {
+      slug: 'triple-beam-balance-reading-263-47-g',
+      title: 'Triple beam balance reading 263.47 g',
+      alt: 'A triple beam balance with its riders at 200 g, 60 g and 3.47 g, with a magnified view of the front beam',
+      caption:
+        'A triple beam balance with its three riders at 200 g on the beam marked in hundreds, 60 g on the beam marked in tens, and 3.47 g on the bottom beam, marked every 0.1 g from 0 to 10. The mass is their sum, 263.47 g, with the hundredths digit estimated. A magnified view shows the bottom rider against its marks.',
+      settings: { mass: 263.47 },
+    },
+    {
+      slug: 'triple-beam-balance-rock-mass-72-35-g',
+      title: 'Mass of a rock on a triple beam balance',
+      alt: 'A rock on the pan of a triple beam balance with its riders reading 72.35 g',
+      caption:
+        'A rock sits on the pan of a triple beam balance with its riders at 70 g on the tens beam, 0 g on the hundreds beam and 2.35 g on the bottom beam. The rock’s mass is their sum, 72.35 g. Pair it with a volume by displacement figure for a density question.',
+      settings: { object: 'rock', mass: 72.35, view: 'whole' },
+    },
+    {
+      slug: 'digital-balance-reading-12-47-g',
+      title: 'Digital balance reading 12.47 g',
+      alt: 'A digital balance with a weigh boat on its pan, its display reading 12.47 g',
+      caption:
+        'A digital balance with a weigh boat on its pan, its display showing 12.47 g. A digital balance is read exactly as shown, to its two decimal places, with no estimated digit.',
+      settings: { instrument: 'digital', mass: 12.47 },
+    },
+    {
+      slug: 'analytical-balance-reading-0-2537-g',
+      title: 'Analytical balance reading 0.2537 g',
+      alt: 'An analytical balance inside its glass draft shield, its display reading 0.2537 g',
+      caption:
+        'An analytical balance inside its glass draft shield, with a weigh boat on the pan and the display reading 0.2537 g. It shows four decimal places, a tenth of a milligram, so its reading has four significant figures here.',
+      settings: { instrument: 'digital', decimals: 4, mass: 0.2537 },
+    },
+    {
+      slug: 'digital-balance-metal-cube-mass-21-6-g',
+      title: 'Mass of a metal cube on a digital balance',
+      alt: 'A metal cube on a digital balance showing 21.6 g',
+      caption:
+        'A metal cube sits on the pan of a digital balance that shows one decimal place, reading 21.6 g. With the cube’s volume from a displacement or ruler figure, students can find its density.',
+      settings: { instrument: 'digital', decimals: 1, object: 'cube', mass: 21.6 },
+    },
+  ]),
+
+  ...examplesOf('temperature-reading', [
+    {
+      slug: 'thermometer-reading-22-6-celsius',
+      title: 'Thermometer reading 22.6 °C',
+      alt: 'A liquid-in-glass thermometer with red liquid reading 22.6 °C, with a magnified view of the top of the column',
+      caption:
+        'A liquid-in-glass thermometer marked every 1 °C from −10 to 110 °C, its red liquid ending a little past halfway between 22 and 23 °C. The reading is 22.6 °C, with the tenths digit estimated. A magnified view shows the top of the column against the marks.',
+      settings: { reading: 22.6 },
+    },
+    {
+      slug: 'thermometer-reading-below-zero-minus-4-5-celsius',
+      title: 'Thermometer reading below zero: −4.5 °C',
+      alt: 'A liquid-in-glass thermometer with blue liquid reading −4.5 °C, below the 0 °C mark',
+      caption:
+        'A liquid-in-glass thermometer with blue liquid whose column ends below 0 °C, halfway between −4 and −5 °C. The reading is −4.5 °C. Use it to check that students count down from zero correctly.',
+      settings: { reading: -4.5, tint: 'blue' },
+    },
+    {
+      slug: 'fahrenheit-thermometer-reading-98-6-f',
+      title: 'Fahrenheit thermometer reading 98.6 °F',
+      alt: 'A liquid-in-glass thermometer in degrees Fahrenheit, marked every 2 °F, reading 98.6 °F',
+      caption:
+        'A liquid-in-glass thermometer scaled in degrees Fahrenheit, marked every 2 °F and numbered every 20 °F. The column ends just past the 98 °F mark, read as 98.6 °F, normal body temperature. Each mark is 2 °F, so students must count by twos.',
+      settings: { unit: 'fahrenheit', reading: 98.6 },
+    },
+    {
+      slug: 'kelvin-thermometer-reading-295-4-k',
+      title: 'Kelvin thermometer reading 295.4 K',
+      alt: 'A liquid-in-glass thermometer in kelvins, reading 295.4 K',
+      caption:
+        'A liquid-in-glass thermometer scaled in kelvins, marked every 1 K from 260 to 390 K, with gray liquid. The column ends between 295 and 296 K, read as 295.4 K (22.25 °C). Kelvin is written without a degree sign.',
+      settings: { unit: 'kelvin', reading: 295.4, tint: 'gray' },
+    },
+    {
+      slug: 'digital-thermometer-reading-78-4-celsius',
+      title: 'Digital thermometer reading 78.4 °C',
+      alt: 'A digital thermometer with its steel probe in a beaker, the meter reading 78.4 °C',
+      caption:
+        'A digital thermometer: a handheld meter wired to a steel probe standing in a beaker of liquid. The display reads 78.4 °C, about the boiling point of ethanol. A digital reading is taken exactly as displayed.',
+      settings: { instrument: 'digital', reading: 78.4 },
+    },
+  ]),
+
+  ...examplesOf('ph-reading', [
+    {
+      slug: 'ph-meter-reading-3-27',
+      title: 'pH meter reading 3.27',
+      alt: 'A digital pH meter with its electrode in a beaker, the display reading pH 3.27',
+      caption:
+        'A digital pH meter wired to a glass pH electrode standing in a beaker of solution. The display reads 3.27, so the solution is acidic. A digital meter is read exactly as shown, to two decimal places.',
+      settings: { reading: 3.27 },
+    },
+    {
+      slug: 'analog-ph-meter-reading-8-46',
+      title: 'Analog pH meter reading 8.46',
+      alt: 'An analog pH meter whose needle points to 8.46 on a 0 to 14 dial, with a magnified view of the needle',
+      caption:
+        'An analog pH meter with a needle over a dial numbered 0 to 14 and marked every 0.2. The needle sits between the 8.4 and 8.6 marks, a little past 8.4, so the reading is 8.46, with the hundredths digit estimated. A magnified view shows the needle against the marks.',
+      settings: { instrument: 'analog', reading: 8.46 },
+    },
+    {
+      slug: 'ph-paper-acid-ph-2',
+      title: 'pH paper showing an acid: pH 2',
+      alt: 'A strip of universal indicator paper turned red, above a pH color chart from 0 to 14, matching pH 2',
+      caption:
+        'A strip of universal indicator (pH) paper whose wet end has turned red-orange, above a color chart with one swatch for each whole pH from 0 to 14. The strip matches the pH 2 swatch, so the solution is strongly acidic. pH paper is read to the whole number, and the figure needs color printing.',
+      settings: { instrument: 'paper', reading: 2 },
+    },
+    {
+      slug: 'ph-paper-base-ph-11',
+      title: 'pH paper showing a base: pH 11',
+      alt: 'A strip of universal indicator paper turned deep blue, above a pH color chart from 0 to 14, matching pH 11',
+      caption:
+        'A strip of universal indicator paper whose wet end has turned deep blue, above the 0 to 14 color chart. It matches the pH 11 swatch, so the solution is basic. Pair it with the acid strip to ask which solution is which.',
+      settings: { instrument: 'paper', reading: 11 },
+    },
+  ]),
+
+  ...examplesOf('titration-curve', [
+    {
+      slug: 'weak-acid-strong-base-titration-curve',
+      title: 'Weak acid–strong base titration curve',
+      alt: 'Titration curve of 25.0 mL of 0.100 M acetic acid with 0.100 M NaOH, with the half-equivalence and equivalence points marked',
+      caption:
+        'The pH of 25.0 mL of 0.100 M acetic acid (CH₃COOH, pKa 4.76) as 0.100 M NaOH is added, up to 50 mL. The pH rises slowly through the buffer region, then steeply at the equivalence point, 25 mL, which is above pH 7. The half-equivalence point at 12.5 mL is marked too, where the pH equals the pKa.',
+      settings: { halfMark: 'guides' },
+    },
+    {
+      slug: 'strong-acid-strong-base-titration-curve',
+      title: 'Strong acid–strong base titration curve',
+      alt: 'Titration curve of 25.0 mL of 0.100 M HCl with 0.100 M NaOH, with the equivalence point at 25 mL and pH 7 marked',
+      caption:
+        'The pH of 25.0 mL of 0.100 M hydrochloric acid (HCl) as 0.100 M NaOH is added, up to 50 mL. The pH starts low, stays nearly flat, then jumps sharply through the equivalence point at 25 mL. For a strong acid and strong base, the equivalence point is at pH 7.',
+      settings: { analyte: 'strong-acid' },
+    },
+    {
+      slug: 'weak-base-strong-acid-titration-curve',
+      title: 'Weak base–strong acid titration curve',
+      alt: 'Titration curve of 25.0 mL of 0.100 M ammonia with 0.100 M HCl, the pH falling, with the equivalence and half-equivalence points marked',
+      caption:
+        'The pH of 25.0 mL of 0.100 M ammonia (NH₃, pKb 4.75) as 0.100 M HCl is added, up to 50 mL. The pH falls, slowly through the buffer region and then steeply at the equivalence point at 25 mL, which is below pH 7. The half-equivalence point at 12.5 mL, where the pH equals 14 − pKb, is marked too.',
+      settings: { analyte: 'weak-base', halfMark: 'guides', xTitle: 'Volume of HCl added (mL)' },
+    },
+    {
+      slug: 'strong-base-strong-acid-titration-curve',
+      title: 'Strong base–strong acid titration curve',
+      alt: 'Titration curve of 25.0 mL of 0.100 M NaOH with 0.100 M HCl, the pH falling from about 13 to about 1.5, with the equivalence point marked',
+      caption:
+        'The pH of 25.0 mL of 0.100 M sodium hydroxide (NaOH) as 0.100 M HCl is added, up to 50 mL. The pH starts high, stays nearly flat, then drops sharply through the equivalence point at 25 mL and pH 7.',
+      settings: { analyte: 'strong-base', xTitle: 'Volume of HCl added (mL)' },
+    },
+    {
+      slug: 'titration-curve-worksheet-label-the-equivalence-point',
+      title: 'Titration curve worksheet: find the equivalence point',
+      alt: 'Titration curve of a weak acid with NaOH, with the equivalence and half-equivalence points marked by dots and blank lines for students to label',
+      caption:
+        'The titration of 20.0 mL of 0.150 M formic acid (HCOOH, pKa 3.75) with 0.120 M NaOH, graphed to 40 mL. The equivalence and half-equivalence points are marked with dots and dashed lines to the axes, each with a blank line for students to name it. Students can read the equivalence volume and the pKa off the graph.',
+      settings: {
+        analyteM: 0.15, analyteMl: 20, titrantM: 0.12, pKa: 3.75,
+        xTo: '40', eqLabelMode: 'blank', halfMark: 'guides', halfLabelMode: 'blank',
+      },
+    },
+  ]),
+
+  ...examplesOf('particle-diagram', [
+    {
+      slug: 'particle-diagram-mixture-of-two-elements',
+      title: 'Particle diagram of a mixture of two elements',
+      alt: 'A box of scattered particles: single large dark gray atoms mixed with pairs of small white atoms joined as diatomic molecules',
+      caption:
+        'A box of particles scattered at random: five single large dark gray atoms and five diatomic molecules, each two small white atoms joined together. Each kind is made of only one type of atom, so each is an element, and the box is a mixture of two elements (like neon and hydrogen gas).',
+      settings: {
+        seed: 7,
+        particles: [
+          { count: 5, shape: 'single', look: { size: 'l', shade: 'dark', charge: '' }, outer: { size: 's', shade: 'white', charge: '' } },
+          { count: 5, shape: 'pair', look: { size: 's', shade: 'white', charge: '' }, outer: { size: 's', shade: 'white', charge: '' } },
+        ],
+      },
+    },
+    {
+      slug: 'particle-diagram-pure-compound-water-molecules',
+      title: 'Particle diagram of a pure compound (water molecules)',
+      alt: 'A box of eight bent molecules, each a large gray atom with two small white atoms, like water',
+      caption:
+        'A box of eight identical bent molecules, each one large gray atom joined to two small white atoms, drawn like H₂O. Every particle is the same molecule made of two kinds of atom, so the box shows a pure compound.',
+      settings: {
+        seed: 3,
+        particles: [{ count: 8, shape: 'bent', look: { size: 'l', shade: 'gray', charge: '' }, outer: { size: 's', shade: 'white', charge: '' } }],
+      },
+    },
+    {
+      slug: 'particle-diagram-pure-element-diatomic-molecules',
+      title: 'Particle diagram of a pure element (diatomic molecules)',
+      alt: 'A box of seven diatomic molecules, each two medium gray atoms joined together',
+      caption:
+        'A box of seven identical diatomic molecules, each two medium gray atoms of the same kind joined together, as in O₂ or N₂ gas. Only one kind of atom appears, so the box shows a pure element even though its particles are molecules.',
+      settings: {
+        seed: 11,
+        particles: [{ count: 7, shape: 'pair', look: { size: 'm', shade: 'gray', charge: '' }, outer: { size: 'm', shade: 'gray', charge: '' } }],
+      },
+    },
+    {
+      slug: 'particle-diagram-mixture-of-element-and-compound',
+      title: 'Particle diagram of a mixture of an element and a compound',
+      alt: 'A box with linear molecules of one black atom between two light gray atoms, mixed with diatomic molecules of two light gray atoms',
+      caption:
+        'A box of two kinds of molecule scattered together: four linear molecules, each a black atom between two light gray atoms (like CO₂), and four diatomic molecules of two light gray atoms (like O₂). The diatomic molecules are an element and the linear ones a compound, so the box is a mixture of an element and a compound.',
+      settings: {
+        seed: 5,
+        particles: [
+          { count: 4, shape: 'line', look: { size: 'm', shade: 'black', charge: '' }, outer: { size: 'm', shade: 'light', charge: '' } },
+          { count: 4, shape: 'pair', look: { size: 'm', shade: 'light', charge: '' }, outer: { size: 'm', shade: 'light', charge: '' } },
+        ],
+      },
+    },
+    {
+      slug: 'particle-diagram-ionic-solid-lattice-nacl',
+      title: 'Particle diagram of an ionic solid (NaCl lattice)',
+      alt: 'A lattice of alternating large light gray negative ions and small dark gray positive ions, with a key naming them Cl⁻ and Na⁺',
+      caption:
+        'A square lattice of 4 rows and 6 columns in which large light gray negative ions alternate with small dark gray positive ions, as in solid sodium chloride. The key beside it names them Cl⁻ and Na⁺ ions. Each ion is surrounded by ions of the opposite charge.',
+      settings: {
+        layout: 'lattice', pattern: 'alternate', rows: 4, columns: 6,
+        main: { size: 'l', shade: 'light', charge: '-' }, second: { size: 's', shade: 'dark', charge: '+' },
+        mainName: 'Cl⁻ ion', secondName: 'Na⁺ ion', show: 'both',
+      },
+    },
+    {
+      slug: 'particle-diagram-interstitial-alloy-steel',
+      title: 'Particle diagram of an interstitial alloy (steel)',
+      alt: 'A lattice of large gray iron atoms with small black carbon atoms in some of the gaps, with a key',
+      caption:
+        'A lattice of large gray atoms, labeled iron in the key, with six small black carbon atoms sitting in the gaps between them. This is an interstitial alloy like steel: the small atoms fit between the metal atoms rather than replacing them.',
+      settings: {
+        layout: 'lattice', pattern: 'interstitial', rows: 5, columns: 6,
+        main: { size: 'l', shade: 'gray', charge: '' }, second: { size: 'xs', shade: 'black', charge: '' }, secondCount: 6,
+        mainName: 'Fe atom', secondName: 'C atom', show: 'both',
+      },
+    },
+    {
+      slug: 'particle-diagram-substitutional-alloy-brass',
+      title: 'Particle diagram of a substitutional alloy (brass)',
+      alt: 'A lattice of light gray copper atoms with some replaced by dark gray zinc atoms of similar size, with a key',
+      caption:
+        'A lattice of light gray atoms, labeled copper in the key, in which eight have been replaced by dark gray zinc atoms of about the same size. This is a substitutional alloy like brass: atoms of the second metal take the places of the first.',
+      settings: {
+        layout: 'lattice', pattern: 'substitute', rows: 5, columns: 6,
+        main: { size: 'l', shade: 'light', charge: '' }, second: { size: 'l', shade: 'dark', charge: '' }, secondCount: 8,
+        mainName: 'Cu atom', secondName: 'Zn atom', show: 'both',
+      },
+    },
+  ]),
+
+  ...examplesOf('bohr-model', [
+    {
+      slug: 'bohr-model-of-sodium',
+      title: 'Bohr model of sodium (Na)',
+      alt: 'Bohr model of a sodium atom: a nucleus of 11 protons and 12 neutrons, with 2, 8 and 1 electrons on three shells',
+      caption:
+        'A Bohr model of a neutral sodium atom. The nucleus is drawn as 11 red protons and 12 gray neutrons, and 11 blue electrons sit on three rings: 2 on the first shell, 8 on the second and 1 on the third. The single outer electron is sodium’s one valence electron.',
+      settings: { protons: 11, neutrons: 12, electrons: [2, 8, 1] },
+    },
+    {
+      slug: 'bohr-model-of-carbon',
+      title: 'Bohr model of carbon (C)',
+      alt: 'Bohr model of a carbon atom: 6 protons and 6 neutrons in the nucleus, 2 and 4 electrons on two shells, with a key',
+      caption:
+        'A Bohr model of a neutral carbon-12 atom: 6 protons and 6 neutrons in the nucleus, and 6 electrons, 2 on the first shell and 4 on the second. A key beside it shows which dot is a proton, a neutron and an electron.',
+      settings: { key: true },
+    },
+    {
+      slug: 'bohr-model-of-oxygen',
+      title: 'Bohr model of oxygen (O)',
+      alt: 'Bohr model of an oxygen atom: 8 protons and 8 neutrons, with 2 electrons on the first shell and 6 on the second drawn in pairs',
+      caption:
+        'A Bohr model of a neutral oxygen atom with 8 protons and 8 neutrons in the nucleus. Its 8 electrons are 2 on the first shell and 6 on the second, drawn in pairs at the four compass points as in a Lewis structure, so the two unpaired valence electrons stand out. The shells are labeled n = 1 and n = 2.',
+      settings: { protons: 8, neutrons: 8, electrons: [2, 6], placement: 'paired', shellLabels: true },
+    },
+    {
+      slug: 'bohr-model-of-calcium',
+      title: 'Bohr model of calcium (Ca)',
+      alt: 'Bohr model of a calcium atom: a nucleus labeled 20 protons and 20 neutrons, with 2, 8, 8 and 2 electrons on four shells',
+      caption:
+        'A Bohr model of a neutral calcium atom, with its nucleus written as text: 20 protons and 20 neutrons. Its 20 electrons fill four shells as 2, 8, 8 and 2. The two electrons on the outer shell are calcium’s valence electrons.',
+      settings: { protons: 20, neutrons: 20, electrons: [2, 8, 8, 2], nucleus: 'text' },
+    },
+    {
+      slug: 'bohr-model-of-sodium-ion-na-plus',
+      title: 'Bohr model of a sodium ion (Na⁺)',
+      alt: 'Bohr model of a sodium ion in brackets with a + charge: 11 protons, 12 neutrons and 2 and 8 electrons, the lost third-shell electron drawn as an empty dashed spot',
+      caption:
+        'A Bohr model of the sodium ion Na⁺, in square brackets with its 1+ charge at the top right. It has 11 protons and 12 neutrons but only 10 electrons, 2 and 8. The electron it lost from the third shell is drawn as an empty dashed spot on the third ring, and a key explains the symbols.',
+      settings: { protons: 11, neutrons: 12, electrons: [2, 8], gainedLost: true, brackets: true, key: true },
+    },
+    {
+      slug: 'bohr-model-of-chloride-ion-cl-minus',
+      title: 'Bohr model of a chloride ion (Cl⁻)',
+      alt: 'Bohr model of a chloride ion in brackets with a − charge: 17 protons, 18 neutrons, and 2, 8 and 8 electrons with the gained electron in green',
+      caption:
+        'A Bohr model of the chloride ion Cl⁻, in square brackets with its 1− charge. It has 17 protons, 18 neutrons and 18 electrons on three shells as 2, 8 and 8. The one electron gained to complete the outer shell is drawn in green, and a key explains the colors.',
+      settings: { protons: 17, neutrons: 18, electrons: [2, 8, 8], gainedLost: true, brackets: true, key: true },
+    },
+    {
+      slug: 'blank-bohr-model-aluminum',
+      title: 'Blank Bohr model to fill in (aluminum)',
+      alt: 'Bohr model of aluminum with 13 protons and 14 neutrons in the nucleus and three empty rings labeled n = 1 to n = 3',
+      caption:
+        'A Bohr model worksheet figure for aluminum: the nucleus shows 13 protons and 14 neutrons, and three empty rings labeled n = 1, n = 2 and n = 3. Students draw the electrons themselves: 2, 8 and 3.',
+      settings: { protons: 13, neutrons: 14, electrons: [2, 8, 3], nucleus: 'text', emptyRings: true, shellLabels: true },
+    },
+  ]),
+
+  ...examplesOf('lewis-structures', [
+    {
+      slug: 'lewis-structure-of-co2',
+      title: 'Lewis structure of CO₂ (carbon dioxide)',
+      alt: 'Lewis structure of CO2: O=C=O with two double bonds and two lone pairs on each oxygen',
+      caption:
+        'The Lewis structure of carbon dioxide, CO₂: a carbon atom in the middle joined to each oxygen by a double bond. Each oxygen has two lone pairs and the carbon none, for 16 valence electrons in all, and every atom has an octet.',
+      settings: { formula: 'CO2' },
+    },
+    {
+      slug: 'lewis-structure-of-h2o',
+      title: 'Lewis structure of H₂O (water)',
+      alt: 'Lewis structure of water drawn bent: an oxygen with two lone pairs single-bonded to two hydrogens',
+      caption:
+        'The Lewis structure of water, H₂O: an oxygen atom single-bonded to two hydrogen atoms, with two lone pairs on the oxygen. It is drawn bent, hinting at the molecule’s real shape, and shows all 8 valence electrons.',
+      settings: { formula: 'H2O', shape: 'shaped' },
+    },
+    {
+      slug: 'lewis-structure-of-nh3',
+      title: 'Lewis structure of NH₃ (ammonia)',
+      alt: 'Lewis structure of ammonia: a nitrogen with one lone pair single-bonded to three hydrogens spread below it',
+      caption:
+        'The Lewis structure of ammonia, NH₃: a nitrogen atom single-bonded to three hydrogen atoms, with one lone pair on top. The hydrogens are spread below the nitrogen to hint at its trigonal pyramidal shape. It shows all 8 valence electrons.',
+      settings: { formula: 'NH3', shape: 'shaped' },
+    },
+    {
+      slug: 'lewis-dot-structure-of-ch4',
+      title: 'Lewis dot structure of CH₄ (methane)',
+      alt: 'Lewis dot structure of methane: a carbon with a pair of dots to each of four hydrogens',
+      caption:
+        'The Lewis dot structure of methane, CH₄, with each bond drawn as a pair of dots rather than a line. The carbon shares one pair of electrons with each of four hydrogen atoms, 8 valence electrons in all, and has no lone pairs.',
+      settings: { formula: 'CH4', bondStyle: 'dots' },
+    },
+    {
+      slug: 'lewis-structure-of-hcn',
+      title: 'Lewis structure of HCN (hydrogen cyanide)',
+      alt: 'Lewis structure of HCN: H single-bonded to C, triple-bonded to N with one lone pair',
+      caption:
+        'The Lewis structure of hydrogen cyanide, HCN: hydrogen single-bonded to a central carbon, which is triple-bonded to nitrogen. The nitrogen has one lone pair, for 10 valence electrons in all.',
+      settings: { formula: 'HCN' },
+    },
+    {
+      slug: 'resonance-structures-of-nitrate-no3',
+      title: 'Resonance structures of nitrate (NO₃⁻)',
+      alt: 'The three resonance structures of the nitrate ion in brackets, joined by double-headed arrows, with formal charges',
+      caption:
+        'The three resonance structures of the nitrate ion, NO₃⁻, side by side and joined by double-headed arrows. In each, nitrogen has one double bond and two single bonds to oxygen, and only the position of the double bond changes. Each is in square brackets with the ion’s 1− charge, and formal charges are shown.',
+      settings: { formula: 'NO3-', resonance: 'all', formalCharges: true },
+    },
+    {
+      slug: 'lewis-structure-of-sulfate-so4-2',
+      title: 'Lewis structure of sulfate (SO₄²⁻)',
+      alt: 'Lewis structure of the sulfate ion: sulfur single-bonded to four oxygens, each with three lone pairs, in brackets with a 2− charge and formal charges',
+      caption:
+        'The Lewis structure of the sulfate ion, SO₄²⁻, following the octet rule: sulfur single-bonded to four oxygen atoms, each oxygen with three lone pairs. The structure is in square brackets with the 2− charge, and formal charges are shown (+2 on sulfur, −1 on each oxygen).',
+      settings: { formula: 'SO4 2-', formalCharges: true },
+    },
+  ]),
+
+  ...examplesOf('orbital-diagram', [
+    {
+      slug: 'orbital-diagram-of-oxygen',
+      title: 'Orbital diagram of oxygen (O)',
+      alt: 'Orbital diagram of oxygen: 1s and 2s boxes each with a pair of arrows, and three 2p boxes with one pair and two single up arrows',
+      caption:
+        'The orbital diagram of an oxygen atom, 1s² 2s² 2p⁴, with each electron an arrow in a box. The 1s and 2s orbitals each hold a pair; in 2p, one orbital holds a pair and the other two hold one electron each, following Hund’s rule.',
+      settings: {},
+    },
+    {
+      slug: 'orbital-diagram-of-iron',
+      title: 'Orbital diagram of iron (Fe)',
+      alt: 'Orbital diagram of iron with boxes from 1s to 3d: 3d has one pair and four single up arrows',
+      caption:
+        'The full orbital diagram of an iron atom, 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶, with the sublevels in filling order. Every sublevel is full except 3d, where one orbital holds a pair and the other four hold one electron each, giving iron four unpaired electrons.',
+      settings: { z: 26 },
+    },
+    {
+      slug: 'orbital-diagram-of-chromium-exception',
+      title: 'Orbital diagram of chromium (an exception)',
+      alt: 'Orbital diagram of chromium with an argon core: 4s has one up arrow and all five 3d boxes have one up arrow',
+      caption:
+        'The orbital diagram of chromium, an exception to the filling order: [Ar] 4s¹ 3d⁵ rather than 4s² 3d⁴. The argon noble gas core is written instead of drawn, then 4s holds one electron and each of the five 3d orbitals holds one, a half-filled d sublevel.',
+      settings: { z: 24, core: true },
+    },
+    {
+      slug: 'orbital-diagram-of-fe3-plus-ion',
+      title: 'Orbital diagram of the Fe³⁺ ion',
+      alt: 'Orbital diagram of Fe3+ with an argon core: an empty 4s box and five 3d boxes each with one up arrow',
+      caption:
+        'The orbital diagram of the iron(III) ion, Fe³⁺: [Ar] 3d⁵. Iron loses its two 4s electrons first and then one 3d electron, so 4s is drawn empty and each of the five 3d orbitals holds one electron.',
+      settings: { z: 26, charge: 3, core: true },
+    },
+    {
+      slug: 'orbital-diagram-and-electron-configuration-of-sulfur',
+      title: 'Orbital diagram and electron configuration of sulfur (S)',
+      alt: 'Orbital diagram of sulfur from 1s to 3p with its electron configuration 1s2 2s2 2p6 3s2 3p4 written underneath',
+      caption:
+        'The orbital diagram of a sulfur atom, with its electron configuration, 1s² 2s² 2p⁶ 3s² 3p⁴, written underneath. In 3p, one orbital holds a pair and two hold one electron each, so sulfur has two unpaired electrons.',
+      settings: { z: 16, configLine: 'text' },
+    },
+    {
+      slug: 'orbital-diagram-hunds-rule-mistake-nitrogen',
+      title: 'Find the mistake: orbital diagram breaking Hund’s rule (nitrogen)',
+      alt: 'Orbital diagram of nitrogen drawn wrong: the 2p sublevel has a pair of arrows in one box, one arrow in the next and an empty third box',
+      caption:
+        'A deliberately wrong orbital diagram of nitrogen for a “find the mistake” question. Its 2p sublevel has a pair in the first orbital, one electron in the second and none in the third, which breaks Hund’s rule: in the ground state, 1s² 2s² 2p³, each 2p orbital holds one electron.',
+      settings: { z: 7, changes: { '2p': ['ud', 'u', ''] } },
+    },
+  ]),
+]
+
+/** A generator's examples, in order; the first is its best. */
+export const examplesFor = (generator: string) => EXAMPLES.filter((e) => e.generator === generator)
+
+export const findExample = (generator: string, slug: string) => EXAMPLES.find((e) => e.generator === generator && e.slug === slug)
+
+/** Generators with examples. */
+export const EXAMPLE_GENERATORS = [...new Set(EXAMPLES.map((e) => e.generator))]
+
+/** The generator's social card image (static/og/<generator>.png), made from its first example. */
+export const ogImage = (generator: string) => `/og/${generator}.png`
