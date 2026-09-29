@@ -10,6 +10,7 @@ import BohrModelPreview from './bohr-model/Preview.svelte'
 import GasSyringePreview from './gas-syringe/Preview.svelte'
 import LengthReadingPreview from './length-reading/Preview.svelte'
 import LewisStructuresPreview from './lewis-structures/Preview.svelte'
+import LineSpectrumPreview from './line-spectrum/Preview.svelte'
 import MassReadingPreview from './mass-reading/Preview.svelte'
 import OrbitalDiagramPreview from './orbital-diagram/Preview.svelte'
 import ParticleDiagramPreview from './particle-diagram/Preview.svelte'
@@ -24,6 +25,7 @@ export const PREVIEWS: Record<string, Component> = {
   'bohr-model': BohrModelPreview,
   'length-reading': LengthReadingPreview,
   'lewis-structures': LewisStructuresPreview,
+  'line-spectrum': LineSpectrumPreview,
   'mass-reading': MassReadingPreview,
   'orbital-diagram': OrbitalDiagramPreview,
   'particle-diagram': ParticleDiagramPreview,
