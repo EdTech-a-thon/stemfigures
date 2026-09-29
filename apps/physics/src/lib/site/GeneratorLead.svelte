@@ -11,7 +11,7 @@
   let { apply }: { apply: (settings: object) => void } = $props()
 
   const generator = $derived(findGenerator(page.url.pathname))
-  /** The catalog description's first sentence: "Make a printable … into a worksheet or test." */
+  /** The catalog description's first sentence: "Make printable … for physics tests." */
   const summary = $derived(generator?.description.split(/(?<=\.)\s/)[0] ?? '')
   const examples = $derived(generator ? examplesFor(generator.id) : [])
   let open = $state(false)

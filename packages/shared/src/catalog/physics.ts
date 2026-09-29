@@ -10,7 +10,7 @@ export const PHYSICS: CatalogEntry[] = [
     path: '/free-body-diagram',
     blurb: 'A dot or block with every force on it, and nothing else.',
     description:
-      'Make a printable free body diagram for your class: a dot or block with up to eight forces at any angle, with equal forces drawn equal, angles and components marked, and every label written or left blank, then copy it into a worksheet or test.',
+      'Make printable free body diagrams for physics tests. Draw a dot or block with up to eight forces, each labeled or left blank.',
     keywords: [
       'free body diagram', 'fbd', 'force diagram', 'forces', 'force', 'gravity', 'weight', 'normal force', 'friction',
       'tension', 'applied force', 'spring', 'air resistance', 'drag', 'net force', 'equilibrium', 'balanced',
@@ -25,7 +25,7 @@ export const PHYSICS: CatalogEntry[] = [
     path: '/vector-diagram',
     blurb: 'Up to three vectors head to tail on a grid, with their resultant.',
     description:
-      'Make a printable vector diagram for your class: up to three vectors drawn to scale head to tail, on a grid or not, with the resultant, angles and components each drawn, dashed or left off for students, then copy it into a worksheet or test.',
+      'Make printable vector diagrams for physics tests. Add up to three vectors head to tail, with the resultant drawn or left for students.',
     keywords: [
       'vector', 'vectors', 'vector diagram', 'vector addition', 'adding vectors', 'head to tail', 'tip to tail',
       'resultant', 'sum', 'components', 'resolve', 'resolving', 'x component', 'y component', 'magnitude', 'direction',
@@ -40,7 +40,7 @@ export const PHYSICS: CatalogEntry[] = [
     path: '/inclined-plane',
     blurb: 'A block, ball or cart on a ramp, with its angle and forces.',
     description:
-      'Make a printable inclined plane figure for your class: a block, ball or cart on a ramp at any angle, with the angle, length and height labeled or left blank, then copy it into a worksheet or test.',
+      'Make printable inclined plane figures for physics tests. Put a block, ball or cart on a ramp at any angle, labeled or left blank.',
     keywords: [
       'incline', 'inclined plane', 'ramp', 'slope', 'wedge', 'block', 'ball', 'cart', 'angle', 'theta', 'friction',
       'rough', 'smooth', 'free body diagram', 'fbd', 'forces', 'normal force', 'gravity', 'newton', "newton's laws", 'sliding',
@@ -54,7 +54,7 @@ export const PHYSICS: CatalogEntry[] = [
     path: '/pulley',
     blurb: 'Objects on strings over pulleys, from an Atwood machine up.',
     description:
-      'Make a printable pulley figure for your class: an Atwood machine, a block on a table or ramp tied over a pulley to a hanging mass, or a block and tackle, with the masses labeled or left blank, then copy it into a worksheet or test.',
+      'Make printable pulley figures for physics tests. Draw an Atwood machine, a block tied over a pulley to a hanging mass, or a block and tackle.',
     keywords: [
       'pulley', 'pulleys', 'atwood', 'atwood machine', 'string', 'rope', 'tension', 'hanging mass', 'block', 'table',
       'ramp', 'block and tackle', 'mechanical advantage', 'strands', 'free body diagram', 'fbd', 'forces', 'newton',
@@ -68,7 +68,7 @@ export const PHYSICS: CatalogEntry[] = [
     path: '/projectile-motion',
     blurb: 'A ball launched from the ground or a cliff, with its path.',
     description:
-      'Make a printable projectile motion figure for your class: a ball launched at any angle from level ground or off a cliff, with its path, launch velocity and components, maximum height and range labeled or left blank, then copy it into a worksheet or test.',
+      'Make printable projectile motion figures for physics tests. Launch a ball from the ground or a cliff, with its path, height and range.',
     keywords: [
       'projectile', 'projectile motion', 'trajectory', 'parabola', 'path', 'launch', 'launch angle', 'thrown', 'kicked',
       'cannon', 'cliff', 'horizontal launch', 'range', 'maximum height', 'time of flight', 'velocity', 'components',
@@ -83,7 +83,7 @@ export const PHYSICS: CatalogEntry[] = [
     path: '/spring-scale',
     blurb: 'A spring scale with its pointer at any force, for reading practice.',
     description:
-      'Make a printable spring scale figure for your class: a 1 N to 50 N scale, color-coded by capacity and printed in newtons, grams or both, with its pointer at any force, a zero offset if you want one and a magnifier on the pointer, then copy it into a worksheet or test.',
+      'Make printable spring scale figures for physics tests. Set the pointer to any force, in newtons, grams or both, for students to read.',
     keywords: [
       'spring scale', 'spring balance', 'newton meter', 'newtonmeter', 'force meter', 'forcemeter', 'force', 'weight',
       'newton', 'newtons', 'grams', 'mass', 'hooke', "hooke's law", 'spring', 'reading', 'measuring', 'measurement',
