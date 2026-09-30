@@ -139,6 +139,14 @@ describe('the figure', () => {
     expect(buildSpectrum({ ...d, ticks: 'none' }).ticks.every((t) => t.major)).toBe(true)
   })
 
+  it('numbers every multiple even when ticks don’t land on it', () => {
+    const f = buildSpectrum({ ...d, ticks: '20', numbers: '50' })
+    expect(f.ticks.filter((t) => t.number).map((t) => t.number)).toEqual(['400', '450', '500', '550', '600', '650', '700'])
+    expect(f.ticks.filter((t) => !t.major)).toHaveLength(12) // 420, 440, 460, 480, 520… not on a number
+    const g = buildSpectrum({ ...d, ticks: '10', numbers: '25' })
+    expect(g.ticks.filter((t) => t.number)).toHaveLength(13)
+  })
+
   it('draws the axis under the last strip, under each, or not at all', () => {
     expect(buildSpectrum(d).strips.map((s) => s.axis)).toEqual([false, false, false, true])
     expect(buildSpectrum({ ...d, axis: 'each' }).strips.every((s) => s.axis)).toBe(true)

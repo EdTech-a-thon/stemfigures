@@ -112,7 +112,13 @@ export function energyAxis(scale: PesSettings['scale'], energies: number[], char
     let x = 0
     groups.forEach((g, i) => {
       const pad = g.high === g.low ? g.high * 0.12 : Math.max((g.high - g.low) * 0.3, g.high * 0.06)
-      const st = { top: g.high + pad, bottom: Math.max(0, g.low - pad), x0: x, x1: x + (room * weights[i]) / total, log: false }
+      // Padding stops halfway (in powers of ten) to the next group, so no
+      // two stretches share an energy and each peak lands in its own.
+      const above = i > 0 ? Math.sqrt(groups[i - 1].low * g.high) : Infinity
+      const below = i < groups.length - 1 ? Math.sqrt(g.low * groups[i + 1].high) : 0
+      const top = Math.min(g.high + pad, above)
+      const bottom = Math.max(0, g.low - pad, below)
+      const st = { top, bottom, x0: x, x1: x + (room * weights[i]) / total, log: false }
       stretches.push(st)
       // Numbered ticks stay clear of the stretch's ends, where the next
       // stretch's numbers begin, and of each other; a narrow stretch may
