@@ -9,7 +9,14 @@ and `docs/adr/` for decisions.
 
 - `/` **Directory**: every generator as a card with a live preview, plus a
   card to request one we don't make yet.
-- No generators yet; the directory shows only the request card.
+- `/predator-prey` **Predator–Prey Cycles**: a predator and its prey (hare
+  and lynx, wolf and moose, or your own pair) rising and falling out of step,
+  from the Lotka–Volterra model, worked out from where they start, their
+  averages and the cycle length, or from the model's four rates. Both
+  populations over time, on one y-axis or with the predators on the right,
+  or as a phase plane loop; smooth curves or census counts with seeded
+  noise; the peaks, lag and period marked, labeled or left blank, and either
+  population left off for students to sketch. Built on `$shared/graph`.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
