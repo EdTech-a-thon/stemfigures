@@ -95,7 +95,6 @@
   {/each}
 
   {#each g.keyEntries as n}{@render sample(n.key, n.sample)}{/each}
-  {#each g.axisKeys as k}{@render sample(k.key, k.sample)}{/each}
 
   <g font-family={SANS} font-size={g.fs * 1.05} font-weight="bold" fill={INK} stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
     {#each g.spans as sp}<text x={sp.label.x} y={sp.label.y} text-anchor={sp.label.anchor}>{sp.label.text}</text>{/each}

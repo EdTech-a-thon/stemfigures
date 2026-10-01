@@ -68,7 +68,6 @@ describe('a predator–prey graph', () => {
     expect(two.right?.numbers.length).toBeGreaterThan(3)
     expect(two.right?.title?.text).toBe('Lynx (thousands)')
     expect(two.width).toBeGreaterThan(one.width)
-    expect(two.axisKeys.map((k) => k.key)).toEqual(['prey', 'predators'])
   })
 
   it('marks the lag and period with their lengths, or blanks for students', () => {

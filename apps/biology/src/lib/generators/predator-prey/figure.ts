@@ -328,20 +328,6 @@ export function buildPredatorPrey(s: PredatorPreySettings) {
     }
   }
 
-  // With two y-axes, a sample of each line beside its axis title says which axis is whose.
-  const axisKeys: { key: SeriesKey; sample: Segment }[] = []
-  if (two) {
-    const beside = (key: SeriesKey, t: { x: number; y: number; text: string } | undefined) => {
-      if (!t || !drawnKeys.includes(key)) return
-      const half = (t.text.length * fs * 1.2 * 0.56) / 2
-      if (half + 8 + SAMPLE_W > area.h / 2 + 4) return
-      // Titles read upward, so the sample goes before (below) the words.
-      axisKeys.push({ key, sample: { x1: t.x, y1: t.y + half + 8 + SAMPLE_W, x2: t.x, y2: t.y + half + 8 } })
-    }
-    beside('prey', grid.labels.find((l) => l.kind === 'side' && l.rotate))
-    beside('predators', right?.title)
-  }
-
   // Peaks, from the model, or from the counts when it's a census.
   const turns = phase ? null : turnsOf(m.rates, m.run)
   const peaksOf = (key: SeriesKey): (Turn & { p: Point })[] => {
@@ -479,7 +465,6 @@ export function buildPredatorPrey(s: PredatorPreySettings) {
     series,
     loop,
     right,
-    axisKeys,
     peaks,
     drops,
     spans,
