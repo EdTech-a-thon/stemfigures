@@ -77,8 +77,15 @@
     s.dominance = next
   }
 
-  const sameSettings = (cross: (typeof COMMON_CROSSES)[number]) =>
-    Object.entries(cross.settings).every(([key, value]) => (t as Record<string, unknown>)[key] === value)
+  // The setup picker shows the common cross the square still is; changing
+  // any of its settings leaves it blank again.
+  const setupName = $derived(
+    COMMON_CROSSES.find((cross) => Object.entries(cross.settings).every(([key, value]) => (t as Record<string, unknown>)[key] === value))?.name ?? '',
+  )
+  function chooseSetup(name: string) {
+    const cross = COMMON_CROSSES.find((x) => x.name === name)
+    if (cross) gen.apply(withCross(gen.snapshot(), cross.settings))
+  }
 
   const toggleCell = (row: number, column: number) => (s.blanks ^= 1 << (row * n + column))
 
@@ -116,6 +123,12 @@
 <GeneratorPage name="Punnett Square" filename="punnett-square" settingsWidth={26} {gen} {svg} bind:labelSize={s.labelSize}>
   {#snippet inputs()}
     <div class="inputs">
+      <label class="field-label" for="punnett-setup">Classic setups</label>
+      <select id="punnett-setup" value={setupName} onchange={(e) => chooseSetup(e.currentTarget.value)}>
+        <option value="" disabled>Choose one…</option>
+        {#each COMMON_CROSSES as cross (cross.name)}<option value={cross.name}>{cross.name}</option>{/each}
+      </select>
+
       <p class="field-label">Cross</p>
       <div class="segmented" role="radiogroup" aria-label="Cross">
         {#each Object.entries(CROSS_NAMES) as [cross, name] (cross)}
@@ -162,15 +175,6 @@
       {:else}
         <p class="note error" id="punnett-parents-note" role="status">{reading.error}</p>
       {/if}
-
-      <p class="field-label">Common crosses</p>
-      <div class="chips">
-        {#each COMMON_CROSSES as cross (cross.name)}
-          <button type="button" class="chip small" class:on={sameSettings(cross)} onclick={() => gen.apply(withCross(gen.snapshot(), cross.settings))}>
-            {cross.name}
-          </button>
-        {/each}
-      </div>
     </div>
   {/snippet}
 
@@ -296,7 +300,6 @@
   .field-label:first-child { margin-top: 0; }
   .note { margin: 0.45rem 0 0; font-size: 0.85rem; color: var(--muted); }
   .note.error { color: var(--red); }
-  .chip.small { padding: 0.35rem 0.7rem; font-size: 0.85rem; }
   .check { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.8rem; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
   .check input { width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--blue); }
   .names { display: grid; gap: 0.45rem; margin-top: 0.7rem; }
