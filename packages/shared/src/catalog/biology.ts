@@ -88,9 +88,8 @@ export const BIOLOGY: CatalogEntry[] = [
     path: '/predator-prey',
     blurb: 'Predator and prey populations rising and falling out of step.',
     description:
-      'Make printable predator–prey graphs for biology tests. Pick a predator and its prey and graph their populations cycling over time, from the Lotka–Volterra model.',
-    keywords: ['predator', 'prey', 'predator-prey', 'lotka-volterra', 'population', 'cycle', 'ecology', 'graph', 'printable'],
-    off: true,
+      'Make printable predator–prey graphs for biology tests. Pick a pair like hare and lynx, graph their populations cycling over time or as a phase plane, and mark the peaks, lag and period.',
+    keywords: ['predator', 'prey', 'predator-prey', 'lotka-volterra', 'population', 'cycle', 'hare', 'lynx', 'wolf', 'phase plane', 'census', 'lag', 'ecology', 'graph', 'printable'],
   },
   {
     id: 'gel-electrophoresis',
