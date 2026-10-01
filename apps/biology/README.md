@@ -43,6 +43,15 @@ and `docs/adr/` for decisions.
   or as a phase plane loop; smooth curves or census counts with seeded
   noise; the peaks, lag and period marked, labeled or left blank, and either
   population left off for students to sketch. Built on `$shared/graph`.
+- `/pedigree` **Pedigree**: a random family for autosomal dominant or
+  recessive, X-linked dominant or recessive, or Y-linked inheritance, over 2
+  to 4 generations, that students can diagnose; or a classic (hemophilia in
+  a royal family, Huntington's, cystic fibrosis, albinism, color blindness,
+  vitamin D–resistant rickets). Click anyone to change their sex or status,
+  mark them deceased or the proband, make twins, or add a child, partner or
+  sibling; the family is written into the address. It checks the family
+  against every mode and says how students can tell, and can show carriers
+  (half filled or a dot), genotypes as answers or blanks, numbers and a key.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a

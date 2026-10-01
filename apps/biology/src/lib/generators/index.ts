@@ -7,6 +7,7 @@ import type { Component } from 'svelte'
 import { generatorsOn } from '$shared/catalog/index'
 import { SITE_ID } from '$lib/site/config'
 import PunnettSquarePreview from './punnett-square/Preview.svelte'
+import PedigreePreview from './pedigree/Preview.svelte'
 import PredatorPreyPreview from './predator-prey/Preview.svelte'
 import GelElectrophoresisPreview from './gel-electrophoresis/Preview.svelte'
 import MicropipetteReadingPreview from './micropipette-reading/Preview.svelte'
@@ -15,6 +16,7 @@ import MicroscopeFieldOfViewPreview from './microscope-field-of-view/Preview.sve
 /** Each generator's directory preview, by id. */
 export const PREVIEWS: Record<string, Component> = {
   'punnett-square': PunnettSquarePreview,
+  pedigree: PedigreePreview,
   'predator-prey': PredatorPreyPreview,
   'gel-electrophoresis': GelElectrophoresisPreview,
   'micropipette-reading': MicropipetteReadingPreview,

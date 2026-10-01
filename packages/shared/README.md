@@ -15,7 +15,7 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve), biology (Predator–Prey Cycles) |
 | `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve), biology (Micropipette Reading, Gel Electrophoresis, Predator–Prey Cycles) |
 | `HelpTip`                                                                                   | math, biology (Predator–Prey Cycles)      |
-| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading, Gel Electrophoresis, `FigureFrame`, `settings`, Microscope Field of View: `FigureFrame`, Predator–Prey Cycles) |
+| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading, Gel Electrophoresis, `FigureFrame`, `settings`, Microscope Field of View: `FigureFrame`, Predator–Prey Cycles, Pedigree) |
 | `Magnifier`, `MagnifierSettings`, `magnify`                                                 | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading: `Magnifier`, `magnify`) |
 | `marks`, `ReadingField`                                                                     | physics (Spring Scale), biology (Microscope Field of View: `ReadingField`) |
 

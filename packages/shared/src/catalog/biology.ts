@@ -64,11 +64,10 @@ export const BIOLOGY: CatalogEntry[] = [
     site: 'biology',
     name: 'Pedigree',
     path: '/pedigree',
-    blurb: 'A family pedigree for a trait, affected and carriers shaded.',
+    blurb: 'A random family for any inheritance mode, or one you change by hand.',
     description:
-      'Make printable pedigree charts for biology tests. Build a family across generations and shade who has the trait, for dominant, recessive or X-linked inheritance.',
-    keywords: ['pedigree', 'family tree', 'genetics', 'inheritance', 'carrier', 'affected', 'autosomal', 'dominant', 'recessive', 'x-linked', 'sex-linked', 'printable'],
-    off: true,
+      'Make printable pedigree charts for biology tests. Get a random family students can diagnose for dominant, recessive, X-linked or Y-linked inheritance, or a classic like hemophilia, then click anyone to change them.',
+    keywords: ['pedigree', 'pedigree chart', 'family tree', 'genetics', 'inheritance', 'carrier', 'affected', 'autosomal', 'dominant', 'recessive', 'x-linked', 'sex-linked', 'y-linked', 'genotype', 'hemophilia', 'huntington', 'cystic fibrosis', 'albinism', 'color blindness', 'printable'],
   },
   {
     id: 'cell-division',
