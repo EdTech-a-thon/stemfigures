@@ -6,10 +6,13 @@
 import type { Component } from 'svelte'
 import { generatorsOn } from '$shared/catalog/index'
 import { SITE_ID } from '$lib/site/config'
+import CellDivisionPreview from './cell-division/Preview.svelte'
 
-// None of its own yet; the directory shows those it lists from other sites
-// and the card for requesting one.
-export const PREVIEWS: Record<string, Component> = {}
+// Each generator's directory preview, by catalog id. The directory also
+// shows those it lists from other sites and the card for requesting one.
+export const PREVIEWS: Record<string, Component> = {
+  'cell-division': CellDivisionPreview,
+}
 
 export const GENERATORS = generatorsOn(SITE_ID, PREVIEWS)
 

@@ -9,13 +9,13 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `request.svelte.ts`                                                                         | math, physics, chemistry, biology, engineering |
 | `Modal`                                                                                     | math, chemistry, physics, biology, engineering |
 | `LabelField`                                                                                | math, chemistry, biology, engineering     |
-| `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics |
-| `labelSize`                                                                                 | math, chemistry (Titration Curve)         |
+| `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics, biology |
+| `labelSize`                                                                                 | math, chemistry (Titration Curve), biology (Mitosis & Meiosis) |
 | `graph/`: `Grid`, `grid`, `axes`, `AxisSettings`, `TitleSettings`, `GridlineSettings`       | math (Coordinate Grid), chemistry (Titration Curve) |
 | `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve)         |
-| `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve) |
+| `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve), biology (Mitosis & Meiosis) |
 | `HelpTip`                                                                                   | math                                      |
-| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading) |
+| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Mitosis & Meiosis, all but `FigureTextSettings`) |
 | `Magnifier`, `MagnifierSettings`, `magnify`                                                 | physics (Spring Scale), math (Length Reading) |
 | `marks`, `ReadingField`                                                                     | physics (Spring Scale)                    |
 
