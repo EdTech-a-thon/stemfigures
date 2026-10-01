@@ -61,6 +61,17 @@ and `docs/adr/` for decisions.
   (with a little scatter) and a census table; any label can be a blank line,
   and the curve can be left off for blank axes. Classroom setups start it
   from yeast in a flask, deer on an island, doubling bacteria and more.
+- `/cell-division` **Mitosis & Meiosis**: cells at the phases of mitosis
+  (interphase G1 or G2 through cytokinesis) or meiosis (prophase I through the
+  four haploid cells), for 2n = 2, 4, 6 or 8, in an animal or plant cell. One
+  phase, or a strip of phases in order or shuffled from a seed. Homologous
+  pairs differ in size, each with a maternal and a paternal member (dark and
+  light in color, solid and outlined in black and white); crossing over swaps
+  tetrads' tips and carries into every later cell. Labels: phase names,
+  numbers or blank lines, "2n = 4" or chromosome counts under each cell, and
+  on one phase the structures (chromosome, sister chromatids, centromere,
+  tetrad or homologous pair, spindle fibers, centrioles, nuclear envelope,
+  cleavage furrow or cell plate) as names, letters or blank lines.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a

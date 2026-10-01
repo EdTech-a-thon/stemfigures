@@ -73,11 +73,10 @@ export const BIOLOGY: CatalogEntry[] = [
     site: 'biology',
     name: 'Mitosis & Meiosis',
     path: '/cell-division',
-    blurb: 'A cell at any phase of mitosis or meiosis, with its chromosomes.',
+    blurb: 'Cells at each phase of mitosis or meiosis, with the right chromosomes.',
     description:
-      'Make printable mitosis and meiosis diagrams for biology tests. Pick a phase and a chromosome number and show the cell with its chromosomes at that stage.',
-    keywords: ['mitosis', 'meiosis', 'cell division', 'cell cycle', 'phases', 'chromosomes', 'prophase', 'metaphase', 'anaphase', 'telophase', 'diploid', 'haploid', 'printable'],
-    off: true,
+      'Make printable mitosis and meiosis diagrams for biology tests. Pick 2n = 2 to 8 and an animal or plant cell, then show one phase or a strip of phases to label or put in order, with crossing over and chromosome counts.',
+    keywords: ['mitosis', 'meiosis', 'cell division', 'cell cycle', 'phases', 'stages', 'chromosomes', 'interphase', 'prophase', 'prometaphase', 'metaphase', 'anaphase', 'telophase', 'cytokinesis', 'crossing over', 'tetrad', 'homologous chromosomes', 'sister chromatids', 'centromere', 'spindle', 'diploid', 'haploid', 'onion root tip', 'printable'],
   },
   {
     id: 'predator-prey',

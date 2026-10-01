@@ -9,6 +9,7 @@ import { SITE_ID } from '$lib/site/config'
 import PopulationGrowthPreview from './population-growth/Preview.svelte'
 import PunnettSquarePreview from './punnett-square/Preview.svelte'
 import PedigreePreview from './pedigree/Preview.svelte'
+import CellDivisionPreview from './cell-division/Preview.svelte'
 import PredatorPreyPreview from './predator-prey/Preview.svelte'
 import GelElectrophoresisPreview from './gel-electrophoresis/Preview.svelte'
 import MicropipetteReadingPreview from './micropipette-reading/Preview.svelte'
@@ -19,6 +20,7 @@ export const PREVIEWS: Record<string, Component> = {
   'population-growth': PopulationGrowthPreview,
   'punnett-square': PunnettSquarePreview,
   pedigree: PedigreePreview,
+  'cell-division': CellDivisionPreview,
   'predator-prey': PredatorPreyPreview,
   'gel-electrophoresis': GelElectrophoresisPreview,
   'micropipette-reading': MicropipetteReadingPreview,
