@@ -37,7 +37,7 @@ and `docs/adr/` for decisions.
   sibling; the family is written into the address. It checks the family
   against every mode and says how students can tell, and can show carriers
   (half filled or a dot), genotypes as answers or blanks, numbers and a key.
-- `/cell-division` **Mitosis & Meiosis**: cells at the phases of mitosis
+- `/cell-division` **Mitosis & Meiosis** (turned off for now, a 404): cells at the phases of mitosis
   (interphase G1 or G2 through cytokinesis) or meiosis (prophase I through the
   four haploid cells), for 2n = 2, 4, 6 or 8, in an animal or plant cell. One
   phase, or a strip of phases in order or shuffled from a seed. Homologous
@@ -69,7 +69,7 @@ and `docs/adr/` for decisions.
   Its display shows three digit wheels read top to bottom, red where the
   decimal point goes (Gilson's convention), with a line there too for black
   and white copies, and a magnifier on the display.
-- `/microscope-field-of-view` **Microscope Field of View**: the circle seen
+- `/microscope-field-of-view` **Microscope Field of View** (turned off for now, a 404): the circle seen
   down a compound microscope, drawn to scale: onion or Elodea cells, cheek or
   red blood cells, paramecia, simple cells or circles, or the letter e, at
   any eyepiece and objective, and the same slide at a higher power beside

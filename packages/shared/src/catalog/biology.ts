@@ -67,6 +67,7 @@ export const BIOLOGY: CatalogEntry[] = [
   {
     id: 'cell-division',
     site: 'biology',
+    off: true,
     name: 'Mitosis & Meiosis',
     path: '/cell-division',
     blurb: 'Cells at each phase of mitosis or meiosis, with the right chromosomes.',
@@ -107,6 +108,7 @@ export const BIOLOGY: CatalogEntry[] = [
   {
     id: 'microscope-field-of-view',
     site: 'biology',
+    off: true,
     name: 'Microscope Field of View',
     path: '/microscope-field-of-view',
     blurb: 'The circle seen down a microscope, drawn to scale, for estimating size.',
