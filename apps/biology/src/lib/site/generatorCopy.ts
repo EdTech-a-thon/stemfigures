@@ -226,7 +226,7 @@ export const COPY: Record<string, GeneratorCopy> = {
     heading: 'Gel electrophoresis figures: DNA fingerprinting, PCR and restriction digests',
     intro: [
       'Gel Electrophoresis draws an agarose gel with up to 12 lanes: a DNA ladder (a 100 bp ladder, a 1 kb ladder or λ DNA cut with HindIII) and sample lanes holding the band sizes you type. Each band runs as far as its size takes it on the gel you pick, so smaller fragments run farther, sizes too big or too small for the gel crowd toward its ends, and bands too close to separate run together as one thicker band. Start from a crime scene, paternity test, restriction digest or PCR experiment, then change anything.',
-      'Teachers use it for DNA fingerprinting, forensics and paternity questions, restriction mapping, PCR results and sizing fragments against a ladder. Leave a sample lane empty for students to draw its bands, swap the ladder’s sizes or the electrodes’ signs for blanks, or add a ruler for a standard curve. The answer key prints every sample lane’s band sizes under the figure.',
+      'Teachers use it for DNA fingerprinting, forensics and paternity questions, restriction mapping, PCR results and sizing fragments against a ladder. Leave a sample lane empty for students to draw its bands, swap the ladder’s sizes or the electrodes’ signs for blanks, or add a ruler for a standard curve. The answer key prints the sample lanes’ band sizes under the figure.',
     ],
     settings: [
       'Lanes: 2 to 12, each a ladder or a sample, in any order, each with its own label',
@@ -261,7 +261,7 @@ export const COPY: Record<string, GeneratorCopy> = {
       },
       {
         q: 'Can students draw the bands themselves?',
-        a: 'Yes. Tick “Blank for students to draw the bands” on any sample lane to leave it empty on the figure, for example the double digest after the two single digests. The answer key still lists that lane’s sizes. Set Ladder sizes or Lane labels to Blank lines, or Electrodes to Blank, for students to fill those in too.',
+        a: 'Yes. Clear a sample lane’s band sizes to leave it empty on the figure, for example the double digest after the two single digests. Set Ladder sizes or Lane labels to Blank lines, or Electrodes to Blank, for students to fill those in too.',
       },
       {
         q: 'Can I put the ladder in the middle of the gel?',

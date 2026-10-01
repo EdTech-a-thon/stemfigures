@@ -1,6 +1,5 @@
 // The lanes of a gel, left to right: a DNA ladder, or a sample with the band
-// sizes the teacher types. A sample lane can be left blank on the figure for
-// students to predict and draw its bands.
+// sizes the teacher types.
 
 import { LADDER_IDS, ladderBands, type LadderId } from './ladders'
 import type { Band } from './migration'
@@ -18,8 +17,6 @@ export interface SampleLane {
   label: string
   /** the band sizes as typed, e.g. "1200, 450 x2, 300" */
   bands: string
-  /** drawn with an empty lane, for students to fill in */
-  blank: boolean
 }
 
 export type Lane = LadderLane | SampleLane
@@ -84,7 +81,7 @@ function tidyLane(v: unknown): Lane | undefined {
   }
   if (raw.type === 'sample') {
     const bands = typeof raw.bands === 'string' ? raw.bands.slice(0, MAX_BANDS_TEXT) : ''
-    return { type: 'sample', id, label: label(raw.label), bands, blank: raw.blank === true }
+    return { type: 'sample', id, label: label(raw.label), bands }
   }
   return undefined
 }

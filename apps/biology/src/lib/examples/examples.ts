@@ -293,10 +293,10 @@ export const EXAMPLES: Example[] = [
       settings: {
         lanes: [
           { type: 'ladder', id: 1, label: 'Ladder', ladder: '1kb' },
-          { type: 'sample', id: 2, label: 'Mother', bands: '4800, 2900, 1600, 800', blank: false },
-          { type: 'sample', id: 3, label: 'Child', bands: '4800, 3200, 1600, 650', blank: false },
-          { type: 'sample', id: 4, label: 'Father 1', bands: '5600, 3500, 2200, 1100', blank: false },
-          { type: 'sample', id: 5, label: 'Father 2', bands: '4400, 3200, 1900, 650', blank: false },
+          { type: 'sample', id: 2, label: 'Mother', bands: '4800, 2900, 1600, 800' },
+          { type: 'sample', id: 3, label: 'Child', bands: '4800, 3200, 1600, 650' },
+          { type: 'sample', id: 4, label: 'Father 1', bands: '5600, 3500, 2200, 1100' },
+          { type: 'sample', id: 5, label: 'Father 2', bands: '4400, 3200, 1900, 650' },
         ],
         look: 'blue',
       },
@@ -310,10 +310,10 @@ export const EXAMPLES: Example[] = [
       settings: {
         lanes: [
           { type: 'ladder', id: 1, label: 'Ladder', ladder: '100bp' },
-          { type: 'sample', id: 2, label: 'Uncut', bands: '221', blank: false },
-          { type: 'sample', id: 3, label: 'TT', bands: '177, 44 x0.3', blank: false },
-          { type: 'sample', id: 4, label: 'Tt', bands: '221, 177, 44 x0.3', blank: false },
-          { type: 'sample', id: 5, label: 'tt', bands: '221', blank: false },
+          { type: 'sample', id: 2, label: 'Uncut', bands: '221' },
+          { type: 'sample', id: 3, label: 'TT', bands: '177, 44 x0.3' },
+          { type: 'sample', id: 4, label: 'Tt', bands: '221, 177, 44 x0.3' },
+          { type: 'sample', id: 5, label: 'tt', bands: '221' },
         ],
         gel: '2',
         laneNumbers: true,
@@ -328,9 +328,9 @@ export const EXAMPLES: Example[] = [
       settings: {
         lanes: [
           { type: 'ladder', id: 1, label: 'Ladder', ladder: 'lambda' },
-          { type: 'sample', id: 2, label: 'Uncut', bands: '48502 x8', blank: false },
-          { type: 'sample', id: 3, label: 'EcoRI', bands: '21226 x3.5, 7421 x1.2, 5804, 5643, 4878 x0.8, 3530 x0.6', blank: false },
-          { type: 'sample', id: 4, label: 'BamHI', bands: '16841 x2.7, 7233 x1.2, 6770 x1.1, 6527 x1.1, 5626 x0.9, 5505 x0.9', blank: false },
+          { type: 'sample', id: 2, label: 'Uncut', bands: '48502 x8' },
+          { type: 'sample', id: 3, label: 'EcoRI', bands: '21226 x3.5, 7421 x1.2, 5804, 5643, 4878 x0.8, 3530 x0.6' },
+          { type: 'sample', id: 4, label: 'BamHI', bands: '16841 x2.7, 7233 x1.2, 6770 x1.1, 6527 x1.1, 5626 x0.9, 5505 x0.9' },
         ],
         gel: '0.8',
         sizeUnits: 'kb',
@@ -346,9 +346,9 @@ export const EXAMPLES: Example[] = [
       settings: {
         lanes: [
           { type: 'ladder', id: 1, label: 'Ladder', ladder: '1kb' },
-          { type: 'sample', id: 2, label: 'EcoRI', bands: '5000', blank: false },
-          { type: 'sample', id: 3, label: 'HindIII', bands: '3200, 1800', blank: false },
-          { type: 'sample', id: 4, label: 'Both', bands: '2100, 1800, 1100', blank: true },
+          { type: 'sample', id: 2, label: 'EcoRI', bands: '5000' },
+          { type: 'sample', id: 3, label: 'HindIII', bands: '3200, 1800' },
+          { type: 'sample', id: 4, label: 'Both', bands: '' },
         ],
         sizeLabels: 'blank',
         electrodes: 'blank',

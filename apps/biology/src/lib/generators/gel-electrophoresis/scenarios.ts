@@ -13,7 +13,7 @@ export interface Scenario {
 }
 
 const ladder = (id: number, ladder: 'lambda' | '1kb' | '100bp' = '1kb'): Lane => ({ type: 'ladder', id, label: 'Ladder', ladder })
-const sample = (id: number, label: string, bands: string): Lane => ({ type: 'sample', id, label, bands, blank: false })
+const sample = (id: number, label: string, bands: string): Lane => ({ type: 'sample', id, label, bands })
 
 export const SCENARIOS: Scenario[] = [
   {

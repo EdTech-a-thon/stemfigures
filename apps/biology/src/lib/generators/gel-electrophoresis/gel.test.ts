@@ -6,7 +6,7 @@ import { GELS, drawBands, inRange, runOf, thicknessOf } from './migration'
 import { SCENARIOS } from './scenarios'
 import { gelSettings, type GelSettings } from './settings'
 
-const sample = (id: number, bands: string, label = ''): Lane => ({ type: 'sample', id, label, bands, blank: false })
+const sample = (id: number, bands: string, label = ''): Lane => ({ type: 'sample', id, label, bands })
 const withLanes = (lanes: Lane[], more: Partial<GelSettings> = {}): GelSettings => ({ ...gelSettings.defaults, lanes, ...more })
 const middles = (s: GelSettings, lane: number) => layoutGel(s).lanes[lane].bands.map((b) => (b.top + b.bottom) / 2)
 
@@ -236,20 +236,15 @@ describe('labels', () => {
 })
 
 describe('the answer key', () => {
-  it('lists each sample lane’s sizes, blank lanes included', () => {
+  it('lists each sample lane’s sizes', () => {
     const s = withLanes([
       { type: 'ladder', id: 1, label: 'Ladder', ladder: '1kb' },
       sample(2, '1200, 450', 'Child'),
-      { type: 'sample', id: 3, label: '', bands: '', blank: true },
+      sample(3, ''),
     ])
-    expect(answerLines(s)).toEqual(['Child: 1200, 450 bp', 'Lane 3: no bands'])
+    expect(answerLines(s)).toEqual(['Child: 1200, 450 bp'])
     expect(answerLines({ ...s, laneLabels: 'blank', sizeLabels: 'blank' })[0]).toBe(
       'Lane 1: 10000, 8000, 6000, 5000, 4000, 3000, 2000, 1500, 1000, 500 bp',
     )
-  })
-
-  it('leaves the bands of a blank lane off the gel', () => {
-    const s = withLanes([sample(1, '450'), { type: 'sample', id: 2, label: '', bands: '450', blank: true }])
-    expect(layoutGel(s).lanes.map((l) => l.bands.length)).toEqual([1, 0])
   })
 })

@@ -95,8 +95,8 @@ export const laneName = (lane: Lane, i: number, s: Pick<GelSettings, 'laneLabels
 
 const sizesList = (sizes: number[]) => sizes.map(String).join(', ')
 
-/** The answer key: every sample lane's band sizes, those blanked for students
- *  included, and the ladder's when its sizes are blank. */
+/** The answer key: every sample lane's band sizes, and the ladder's when its
+ *  sizes are blank. */
 export function answerLines(s: GelSettings): string[] {
   const lines: string[] = []
   s.lanes.forEach((lane, i) => {
@@ -105,7 +105,6 @@ export function answerLines(s: GelSettings): string[] {
     if (lane.type === 'ladder') {
       if (s.sizeLabels === 'blank') lines.push(`${name}: ${sizesList(sizes)} bp`)
     } else if (sizes.length) lines.push(`${name}: ${sizesList(sizes)} bp`)
-    else if (lane.blank) lines.push(`${name}: no bands`)
   })
   return lines
 }
@@ -114,7 +113,7 @@ export interface DrawnLane {
   lane: Lane
   /** the middle of the lane, across */
   cx: number
-  /** the bands to draw, none for a lane left blank */
+  /** the bands to draw */
   bands: DrawnBand[]
   /** sizes outside the gel's resolving range, and sizes that ran together */
   outside: number[]
@@ -168,7 +167,7 @@ export function layoutGel(s: GelSettings): GelLayout {
     return {
       lane,
       cx: laneX(i),
-      bands: lane.type === 'sample' && lane.blank ? [] : drawn,
+      bands: drawn,
       outside: bands.filter((b) => !inRange(b.bp, s.gel)).map((b) => b.bp),
       merged: drawn.filter((b) => b.sizes.length > 1).map((b) => b.sizes),
     }

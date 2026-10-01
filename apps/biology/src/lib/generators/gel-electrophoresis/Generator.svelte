@@ -12,7 +12,7 @@
   import { LADDERS, LADDER_IDS } from './ladders'
   import { MAX_BANDS_TEXT, MAX_LABEL, MAX_LANES, MIN_LANES, nextId, parseBands, type Lane } from './lanes'
   import { GELS, GEL_RANGES, type Gel } from './migration'
-  import { SCENARIOS, type Scenario } from './scenarios'
+  import { SCENARIOS } from './scenarios'
   import { ELECTRODES, LANE_LABELS, LOOKS, SIZE_LABELS, SIZE_UNITS, gelSettings, type Look } from './settings'
 
   const gen = generatorState(gelSettings, 'gel-electrophoresis')
@@ -62,10 +62,20 @@
   const middleLadder = $derived(clean.sizeLabels !== 'none' && clean.lanes.some((l, i) => l.type === 'ladder' && i > 0 && i < clean.lanes.length - 1))
   const noLadderLabels = $derived(clean.sizeLabels !== 'none' && clean.lanes.some((l) => l.type === 'ladder') && !at.sizes.length)
 
-  function start(scenario: Scenario) {
+  function start(id: string) {
+    const scenario = SCENARIOS.find((x) => x.id === id)
+    if (!scenario) return
     s.lanes = scenario.lanes.map((lane) => ({ ...lane }))
     s.gel = scenario.gel
   }
+  // The setup picker shows the experiment the gel still is; changing its gel
+  // or any lane leaves it blank again.
+  const sameLane = (a: Lane, b: Lane) =>
+    a.type === b.type && a.label === b.label &&
+    (a.type === 'ladder' ? a.ladder === (b as typeof a).ladder : a.bands === (b as typeof a).bands)
+  const scenarioId = $derived(
+    SCENARIOS.find((x) => x.gel === clean.gel && x.lanes.length === clean.lanes.length && x.lanes.every((l, i) => sameLane(l, clean.lanes[i])))?.id ?? '',
+  )
 
   function add(lane: Lane) {
     if (s.lanes.length < MAX_LANES) s.lanes.push(lane)
@@ -93,13 +103,16 @@
 <GeneratorPage name="Gel Electrophoresis" filename="gel-electrophoresis" settingsWidth={27} printWidth={6.5} printHeight={8} {gen} {svg}>
   {#snippet settings()}
     <Section title="Lanes" summary={lanesSummary} icon={Rows3} open>
-      <p class="field-label">Start from</p>
-      <div class="chips">
-        {#each SCENARIOS as scenario (scenario.id)}
-          <button type="button" class="chip" title={scenario.note} onclick={() => start(scenario)}>{scenario.name}</button>
-        {/each}
-      </div>
-      <p class="note">Replaces the lanes and gel with a ready-made experiment. Undo brings yours back.</p>
+      <label class="text-field">
+        <span>Classic setups</span>
+        <select value={scenarioId} onchange={(e) => start(e.currentTarget.value)}>
+          <option value="" disabled>Choose one…</option>
+          {#each SCENARIOS as scenario (scenario.id)}<option value={scenario.id}>{scenario.name}</option>{/each}
+        </select>
+      </label>
+      <p class="note">
+        {SCENARIOS.find((x) => x.id === scenarioId)?.note ?? 'Replaces the lanes and gel with a ready-made experiment. Undo brings yours back.'}
+      </p>
 
       <div class="lanes">
         {#each s.lanes as lane, i (lane.id)}
@@ -144,10 +157,6 @@
               {#if bad.length}
                 <p class="warning" role="status">Not band sizes, so left out: {bad.join(', ')}.</p>
               {/if}
-              <label class="check">
-                <input type="checkbox" bind:checked={lane.blank} />
-                <span>Blank for students to draw the bands</span>
-              </label>
             {/if}
             {#if drawn?.outside.length}
               <p class="note">
@@ -165,7 +174,7 @@
         <div class="actions">
           <button
             type="button" class="btn-ghost small"
-            onclick={() => add({ type: 'sample', id: nextId(s.lanes), label: '', bands: '', blank: false })}
+            onclick={() => add({ type: 'sample', id: nextId(s.lanes), label: '', bands: '' })}
           >
             <Plus size={17} aria-hidden="true" /> Sample
           </button>
@@ -240,7 +249,6 @@
   .hint { font-weight: 400; color: var(--muted); }
   .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
   .small { padding: 0.5rem 0.85rem; font-size: 0.9rem; }
-  .chip { padding: 0.4rem 0.8rem; font-size: 0.88rem; }
   .note { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.82rem; }
   .lane .note { margin: 0; }
   .warning { margin: 0; padding: 0.55rem 0.75rem; border-radius: 10px; background: var(--red-soft); color: #991b1b; font-size: 0.85rem; }
