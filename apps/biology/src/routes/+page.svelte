@@ -19,7 +19,7 @@
     <p>Make one to fit your lesson, then copy it straight into your document. Free, with no sign-up.</p>
   </header>
 
-  <GeneratorDirectory site={SITE_ID} previews={PREVIEWS} placeholder="Search figures, like “cell diagram”" />
+  <GeneratorDirectory site={SITE_ID} previews={PREVIEWS} placeholder="Search figures, like “punnett square”" />
 </div>
 
 <style>
