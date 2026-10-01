@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { buildPopulation, type Panel } from './figure'
+import { buildPopulation, numberBox, type Panel } from './figure'
 import { fitAxes, niceRange } from './fit'
-import { populationSettings, type PopulationSettings } from './settings'
+import { MODELS } from './growth'
+import { crosses, textWidth } from './labels'
+import { GRAPH_IDS, populationSettings, type PopulationSettings } from './settings'
 import { SETUPS, settingsFor } from './setups'
 
 const read = (query: string) => populationSettings.fromParams(new URLSearchParams(query))
@@ -13,12 +15,32 @@ const fitted = (query: string) => {
 const build = (query: string) => buildPopulation(fitted(query))
 
 const overlap = (a: { x0: number; y0: number; x1: number; y1: number }, b: typeof a) => a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1
+/** The space a label takes as drawn: its letters, descenders and white outline. */
 const boxOf = (l: Panel['labels'][number], fs: number) => {
-  const w = l.text ? l.text.length * fs * 0.58 : l.blank ? Math.hypot(l.blank.x2 - l.blank.x1, l.blank.y2 - l.blank.y1) : 0
-  if (l.rotate) return { x0: l.x - fs * 0.78, y0: l.y, x1: l.x + fs * 0.24, y1: l.y + w }
+  const w = l.text ? textWidth(l.text, fs) : l.blank ? Math.hypot(l.blank.x2 - l.blank.x1, l.blank.y2 - l.blank.y1) : 0
+  if (l.rotate) {
+    // Turned to read upward: hung from its end, or standing on its start.
+    const y0 = l.anchor === 'start' ? l.y - w : l.y
+    return { x0: l.x - fs * 0.78, y0, x1: l.x + fs * 0.3, y1: y0 + w }
+  }
   const x0 = l.anchor === 'start' ? l.x : l.anchor === 'end' ? l.x - w : l.x - w / 2
-  return { x0, y0: l.y - fs * 0.78, x1: x0 + w, y1: l.y + fs * 0.24 }
+  return { x0, y0: l.y - fs * 0.78, x1: x0 + w, y1: l.y + fs * 0.3 }
 }
+/** The straight pieces of a drawn path ("M1,2L3,4…"). */
+const segmentsOf = (d: string) => {
+  const pts = [...d.matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map((m) => ({ x: Number(m[1]), y: Number(m[2]) }))
+  return pts.slice(1).map((b, k) => ({ x1: pts[k].x, y1: pts[k].y, x2: b.x, y2: b.y }))
+}
+
+describe('measuring labels', () => {
+  it('matches bold Arial, as Chromium draws it', () => {
+    // Widths measured in Chromium with Liberation Sans Bold (Arial's metrics), per letter at size 1.
+    expect(textWidth('Inflection point (N = K/2)', 1)).toBeCloseTo(0.443 * 26, 1)
+    expect(textWidth('Fastest growth (N = K/2)', 1)).toBeCloseTo(0.478 * 24, 1)
+    expect(textWidth('Carrying capacity (K)', 1)).toBeCloseTo(0.479 * 21, 1)
+    expect(textWidth('1000', 1)).toBeCloseTo(0.556 * 4, 2)
+  })
+})
 
 describe('round axis ranges', () => {
   it('counts in 1s, 2s, 2.5s (as 25s) and 5s, close to the squares wanted', () => {
@@ -105,15 +127,30 @@ describe('a population growth figure', () => {
     expect(g.panels[0].curves).toEqual([])
   })
 
-  it('never lets labels overlap, in any classroom setup', () => {
-    for (const setup of SETUPS) {
-      const s = settingsFor(setup, populationSettings.defaults, populationSettings.defaults)
-      const all = { ...s, inflection: true, phases: true, kLine: true }
-      const g = buildPopulation(populationSettings.tidy({ ...all, ...fitAxes(populationSettings.tidy(all)) }))
-      for (const p of g.panels) {
-        const boxes = p.labels.map((l) => boxOf(l, g.labelFs))
-        for (let i = 0; i < boxes.length; i++)
-          for (let j = i + 1; j < boxes.length; j++) expect(overlap(boxes[i], boxes[j]), `${setup.id}: ${p.labels[i].text} and ${p.labels[j].text}`).toBe(false)
+  it('keeps every label inside its grid, off the numbers, lines, curves and other labels', () => {
+    // Every classroom setup, and every model on every kind of graph, with
+    // everything marked, at medium and large labels.
+    const cases: [string, PopulationSettings][] = SETUPS.map((setup) => [setup.id, settingsFor(setup, populationSettings.defaults, populationSettings.defaults)])
+    for (const model of MODELS)
+      for (const graphs of GRAPH_IDS) cases.push([`${model} ${graphs}`, { ...populationSettings.defaults, model, graphs }])
+    for (const [name, base] of cases) {
+      for (const labelSize of ['medium', 'large'] as const) {
+        const all = populationSettings.tidy({ ...base, inflection: true, phases: true, kLine: true, labelSize })
+        const g = buildPopulation(populationSettings.tidy({ ...all, ...fitAxes(all) }))
+        for (const p of g.panels) {
+          const where = `${name}, ${labelSize}, ${p.view}`
+          const boxes = p.labels.map((l) => boxOf(l, g.labelFs))
+          const { x, y, w, h } = p.layout.grid
+          const numbers = p.layout.numbers.map((n) => numberBox(n, g.fs))
+          const lines = [...p.refs, ...p.curves.flatMap((c) => segmentsOf(c.d))]
+          boxes.forEach((b, i) => {
+            const what = `${where}: “${p.labels[i].text ?? 'blank'}”`
+            expect(b.x0 >= x + 2 && b.x1 <= x + w - 2 && b.y0 >= y + 2 && b.y1 <= y + h - 2, `${what} inside the grid`).toBe(true)
+            for (const n of numbers) expect(overlap(b, n), `${what} off the numbers`).toBe(false)
+            for (const l of lines) expect(crosses(l, b), `${what} off the lines`).toBe(false)
+            for (const other of boxes.slice(i + 1)) expect(overlap(b, other), `${what} off the other labels`).toBe(false)
+          })
+        }
       }
     }
   })

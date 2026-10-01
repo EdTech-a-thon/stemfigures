@@ -71,7 +71,9 @@ export function fitAxes(s: PopulationSettings) {
   const sols = curves.map((c) => solve(c, g, tEnd))
   // With both curves, the exponential one runs off the top: fit to the logistic.
   const fitted = s.model === 'both' ? sols.slice(0, 1) : sols
-  const headroom = (view: View) => (s.model === 'both' ? 1.3 : view === 'size' && hasK(s.model) ? 1.1 : 1.08)
+  // Room over the top of the curves; a growth rate's peak needs room for its label.
+  const headroom = (view: View) =>
+    s.model === 'both' ? 1.3 : view === 'size' ? (hasK(s.model) ? 1.1 : 1.08) : view === 'rate' || againstOf(s) === 'size' ? 1.25 : 1.08
 
   const sizeHigh = () => {
     const { hi } = extent('size', fitted, tEnd)
@@ -80,7 +82,8 @@ export function fitAxes(s: PopulationSettings) {
   function yRange(view: View, blocks: number) {
     if (view === 'size') return niceRange(0, sizeHigh(), blocks)
     if (againstOf(s) === 'size' && s.model !== 'overshoot' && s.model !== 'crash') {
-      // Against N, a logistic curve peaks at K/2 and a lone exponential rises to the end of the N axis.
+      // Against N, a logistic curve peaks at K/2 and a lone exponential rises
+      // to the end of the N axis.
       const top = view === 'percapita' ? g.r : s.model === 'exponential' ? g.r * sizeHigh() : (g.r * g.k) / 4
       return niceRange(0, top * headroom(view), blocks)
     }
@@ -88,7 +91,7 @@ export function fitAxes(s: PopulationSettings) {
     return niceRange(lo < 0 ? lo * 1.08 : 0, hi * headroom(view), blocks)
   }
 
-  const x = againstOf(s) === 'time' ? niceRange(0, tEnd, 20) : niceRange(0, sizeHigh(), stacked ? 12 : 10)
+  const x = againstOf(s) === 'time' ? niceRange(0, tEnd, 20) : niceRange(0, sizeHigh(), 20)
   const y = yRange(views[0], tall)
   const y2 = stacked ? yRange(views[1], tall) : null
   const widest = (r: { from: string; to: string }) => Math.max(r.from.length, r.to.length)

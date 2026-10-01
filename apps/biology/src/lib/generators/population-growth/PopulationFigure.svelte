@@ -58,6 +58,12 @@
         {#each p.dots as d}
           <circle cx={d.x} cy={d.y} r={g.r} fill="#fff" stroke={INK} stroke-width="2.5" />
         {/each}
+        <!-- Each label is backed in white, so no gridline runs through it. -->
+        <g fill="#fff">
+          {#each p.labels as l}
+            {#if l.text && l.box}<rect x={l.box.x0} y={l.box.y0} width={l.box.x1 - l.box.x0} height={l.box.y1 - l.box.y0} />{/if}
+          {/each}
+        </g>
         <g font-family={SANS} font-size={g.labelFs} font-weight="bold" fill={INK} stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
           {#each p.labels as l}{@render labelText(l)}{/each}
         </g>

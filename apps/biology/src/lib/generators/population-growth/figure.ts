@@ -11,20 +11,30 @@ import {
   census, censusDecimals, checkGrowth, curvesOf, hasK, hasLogistic, inflection, perCapitaAtN, phases, rateAtN, solve,
   type Curve, type Solution,
 } from './growth'
-import { alongCurve, besidePoint, placer, textBox, type Anchor, type Box, type Spot } from './labels'
+import { alongCurve, besidePoint, placer, textBox, textWidth, type Anchor, type Box, type Spot } from './labels'
 import { againstOf, growthOf, viewsOf, type PopulationSettings, type View } from './settings'
 
 const DOT_R = 5.5
 const CENSUS_R = 4.5
 const BLANK_W = 110 // a write-on line for a label left blank
 const PAD = 14
+const INSET = 4 // how far inside the grid's border labels stay
 /** The exponential curve's dashes when it's drawn with the logistic one. */
 export const EXP_DASH = '12 7'
 
 type Segment = { x1: number; y1: number; x2: number; y2: number }
 type Mode = PopulationSettings['kLabelMode']
 /** A label on the figure: written text, or a write-on line for students. */
-export type Label = { x: number; y: number; anchor: Anchor; text?: string; blank?: Segment; rotate?: boolean }
+export type Label = {
+  x: number
+  y: number
+  anchor: Anchor
+  text?: string
+  blank?: Segment
+  rotate?: boolean
+  /** the white behind its letters, so no gridline runs through them */
+  box?: Box
+}
 export type Line = { d: string; color: string; dash?: string }
 
 export type Panel = {
@@ -46,6 +56,13 @@ export type Panel = {
 }
 
 const labelText = (mode: Mode, words: string) => (mode === 'text' ? words.trim() : '')
+
+/** The box a tick number takes up (Grid.svelte writes them in bold at `fs`). */
+export function numberBox(n: { x: number; y: number; text: string; anchor: 'middle' | 'end' }, fs: number): Box {
+  const w = textWidth(n.text, fs)
+  const x0 = n.anchor === 'end' ? n.x - w : n.x - w / 2
+  return { x0: x0 - 2, y0: n.y - fs * 0.8, x1: x0 + w + 2, y1: n.y + fs * 0.25 }
+}
 
 /** A view's value on a curve at time t. */
 const valueAt = (view: View, sol: Solution, t: number) => (view === 'size' ? sol.n(t) : view === 'rate' ? sol.rate(t) : sol.perCapita(t))
@@ -110,14 +127,26 @@ export function buildPopulation(s: PopulationSettings) {
 
   const fs = panels[0].layout.fs
   const LABEL_FS = fs * 1.05
-  const CHAR = LABEL_FS * 0.58
-  const widthOf = (mode: Mode, words: string) => (mode === 'blank' ? BLANK_W : labelText(mode, words).length * CHAR)
+  // The room a label is kept clear in: its letters, and a little to spare
+  // for a font a little wider than Arial.
+  const widthOf = (mode: Mode, words: string) => (mode === 'blank' ? BLANK_W : textWidth(labelText(mode, words), LABEL_FS) * 1.06 + 2)
+  // The white behind a label: its letters' own width.
+  const backing = ({ x, y, anchor }: Spot, words: string, rotate = false): Box => {
+    const w = textWidth(words, LABEL_FS)
+    const from = anchor === 'start' ? 0 : anchor === 'end' ? -w : -w / 2
+    if (!rotate) return { x0: x + from - 2, y0: y - LABEL_FS * 0.78, x1: x + from + w + 2, y1: y + LABEL_FS * 0.24 }
+    // Turned to read upward, its start is at the bottom.
+    return { x0: x - LABEL_FS * 0.78, y0: y - from - w - 2, x1: x + LABEL_FS * 0.24, y1: y - from + 2 }
+  }
 
   for (const p of panels) {
     const { px, box, view, layout } = p
     const grid = layout.grid
-    const bounds: Box = { x0: grid.x + 2, y0: grid.y + 2, x1: grid.x + grid.w - 2, y1: grid.y + grid.h - 2 }
+    // Labels stay a little inside the grid's border, and off any tick numbers
+    // (which are inside the grid where an axis crosses it at 0).
+    const bounds: Box = { x0: grid.x + INSET, y0: grid.y + INSET, x1: grid.x + grid.w - INSET, y1: grid.y + grid.h - INSET }
     const place = placer(bounds)
+    for (const n of layout.numbers) place.box(numberBox(n, fs))
     const onGrid = (v: Point) => v.x >= box.x0 - 1e-9 && v.x <= box.x1 + 1e-9 && v.y >= box.y0 - 1e-9 && v.y <= box.y1 + 1e-9
 
     // The curves, cut to the grid, leaving out points too close to see.
@@ -224,33 +253,46 @@ export function buildPopulation(s: PopulationSettings) {
     const label = (spots: Spot[], mode: Mode, words: string) => {
       if (mode === 'none' || (mode === 'text' && !words.trim()) || !spots.length) return
       const spot = place.place(spots, widthOf(mode, words), LABEL_FS)
-      if (mode === 'text') p.labels.push({ x: spot.x, y: spot.y, anchor: spot.anchor, text: words.trim() })
+      if (mode === 'text') p.labels.push({ x: spot.x, y: spot.y, anchor: spot.anchor, text: words.trim(), box: backing(spot, words.trim()) })
       else p.labels.push({ ...spot, blank: { x1: spot.box.x0, y1: spot.y, x2: spot.box.x1, y2: spot.y } })
     }
     if (kLine && kLine.y1 === kLine.y2) {
       // Along the line, above it then below, from the left end (where a
-      // growing population is still low) to the right.
+      // growing population is still low) to the right; then a little
+      // further off the line, for a curve that swings around K.
       const y = kLine.y1
-      const spots = [-11, LABEL_FS + 7].flatMap((dy) => [
+      const spots = [-11, LABEL_FS + 7, -11 - LABEL_FS, 2 * LABEL_FS + 10].flatMap((dy) => [
         { x: grid.x + 8, y: y + dy, anchor: 'start' as const },
         { x: grid.x + grid.w - 8, y: y + dy, anchor: 'end' as const },
-        ...[0.25, 0.5, 0.75].map((f) => ({ x: grid.x + f * grid.w, y: y + dy, anchor: 'middle' as const })),
+        ...[0.25, 0.375, 0.5, 0.625, 0.75].map((f) => ({ x: grid.x + f * grid.w, y: y + dy, anchor: 'middle' as const })),
       ])
       label(spots, s.kLabelMode, s.kLabel)
     } else if (kLine && s.kLabelMode !== 'none' && (s.kLabelMode === 'blank' || s.kLabel.trim())) {
       // Against N, the label runs up beside the line, reading from the
       // bottom, just under the top of the graph: past K is room a logistic
       // curve never reaches.
-      const w = widthOf(s.kLabelMode, s.kLabel)
-      const top = grid.y + 6
-      const options = [kLine.x1 + 6 + LABEL_FS * 0.78, kLine.x1 - 6 - LABEL_FS * 0.24].map((x) => ({
-        x, y: top, box: { x0: x - LABEL_FS * 0.78, y0: top, x1: x + LABEL_FS * 0.24, y1: top + w },
-      }))
-      const at = place.choose(options)
+      // Hung from the top, or (when a line crosses up there) standing on the
+      // bottom. Words that don't fit clear of every line become just "K".
+      const top = grid.y + INSET + 2
+      const bottom = grid.y + grid.h - INSET - 2
+      const sides = [kLine.x1 + 9 + LABEL_FS * 0.78, kLine.x1 - 9 - LABEL_FS * 0.3]
+      const spotsFor = (w: number) =>
+        [
+          ...sides.map((x) => ({ x, y: top, anchor: 'end' as const, from: top })),
+          ...sides.map((x) => ({ x, y: bottom, anchor: 'start' as const, from: bottom - w })),
+        ].map((o) => ({ ...o, w, box: { x0: o.x - LABEL_FS * 0.78, y0: o.from, x1: o.x + LABEL_FS * 0.3, y1: o.from + w } }))
+      let words = s.kLabel.trim()
+      let at = place.choose(spotsFor(widthOf(s.kLabelMode, words)), false)
+      // (Only lines crossed count here; being near one, as next to K's own, doesn't.)
+      if (at.score >= 1 && s.kLabelMode === 'text' && words !== 'K') {
+        words = 'K'
+        at = place.choose(spotsFor(widthOf('text', words)), false)
+      }
+      place.keep(at.box)
       p.labels.push(
         s.kLabelMode === 'text'
-          ? { x: at.x, y: at.y, anchor: 'end', text: s.kLabel.trim(), rotate: true }
-          : { x: at.x, y: at.y, anchor: 'end', rotate: true, blank: { x1: at.x, y1: top, x2: at.x, y2: top + w } },
+          ? { x: at.x, y: at.y, anchor: at.anchor, text: words, rotate: true, box: backing(at, words, true) }
+          : { x: at.x, y: at.y, anchor: at.anchor, rotate: true, blank: { x1: at.x, y1: at.from, x2: at.x, y2: at.from + at.w } },
       )
     }
     if (marked) label(besidePoint(px(marked.at), LABEL_FS), marked.mode, marked.words)
@@ -286,7 +328,7 @@ export function buildPopulation(s: PopulationSettings) {
       if (mode === 'none' || (mode === 'text' && !words.trim())) return
       // Centered over its phase, kept on the graph's width, and on a row
       // above when it would run into the phase before.
-      const w = mode === 'blank' ? Math.min(BLANK_W, Math.max(40, x2 - x1 - 12)) : labelText(mode, words).length * CHAR
+      const w = mode === 'blank' ? Math.min(BLANK_W, Math.max(40, x2 - x1 - 12)) : widthOf(mode, words)
       const gx = top.layout.grid.x
       const x = Math.min(Math.max((x1 + x2) / 2, gx + w / 2), gx + top.layout.grid.w + 30 - w / 2)
       let row = 0
@@ -309,7 +351,6 @@ export function buildPopulation(s: PopulationSettings) {
   // SVG would cut off a title longer than the graph is tall. A title much
   // longer than its graph goes on two lines, and the graphs move apart to
   // keep one title off the next.
-  const TITLE_CHAR = fs * 1.2 * 0.58
   const LINE = fs * 1.25
   for (const p of panels) {
     const t = p.layout.labels.find((l) => l.kind === 'side' && l.rotate)
@@ -317,14 +358,14 @@ export function buildPopulation(s: PopulationSettings) {
     p.layout = { ...p.layout, labels: p.layout.labels.filter((l) => l !== t) }
     const words = t.text.split(' ')
     let lines = [t.text]
-    if (t.text.length * TITLE_CHAR > p.layout.grid.h + 24 && words.length > 1) {
+    if (textWidth(t.text, fs * 1.2) > p.layout.grid.h + 24 && words.length > 1) {
       // Split at the space nearest the middle.
       const offMiddle = (k: number) => Math.abs(words.slice(0, k).join(' ').length - t.text.length / 2)
       let best = 1
       for (let k = 2; k < words.length; k++) if (offMiddle(k) < offMiddle(best)) best = k
       lines = [words.slice(0, best).join(' '), words.slice(best).join(' ')]
     }
-    p.yTitle = { x: t.x, y: t.y, lines, half: (Math.max(...lines.map((l) => l.length)) * TITLE_CHAR) / 2 }
+    p.yTitle = { x: t.x, y: t.y, lines, half: Math.max(...lines.map((l) => textWidth(l, fs * 1.2))) / 2 }
   }
   const extraL = panels.some((p) => (p.yTitle?.lines.length ?? 0) > 1) ? LINE : 0
   const gx = Math.max(...panels.map((p) => p.layout.grid.x)) + extraL
