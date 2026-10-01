@@ -6,6 +6,7 @@ export const BIOLOGY: CatalogEntry[] = [
   {
     id: 'cell-diagram',
     site: 'biology',
+    off: true,
     name: 'Cell Diagram',
     path: '/cell-diagram',
     blurb: 'An animal, plant or bacterial cell with the organelles you pick, labeled or left for students.',
