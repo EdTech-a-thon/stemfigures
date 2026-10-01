@@ -52,6 +52,15 @@ and `docs/adr/` for decisions.
   sibling; the family is written into the address. It checks the family
   against every mode and says how students can tell, and can show carriers
   (half filled or a dot), genotypes as answers or blanks, numbers and a key.
+- `/population-growth` **Population Growth**: exponential (J-curve),
+  logistic (S-curve), both together, overshoot and oscillation around K, or a
+  boom and crash, from N₀, r and K. Graphs population size, the growth rate
+  dN/dt or the per capita growth rate, over time or against N, one graph or
+  two stacked on the same x-axis. Marks the carrying capacity, the inflection
+  point and the lag, exponential and stationary phases; adds census points
+  (with a little scatter) and a census table; any label can be a blank line,
+  and the curve can be left off for blank axes. Classroom setups start it
+  from yeast in a flask, deer on an island, doubling bacteria and more.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a

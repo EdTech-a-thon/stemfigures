@@ -10,12 +10,12 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `Modal`                                                                                     | math, chemistry, physics, biology, engineering |
 | `LabelField`                                                                                | math, chemistry, biology, engineering     |
 | `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics, biology |
-| `labelSize`                                                                                 | math, chemistry (Titration Curve), biology (Punnett Square, Predator–Prey Cycles) |
-| `graph/`: `Grid`, `grid`, `axes`, `AxisSettings`, `TitleSettings`, `GridlineSettings`       | math (Coordinate Grid), chemistry (Titration Curve), biology (Predator–Prey Cycles) |
-| `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve), biology (Predator–Prey Cycles) |
-| `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve), biology (Micropipette Reading, Gel Electrophoresis, Predator–Prey Cycles) |
-| `HelpTip`                                                                                   | math, biology (Predator–Prey Cycles)      |
-| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading, Gel Electrophoresis, `FigureFrame`, `settings`, Microscope Field of View: `FigureFrame`, Predator–Prey Cycles, Pedigree) |
+| `labelSize`                                                                                 | math, chemistry (Titration Curve), biology (Punnett Square, Predator–Prey Cycles, Population Growth) |
+| `graph/`: `Grid`, `grid`, `axes`, `AxisSettings`, `TitleSettings`, `GridlineSettings`       | math (Coordinate Grid), chemistry (Titration Curve), biology (Predator–Prey Cycles, Population Growth) |
+| `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve), biology (Predator–Prey Cycles, Population Growth) |
+| `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve), biology (Micropipette Reading, Gel Electrophoresis, Predator–Prey Cycles, Population Growth) |
+| `HelpTip`                                                                                   | math, biology (Predator–Prey Cycles, Population Growth)      |
+| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading, Gel Electrophoresis, `FigureFrame`, `settings`, Microscope Field of View: `FigureFrame`, Predator–Prey Cycles, Pedigree, Population Growth: `settings`) |
 | `Magnifier`, `MagnifierSettings`, `magnify`                                                 | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading: `Magnifier`, `magnify`) |
 | `marks`, `ReadingField`                                                                     | physics (Spring Scale), biology (Microscope Field of View: `ReadingField`) |
 

@@ -23,11 +23,10 @@ export const BIOLOGY: CatalogEntry[] = [
     site: 'biology',
     name: 'Population Growth',
     path: '/population-growth',
-    blurb: 'Exponential and logistic growth curves, as numbers or per capita.',
+    blurb: 'J- and S-shaped growth curves, as numbers or per capita rates.',
     description:
-      'Make printable population growth graphs for biology tests. Draw exponential or logistic growth with a carrying capacity, as raw numbers or per capita rates.',
-    keywords: ['population', 'growth', 'exponential', 'logistic', 'carrying capacity', 'per capita', 'ecology', 'graph', 'printable'],
-    off: true,
+      'Make printable population growth graphs for biology tests. Graph exponential or logistic growth toward a carrying capacity, as population size, growth rate or per capita growth rate, with census data or blank axes for students.',
+    keywords: ['population', 'growth', 'exponential', 'logistic', 'j-curve', 's-curve', 'carrying capacity', 'per capita', 'growth rate', 'inflection point', 'lag phase', 'stationary phase', 'census', 'overshoot', 'ecology', 'graph', 'printable'],
   },
   {
     id: 'punnett-square',
