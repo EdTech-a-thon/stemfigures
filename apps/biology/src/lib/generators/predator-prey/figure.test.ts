@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { overlaps } from './place'
-import { buildPredatorPrey, fitHeights, fitSpan, niceCeil, timeText } from './figure'
+import { buildPredatorPrey, fitHeights, fitSpan, niceCeil, rangesOf, timeText } from './figure'
 import { predatorPreySettings } from './settings'
 
 const build = (query: string) => buildPredatorPrey(predatorPreySettings.fromParams(new URLSearchParams(query)))
@@ -25,6 +25,16 @@ describe('fitting the axes', () => {
       expect(blocks * steps[k]).toBeLessThan(high * 1.6)
     }
   })
+
+  it('fits each axis on its own', () => {
+    const typed = (query: string) => {
+      const s = predatorPreySettings.fromParams(new URLSearchParams(query))
+      return rangesOf(s, buildPredatorPrey(s).fitted)
+    }
+    const fitted = typed('')
+    expect(typed('xFit=0&xTo=7&xStep=1')).toEqual({ ...fitted, xFrom: '0', xTo: '7', xStep: '1' })
+    expect(typed('yFit=0&yTo=7&yStep=1')).toMatchObject({ xTo: fitted.xTo, xStep: fitted.xStep, yTo: '7', yStep: '1' })
+  })
 })
 
 describe('a predator–prey graph', () => {
@@ -44,7 +54,7 @@ describe('a predator–prey graph', () => {
   })
 
   it('keeps every line inside the grid', () => {
-    const g = build('fit=0&yTo=60&yStep=10')
+    const g = build('yFit=0&yTo=60&yStep=10')
     const ys = g.series.flatMap((s) => s.lines).join(' ').match(/,-?[\d.]+/g)!.map((t) => Number(t.slice(1)))
     expect(Math.min(...ys)).toBeGreaterThanOrEqual(g.grid.y - 0.01)
     expect(Math.max(...ys)).toBeLessThanOrEqual(g.grid.y + g.grid.h + 0.01)

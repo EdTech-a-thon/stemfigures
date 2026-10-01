@@ -127,9 +127,13 @@ export function fitRanges(s: PredatorPreySettings, m: Model) {
 
 export type Ranges = ReturnType<typeof fitRanges>
 
-const typedRanges = (s: PredatorPreySettings): Ranges => ({
-  xFrom: s.xFrom, xTo: s.xTo, xStep: s.xStep, yFrom: s.yFrom, yTo: s.yTo, yStep: s.yStep, y2From: s.y2From, y2Step: s.y2Step,
-})
+/** The ranges drawn: each axis fitted, or as typed. The phase plane's always fit the loop. */
+export function rangesOf(s: PredatorPreySettings, fitted: Ranges): Ranges {
+  if (s.view === 'phase') return fitted
+  const x = s.xFit ? fitted : s
+  const y = s.yFit ? fitted : s
+  return { xFrom: x.xFrom, xTo: x.xTo, xStep: x.xStep, yFrom: y.yFrom, yTo: y.yTo, yStep: y.yStep, y2From: y.y2From, y2Step: y.y2Step }
+}
 
 const plain = (text: string) => {
   const t = text.replace(/−/g, '-').trim()
@@ -181,7 +185,7 @@ export function buildPredatorPrey(s: PredatorPreySettings) {
   const phase = s.view === 'phase'
   const two = !phase && s.scale === 'two'
   const fitted = fitRanges(s, m)
-  const ranges = phase || s.fit ? fitted : typedRanges(s)
+  const ranges = rangesOf(s, fitted)
   const problems: Record<string, string | null> = {}
 
   // The grid's settings: in the phase plane, its own axis titles.
@@ -205,7 +209,7 @@ export function buildPredatorPrey(s: PredatorPreySettings) {
 
   // The right-hand axis, as typed or fitted.
   let y2 = { start: plain(ranges.y2From) ?? 0, step: plain(ranges.y2Step) ?? 1 }
-  if (two && !s.fit) {
+  if (two && !s.yFit) {
     if (plain(s.y2From) === null) problems.y2From = 'Type a number, like 0 or 10.'
     if (plain(s.y2Step) === null) problems.y2Step = 'Type a number, like 1, 5 or 10.'
     else if (plain(s.y2Step)! <= 0) problems.y2Step = 'Count by a number bigger than 0.'

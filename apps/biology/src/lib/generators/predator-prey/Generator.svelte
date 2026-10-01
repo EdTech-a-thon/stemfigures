@@ -14,12 +14,12 @@
   import GridlineSettings from '$shared/graph/GridlineSettings.svelte'
   import TitleSettings from '$shared/graph/TitleSettings.svelte'
   import { readAxes } from '$shared/graph/axes'
-  import { buildPredatorPrey, timeText, type Ranges } from './figure'
+  import { buildPredatorPrey, rangesOf, timeText, type Ranges } from './figure'
   import { balanceOf, periodOf } from './model'
   import { PAIRS, UNITS, pairNamed, type Units } from './pairs'
   import PredatorPreyFigure from './PredatorPreyFigure.svelte'
   import {
-    MARK_LABELS, MARK_LABEL_NAMES, SHOWS, SHOW_NAMES, autoTitles, pairSettings, predatorPreySettings, ratesOf,
+    MARK_LABELS, MARK_LABEL_NAMES, SHOW_NAMES, autoTitles, pairSettings, predatorPreySettings, ratesOf,
   } from './settings'
 
   const gen = generatorState(predatorPreySettings, 'predator-prey')
@@ -45,7 +45,7 @@
   function choosePair(id: string) {
     const p = PAIRS.find((p) => p.id === id)
     if (!p) return
-    retitle(() => Object.assign(s, pairSettings(p), { fit: true }))
+    retitle(() => Object.assign(s, pairSettings(p), { xFit: true, yFit: true }))
   }
 
   // Populations work the rates out; switching keeps the same cycle either way.
@@ -68,14 +68,23 @@
     s.source = source
   }
 
-  // While the axes fit the populations, their boxes show the fitted ranges;
-  // typing in one takes over from there.
-  const shown = $derived<Ranges>(clean.fit || phase ? g.fitted : clean)
+  // While an axis fits the populations, its boxes show the fitted range;
+  // typing in one takes over for that axis. The right y-axis goes with the left.
+  const shown = $derived<Ranges>(rangesOf(clean, g.fitted))
   const shownAxes = $derived(readAxes(shown))
   function typeRange(key: keyof Ranges, v: string) {
-    if (s.fit) Object.assign(s, g.fitted, { fit: false })
+    const f = g.fitted
+    if (key.startsWith('x') && s.xFit) Object.assign(s, { xFrom: f.xFrom, xTo: f.xTo, xStep: f.xStep, xFit: false })
+    if (key.startsWith('y') && s.yFit) Object.assign(s, { yFrom: f.yFrom, yTo: f.yTo, yStep: f.yStep, y2From: f.y2From, y2Step: f.y2Step, yFit: false })
     s[key] = v
   }
+
+  // The populations drawn, one box each; the phase plane's loop needs both.
+  const preyDrawn = $derived(s.show === 'both' || s.show === 'prey')
+  const predatorsDrawn = $derived(s.show === 'both' || s.show === 'predators')
+  const draw = (prey: boolean, predators: boolean) =>
+    (s.show = prey && predators ? 'both' : prey ? 'prey' : predators ? 'predators' : 'neither')
+  const capital = (name: string, fallback: string) => (name.trim() || fallback).replace(/^./, (c) => c.toUpperCase())
 
   const r = $derived(g.readout)
   const unitName = (u: Units) => u[0].toUpperCase() + u.slice(1)
@@ -94,7 +103,7 @@
   )
   const markSummary = $derived(marked.length ? `${marked.join(', ')}`.replace(/^./, (c) => c.toUpperCase()) : 'Nothing marked')
   const rightSummary = $derived(
-    `${clean.fit ? 'Fitted' : 'Typed'} · from ${shown.y2From} by ${shown.y2Step}${clean.y2TitleMode === 'text' && clean.y2Title.trim() ? ` · “${clean.y2Title.trim()}”` : ''}`,
+    `${clean.yFit ? 'Fitted' : 'Typed'} · from ${shown.y2From} by ${shown.y2Step}${clean.y2TitleMode === 'text' && clean.y2Title.trim() ? ` · “${clean.y2Title.trim()}”` : ''}`,
   )
   const filename = $derived(
     (clean.titleMode === 'text' && clean.title.trim() ? clean.title.trim() : `${clean.preyName}-${clean.predatorName}`)
@@ -158,7 +167,6 @@
         {/if}
       </div>
       {#if s.source === 'simple'}
-        <p class="help">The further the start is from the averages, the bigger the swings.</p>
         <div class="fields">
           {@render numberField('period', 'Cycle length', clean.units, 'period', 0.001)}
         </div>
@@ -207,14 +215,15 @@
       {#if phase}
         <p class="help setting">Predators against prey: one cycle is one trip round the loop, the way the arrows go.</p>
       {/if}
-      <label class="field setting">
+      <div class="field setting">
         <span>Populations drawn <span class="hint">leave some off for students to sketch</span></span>
-        <select bind:value={s.show}>
-          {#each SHOWS as v}
-            {#if !phase || v === 'both' || v === 'neither'}<option value={v}>{phase && v === 'both' ? 'The loop' : SHOW_NAMES[v]}</option>{/if}
-          {/each}
-        </select>
-      </label>
+        {#if phase}
+          {@render check('The loop', '', s.show !== 'neither', (v) => draw(v, v))}
+        {:else}
+          {@render check(capital(clean.preyName, 'Prey'), '', preyDrawn, (v) => draw(v, predatorsDrawn))}
+          {@render check(capital(clean.predatorName, 'Predators'), '', predatorsDrawn, (v) => draw(preyDrawn, v))}
+        {/if}
+      </div>
       {#if !phase}
         <div class="field setting">
           <span>y-axis</span>
@@ -290,9 +299,9 @@
         bind:to={() => shown.xTo, (v) => typeRange('xTo', v)}
         bind:step={() => shown.xStep, (v) => typeRange('xStep', v)}
         bind:every={s.xEvery} bind:labelMode={s.xLabelMode} bind:label={s.xLabel} bind:startCap={s.xStartCap} bind:endCap={s.xEndCap}
-        extras={[clean.fit ? 'fitted' : '']}
+        extras={[clean.xFit ? 'fitted' : '']}
       >
-        {@render check('Fit to the populations', 'the time shown along this axis, and room for both lines up the side', s.fit, (v) => (s.fit = v))}
+        {@render check('Fit to the time shown', '', s.xFit, (v) => (s.xFit = v))}
       </AxisSettings>
       <AxisSettings
         axis="y" read={shownAxes.y} problems={g.problems}
@@ -300,9 +309,9 @@
         bind:to={() => shown.yTo, (v) => typeRange('yTo', v)}
         bind:step={() => shown.yStep, (v) => typeRange('yStep', v)}
         bind:every={s.yEvery} bind:labelMode={s.yLabelMode} bind:label={s.yLabel} bind:startCap={s.yStartCap} bind:endCap={s.yEndCap}
-        extras={[clean.fit ? 'fitted' : '']}
+        extras={[clean.yFit ? 'fitted' : '']}
       >
-        {@render check('Fit to the populations', '', s.fit, (v) => (s.fit = v))}
+        {@render check('Fit to the populations', two ? 'room for both lines up the side, and the right y-axis with it' : 'room for both lines up the side', s.yFit, (v) => (s.yFit = v))}
       </AxisSettings>
       {#if two}
         <Section title="Right y-axis" icon={MoveUp} summary={rightSummary}>

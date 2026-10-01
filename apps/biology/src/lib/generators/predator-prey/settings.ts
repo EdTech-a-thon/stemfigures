@@ -98,8 +98,10 @@ export const predatorPreySettings = defineSettings(
     cycle: bool(false),
     markLabels: choice(MARK_LABELS, 'value'),
     color: bool(true),
-    /** fit the axes to the populations, rather than use the ranges typed */
-    fit: bool(true),
+    /** fit the x-axis to the time shown, rather than use the range typed */
+    xFit: bool(true),
+    /** fit the y-axes to the populations, rather than use the ranges typed */
+    yFit: bool(true),
     /** the right-hand axis, for predators on a scale of their own; it has as many blocks as the left */
     y2From: text('0'),
     y2Step: text('5'),
