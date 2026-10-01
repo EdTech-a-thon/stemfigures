@@ -76,10 +76,16 @@ and `docs/adr/` for decisions.
   it. The field's diameter is typed or worked out from the low-power one.
   Optional clear mm ruler, scale bar and diameter arrow; a question written
   for the settings and an answer box, shown or blank.
-- `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
+- `/<generator>`: on each one, the About button in the top bar opens a drawer
+  with what it makes, what can be set, its example figures and frequently
+  asked questions (`src/lib/site/generatorCopy.ts`, which also feeds the
+  page's structured data).
+- `/<generator>/examples/<slug>`: one example figure (see below).
+- `/about`, `/privacy`, `/reuse`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name and the current generator on the
-left, and links to the other STEM Figures sites on the right, which the footer
+left, and on a generator its About button, then links to the other STEM
+Figures sites, on the right, which the footer
 repeats along with the "Built by teacher.dev" link. The directory's search box
 filters its cards as you type, and its last card is **Request a generator**. Generators fill the
 window with no footer. The help button in the corner opens the same kind of
@@ -90,11 +96,52 @@ A generator's settings live in the page address, so a link opens the same
 figure, and the server renders that figure on first load (see ADR 0001).
 Saved presets stay in the browser's localStorage.
 
+## Example figures
+
+Each generator has a handful of example figures, so search engines have real
+pictures to index. Each one has:
+
+- its settings, title, alt text and caption in `src/lib/examples/examples.ts`
+  (the first of each generator is its best);
+- a static page at `/<generator>/examples/<slug>`, built by
+  `src/routes/[generator=examplegenerator]/examples/[slug]/`, with the picture,
+  an "Edit this figure" link that opens the generator with those settings, a
+  PNG download, and an answer key where the generator works one out, from
+  the generator's own code in `src/lib/examples/details.server.ts`;
+- its picture at `static/examples/<generator>/<slug>.png`, listed in
+  `sitemap.xml` as an image of both its page and its generator's page.
+
+A generator's first example is also its social card, `static/og/<generator>.png`
+(1200×630). The first card in each generator's settings column says what it
+makes and opens its examples to start from, with saved presets moved to the
+bottom of the column. Who may reuse the pictures, and how, is in
+`src/lib/examples/license.ts` and the `/reuse` page. A generator that is
+turned off lists no examples.
+
+The build fails if an example's settings aren't ones its generator keeps as
+written (a volume the pipette can't be set to, say), so a picture can't show a
+different figure than its page describes.
+
+### Redoing the pictures
+
+After adding or changing an example, or changing how a generator draws, take
+the pictures again. With the site running:
+
+```sh
+./scripts/agent-dev.mjs stemfigures/apps/biology                          # from the workspace root; prints its address
+node scripts/snapshot-examples.mjs --app=biology http://localhost:10003/  # from stemfigures/, with that address
+```
+
+It needs the Chromium Playwright installs (`npx playwright install chromium`).
+Look at the pictures before committing them, and delete the PNG of an example
+you removed or renamed.
+
 ## Code layout
 
 ```
 src/routes/            SvelteKit pages
-src/lib/site/          top bar, directory dialogs, Help, footer, SEO
+src/lib/site/          top bar, About drawer and page copy, Help, footer, SEO
+src/lib/examples/      example figures, their pages' details and gallery
 src/lib/shared/        pieces every generator uses: figure card and toolbar,
                        undo history, presets, dialogs, fields
 $shared/               ../../packages/shared: pieces shared with the other sites
@@ -104,6 +151,9 @@ src/lib/generators/    index.ts lists every generator; one folder each
 To add a generator: make a folder under `src/lib/generators/` with its
 builder and preview, add one entry to `generators/index.ts`, and add its route
 under `src/routes/`. The directory, search and sitemap pick it up from the list.
+Its page needs its words in `src/lib/site/generatorCopy.ts`, and it should get
+a few examples in `src/lib/examples/examples.ts` (with its settings type in
+`types.ts` and its definition in `details.server.ts`).
 
 ## Development
 
