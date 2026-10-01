@@ -78,11 +78,10 @@ export const BIOLOGY: CatalogEntry[] = [
     site: 'biology',
     name: 'Gel Electrophoresis',
     path: '/gel-electrophoresis',
-    blurb: 'A gel with a DNA ladder and the bands you type in each lane.',
+    blurb: 'An agarose gel with a DNA ladder and the band sizes you type.',
     description:
-      'Make printable gel electrophoresis results for biology tests. Add a DNA ladder and sample lanes, type each band’s size, and the bands move the right distance.',
-    keywords: ['gel electrophoresis', 'gel', 'dna', 'bands', 'ladder', 'base pairs', 'dna fingerprinting', 'paternity', 'pcr', 'restriction', 'printable'],
-    off: true,
+      'Make printable gel electrophoresis results for biology tests. Pick a DNA ladder and gel, type each lane’s band sizes, and every band runs as far as its size takes it.',
+    keywords: ['gel electrophoresis', 'agarose', 'gel', 'dna', 'bands', 'ladder', 'marker', 'base pairs', 'dna fingerprinting', 'crime scene', 'forensics', 'paternity', 'pcr', 'restriction digest', 'plasmid', 'standard curve', 'printable'],
   },
   {
     id: 'micropipette-reading',

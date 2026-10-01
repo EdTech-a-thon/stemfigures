@@ -16,6 +16,13 @@ and `docs/adr/` for decisions.
   with a line there too for black and white copies, and a magnifier on the
   display. Parts can be named or left blank, and the volume printed as an
   answer key or a write-in line.
+- `/gel-electrophoresis` **Gel Electrophoresis**: an agarose gel of 2 to 12
+  lanes, each a DNA ladder (100 bp, 1 kb or λ/HindIII) or a sample with the
+  band sizes typed in. Bands run linearly in log size over the gel's range
+  (0.8 to 2% agarose) and crowd together past it; bands too close to
+  separate run as one. Printable, blue-stained or glowing, with ladder
+  sizes, lane names, electrodes and a ruler shown or blanked, and sample
+  lanes left blank for students to draw.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a

@@ -6,10 +6,12 @@
 import type { Component } from 'svelte'
 import { generatorsOn } from '$shared/catalog/index'
 import { SITE_ID } from '$lib/site/config'
+import GelElectrophoresisPreview from './gel-electrophoresis/Preview.svelte'
 import MicropipetteReadingPreview from './micropipette-reading/Preview.svelte'
 
 /** Each generator's directory preview, by id. */
 export const PREVIEWS: Record<string, Component> = {
+  'gel-electrophoresis': GelElectrophoresisPreview,
   'micropipette-reading': MicropipetteReadingPreview,
 }
 
