@@ -12,11 +12,10 @@ export const BIOLOGY: CatalogEntry[] = [
     site: 'biology',
     name: 'Cell Diagram',
     path: '/cell-diagram',
-    blurb: 'An animal, plant or bacterial cell, with the organelles you choose.',
+    blurb: 'An animal, plant or bacterial cell with the organelles you pick, labeled or left for students.',
     description:
-      'Make printable cell diagrams for biology tests. Pick an animal, plant or bacterial cell, choose which organelles to show, and label them, number them or leave them blank.',
-    keywords: ['cell', 'organelles', 'animal cell', 'plant cell', 'bacteria', 'prokaryote', 'eukaryote', 'labeling', 'printable'],
-    off: true,
+      'Make printable cell diagrams for biology tests. Pick an animal, plant or bacterial cell and its organelles, then label them with names, numbers and a word bank, or blank lines, in color or black and white.',
+    keywords: ['cell', 'organelles', 'animal cell', 'plant cell', 'bacteria', 'prokaryotic', 'eukaryotic', 'cell structure', 'nucleus', 'mitochondria', 'chloroplast', 'labeling', 'worksheet', 'coloring page', 'word bank', 'printable'],
   },
   {
     id: 'population-growth',

@@ -9,7 +9,11 @@ and `docs/adr/` for decisions.
 
 - `/` **Directory**: every generator as a card with a live preview, plus a
   card to request one we don't make yet.
-- No generators yet; the directory shows only the request card.
+- `/cell-diagram` **Cell Diagram**: an animal, plant or bacterial cell, one
+  per figure, in color or black-and-white line art. A checklist (or a click
+  on the figure) picks which structures it shows and which are labeled;
+  labels are names, numbers or letters (with a word bank and answer key),
+  or blank lines, down both sides with leader lines that never cross.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
