@@ -9,7 +9,7 @@ and `docs/adr/` for decisions.
 
 - `/` **Directory**: every generator as a card with a live preview, plus a
   card to request one we don't make yet.
-- `/cell-diagram` **Cell Diagram**: an animal, plant or bacterial cell, one
+- `/cell-diagram` **Cell Diagram** (turned off for now, a 404): an animal, plant or bacterial cell, one
   per figure, in color or black-and-white line art. A checklist (or a click
   on the figure) picks which structures it shows and which are labeled;
   labels are names, numbers or letters (with a word bank and answer key),
@@ -79,9 +79,10 @@ and `docs/adr/` for decisions.
   for the settings and an answer box, shown or blank.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
-Every page has the top bar: the site name, the current generator, and a
-"Built by teacher.dev" link, which the footer repeats. The directory's search box filters its cards as
-you type, and its last card is **Request a generator**. Generators fill the
+Every page has the top bar: the site name and the current generator on the
+left, and links to the other STEM Figures sites on the right, which the footer
+repeats along with the "Built by teacher.dev" link. The directory's search box
+filters its cards as you type, and its last card is **Request a generator**. Generators fill the
 window with no footer. The help button in the corner opens the same kind of
 email dialog. Behind every page are faint biology doodles: a DNA helix,
 a cell, a leaf, a mitochondrion, a bacterium and a Punnett square.
