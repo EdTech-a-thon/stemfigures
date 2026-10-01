@@ -21,7 +21,7 @@ and `docs/adr/` for decisions.
   two stacked on the same x-axis. Marks the carrying capacity, the inflection
   point and the lag, exponential and stationary phases; adds census points
   (with a little scatter) and a census table; any label can be a blank line,
-  and the curve can be left off for blank axes. Classroom setups start it
+  and the curve can be left off for blank axes. Default setups start it
   from yeast in a flask, deer on an island, doubling bacteria and more.
 - `/punnett-square` **Punnett Square**: a monohybrid, dihybrid or X-linked
   cross typed as the parents' genotypes (Tt × tt), with complete, incomplete

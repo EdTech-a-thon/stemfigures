@@ -1,4 +1,4 @@
-// Classroom setups: populations teachers graph most often, each a set of
+// Default setups: populations teachers graph most often, each a set of
 // settings over the defaults. The axes are fitted to each when it's picked.
 
 import type { PopulationSettings } from './settings'

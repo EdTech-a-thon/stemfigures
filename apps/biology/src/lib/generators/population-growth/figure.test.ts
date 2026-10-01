@@ -128,7 +128,7 @@ describe('a population growth figure', () => {
   })
 
   it('keeps every label inside its grid, off the numbers, lines, curves and other labels', () => {
-    // Every classroom setup, and every model on every kind of graph, with
+    // Every default setup, and every model on every kind of graph, with
     // everything marked, at medium and large labels.
     const cases: [string, PopulationSettings][] = SETUPS.map((setup) => [setup.id, settingsFor(setup, populationSettings.defaults, populationSettings.defaults)])
     for (const model of MODELS)

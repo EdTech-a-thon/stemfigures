@@ -69,13 +69,27 @@
     s.unit = unit
   }
 
+  // The settings a setup makes from the teacher's current look, before the
+  // axes are fitted.
+  function made(setup: (typeof SETUPS)[number], current: PopulationSettings) {
+    const next = settingsFor(setup, populationSettings.defaults, current)
+    return populationSettings.tidy({ ...next, censusEvery: setup.settings.censusEvery ?? censusEveryFor(next.span) })
+  }
   function chooseSetup(id: string) {
     const setup = SETUPS.find((x) => x.id === id)
     if (!setup) return
-    const next = settingsFor(setup, populationSettings.defaults, now())
-    const census = setup.settings.censusEvery ?? censusEveryFor(next.span)
-    Object.assign(s, populationSettings.tidy({ ...next, censusEvery: census, ...fitAxes(populationSettings.tidy(next)) }))
+    const next = made(setup, now())
+    Object.assign(s, populationSettings.tidy({ ...next, ...fitAxes(next) }))
   }
+  // The setup picker shows the setup the graph still is: one whose settings
+  // (any a setup sets) all match. Changing one of them leaves it blank again.
+  const SETUP_KEYS = [...new Set(SETUPS.flatMap((x) => Object.keys(x.settings)))] as (keyof PopulationSettings)[]
+  const setupId = $derived(
+    SETUPS.find((x) => {
+      const m = made(x, clean)
+      return SETUP_KEYS.every((key) => m[key] === clean[key])
+    })?.id ?? '',
+  )
 
   const per = $derived(UNITS[clean.unit])
   const n = (v: number) => plain(Number(v.toPrecision(3)))
@@ -115,10 +129,10 @@
   )
 </script>
 
-{#snippet numberField(id: string, name: string, unit: string, key: GrowthKey, min: number, problem?: string | null)}
+{#snippet numberField(id: string, name: string, unit: string, key: GrowthKey, min: number, problem?: string | null, step = 'any')}
   <label class="number-field" for={id}>
     <span>{name}{#if unit}&nbsp;<span class="unit">({unit})</span>{/if}</span>
-    <input {id} type="number" step="any" {min} aria-invalid={!!problem} bind:value={() => s[key], (v) => change(key, v)} />
+    <input {id} type="number" {step} {min} aria-invalid={!!problem} bind:value={() => s[key], (v) => change(key, v)} />
   </label>
 {/snippet}
 
@@ -133,7 +147,7 @@
   </div>
 {/snippet}
 
-<GeneratorPage name="Population Growth" {filename} {gen} {svg} bind:labelSize={s.labelSize}>
+<GeneratorPage name="Population Growth" {filename} {gen} {svg} settingsWidth={30} bind:labelSize={s.labelSize}>
   {#snippet inputs()}
     <section class="population">
       <div class="head-row">
@@ -145,8 +159,8 @@
         </HelpTip>
       </div>
       <label class="field">
-        <span>Classroom setup</span>
-        <select value="" onchange={(e) => { chooseSetup(e.currentTarget.value); e.currentTarget.value = '' }}>
+        <span>Default setups</span>
+        <select value={setupId} onchange={(e) => chooseSetup(e.currentTarget.value)}>
           <option value="" disabled>Choose one…</option>
           {#each SETUPS as setup}<option value={setup.id}>{setup.name}</option>{/each}
         </select>
@@ -159,7 +173,7 @@
       </label>
       <div class="fields">
         {@render numberField('n0', 'Starting size, N₀', '', 'n0', 0, g.problems.n0)}
-        {@render numberField('r', 'Growth rate, r', `per ${per}`, 'r', 0, g.problems.r)}
+        {@render numberField('r', 'Growth rate, r', `per ${per}`, 'r', 0, g.problems.r, '0.1')}
         {#if clean.model === 'crash'}
           {@render numberField('k', 'Peak size', '', 'k', 0, g.problems.k)}
         {:else if hasK(clean.model)}
@@ -213,7 +227,7 @@
     </Section>
 
     <Section title="Curve" icon={Spline} summary={curveSummary}>
-      <label class="check"><input type="checkbox" bind:checked={s.curve} /> <span>Draw the curve <span class="hint">off for blank axes</span></span></label>
+      <label class="check"><input type="checkbox" bind:checked={s.curve} /> <span>Draw the curve <span class="hint">untick to leave the axes blank</span></span></label>
       {#if s.curve}
         <div class="field setting">
           <span>{clean.model === 'both' ? 'Logistic curve color' : 'Color'}</span>
