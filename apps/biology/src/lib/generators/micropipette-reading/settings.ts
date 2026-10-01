@@ -2,7 +2,6 @@
 // volume is kept in µL, always one the chosen pipette can be set to.
 
 import { figureTextFields } from '$shared/figureText'
-import { MAGNIFIER_VIEWS } from '$shared/magnify'
 import { bool, choice, defineSettings, number } from '$shared/settings'
 import { MODELS, canSet, digitsFor, pipette, tidyVolume, volumeText } from './pipette'
 
@@ -22,7 +21,6 @@ export const pipetteSettings = defineSettings(
     decimalLine: bool(true),
     /** the size printed above the window */
     showModel: bool(true),
-    view: choice(MAGNIFIER_VIEWS, 'both'),
     parts: choice(PART_LABELS, 'none'),
     /** a line under the figure for students to write the volume on */
     writeIn: bool(false),

@@ -1,10 +1,8 @@
 <script lang="ts">
-  // A micropipette set to `volume`, its three digit wheels showing it in the
-  // window on the handle, drawn at `zoom` (1 for the whole pipette; more
-  // inside a magnifier, where lines stay a comfortable weight). In color its
-  // red wheels are red; with `decimalLine`, a line across the window marks
-  // where they start too, which keeps them clear on a black and white copy.
-  import { sizeAt } from '$shared/magnify'
+  // A micropipette set to `volume`, its digit wheels showing it in the
+  // window on the handle. In color its red wheels are red; with `decimalLine`,
+  // a line across the window marks where they start too, which keeps them
+  // clear on a black and white copy.
   import { DIGIT_SIZE, WHEEL_H, type PipetteLayout } from './layout'
   import { decimalAfter, digitsFor, type Pipette } from './pipette'
 
@@ -15,11 +13,9 @@
     color: boolean
     decimalLine: boolean
     showModel: boolean
-    zoom?: number
   }
-  let { p, at, volume, color, decimalLine, showModel, zoom = 1 }: Props = $props()
+  let { p, at, volume, color, decimalLine, showModel }: Props = $props()
 
-  const k = $derived(sizeAt(zoom))
   const INK = '#111'
   const RED = '#c8102e'
   const TIPS = { clear: '#ffffff', yellow: '#f6cf3f', blue: '#4f8fe6' }
@@ -78,30 +74,26 @@
 </script>
 
 <g stroke-linejoin="round" stroke-linecap="round">
-  <!-- the tip ejector button, on its stem into the handle -->
-  <rect x={at.ejectorStem.left} y={at.ejectorButton.bottom - 2} width={at.ejectorStem.right - at.ejectorStem.left} height={at.handle.top - at.ejectorButton.bottom + 4} fill={body} stroke={INK} stroke-width={1.6 * k} />
-  <rect x={at.ejectorButton.left} y={at.ejectorButton.top} width={at.ejectorButton.right - at.ejectorButton.left} height={at.ejectorButton.bottom - at.ejectorButton.top} rx={3} fill={body} stroke={INK} stroke-width={2 * k} />
-
   <!-- the plunger: its colored cap on a wide neck, down into the handle -->
-  <rect x={cx - at.rod.half} y={at.rod.top - 2} width={2 * at.rod.half} height={at.rod.bottom - at.rod.top + 6} fill={body} stroke={INK} stroke-width={2 * k} />
+  <rect x={cx - at.rod.half} y={at.rod.top - 2} width={2 * at.rod.half} height={at.rod.bottom - at.rod.top + 6} fill={body} stroke={INK} stroke-width="2" />
   <path
     d="M {cx - at.button.half} {at.button.bottom} V {at.button.top + 5} Q {cx - at.button.half} {at.button.top} {cx - at.button.half + 5} {at.button.top} H {cx + at.button.half - 5} Q {cx + at.button.half} {at.button.top} {cx + at.button.half} {at.button.top + 5} V {at.button.bottom} Z"
     fill={accent}
     stroke={INK}
-    stroke-width={2 * k}
+    stroke-width="2"
   />
 
-  <!-- the handle with its finger rest, over the plunger's and ejector button's stems -->
-  <path d={handle} fill={body} stroke={INK} stroke-width={2 * k} />
+  <!-- the handle with its finger rest, over the plunger's neck -->
+  <path d={handle} fill={body} stroke={INK} stroke-width="2" />
 
   <!-- the shaft, with the tip ejector around it and the nut joining it to the handle -->
-  <path d={shaft} fill={body} stroke={INK} stroke-width={2 * k} />
-  <path d={ejector} fill={body} stroke={INK} stroke-width={2 * k} />
-  <rect x={cx - at.nut.half} y={at.nut.top - 2} width={2 * at.nut.half} height={at.nut.bottom - at.nut.top + 2} rx={3} fill={body} stroke={INK} stroke-width={2 * k} />
+  <path d={shaft} fill={body} stroke={INK} stroke-width="2" />
+  <path d={ejector} fill={body} stroke={INK} stroke-width="2" />
+  <rect x={cx - at.nut.half} y={at.nut.top - 2} width={2 * at.nut.half} height={at.nut.bottom - at.nut.top + 2} rx={3} fill={body} stroke={INK} stroke-width="2" />
 
   {#if at.withTip}
-    <path d={tip.cone} fill={TIPS[p.tip]} fill-opacity={color ? 0.75 : 0} stroke={INK} stroke-width={1.6 * k} />
-    <rect {...tip.rim} rx={1.5} fill={TIPS[p.tip]} fill-opacity={color ? 0.9 : 0} stroke={INK} stroke-width={1.6 * k} />
+    <path d={tip.cone} fill={TIPS[p.tip]} fill-opacity={color ? 0.75 : 0} stroke={INK} stroke-width="1.6" />
+    <rect {...tip.rim} rx={1.5} fill={TIPS[p.tip]} fill-opacity={color ? 0.9 : 0} stroke={INK} stroke-width="1.6" />
   {/if}
 
   <!-- its size, printed above the window -->
@@ -109,17 +101,17 @@
     <text x={cx} y={at.modelY} dy="0.35em" text-anchor="middle" font-size="12" font-weight="700" fill={INK}>{p.name}</text>
   {/if}
 
-  <!-- the window and its three digit wheels, read top to bottom -->
-  <rect x={at.window.left} y={at.window.top} width={at.window.right - at.window.left} height={at.window.bottom - at.window.top} rx={5} fill="#fff" stroke={INK} stroke-width={2.2 * k} />
+  <!-- the window and its digit wheels, read top to bottom -->
+  <rect x={at.window.left} y={at.window.top} width={at.window.right - at.window.left} height={at.window.bottom - at.window.top} rx={5} fill="#fff" stroke={INK} stroke-width="2.2" />
   {#each digits as d, i (i)}
     {@const top = at.wheels.top + i * WHEEL_H}
     {#if i > 0}
-      <line x1={at.wheels.left} x2={at.wheels.right} y1={top} y2={top} stroke={INK} stroke-opacity="0.35" stroke-width={0.8 * k} />
+      <line x1={at.wheels.left} x2={at.wheels.right} y1={top} y2={top} stroke={INK} stroke-opacity="0.35" stroke-width="0.8" />
     {/if}
     <text x={cx} y={at.wheelY(i)} dy="0.36em" text-anchor="middle" font-size={DIGIT_SIZE} font-weight="700" fill={color && p.red[i] ? RED : INK}>{d}</text>
   {/each}
   {#if line !== null}
     {@const y = at.wheels.top + line * WHEEL_H}
-    <line x1={at.window.left} x2={at.window.right} y1={y} y2={y} stroke={INK} stroke-width={2.4 * k} stroke-linecap="butt" />
+    <line x1={at.window.left} x2={at.window.right} y1={y} y2={y} stroke={INK} stroke-width="2.4" stroke-linecap="butt" />
   {/if}
 </g>

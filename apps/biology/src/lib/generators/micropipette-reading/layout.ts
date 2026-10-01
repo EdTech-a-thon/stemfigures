@@ -1,7 +1,6 @@
 // Where the parts of the drawn micropipette sit, in drawing units, and where
 // their labels go. It stands upright: the plunger button on top of its neck,
-// the tip ejector button beside it, the handle with its finger rest and
-// volume display, then the shaft with the tip ejector around it and the tip
+// the handle with its finger rest and volume display, then the shaft with the tip ejector around it and the tip
 // on its end. It's modeled on the common single-channel kind (Eppendorf's
 // Research plus): the finger rest a hook swept back from the handle's top,
 // and the tip ejector a cone around the shaft's top, just below the handle.
@@ -11,12 +10,11 @@
 import type { Pipette } from './pipette'
 
 /** The parts that can be labeled, top to bottom. */
-export const PARTS = ['plunger', 'ejectorButton', 'display', 'handle', 'ejector', 'shaft', 'tip'] as const
+export const PARTS = ['plunger', 'display', 'handle', 'ejector', 'shaft', 'tip'] as const
 export type Part = (typeof PARTS)[number]
 
 export const PART_NAMES: Record<Part, string> = {
   plunger: 'Plunger button',
-  ejectorButton: 'Tip ejector button',
   display: 'Volume display',
   handle: 'Handle',
   ejector: 'Tip ejector',
@@ -41,7 +39,7 @@ export function pipetteLayout(p: Pipette, withTip: boolean) {
   const handle = { top: 46, bottom: 318, half: 30, bottomHalf: 22 }
   const window = { top: 94, half: 17 }
   const wheelsTop = window.top + 5
-  const wheelsBottom = wheelsTop + 3 * WHEEL_H
+  const wheelsBottom = wheelsTop + p.places.length * WHEEL_H
   const windowBottom = wheelsBottom + 5
   const nut = { top: handle.bottom, bottom: handle.bottom + 16, half: Math.max(19, shaft.top / 2 + 12) }
   const shaftTop = nut.bottom
@@ -58,9 +56,6 @@ export function pipetteLayout(p: Pipette, withTip: boolean) {
     /** the plunger's colored cap, on a wide neck down into the handle */
     button: { top: 0, bottom: 12, half: 13 },
     rod: { top: 12, bottom: handle.top, half: 11 },
-    /** the tip ejector button, beside the plunger, and the stem it pushes down */
-    ejectorButton: { top: 18, bottom: 30, left: cx - 29, right: cx - 17 },
-    ejectorStem: { left: cx - 25, right: cx - 21 },
     handle,
     /** the finger rest: a hook swept back from the handle's top, its end this low and far out */
     hook: { bottom: handle.top + 74, out: cx + 64 },
@@ -85,8 +80,6 @@ export function anchorOf(at: PipetteLayout, part: Part) {
   switch (part) {
     case 'plunger':
       return { x: at.cx - at.button.half, y: (at.button.top + at.button.bottom) / 2 }
-    case 'ejectorButton':
-      return { x: at.ejectorButton.left, y: (at.ejectorButton.top + at.ejectorButton.bottom) / 2 }
     case 'display':
       return { x: at.window.left, y: (at.window.top + at.window.bottom) / 2 }
     case 'handle':

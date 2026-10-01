@@ -102,7 +102,7 @@ export const BIOLOGY: CatalogEntry[] = [
     path: '/micropipette-reading',
     blurb: 'A micropipette’s volume display, set to the volume you type.',
     description:
-      'Make printable micropipette figures for biology tests. Pick a 2 µL to 1000 µL pipette and type a volume, and students read it from the three digits in its display, magnified.',
+      'Make printable micropipette figures for biology tests. Pick a 2 µL to 1000 µL pipette and type a volume, and students read it from the digits in its display.',
     keywords: ['micropipette', 'pipette', 'pipettor', 'pipetman', 'p20', 'p200', 'p1000', 'dial', 'display', 'microliter', 'volume', 'measurement', 'parts', 'lab', 'printable'],
   },
   {

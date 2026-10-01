@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { LABELS, PARTS, anchorOf, partsShown, pipetteLayout, spreadLabels } from './layout'
-import { MODELS, canSet, carryVolume, decimalAfter, digitsFor, pipette, randomVolume, readVolume, tidyVolume, volumeOf, volumeText } from './pipette'
+import { MODELS, canSet, carryVolume, decimalAfter, digitsFor, pipette, randomVolume, readVolume, stepOf, tidyVolume, volumeOf, volumeText } from './pipette'
 import { answerLine, digitsText, pipetteSettings, underLine } from './settings'
 
 const P = (m: (typeof MODELS)[number]) => pipette(m)
@@ -13,22 +13,26 @@ describe('micropipettes', () => {
   })
 
   it('step by one on the bottom wheel', () => {
-    expect(MODELS.map((m) => P(m).places[2])).toEqual([0.01, 0.1, 0.1, 1, 1, 10])
+    expect(MODELS.map((m) => stepOf(P(m)))).toEqual([0.01, 0.1, 0.1, 1, 1, 1])
     expect(MODELS.map((m) => P(m).decimals)).toEqual([2, 1, 1, 0, 0, 0])
   })
 
-  it('color the wheels as Gilson does: black for µL, red past the decimal point, red for mL on a P1000', () => {
+  it('have three wheels, or four on a P1000', () => {
+    expect(MODELS.map((m) => P(m).places.length)).toEqual([3, 3, 3, 3, 3, 4])
+  })
+
+  it('color the wheels as Gilson does: black for µL, red past the decimal point; a P1000 all black', () => {
     expect(P('P2').red).toEqual([false, true, true])
     expect(P('P20').red).toEqual([false, false, true])
     expect(P('P200').red).toEqual([false, false, false])
-    expect(P('P1000').red).toEqual([true, false, false])
-    expect(MODELS.map((m) => decimalAfter(P(m)))).toEqual([1, 2, 2, null, null, 1])
+    expect(P('P1000').red).toEqual([false, false, false, false])
+    expect(MODELS.map((m) => decimalAfter(P(m)))).toEqual([1, 2, 2, null, null, null])
   })
 })
 
 describe('the volume display', () => {
   // Each model's examples from Gilson's guide and lab manuals: the volume, and its wheels top to bottom.
-  const CASES: [(typeof MODELS)[number], number, [number, number, number]][] = [
+  const CASES: [(typeof MODELS)[number], number, number[]][] = [
     ['P2', 1.25, [1, 2, 5]],
     ['P2', 0.2, [0, 2, 0]],
     ['P2', 2, [2, 0, 0]],
@@ -46,10 +50,11 @@ describe('the volume display', () => {
     ['P200', 125, [1, 2, 5]],
     ['P200', 95, [0, 9, 5]],
     ['P200', 200, [2, 0, 0]],
-    ['P1000', 750, [0, 7, 5]],
-    ['P1000', 1000, [1, 0, 0]],
-    ['P1000', 200, [0, 2, 0]],
-    ['P1000', 990, [0, 9, 9]],
+    ['P1000', 750, [0, 7, 5, 0]],
+    ['P1000', 1000, [1, 0, 0, 0]],
+    ['P1000', 200, [0, 2, 0, 0]],
+    ['P1000', 755, [0, 7, 5, 5]],
+    ['P1000', 101, [0, 1, 0, 1]],
   ]
 
   it('shows each volume on the right wheels', () => {
@@ -63,8 +68,9 @@ describe('the volume display', () => {
   it('round-trips every volume each model can be set to', () => {
     for (const m of MODELS) {
       const p = P(m)
-      for (let n = Math.round(p.min / p.places[2]); n * p.places[2] <= p.max + 1e-9; n++) {
-        const v = volumeOf(p, [Math.floor(n / 100) % 10, Math.floor(n / 10) % 10, n % 10])
+      const count = p.places.length
+      for (let n = Math.round(p.min / stepOf(p)); n * stepOf(p) <= p.max + 1e-9; n++) {
+        const v = volumeOf(p, p.places.map((_, i) => Math.floor(n / 10 ** (count - 1 - i)) % 10))
         expect(canSet(p, v), `${m} ${v}`).toBe(true)
         expect(volumeOf(p, digitsFor(p, v)), `${m} ${v}`).toBe(v)
       }
@@ -94,7 +100,7 @@ describe('typing a volume', () => {
 
   it('says why it can’t take one between steps, and the nearest it can', () => {
     expect(readVolume(P('P20'), '12.53').error).toBe('A 20 µL pipette is set in steps of 0.1 µL, so 12.53 µL can’t be dialed. The nearest is 12.5 µL.')
-    expect(readVolume(P('P1000'), '755').error).toBe('A 1000 µL pipette is set in steps of 10 µL, so 755 µL can’t be dialed. The nearest is 760 µL.')
+    expect(readVolume(P('P1000'), '755.4').error).toBe('A 1000 µL pipette is set in steps of 1 µL, so 755.4 µL can’t be dialed. The nearest is 755 µL.')
     expect(readVolume(P('P200'), '99.5').error).toContain('The nearest is 100 µL.')
   })
 
@@ -109,7 +115,7 @@ describe('volumes for a pipette', () => {
   it('tidy one to a step within range', () => {
     expect(tidyVolume(P('P20'), 12.53)).toBe(12.5)
     expect(tidyVolume(P('P20'), 50)).toBe(20)
-    expect(tidyVolume(P('P1000'), 755)).toBe(760)
+    expect(tidyVolume(P('P1000'), 755.6)).toBe(756)
     expect(tidyVolume(P('P1000'), 0)).toBe(100)
   })
 
@@ -126,7 +132,7 @@ describe('volumes for a pipette', () => {
   it('carry one over to another pipette only if it can be set there', () => {
     expect(carryVolume(P('P200'), 20)).toBe(20)
     expect(carryVolume(P('P200'), 12.5)).toBe(125)
-    expect(carryVolume(P('P1000'), 125)).toBe(750)
+    expect(carryVolume(P('P1000'), 12.5)).toBe(750)
     expect(carryVolume(P('P1000'), 200)).toBe(200)
   })
 })
@@ -138,7 +144,7 @@ describe('micropipette settings', () => {
   })
 
   it('tidy a volume from the address to one the pipette can be set to', () => {
-    expect(pipetteSettings.fromParams(new URLSearchParams('model=P1000&volume=755')).volume).toBe(760)
+    expect(pipetteSettings.fromParams(new URLSearchParams('model=P1000&volume=755.6')).volume).toBe(756)
     expect(pipetteSettings.fromParams(new URLSearchParams('model=P2&volume=5')).volume).toBe(2)
     expect(pipetteSettings.fromParams(new URLSearchParams('model=P200&volume=125')).volume).toBe(125)
   })

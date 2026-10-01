@@ -39,7 +39,7 @@
           </button>
         {/each}
       </div>
-      <p class="note">Set from {p.min} to {p.max} µL. Its digits count {p.places.slice(0, 2).map((n) => `${n} µL`).join(', ')} and {p.places[2]} µL, top to bottom.</p>
+      <p class="note">Set from {p.min} to {p.max} µL. Its digits count {p.places.slice(0, -1).map((n) => `${n} µL`).join(', ')} and {p.places[p.places.length - 1]} µL, top to bottom.</p>
       <label class="check"><input type="checkbox" bind:checked={s.tip} /> Tip on the end</label>
       <label class="check"><input type="checkbox" bind:checked={s.showModel} /> Size printed above the display</label>
     </Section>
@@ -50,7 +50,7 @@
 
     <Section title="Color" summary={printSummary} icon={Palette}>
       <div class="segmented" role="radiogroup" aria-label="Color">
-        <button type="button" role="radio" aria-checked={s.color} class:on={s.color} onclick={() => (s.color = true)}>Red digits in red</button>
+        <button type="button" role="radio" aria-checked={s.color} class:on={s.color} onclick={() => (s.color = true)}>Decimals in red</button>
         <button type="button" role="radio" aria-checked={!s.color} class:on={!s.color} onclick={() => (s.color = false)}>Black and white</button>
       </div>
       <label class="check below"><input type="checkbox" bind:checked={s.decimalLine} /> Line at the decimal point</label>

@@ -2,13 +2,13 @@
 // what each one's volume display means, and checking a typed volume against
 // what that pipette can be set to.
 //
-// The display is three digit wheels read top to bottom. Which places they
-// stand for depends on the model, and red wheels mark where the decimal point
-// goes in the unit the maker uses (Gilson's Pipetman guide):
-//   P2      1 µL, 0.1 µL, 0.01 µL     red: the bottom two    1-2-5 is 1.25 µL
-//   P10/P20 10 µL, 1 µL, 0.1 µL       red: the bottom one    1-2-5 is 12.5 µL
-//   P100/P200 100 µL, 10 µL, 1 µL     none                   1-2-5 is 125 µL
-//   P1000   1000 µL, 100 µL, 10 µL    red: the top one (mL)  0-7-5 is 750 µL
+// The display is digit wheels read top to bottom: three, or four on the
+// P1000. Which places they stand for depends on the model, and red wheels mark
+// where the decimal point goes (Gilson's Pipetman guide):
+//   P2      1 µL, 0.1 µL, 0.01 µL            red: the bottom two  1-2-5 is 1.25 µL
+//   P10/P20 10 µL, 1 µL, 0.1 µL              red: the bottom one  1-2-5 is 12.5 µL
+//   P100/P200 100 µL, 10 µL, 1 µL            none                 1-2-5 is 125 µL
+//   P1000   1000 µL, 100 µL, 10 µL, 1 µL     none                 0-7-5-0 is 750 µL
 // Each is used from a tenth of its largest volume up to it, as lab manuals
 // teach (P20: 2 to 20 µL).
 
@@ -25,9 +25,9 @@ export interface Pipette {
   /** the smallest, in µL */
   min: number
   /** what each wheel counts, top to bottom, in µL */
-  places: [number, number, number]
+  places: number[]
   /** which wheels are red, top to bottom */
-  red: [boolean, boolean, boolean]
+  red: boolean[]
   /** decimal places in a volume in µL: the bottom wheel's place */
   decimals: number
   /** the volume Gilson's guide shows it set to, in µL */
@@ -47,37 +47,38 @@ const PIPETTES: Record<Model, Omit<Pipette, 'model' | 'name' | 'min' | 'decimals
   P20: { max: 20, places: [10, 1, 0.1], red: [B, B, R], example: 12.5, shaft: 'medium', tip: 'yellow' },
   P100: { max: 100, places: [100, 10, 1], red: [B, B, B], example: 75, shaft: 'medium', tip: 'yellow' },
   P200: { max: 200, places: [100, 10, 1], red: [B, B, B], example: 125, shaft: 'medium', tip: 'yellow' },
-  P1000: { max: 1000, places: [1000, 100, 10], red: [R, B, B], example: 750, shaft: 'wide', tip: 'blue' },
+  P1000: { max: 1000, places: [1000, 100, 10, 1], red: [B, B, B, B], example: 750, shaft: 'wide', tip: 'blue' },
 }
 
 export function pipette(model: Model): Pipette {
   const p = PIPETTES[model]
-  const decimals = Math.max(0, Math.round(-Math.log10(p.places[2])))
+  const decimals = Math.max(0, Math.round(-Math.log10(p.places[p.places.length - 1])))
   return { ...p, model, name: `${p.max} µL`, min: p.max / 10, decimals }
 }
 
 /** The smallest step a volume can take on it, in µL: one on the bottom wheel. */
-export const stepOf = (p: Pipette) => p.places[2]
+export const stepOf = (p: Pipette) => p.places[p.places.length - 1]
 
 /** Where the line marking the decimal point goes: after this many wheels from
  *  the top, between the black wheels and the red ones. Null with no red wheel. */
 export function decimalAfter(p: Pipette): number | null {
-  for (let i = 0; i < 2; i++) if (p.red[i] !== p.red[i + 1]) return i + 1
+  for (let i = 0; i < p.red.length - 1; i++) if (p.red[i] !== p.red[i + 1]) return i + 1
   return null
 }
 
 /** How many bottom-wheel steps a volume is, as a whole number. */
 const stepsIn = (p: Pipette, volume: number) => Math.round(volume / stepOf(p) + 1e-9 * Math.sign(volume))
 
-/** The three digits the wheels show for a volume, top to bottom. */
-export function digitsFor(p: Pipette, volume: number): [number, number, number] {
+/** The digits the wheels show for a volume, top to bottom. */
+export function digitsFor(p: Pipette, volume: number): number[] {
   const n = stepsIn(p, volume)
-  return [Math.floor(n / 100) % 10, Math.floor(n / 10) % 10, n % 10]
+  const count = p.places.length
+  return p.places.map((_, i) => Math.floor(n / 10 ** (count - 1 - i)) % 10)
 }
 
-/** The volume three digits stand for, in µL. */
-export function volumeOf(p: Pipette, digits: readonly [number, number, number]): number {
-  const n = digits[0] * 100 + digits[1] * 10 + digits[2]
+/** The volume the wheels' digits stand for, in µL. */
+export function volumeOf(p: Pipette, digits: readonly number[]): number {
+  const n = digits.reduce((sum, d) => sum * 10 + d, 0)
   return roundTo(n * stepOf(p), p.decimals)
 }
 

@@ -3,7 +3,7 @@
   // type, whenever the pipette can be set to what's typed; when it can't, the
   // figure stays on the last volume that could and the box says why.
   import { Dices } from '@lucide/svelte'
-  import { readVolume, type Pipette } from './pipette'
+  import { readVolume, stepOf, type Pipette } from './pipette'
 
   interface Props {
     p: Pipette
@@ -60,7 +60,7 @@
   {#if error}
     <p class="error" id="{id}-hint" role="alert">{error} The figure still shows {volume.toFixed(p.decimals)} µL.</p>
   {:else}
-    <p class="hint" id="{id}-hint">A {p.name} pipette is set from {p.min} to {p.max} µL, in steps of {p.places[2]} µL.</p>
+    <p class="hint" id="{id}-hint">A {p.name} pipette is set from {p.min} to {p.max} µL, in steps of {stepOf(p)} µL.</p>
   {/if}
 </div>
 

@@ -66,9 +66,9 @@ and `docs/adr/` for decisions.
 - `/micropipette-reading` **Micropipette Reading**: a 2, 10, 20, 100,
   200 or 1000 µL micropipette (Gilson's P2 to P1000), labeled with its size
   and set to the volume typed, which is checked against its range and steps.
-  Its display shows three digit wheels read top to bottom, red where the
-  decimal point goes (Gilson's convention), with a line there too for black
-  and white copies, and a magnifier on the display.
+  Its display shows three digit wheels read top to bottom (four on the
+  1000 µL, all black), red where the decimal point goes (Gilson's
+  convention), with a line there too for black and white copies.
 - `/microscope-field-of-view` **Microscope Field of View** (turned off for now, a 404): the circle seen
   down a compound microscope, drawn to scale: onion or Elodea cells, cheek or
   red blood cells, paramecia, simple cells or circles, or the letter e, at
