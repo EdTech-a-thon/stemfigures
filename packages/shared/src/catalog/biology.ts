@@ -1,8 +1,4 @@
 // Biology Figures' generators. See ./index.ts.
-//
-// Each starts turned off (`off: true`) until it is built: the generator's
-// own branch deletes the flag, adds its preview and snapshot, and rewrites
-// its blurb, description and keywords to match what it draws.
 
 import type { CatalogEntry } from './index'
 

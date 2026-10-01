@@ -9,49 +9,11 @@ and `docs/adr/` for decisions.
 
 - `/` **Directory**: every generator as a card with a live preview, plus a
   card to request one we don't make yet.
-- `/micropipette-reading` **Micropipette Reading**: a Pipetman-style P2,
-  P10, P20, P100, P200 or P1000 set to the volume typed, which is checked
-  against the model's range and steps. Its display shows three digit wheels
-  read top to bottom, red where the decimal point goes (Gilson's convention),
-  with a line there too for black and white copies, and a magnifier on the
-  display. Parts can be named or left blank, and the volume printed as an
-  answer key or a write-in line.
-- `/gel-electrophoresis` **Gel Electrophoresis**: an agarose gel of 2 to 12
-  lanes, each a DNA ladder (100 bp, 1 kb or λ/HindIII) or a sample with the
-  band sizes typed in. Bands run linearly in log size over the gel's range
-  (0.8 to 2% agarose) and crowd together past it; bands too close to
-  separate run as one. Printable, blue-stained or glowing, with ladder
-  sizes, lane names, electrodes and a ruler shown or blanked, and sample
-  lanes left blank for students to draw.
-- `/punnett-square` **Punnett Square**: a monohybrid, dihybrid or X-linked
-  cross typed as the parents' genotypes (Tt × tt), with complete, incomplete
-  or codominance (Cᴿ Cᵂ, Iᴬ Iᴮ i). Gametes, parents and any cells can be left
-  blank; cells can be shaded by phenotype in gray, hatching or dots; genotype
-  and phenotype ratios print underneath as ratios, percentages or fractions.
-- `/microscope-field-of-view` **Microscope Field of View**: the circle seen
-  down a compound microscope, drawn to scale: onion or Elodea cells, cheek or
-  red blood cells, paramecia, simple cells or circles, or the letter e, at
-  any eyepiece and objective, and the same slide at a higher power beside
-  it. The field's diameter is typed or worked out from the low-power one.
-  Optional clear mm ruler, scale bar and diameter arrow; a question written
-  for the settings and an answer box, shown or blank.
-- `/predator-prey` **Predator–Prey Cycles**: a predator and its prey (hare
-  and lynx, wolf and moose, or your own pair) rising and falling out of step,
-  from the Lotka–Volterra model, worked out from where they start, their
-  averages and the cycle length, or from the model's four rates. Both
-  populations over time, on one y-axis or with the predators on the right,
-  or as a phase plane loop; smooth curves or census counts with seeded
-  noise; the peaks, lag and period marked, labeled or left blank, and either
-  population left off for students to sketch. Built on `$shared/graph`.
-- `/pedigree` **Pedigree**: a random family for autosomal dominant or
-  recessive, X-linked dominant or recessive, or Y-linked inheritance, over 2
-  to 4 generations, that students can diagnose; or a classic (hemophilia in
-  a royal family, Huntington's, cystic fibrosis, albinism, color blindness,
-  vitamin D–resistant rickets). Click anyone to change their sex or status,
-  mark them deceased or the proband, make twins, or add a child, partner or
-  sibling; the family is written into the address. It checks the family
-  against every mode and says how students can tell, and can show carriers
-  (half filled or a dot), genotypes as answers or blanks, numbers and a key.
+- `/cell-diagram` **Cell Diagram**: an animal, plant or bacterial cell, one
+  per figure, in color or black-and-white line art. A checklist (or a click
+  on the figure) picks which structures it shows and which are labeled;
+  labels are names, numbers or letters (with a word bank and answer key),
+  or blank lines, down both sides with leader lines that never cross.
 - `/population-growth` **Population Growth**: exponential (J-curve),
   logistic (S-curve), both together, overshoot and oscillation around K, or a
   boom and crash, from N₀, r and K. Graphs population size, the growth rate
@@ -61,6 +23,20 @@ and `docs/adr/` for decisions.
   (with a little scatter) and a census table; any label can be a blank line,
   and the curve can be left off for blank axes. Classroom setups start it
   from yeast in a flask, deer on an island, doubling bacteria and more.
+- `/punnett-square` **Punnett Square**: a monohybrid, dihybrid or X-linked
+  cross typed as the parents' genotypes (Tt × tt), with complete, incomplete
+  or codominance (Cᴿ Cᵂ, Iᴬ Iᴮ i). Gametes, parents and any cells can be left
+  blank; cells can be shaded by phenotype in gray, hatching or dots; genotype
+  and phenotype ratios print underneath as ratios, percentages or fractions.
+- `/pedigree` **Pedigree**: a random family for autosomal dominant or
+  recessive, X-linked dominant or recessive, or Y-linked inheritance, over 2
+  to 4 generations, that students can diagnose; or a classic (hemophilia in
+  a royal family, Huntington's, cystic fibrosis, albinism, color blindness,
+  vitamin D–resistant rickets). Click anyone to change their sex or status,
+  mark them deceased or the proband, make twins, or add a child, partner or
+  sibling; the family is written into the address. It checks the family
+  against every mode and says how students can tell, and can show carriers
+  (half filled or a dot), genotypes as answers or blanks, numbers and a key.
 - `/cell-division` **Mitosis & Meiosis**: cells at the phases of mitosis
   (interphase G1 or G2 through cytokinesis) or meiosis (prophase I through the
   four haploid cells), for 2n = 2, 4, 6 or 8, in an animal or plant cell. One
@@ -72,11 +48,35 @@ and `docs/adr/` for decisions.
   on one phase the structures (chromosome, sister chromatids, centromere,
   tetrad or homologous pair, spindle fibers, centrioles, nuclear envelope,
   cleavage furrow or cell plate) as names, letters or blank lines.
-- `/cell-diagram` **Cell Diagram**: an animal, plant or bacterial cell, one
-  per figure, in color or black-and-white line art. A checklist (or a click
-  on the figure) picks which structures it shows and which are labeled;
-  labels are names, numbers or letters (with a word bank and answer key),
-  or blank lines, down both sides with leader lines that never cross.
+- `/predator-prey` **Predator–Prey Cycles**: a predator and its prey (hare
+  and lynx, wolf and moose, or your own pair) rising and falling out of step,
+  from the Lotka–Volterra model, worked out from where they start, their
+  averages and the cycle length, or from the model's four rates. Both
+  populations over time, on one y-axis or with the predators on the right,
+  or as a phase plane loop; smooth curves or census counts with seeded
+  noise; the peaks, lag and period marked, labeled or left blank, and either
+  population left off for students to sketch. Built on `$shared/graph`.
+- `/gel-electrophoresis` **Gel Electrophoresis**: an agarose gel of 2 to 12
+  lanes, each a DNA ladder (100 bp, 1 kb or λ/HindIII) or a sample with the
+  band sizes typed in. Bands run linearly in log size over the gel's range
+  (0.8 to 2% agarose) and crowd together past it; bands too close to
+  separate run as one. Printable, blue-stained or glowing, with ladder
+  sizes, lane names, electrodes and a ruler shown or blanked, and sample
+  lanes left blank for students to draw.
+- `/micropipette-reading` **Micropipette Reading**: a Pipetman-style P2,
+  P10, P20, P100, P200 or P1000 set to the volume typed, which is checked
+  against the model's range and steps. Its display shows three digit wheels
+  read top to bottom, red where the decimal point goes (Gilson's convention),
+  with a line there too for black and white copies, and a magnifier on the
+  display. Parts can be named or left blank, and the volume printed as an
+  answer key or a write-in line.
+- `/microscope-field-of-view` **Microscope Field of View**: the circle seen
+  down a compound microscope, drawn to scale: onion or Elodea cells, cheek or
+  red blood cells, paramecia, simple cells or circles, or the letter e, at
+  any eyepiece and objective, and the same slide at a higher power beside
+  it. The field's diameter is typed or worked out from the low-power one.
+  Optional clear mm ruler, scale bar and diameter arrow; a question written
+  for the settings and an answer box, shown or blank.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
