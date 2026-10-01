@@ -9,7 +9,13 @@ and `docs/adr/` for decisions.
 
 - `/` **Directory**: every generator as a card with a live preview, plus a
   card to request one we don't make yet.
-- No generators yet; the directory shows only the request card.
+- `/micropipette-reading` **Micropipette Reading**: a Pipetman-style P2,
+  P10, P20, P100, P200 or P1000 set to the volume typed, which is checked
+  against the model's range and steps. Its display shows three digit wheels
+  read top to bottom, red where the decimal point goes (Gilson's convention),
+  with a line there too for black and white copies, and a magnifier on the
+  display. Parts can be named or left blank, and the volume printed as an
+  answer key or a write-in line.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
