@@ -1,8 +1,9 @@
 <script lang="ts">
   // A predator–prey graph on the shared graph grid: the dotted guides, then
   // both populations (prey solid, predators dashed, so they read apart in
-  // black and white), the peaks, lag and period, each population's name
-  // beside its line, and the right-hand axis when the predators have one.
+  // black and white), the peaks, lag and period, a key naming each
+  // population under the graph, and the right-hand axis when the predators
+  // have one.
   // The phase plane draws the loop with arrows instead.
   import Grid from '$shared/graph/Grid.svelte'
   import { INK, SANS } from '$shared/graph/grid'
@@ -93,12 +94,12 @@
     {/if}
   {/each}
 
-  {#each g.nameLabels as n}{@render sample(n.key, n.sample)}{/each}
+  {#each g.keyEntries as n}{@render sample(n.key, n.sample)}{/each}
   {#each g.axisKeys as k}{@render sample(k.key, k.sample)}{/each}
 
   <g font-family={SANS} font-size={g.fs * 1.05} font-weight="bold" fill={INK} stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">
     {#each g.spans as sp}<text x={sp.label.x} y={sp.label.y} text-anchor={sp.label.anchor}>{sp.label.text}</text>{/each}
-    {#each g.nameLabels as n}<text x={n.text.x} y={n.text.y} text-anchor={n.text.anchor}>{n.text.text}</text>{/each}
+    {#each g.keyEntries as n}<text x={n.text.x} y={n.text.y} text-anchor={n.text.anchor}>{n.text.text}</text>{/each}
   </g>
   <g stroke={INK} stroke-width="1.5">
     {#each g.spans as sp}

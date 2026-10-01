@@ -51,12 +51,15 @@ const counted = (name: string, count: string) => `${name.trim()}${count ? ` (${c
 export function autoTitles(s: { preyName: string; predatorName: string; units: Units; scale: (typeof SCALES)[number] }) {
   const pair = pairNamed(s.preyName, s.predatorName)
   const count = pair?.count ?? ''
+  // Names left empty are drawn as Prey and Predators, so they're titled so too.
+  const prey = s.preyName.trim() || 'Prey'
+  const predators = s.predatorName.trim() || 'Predators'
   return {
     xTitle: `Time (${s.units})`,
-    yTitle: s.scale === 'two' ? counted(s.preyName, count) : pair ? counted(`Number of ${pair.kind}`, count) : 'Population size',
-    y2Title: counted(s.predatorName, count),
-    pxTitle: counted(s.preyName, count),
-    pyTitle: counted(s.predatorName, count),
+    yTitle: s.scale === 'two' ? counted(prey, count) : pair ? counted(`Number of ${pair.kind}`, count) : 'Population size',
+    y2Title: counted(predators, count),
+    pxTitle: counted(prey, count),
+    pyTitle: counted(predators, count),
   }
 }
 

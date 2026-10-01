@@ -42,10 +42,11 @@
   }
 
   const pair = $derived(pairNamed(clean.preyName, clean.predatorName))
+  /** A pair sets everything it comes with; your own pair just empties the names. */
   function choosePair(id: string) {
     const p = PAIRS.find((p) => p.id === id)
-    if (!p) return
-    retitle(() => Object.assign(s, pairSettings(p), { xFit: true, yFit: true }))
+    if (p) retitle(() => Object.assign(s, pairSettings(p), { xFit: true, yFit: true }))
+    else retitle(() => Object.assign(s, { preyName: '', predatorName: '' }))
   }
 
   // Populations work the rates out; switching keeps the same cycle either way.
@@ -137,9 +138,9 @@
       </div>
       <label class="field">
         <span>Pair</span>
-        <select value={pair?.id ?? ''} onchange={(e) => choosePair(e.currentTarget.value)}>
+        <select value={pair?.id ?? 'own'} onchange={(e) => choosePair(e.currentTarget.value)}>
           {#each PAIRS as p}<option value={p.id}>{p.name}</option>{/each}
-          <option value="" disabled>Your own pair</option>
+          <option value="own">Your own pair</option>
         </select>
       </label>
       <div class="fields">

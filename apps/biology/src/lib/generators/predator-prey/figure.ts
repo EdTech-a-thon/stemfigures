@@ -1,8 +1,8 @@
 // Lays out a predator–prey graph for PredatorPreyFigure.svelte to draw: the
 // grid from $shared/graph, both populations on it (as curves or census
 // counts), a right-hand axis when the predators have a scale of their own,
-// each population's name beside its line, and the peaks, lag and period
-// marked if the teacher wants them. The phase plane instead draws predators
+// a key naming each population under the graph, and the peaks, lag and
+// period marked if the teacher wants them. The phase plane instead draws predators
 // against prey: the closed loop, with arrows for the way it goes round.
 
 import { readAxes } from '$shared/graph/axes'
@@ -14,7 +14,7 @@ import {
   type Census, type Populations, type Turn,
 } from './model'
 import { UNIT_ONE } from './pairs'
-import { best, clearance, dense, inside, overlaps, type Box } from './place'
+import { clearance, dense, inside, overlaps, type Box } from './place'
 import { ratesOf, type PredatorPreySettings } from './settings'
 
 export type SeriesKey = 'prey' | 'predators'
@@ -27,7 +27,8 @@ export const MAX_COUNTS = 400
 export const PREDATOR_DASH = '10 6'
 export const COUNT_DASH = '6 4'
 const SAMPLE_W = 26 // the line sample in front of a population's name
-const LABEL_GAP = 7 // from a line to its name
+const KEY_GAP = 28 // between the key's entries
+const PAD = 14 // the figure's margin, as the grid's
 const BLANK_W = 60 // a write-on line for a lag or period left blank
 const DOT_R = 5
 
@@ -177,8 +178,8 @@ export type Span = {
   guides: Segment[]
 }
 
-/** A population's name beside its line, after a sample of the line. */
-export type NameLabel = { key: SeriesKey; sample: Segment; mark: Point; text: Text }
+/** A population's name in the key, after a sample of its line. */
+export type KeyEntry = { key: SeriesKey; sample: Segment; text: Text }
 
 export function buildPredatorPrey(s: PredatorPreySettings) {
   const m = modelOf(s)
@@ -447,61 +448,34 @@ export function buildPredatorPrey(s: PredatorPreySettings) {
     if (sp) spans.push(sp)
   }
 
-  // Each population's name, beside its own line and well clear of the other's.
-  const nameLabels: NameLabel[] = []
-  for (const key of drawnKeys) {
-    const text = names[key]
-    const w = SAMPLE_W + 6 + text.length * fs * 1.05 * 0.6
-    const h = fs * 1.3
-    const own = pixels[key]
-    const lines = [...drops, ...spans.flatMap((sp) => [sp.arrow, ...sp.guides])]
-    const others = [...(key === 'prey' ? pixels.predators : pixels.prey), ...rings, ...lines.flatMap((l) => dense([{ x: l.x1, y: l.y1 }, { x: l.x2, y: l.y2 }]))]
-    const line = m.counts ?? m.run.t.map((t, k) => ({ t, prey: m.run.prey[k], predators: m.run.predators[k] }))
-    const times = line.map((c) => c.t)
-    const values = line.map((c) => c[key])
-    // Above or below points along the line, a little or further off, centered
-    // or to one side; or beside it, where it's steep.
-    const options: { box: Box; i: number; above: boolean }[] = []
-    for (let i = 0; i <= 60; i++) {
-      const t = box.x0 + (box.x1 - box.x0) * (0.03 + (0.94 * i) / 60)
-      if (t > times[times.length - 1]) break
-      const p = at(key, t, valueAt(times, values, t))
-      for (const gap of [LABEL_GAP, LABEL_GAP * 2, LABEL_GAP * 3.5]) {
-        for (const f of [0.5, 0.15, 0.85]) {
-          const x = p.x - w * f
-          options.push({ box: { x, y: p.y - gap - h, w, h }, i, above: true }, { box: { x, y: p.y + gap, w, h }, i, above: false })
-        }
-        options.push({ box: { x: p.x + gap, y: p.y - h / 2, w, h }, i, above: false }, { box: { x: p.x - gap - w, y: p.y - h / 2, w, h }, i, above: false })
-      }
+  // The key: each population's line and name in a row under the x-axis
+  // title, centered under the grid. The lines cross every cycle, so names
+  // written beside them would be hard to tell apart.
+  const keyEntries: KeyEntry[] = []
+  let height = grid.height
+  if (drawnKeys.length) {
+    const textW = (text: string) => text.length * fs * 1.05 * 0.6
+    const entryW = (key: SeriesKey) => SAMPLE_W + 6 + textW(names[key])
+    const rowW = drawnKeys.reduce((w, key, k) => w + entryW(key) + (k ? KEY_GAP : 0), 0)
+    const y = grid.height + fs * 0.2
+    let x = Math.max(PAD, area.x + area.w / 2 - rowW / 2)
+    for (const key of drawnKeys) {
+      keyEntries.push({
+        key,
+        sample: { x1: x, y1: y, x2: x + SAMPLE_W, y2: y },
+        text: { x: x + SAMPLE_W + 6, y: y + fs * 0.38, text: names[key], anchor: 'start' },
+      })
+      x += entryW(key) + KEY_GAP
     }
-    const score = (strict: boolean) => (o: (typeof options)[number]) => {
-      if (!inside(o.box, area, 3) || placed.some((p) => overlaps(p, o.box, 4))) return null
-      const near = clearance(o.box, own)
-      if (near < 5 || near > LABEL_GAP * 4) return null
-      const far = clearance(o.box, others)
-      if (strict && (far < 12 || far < near * 1.8)) return null
-      if (!strict && far < near) return null
-      return Math.min(far, 40) - near - o.i * 0.1 + (o.above ? 1 : 0)
-    }
-    // Failing that, wherever on the grid is clearest of everything.
-    const clearest = (o: (typeof options)[number]) =>
-      inside(o.box, area, 3) && !placed.some((p) => overlaps(p, o.box, 4)) ? Math.min(clearance(o.box, own), clearance(o.box, others), 30) : null
-    const pick = best(options, score(true)) ?? best(options, score(false)) ?? best(options, clearest)
-    if (!pick) continue
-    placed.push(pick.box)
-    const mid = pick.box.y + pick.box.h / 2
-    nameLabels.push({
-      key,
-      sample: { x1: pick.box.x, y1: mid, x2: pick.box.x + SAMPLE_W, y2: mid },
-      mark: { x: pick.box.x + SAMPLE_W / 2, y: mid },
-      text: { x: pick.box.x + SAMPLE_W + 6, y: mid + fs * 0.38, text, anchor: 'start' },
-    })
+    width = Math.max(width, x - KEY_GAP + PAD)
+    height = y + fs * 0.7 + PAD
   }
 
   const ex = extremesOf(m.rates, m.start)
   return {
     ...grid,
     width,
+    height,
     series,
     loop,
     right,
@@ -509,7 +483,7 @@ export function buildPredatorPrey(s: PredatorPreySettings) {
     peaks,
     drops,
     spans,
-    nameLabels,
+    keyEntries,
     census: !!m.counts,
     color,
     r: DOT_R,

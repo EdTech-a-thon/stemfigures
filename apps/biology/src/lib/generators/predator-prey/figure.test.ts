@@ -4,7 +4,7 @@ import { buildPredatorPrey, fitHeights, fitSpan, niceCeil, rangesOf, timeText } 
 import { predatorPreySettings } from './settings'
 
 const build = (query: string) => buildPredatorPrey(predatorPreySettings.fromParams(new URLSearchParams(query)))
-const boxOf = (n: ReturnType<typeof build>['nameLabels'][number]) => ({ x: n.sample.x1, y: n.sample.y1 - 8, w: n.text.x - n.sample.x1 + n.text.text.length * 8, h: 16 })
+const boxOf = (n: ReturnType<typeof build>['keyEntries'][number]) => ({ x: n.sample.x1, y: n.sample.y1 - 8, w: n.text.x - n.sample.x1 + n.text.text.length * 8, h: 16 })
 
 describe('fitting the axes', () => {
   it('counts by nice steps', () => {
@@ -38,18 +38,20 @@ describe('fitting the axes', () => {
 })
 
 describe('a predator–prey graph', () => {
-  it('draws the hares and lynx, each named beside its own line', () => {
+  it('draws the hares and lynx, named in a key under the graph', () => {
     const g = build('')
     expect(g.series.map((s) => s.key)).toEqual(['prey', 'predators'])
     expect(g.series.every((s) => s.lines.length > 0)).toBe(true)
-    expect(g.nameLabels.map((n) => n.text.text)).toEqual(['Hares', 'Lynx'])
-    for (const n of g.nameLabels) {
+    expect(g.keyEntries.map((n) => n.text.text)).toEqual(['Hares', 'Lynx'])
+    const title = g.labels.find((l) => l.kind === 'side' && !l.rotate)!
+    for (const n of g.keyEntries) {
+      expect(n.sample.y1).toBeGreaterThan(title.y)
+      expect(n.text.y).toBeLessThan(g.height)
       expect(n.sample.x1).toBeGreaterThanOrEqual(g.grid.x)
       expect(n.text.x).toBeLessThan(g.grid.x + g.grid.w)
-      expect(n.sample.y1).toBeGreaterThan(g.grid.y)
-      expect(n.sample.y1).toBeLessThan(g.grid.y + g.grid.h)
     }
-    expect(overlaps(boxOf(g.nameLabels[0]), boxOf(g.nameLabels[1]))).toBe(false)
+    expect(g.height).toBeGreaterThan(g.grid.y + g.grid.h)
+    expect(overlaps(boxOf(g.keyEntries[0]), boxOf(g.keyEntries[1]))).toBe(false)
     expect(g.right).toBeNull()
   })
 
@@ -89,7 +91,7 @@ describe('a predator–prey graph', () => {
     expect(build('lag=1&show=prey').spans).toEqual([])
     const blank = build('show=neither&lag=1&cycle=1')
     expect(blank.series).toEqual([])
-    expect(blank.nameLabels).toEqual([])
+    expect(blank.keyEntries).toEqual([])
     expect(blank.spans).toEqual([])
   })
 
