@@ -10,12 +10,12 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `Modal`                                                                                     | math, chemistry, physics, biology, engineering |
 | `LabelField`                                                                                | math, chemistry, biology, engineering     |
 | `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics, biology |
-| `labelSize`                                                                                 | math, chemistry (Titration Curve)         |
+| `labelSize`                                                                                 | math, chemistry (Titration Curve), biology (Punnett Square) |
 | `graph/`: `Grid`, `grid`, `axes`, `AxisSettings`, `TitleSettings`, `GridlineSettings`       | math (Coordinate Grid), chemistry (Titration Curve) |
 | `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve)         |
 | `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve), biology (Micropipette Reading, Gel Electrophoresis) |
 | `HelpTip`                                                                                   | math                                      |
-| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading, Gel Electrophoresis) |
+| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading, Gel Electrophoresis, `FigureFrame`, `settings`) |
 | `Magnifier`, `MagnifierSettings`, `magnify`                                                 | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading: `Magnifier`, `magnify`) |
 | `marks`, `ReadingField`                                                                     | physics (Spring Scale)                    |
 
