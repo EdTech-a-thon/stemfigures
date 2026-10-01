@@ -9,7 +9,13 @@ and `docs/adr/` for decisions.
 
 - `/` **Directory**: every generator as a card with a live preview, plus a
   card to request one we don't make yet.
-- No generators yet; the directory shows only the request card.
+- `/microscope-field-of-view` **Microscope Field of View**: the circle seen
+  down a compound microscope, drawn to scale: onion or Elodea cells, cheek or
+  red blood cells, paramecia, simple cells or circles, or the letter e, at
+  any eyepiece and objective, and the same slide at a higher power beside
+  it. The field's diameter is typed or worked out from the low-power one.
+  Optional clear mm ruler, scale bar and diameter arrow; a question written
+  for the settings and an answer box, shown or blank.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
