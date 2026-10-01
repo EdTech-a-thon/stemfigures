@@ -9,7 +9,11 @@ and `docs/adr/` for decisions.
 
 - `/` **Directory**: every generator as a card with a live preview, plus a
   card to request one we don't make yet.
-- No generators yet; the directory shows only the request card.
+- `/punnett-square` **Punnett Square**: a monohybrid, dihybrid or X-linked
+  cross typed as the parents' genotypes (Tt × tt), with complete, incomplete
+  or codominance (Cᴿ Cᵂ, Iᴬ Iᴮ i). Gametes, parents and any cells can be left
+  blank; cells can be shaded by phenotype in gray, hatching or dots; genotype
+  and phenotype ratios print underneath as ratios, percentages or fractions.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
