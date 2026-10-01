@@ -31,7 +31,7 @@
           cheek: { fill: '#f1f4fb', ink: '#3b4a6b', nucleus: '#6276b4' },
           blood: { fill: '#f1bcbc', ink: '#8e3636', pale: '#fbe4e4' },
           cell: { fill: '#fff', ink: INK, nucleus: '#93b2d9' },
-          paramecium: { fill: '#f6f2e4', ink: INK, nucleus: '#b7a473' },
+          paramecium: { fill: '#efe6c6', ink: INK, nucleus: '#8c7a45' },
         }
       : {
           onion: { fill: '#fff', wall: '#333', nucleus: '#a5a5a5', nucleusInk: '#333' },
@@ -39,7 +39,7 @@
           cheek: { fill: '#fff', ink: '#333', nucleus: '#7a7a7a' },
           blood: { fill: '#cdcdcd', ink: '#333', pale: '#fafafa' },
           cell: { fill: '#fff', ink: INK, nucleus: '#a8a8a8' },
-          paramecium: { fill: '#f6f6f6', ink: INK, nucleus: '#a5a5a5' },
+          paramecium: { fill: '#e6e6e6', ink: INK, nucleus: '#7a7a7a' },
         },
   )
 
@@ -101,11 +101,11 @@
         {@const c = look.paramecium}
         {@const p = paramecium(it.size * k)}
         {#if p.cilia}<path d={p.cilia} stroke={c.ink} stroke-width="0.8" stroke-linecap="round" />{/if}
-        <path d={p.outline} fill={c.fill} stroke={c.ink} stroke-width={line(r * 0.6, 1.6)} stroke-linejoin="round" />
+        <path d={p.outline} fill={c.fill} stroke={c.ink} stroke-width={p.edge} stroke-linejoin="round" />
         {#if p.groove}<path d={p.groove} fill="none" stroke={c.ink} stroke-width="1" stroke-linecap="round" />{/if}
         {#if p.mouth}<circle {...p.mouth} fill="#fff" stroke={c.ink} stroke-width="1" />{/if}
         {#if p.macronucleus}
-          <ellipse {...p.macronucleus} fill={c.nucleus} stroke={c.ink} stroke-width={line(r * 0.3, 1)} />
+          <ellipse {...p.macronucleus} fill={c.nucleus} stroke={c.ink} stroke-width={line(r * 0.3, 1)} stroke-opacity={r < 15 ? 0 : 1} />
         {/if}
         {#if p.micronucleus}<circle {...p.micronucleus} fill={c.ink} />{/if}
         {#each p.vacuoles as v, j (j)}

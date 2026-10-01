@@ -55,8 +55,10 @@ function bodyPoints(perCurve: number): Point[] {
 
 /** A paramecium `L` pixels long, lying along the x axis around (0, 0): its
  *  outline, oral groove, nuclei, contractile vacuoles with their radiating
- *  canals, food vacuoles and cilia. Smaller ones leave out what wouldn't
- *  show: organelles below 60 px long, cilia below 90 px. */
+ *  canals, food vacuoles and cilia, and the width of its outline. Smaller
+ *  ones leave out what wouldn't show, but keep the slipper outline, a firm
+ *  edge and the macronucleus: the oral groove goes below 30 px long, the
+ *  other organelles below 60 px, cilia below 90 px. */
 export function paramecium(L: number) {
   const s = (p: Point): Point => [p[0] * L, p[1] * L]
   const outline =
@@ -92,9 +94,10 @@ export function paramecium(L: number) {
   }
   return {
     outline,
-    groove: organelles ? `M ${pt(s([-0.43, 0.065]))} Q ${pt(s([-0.2, 0.02]))} ${pt(s([0, 0.06]))}` : '',
+    edge: r2(Math.min(1.6, Math.max(1, 0.03 * L))),
+    groove: L >= 30 ? `M ${pt(s([-0.43, 0.065]))} Q ${pt(s([-0.2, 0.02]))} ${pt(s([0, 0.06]))}` : '',
     mouth: organelles ? { cx: r2(0.02 * L), cy: r2(0.065 * L), r: r2(0.02 * L) } : null,
-    macronucleus: L >= 24 ? { cx: r2(0.04 * L), cy: r2(-0.025 * L), rx: r2(0.12 * L), ry: r2(0.06 * L) } : null,
+    macronucleus: L >= 10 ? { cx: r2(0.04 * L), cy: r2(-0.025 * L), rx: r2(0.12 * L), ry: r2(0.06 * L) } : null,
     micronucleus: organelles ? { cx: r2(0.16 * L), cy: r2(-0.065 * L), r: r2(0.018 * L) } : null,
     vacuoles: organelles ? [vacuole(-0.3), vacuole(0.3)] : [],
     food: organelles

@@ -22,6 +22,8 @@
   const R = FIELD_R
   /** the ring's width */
   const RING = 4
+  /** the ruler strip's height: a fifth of the field */
+  const RULER_H = 0.4 * R
   const r2 = (n: number) => Math.round(n * 100) / 100
 
   const views = $derived(viewsOf(s))
@@ -112,12 +114,11 @@
       <g transform="translate({c.x} {c.y})">
         <Slide {slide} specimen={s.specimen} {k} {R} color={s.color} inverted={s.orientation === 'seen'} />
         {#if s.ruler}
-          <!-- a clear plastic ruler, its marked edge along the diameter -->
-          <rect x={-R} y="0" width={2 * R} height={R} fill={s.color ? '#cfe0ee' : '#d6d6d6'} fill-opacity="0.35" />
-          <line x1={-R} x2={R} y1="0" y2="0" stroke={INK} stroke-width="1.2" />
+          <!-- a strip of clear plastic ruler, its marked edge along the diameter -->
+          <rect x={-R - 4} y="0" width={2 * R + 8} height={RULER_H} fill={s.color ? '#cfe0ee' : '#d6d6d6'} fill-opacity="0.4" stroke={INK} stroke-width="1.2" />
           {#each rulerMarks(v) as m (m.n)}
             <line
-              x1={m.x} x2={m.x} y1="0" y2={m.n % 10 === 0 ? 0.62 * R : m.n % 5 === 0 ? 0.48 * R : 0.34 * R}
+              x1={m.x} x2={m.x} y1="0" y2={(m.n % 10 === 0 ? 0.85 : m.n % 5 === 0 ? 0.7 : 0.5) * RULER_H}
               stroke={INK} stroke-width={markWidth(v)}
             />
           {/each}

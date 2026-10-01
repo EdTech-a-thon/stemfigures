@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { arrange, seededRandom, wholeCount, type ArrangeOptions, type LooseItem } from './specimens'
+import { ROW_STAGGER, arrange, seededRandom, wholeCount, type ArrangeOptions, type LooseItem } from './specimens'
 
 const base: ArrangeOptions = { specimen: 'onion', size: 300, field: 1800, arrangement: 'scatter', count: 8, edges: true, seed: 1 }
 
@@ -95,12 +95,17 @@ describe('loose specimens', () => {
   it('in a row, lie end to end across the diameter from its left edge', () => {
     const row = itemsOf({ ...base, specimen: 'paramecium', size: 225, field: 1800, arrangement: 'row' }).items
     expect(row.length).toBe(8)
-    expect(row.every((i: LooseItem) => i.whole && i.y === 0 && i.angle === 0 && i.size === 225)).toBe(true)
+    expect(row.every((i: LooseItem) => i.whole && i.angle === 0 && i.size === 225)).toBe(true)
+    // above and below the line by turns, clear of each other
+    expect(row.map((i) => Math.sign(i.y))).toEqual([-1, 1, -1, 1, -1, 1, -1, 1])
+    for (const i of row) expect(Math.abs(i.y)).toBeCloseTo(ROW_STAGGER * 225)
+    expect(2 * ROW_STAGGER).toBeGreaterThan(0.3)
     expect(row[0].x - 225 / 2).toBeCloseTo(-900)
     expect(row[7].x + 225 / 2).toBeCloseTo(900)
     // 4.5 fit: the fifth is cut off by the far edge
     const half = itemsOf({ ...base, specimen: 'circles', size: 400, field: 1800, arrangement: 'row' }).items
     expect(half.length).toBe(5)
+    expect(half.every((i) => i.y === 0)).toBe(true)
     expect(wholeCount({ kind: 'loose', items: half, missing: 0 })).toBe(4)
   })
 })

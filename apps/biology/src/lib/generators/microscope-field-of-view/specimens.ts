@@ -248,16 +248,24 @@ function item(o: ArrangeOptions, random: () => number, x: number, y: number, inR
 }
 
 /** Specimens end to end along the field's middle from its left edge, as
- *  many as reach across it; the last is cut off unless they fit exactly. */
+ *  many as reach across it; the last is cut off unless they fit exactly.
+ *  Paramecia, long and thin, sit a little above and below the line by
+ *  turns, so each stands apart from the next instead of joining into a
+ *  chain; their ends still meet across the field. */
 function row(o: ArrangeOptions): LooseItem[] {
   const random = seededRandom(o.seed)
   const R = o.field / 2
   const n = Math.min(Math.ceil(o.field / o.size - 1e-9), 400)
+  const stagger = o.specimen === 'paramecium' ? ROW_STAGGER * o.size : 0
   return Array.from({ length: n }, (_, k) => {
-    const it = item(o, random, -R + (k + 0.5) * o.size, 0, true)
+    const it = item(o, random, -R + (k + 0.5) * o.size, (k % 2 ? 1 : -1) * stagger, true)
     return { ...it, whole: (k + 1) * o.size <= o.field + 1e-6 }
   })
 }
+
+/** How far a row's paramecia sit off the line, as a share of their length:
+ *  more than half their width, so neighbors don't touch. */
+export const ROW_STAGGER = 0.18
 
 /** Space kept between scattered specimens, as a share of their size. */
 const GAP = 0.08

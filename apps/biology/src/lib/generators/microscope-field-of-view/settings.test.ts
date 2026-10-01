@@ -67,6 +67,17 @@ describe('questions and answers', () => {
     expect(autoQuestion(settings({ ruler: true }))).toMatch(/^Use the ruler/)
   })
 
+  it('give the same size in the answer’s headline as in its working', () => {
+    const s = settings({ specimen: 'paramecium', size: 220, count: 1, objective: '40' })
+    expect(answerText(s, slideOf(s))).toBe('About 220 µm (450 µm ÷ 2.05 ≈ 220 µm)')
+    for (const objective of ['4', '10', '40', '100'] as const)
+      for (const size of [7.5, 8, 60, 75, 100, 220, 223, 300, 333, 1500]) {
+        const t = settings({ specimen: 'cells', size, objective })
+        const [, headline, working] = answerText(t, slideOf(t)).match(/^About (.+?) \(.+ ≈ (.+)\)$/)!
+        expect(headline, `${size} µm at ${objective}×`).toBe(working)
+      }
+  })
+
   it('work out the field at a higher power', () => {
     const s = settings({ question: 'field', compare: true })
     expect(fieldStep(s).from.magnification).toBe(100)

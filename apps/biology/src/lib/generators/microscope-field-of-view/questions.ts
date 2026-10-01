@@ -90,9 +90,12 @@ export function answerText(s: MicroscopeSettings, slide: Arranged): string {
   const [main] = views
   switch (s.question) {
     case 'size': {
+      // The estimate a student makes: the field divided by how many fit
+      // across it, as written. The headline and the working both give it.
       const fieldUm = main.field * UM_PER_MM
-      const fit = fitAcross(main.field, s.size)
-      return `About ${umText(s.size)} (${umText(fieldUm)} ÷ ${formatFit(fit)} ≈ ${umText(fieldUm / Number(formatFit(fit)))})`
+      const fit = formatFit(fitAcross(main.field, s.size))
+      const estimate = umText(fieldUm / Number(fit))
+      return `About ${estimate} (${umText(fieldUm)} ÷ ${fit} ≈ ${estimate})`
     }
     case 'field': {
       const { from, to } = fieldStep(s)
