@@ -117,10 +117,13 @@ export const BIOLOGY: CatalogEntry[] = [
     site: 'biology',
     name: 'Microscope Field of View',
     path: '/microscope-field-of-view',
-    blurb: 'What you see down a microscope, for estimating size and magnification.',
+    blurb: 'The circle seen down a microscope, drawn to scale, for estimating size.',
     description:
-      'Make printable microscope field of view figures for biology tests. Pick a magnification and specimen and students estimate its size from the field of view.',
-    keywords: ['microscope', 'field of view', 'magnification', 'objective', 'eyepiece', 'specimen', 'cell size', 'micrometers', 'estimate', 'lab', 'printable'],
-    off: true,
+      'Make printable microscope field of view figures for biology tests. Pick a magnification and a specimen, from onion cells to the letter e, and students estimate its size, work out the field at high power, or count the cells.',
+    keywords: [
+      'microscope', 'field of view', 'fov', 'field diameter', 'magnification', 'total magnification', 'objective', 'eyepiece', 'ocular',
+      'low power', 'high power', 'specimen', 'cell size', 'estimate', 'micrometers', 'microns', 'onion cells', 'cheek cells',
+      'red blood cells', 'paramecium', 'elodea', 'letter e', 'scale bar', 'lab', 'printable',
+    ],
   },
 ]

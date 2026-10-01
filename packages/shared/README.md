@@ -15,9 +15,9 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve)         |
 | `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve), biology (Micropipette Reading, Gel Electrophoresis) |
 | `HelpTip`                                                                                   | math                                      |
-| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading, Gel Electrophoresis, `FigureFrame`, `settings`) |
+| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading, Gel Electrophoresis, `FigureFrame`, `settings`, Microscope Field of View: `FigureFrame`) |
 | `Magnifier`, `MagnifierSettings`, `magnify`                                                 | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading: `Magnifier`, `magnify`) |
-| `marks`, `ReadingField`                                                                     | physics (Spring Scale)                    |
+| `marks`, `ReadingField`                                                                     | physics (Spring Scale), biology (Microscope Field of View: `ReadingField`) |
 
 `catalog/` lists every generator on every site. Each lives on one site
 (`site`), the only address it has; `alsoOn` names other sites whose

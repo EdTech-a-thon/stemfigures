@@ -28,6 +28,13 @@ and `docs/adr/` for decisions.
   or codominance (Cᴿ Cᵂ, Iᴬ Iᴮ i). Gametes, parents and any cells can be left
   blank; cells can be shaded by phenotype in gray, hatching or dots; genotype
   and phenotype ratios print underneath as ratios, percentages or fractions.
+- `/microscope-field-of-view` **Microscope Field of View**: the circle seen
+  down a compound microscope, drawn to scale: onion or Elodea cells, cheek or
+  red blood cells, paramecia, simple cells or circles, or the letter e, at
+  any eyepiece and objective, and the same slide at a higher power beside
+  it. The field's diameter is typed or worked out from the low-power one.
+  Optional clear mm ruler, scale bar and diameter arrow; a question written
+  for the settings and an answer box, shown or blank.
 - `/about`, `/privacy`, `/sitemap.xml`, `/robots.txt`
 
 Every page has the top bar: the site name, the current generator, and a
