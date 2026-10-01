@@ -58,6 +58,15 @@ describe('reading a cross', () => {
     expect(crossText(read('IAIB x ii', 'monohybrid', 'codominance'))).toBe('I^A I^B × i i')
   })
 
+  it('reads subscripts written with _, as a digit straight after, or pasted', () => {
+    for (const t of ['R_1 R_2 x R_1 R_2', 'R1R2 x R1R2', 'R₁R₂ × R₁R₂', 'R_2R_1 x R_{1}R_2']) {
+      expect(crossText(read(t, 'monohybrid', 'incomplete'))).toBe('R_1 R_2 × R_1 R_2')
+    }
+    expect(crossText(read('A_{12} A_3 x A_3 A_3', 'monohybrid', 'codominance'))).toBe('A_{12} A_3 × A_3 A_3')
+    // A subscript and a superscript on one allele, in either order.
+    expect(crossText(read('C^R_1 C_2^R x C_1^R C_1^R', 'monohybrid', 'incomplete'))).toBe('C_1^R C_2^R × C_1^R C_1^R')
+  })
+
   it('reads X-linked crosses in either order', () => {
     expect(crossText(read('XHXh x XHY', 'x-linked'))).toBe('X^H X^h × X^H Y')
     expect(crossText(read('X^hY × X^hX^H', 'x-linked'))).toBe('X^h Y × X^H X^h')
@@ -77,6 +86,9 @@ describe('reading a cross', () => {
     expect(error('Rr x Rr', 'dihybrid')).toMatch(/one gene/)
     expect(error('RrYy x Rrss', 'dihybrid')).toMatch(/same genes/)
     expect(error('C^RC^W x C^RC^W')).toMatch(/Superscripts/)
+    expect(error('R_1R_2 x R_1R_2')).toMatch(/subscripts/)
+    expect(error('R_{}R_2 x R_1R_2', 'monohybrid', 'incomplete')).toMatch(/after the _/)
+    expect(error('X_1X_2 x X_1Y', 'x-linked', 'incomplete')).toMatch(/not a subscript/)
     expect(error('XHXh x XHXh', 'x-linked')).toMatch(/mother .* father/)
     expect(error('XX x XY', 'x-linked')).toMatch(/give each X its allele/)
     expect(error('Tt x tt', 'x-linked')).toMatch(/X and Y/)
@@ -138,6 +150,8 @@ describe('counting', () => {
   it('incomplete dominance gives every genotype its own phenotype', () => {
     expect(phenotypes('C^R C^W x C^R C^W', 'monohybrid', 'incomplete')).toEqual(['1 C^R', '2 C^R+C^W', '1 C^W'])
     expect(phenotypes('Rr x Rr', 'monohybrid', 'incomplete')).toEqual(['1 R', '2 R+r', '1 r'])
+    expect(phenotypes('R_1 R_2 x R_1 R_2', 'monohybrid', 'incomplete')).toEqual(['1 R_1', '2 R_1+R_2', '1 R_2'])
+    expect(counts('R_1 R_2 x R_1 R_2', 'monohybrid', 'incomplete')).toEqual(['1 R_1R_1', '2 R_1R_2', '1 R_2R_2'])
   })
 
   it('ABO: Iᴬ and Iᴮ codominant, both dominant to i', () => {

@@ -1,13 +1,15 @@
 // The genetics behind a Punnett square: reading the cross the teacher types
-// ("Tt x tt", "RrYy × RrYy", "X^H X^h × X^H Y", "C^R C^W × C^R C^W"), the
+// ("Tt x tt", "RrYy × RrYy", "X^H X^h × X^H Y", "C^R C^W × C^R C^W",
+// "R_1 R_2 × R_1 R_2"), the
 // gametes each parent makes, the offspring in each cell, and the genotype
 // and phenotype counts they add up to.
 //
 // Alleles are written the usual classroom way. With complete dominance a
 // capital letter is dominant and its small letter recessive (T, t). With
-// incomplete dominance or codominance alleles carry superscripts (Cᴿ, Cᵂ),
-// and a small letter without one is recessive to them (i in Iᴬ, Iᴮ, i). An
-// X-linked allele is the superscript on its X (Xᴴ, Xʰ); Y carries none.
+// incomplete dominance or codominance alleles carry superscripts (Cᴿ, Cᵂ) or
+// subscripts (R₁, R₂), and a small letter without one is recessive to them
+// (i in Iᴬ, Iᴮ, i). An X-linked allele is the superscript on its X (Xᴴ, Xʰ);
+// Y carries none.
 
 export const CROSSES = ['monohybrid', 'dihybrid', 'x-linked'] as const
 export type Cross = (typeof CROSSES)[number]
@@ -15,10 +17,12 @@ export type Cross = (typeof CROSSES)[number]
 export const DOMINANCE = ['complete', 'incomplete', 'codominance'] as const
 export type Dominance = (typeof DOMINANCE)[number]
 
-/** One allele: a letter and its superscript (T, t, Cᴿ, Iᴬ, i), or on an X
- *  chromosome the X with the allele as its superscript (Xᴴ), or a Y. */
+/** One allele: a letter and its subscript or superscript (T, t, Cᴿ, Iᴬ, R₁,
+ *  i), or on an X chromosome the X with the allele as its superscript (Xᴴ),
+ *  or a Y. */
 export interface Allele {
   base: string
+  sub: string
   sup: string
   /** on an X-linked cross, the chromosome: an X with this allele, or a Y */
   chromosome?: 'X' | 'Y'
@@ -31,8 +35,11 @@ export type Genotype = Allele[][]
 /** A gamete: one allele per gene. */
 export type Gamete = Allele[]
 
-/** The allele as the address writes it: T, C^R, X^H, or C^{AB} for a longer superscript. */
-export const alleleId = (a: Allele) => a.base + (a.sup ? (a.sup.length > 1 ? `^{${a.sup}}` : `^${a.sup}`) : '')
+const script = (mark: string, t: string) => (t ? (t.length > 1 ? `${mark}{${t}}` : mark + t) : '')
+
+/** The allele as the address writes it: T, C^R, X^H, R_1, or C^{AB} for a
+ *  longer superscript. */
+export const alleleId = (a: Allele) => a.base + script('_', a.sub) + script('^', a.sup)
 
 const isY = (a: Allele) => a.chromosome === 'Y'
 const isUpper = (c: string) => c !== c.toLowerCase() || /^\d/.test(c)
@@ -40,15 +47,15 @@ const isUpper = (c: string) => c !== c.toLowerCase() || /^\d/.test(c)
 /** Dominant (top) alleles are capitals: T, Cᴿ, Iᴬ, and on an X, Xᴴ. */
 export const isTop = (a: Allele) => (a.chromosome === 'X' ? isUpper(a.sup) : !isY(a) && isUpper(a.base))
 
-/** The letters that tell an allele apart: T, CR, IA, or for an X allele just H. */
-const letters = (a: Allele) => (a.chromosome === 'X' ? a.sup : a.base + a.sup)
+/** The letters that tell an allele apart: T, CR, IA, R1, or for an X allele just H. */
+const letters = (a: Allele) => (a.chromosome === 'X' ? a.sup : a.base + a.sub + a.sup)
 
 /** Sorting order for alleles: dominant first, then alphabetical, with Y last. */
-const rankKey = (a: Allele) => (isY(a) ? '2' : (isTop(a) ? '0' : '1') + a.sup.toLowerCase() + a.sup + a.base)
+const rankKey = (a: Allele) => (isY(a) ? '2' : (isTop(a) ? '0' : '1') + a.sup.toLowerCase() + a.sup + a.sub + a.base)
 const byRank = (a: Allele, b: Allele) => (rankKey(a) < rankKey(b) ? -1 : rankKey(a) > rankKey(b) ? 1 : 0)
 export const sortAlleles = (alleles: Allele[]) => [...alleles].sort(byRank)
 
-const sameAllele = (a: Allele, b: Allele) => a.base === b.base && a.sup === b.sup && a.chromosome === b.chromosome
+const sameAllele = (a: Allele, b: Allele) => a.base === b.base && a.sub === b.sub && a.sup === b.sup && a.chromosome === b.chromosome
 
 export const isFemale = (g: Genotype) => !g.some((gene) => gene.some(isY))
 
@@ -63,13 +70,22 @@ const SUPERSCRIPTS: Record<string, string> = Object.fromEntries(
   ),
 )
 
+/** Subscripts someone might paste in (R₁, R₂), likewise. */
+const SUBSCRIPTS: Record<string, string> = Object.fromEntries(
+  [...'₀₁₂₃₄₅₆₇₈₉'].map((c, i) => [c, String(i)]).concat(
+    [...'ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ'].map((c, i) => [c, 'aehijklmnoprstuvx'[i]]),
+    [['₊', '+']],
+  ),
+)
+
 /** One parent's genotype as typed, tidied: no spaces or brackets, and pasted
- *  superscript letters written with ^. */
+ *  superscripts and subscripts written with ^ and _. */
 function clean(text: string) {
   let out = ''
   for (const c of text.normalize('NFC')) {
     if (SUPERSCRIPTS[c]) out += `^${SUPERSCRIPTS[c]}`
-    else if (!/[\s,;()[\]_]/.test(c)) out += c
+    else if (SUBSCRIPTS[c]) out += `_${SUBSCRIPTS[c]}`
+    else if (!/[\s,;()[\]]/.test(c)) out += c
   }
   return out
 }
@@ -77,19 +93,22 @@ function clean(text: string) {
 type Read<T> = { ok: true; value: T } | { ok: false; error: string }
 const fail = (error: string): { ok: false; error: string } => ({ ok: false, error })
 
-/** The superscript after a ^ at `i`: one character, or several in braces. */
-function readSup(s: string, i: number): { sup: string; next: number } | undefined {
+/** The superscript after a ^ at `i`, or the subscript after a _: one
+ *  character, or several in braces. */
+function readScript(s: string, i: number): { text: string; next: number } | undefined {
   if (s[i + 1] === '{') {
     const end = s.indexOf('}', i + 2)
     if (end < 0 || end === i + 2) return undefined
-    return { sup: s.slice(i + 2, end), next: end + 1 }
+    return { text: s.slice(i + 2, end), next: end + 1 }
   }
-  return s[i + 1] && /[A-Za-z0-9+]/.test(s[i + 1]) ? { sup: s[i + 1], next: i + 2 } : undefined
+  return s[i + 1] && /[A-Za-z0-9+]/.test(s[i + 1]) ? { text: s[i + 1], next: i + 2 } : undefined
 }
 
 /** One parent's alleles, in the order typed. Superscripts are written with
- *  ^ (C^R) or, outside complete dominance, straight after the gene's letter
- *  (CR, IA, XH): any letter other than the one the genotype starts with. */
+ *  ^ (C^R) and subscripts with _ (R_1), or, outside complete dominance,
+ *  straight after the gene's letter: a digit is a subscript (R1), and any
+ *  other letter than the one the genotype starts with a superscript (CR, IA,
+ *  XH). */
 function readAlleles(typed: string, cross: Cross, dominance: Dominance): Read<Allele[]> {
   const s = clean(typed)
   if (!s) return fail('Type a genotype for each parent.')
@@ -103,20 +122,25 @@ function readAlleles(typed: string, cross: Cross, dominance: Dominance): Read<Al
     if (cross === 'x-linked' && c !== 'X' && c !== 'Y') {
       return fail(`Write each parent with X and Y chromosomes, like X^H X^h or X^H Y.`)
     }
-    const a: Allele = cross === 'x-linked' ? { base: c, sup: '', chromosome: c as 'X' | 'Y' } : { base: c, sup: '' }
+    const a: Allele = cross === 'x-linked' ? { base: c, sub: '', sup: '', chromosome: c as 'X' | 'Y' } : { base: c, sub: '', sup: '' }
     i++
-    if (s[i] === '^') {
-      const read = readSup(s, i)
-      if (!read) return fail(`Put the superscript straight after the ^, like C^R.`)
-      a.sup = read.sup
+    // A subscript and a superscript, in either order (R_1^A or R^A_1).
+    while ((s[i] === '^' && !a.sup) || (s[i] === '_' && !a.sub)) {
+      const read = readScript(s, i)
+      if (!read) return fail(s[i] === '^' ? `Put the superscript straight after the ^, like C^R.` : `Put the subscript straight after the _, like R_1.`)
+      if (s[i] === '^') a.sup = read.text
+      else a.sub = read.text
       i = read.next
-    } else if (implicit && c !== 'Y' && s[i] && /[A-Za-z0-9+]/.test(s[i])) {
+    }
+    if (!a.sub && !a.sup && implicit && c !== 'Y' && s[i] && /[A-Za-z0-9+]/.test(s[i])) {
       // An X takes the next letter as its allele; another letter does unless
-      // it starts the next allele of the same gene (the I in IAIB).
+      // it starts the next allele of the same gene (the I in IAIB). Away from
+      // an X, a digit is a subscript, the way R1 R2 is usually meant.
       const next = s[i]
       const starts = cross === 'x-linked' ? next === 'X' || next === 'Y' : next.toLowerCase() === gene
       if (!starts) {
-        a.sup = next
+        if (cross !== 'x-linked' && /\d/.test(next)) a.sub = next
+        else a.sup = next
         i++
       }
     }
@@ -142,7 +166,8 @@ function readParent(typed: string, cross: Cross, dominance: Dominance, order?: s
   if (cross === 'x-linked') {
     const xs = alleles.filter((a) => a.chromosome === 'X')
     const ys = alleles.filter(isY)
-    if (alleles.some((a) => isY(a) && a.sup)) return fail(`${it}: a Y chromosome carries no allele, so it has no superscript.`)
+    if (alleles.some((a) => isY(a) && (a.sup || a.sub))) return fail(`${it}: a Y chromosome carries no allele, so it has no superscript.`)
+    if (alleles.some((a) => a.sub)) return fail(`${it}: write each X’s allele as its superscript, like X^H, not a subscript.`)
     if (xs.some((a) => !a.sup)) return fail(`${it}: give each X its allele as a superscript, like X^H or X^h.`)
     if (xs.length + ys.length !== 2 || ys.length > 1) {
       return fail(`${it}: a mother has two X chromosomes (X^H X^h) and a father an X and a Y (X^H Y).`)
@@ -150,8 +175,8 @@ function readParent(typed: string, cross: Cross, dominance: Dominance, order?: s
     return { ok: true, value: [sortAlleles(alleles)] }
   }
 
-  if (dominance === 'complete' && alleles.some((a) => a.sup)) {
-    return fail('Superscripts are for incomplete dominance and codominance. With complete dominance, use letters like Tt.')
+  if (dominance === 'complete' && alleles.some((a) => a.sup || a.sub)) {
+    return fail('Superscripts and subscripts are for incomplete dominance and codominance. With complete dominance, use letters like Tt.')
   }
   const genes = new Map<string, Allele[]>()
   for (const a of alleles) genes.set(geneOf(a, cross), [...(genes.get(geneOf(a, cross)) ?? []), a])
@@ -225,9 +250,10 @@ export function parseCross(text: string, cross: Cross, dominance: Dominance): Re
 }
 
 /** The cross written back in standard form, as the cross box shows it after
- *  typing: "Aa × aa", "RrYy × RrYy", "X^H X^h × X^H Y", "I^A i × I^B i". */
+ *  typing: "Aa × aa", "RrYy × RrYy", "X^H X^h × X^H Y", "I^A i × I^B i",
+ *  "R_1 R_2 × R_1 R_2". */
 export function crossText(p: ParsedCross) {
-  const spaced = p.cross === 'x-linked' || p.parents.some((g) => g.some((gene) => gene.some((a) => a.sup)))
+  const spaced = p.cross === 'x-linked' || p.parents.some((g) => g.some((gene) => gene.some((a) => a.sup || a.sub)))
   const one = (g: Genotype) => g.map((gene) => gene.map(alleleId).join(spaced ? ' ' : '')).join(spaced ? ' ' : '')
   return `${one(p.parents[0])} × ${one(p.parents[1])}`
 }

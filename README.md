@@ -46,4 +46,6 @@ deployment on the branch.
 
 `apps/math` and `apps/physics` vendor different builds of Caret, so
 `apps/physics/vendor` stamps its copies `0.0.0-physics`, and `.npmrc` sets
-`legacy-peer-deps` so npm can install both.
+`legacy-peer-deps` so npm can install both. `apps/biology/vendor` (Punnett
+Square's cross) holds Physics's build restamped `0.0.0-biology`, so updating
+one site's Caret never changes the other's.

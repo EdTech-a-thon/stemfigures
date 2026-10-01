@@ -1,13 +1,13 @@
 // The text on a Punnett square, as runs of one style each, so alleles can be
 // set the way genetics texts set them: italic serif letters (T, t), with the
-// allele on an X or a codominant allele as a superscript (Xᴴ, Cᴿ, Iᴬ), and X
-// and Y upright, since they're chromosomes rather than genes. Widths are
+// allele on an X or a codominant allele as a superscript (Xᴴ, Cᴿ, Iᴬ) or a
+// subscript (R₁), and X and Y upright, since they're chromosomes rather than genes. Widths are
 // estimated from typical letter widths, since the figure is laid out on the
 // server where nothing can be measured.
 
 import { alleleId, type Allele, type Genotype } from './genetics'
 
-export type RunStyle = 'text' | 'bold' | 'allele' | 'sup' | 'chromosome' | 'symbol'
+export type RunStyle = 'text' | 'bold' | 'allele' | 'sup' | 'sub' | 'chromosome' | 'symbol'
 
 export interface Run {
   text: string
@@ -16,9 +16,11 @@ export interface Run {
 
 /** The serif the alleles are set in. Its italic I is plainly not an l. */
 export const ALLELE_FONT = "Georgia, 'Times New Roman', Times, serif"
-/** A superscript's size and how far it's raised, as fractions of the text size. */
+/** A superscript's or subscript's size, how far a superscript is raised and
+ *  how far a subscript is lowered, as fractions of the text size. */
 export const SUP_SIZE = 0.62
 export const SUP_RISE = 0.38
+export const SUB_DROP = 0.2
 /** The ♀ and ♂ signs are drawn this much bigger, to stand level with the letters. */
 export const SYMBOL_SIZE = 1.25
 
@@ -27,15 +29,19 @@ export const text = (t: string, style: RunStyle = 'text'): Run => ({ text: t, st
 export function alleleRuns(a: Allele): Run[] {
   if (a.chromosome === 'X') return [text('X', 'chromosome'), text(a.sup, 'sup')]
   if (a.chromosome === 'Y') return [text('Y', 'chromosome')]
-  return [text(a.base, 'allele'), ...(a.sup ? [text(a.sup, 'sup')] : [])]
+  return [text(a.base, 'allele'), ...(a.sub ? [text(a.sub, 'sub')] : []), ...(a.sup ? [text(a.sup, 'sup')] : [])]
 }
+
+/** Runs set in the serif the alleles are, and those set small. */
+export const isSerif = (style: RunStyle) => style === 'allele' || style === 'sup' || style === 'sub' || style === 'chromosome'
+export const isScript = (style: RunStyle) => style === 'sup' || style === 'sub'
 
 /** A genotype or gamete, its genes written one after another: AaBb, XᴴY. */
 export const allelesRuns = (alleles: Allele[]) => alleles.flatMap(alleleRuns)
 export const genotypeRuns = (g: Genotype) => g.flatMap(allelesRuns)
 
-/** Plain text for screen readers and the settings: "C^R C^W" is "CR CW". */
-export const plainAlleles = (alleles: Allele[]) => alleles.map((a) => alleleId(a).replace(/[\^{}]/g, '')).join('')
+/** Plain text for screen readers and the settings: "C^R C^W" is "CR CW", "R_1" is "R1". */
+export const plainAlleles = (alleles: Allele[]) => alleles.map((a) => alleleId(a).replace(/[\^_{}]/g, '')).join('')
 
 // Rough advance widths, in ems, of Arial and of Georgia italic.
 const SANS: Record<string, number> = { ' ': 0.28, ':': 0.28, ',': 0.28, '.': 0.28, '/': 0.28, '%': 0.89, '·': 0.33, '_': 0.56, '♀': 0.6, '♂': 0.75, '(': 0.33, ')': 0.33, '–': 0.56, '—': 1 }
@@ -43,7 +49,7 @@ const NARROW = new Set([...'fijlrtI'])
 const WIDE = new Set([...'mwMW'])
 
 function charWidth(c: string, style: RunStyle) {
-  const serif = style === 'allele' || style === 'sup' || style === 'chromosome'
+  const serif = isSerif(style)
   if (!serif && SANS[c] !== undefined) return SANS[c] * (style === 'bold' && c !== ' ' ? 1.05 : 1)
   if (/\d/.test(c)) return 0.56
   const upper = c !== c.toLowerCase()
@@ -54,9 +60,9 @@ function charWidth(c: string, style: RunStyle) {
   return style === 'bold' ? w * 1.06 : w
 }
 
-/** A run's width at text size `size` (a superscript is smaller). */
+/** A run's width at text size `size` (a superscript or subscript is smaller). */
 export const runWidth = (r: Run, size: number) =>
-  [...r.text].reduce((sum, c) => sum + charWidth(c, r.style), 0) * size * (r.style === 'sup' ? SUP_SIZE : r.style === 'symbol' ? SYMBOL_SIZE : 1)
+  [...r.text].reduce((sum, c) => sum + charWidth(c, r.style), 0) * size * (isScript(r.style) ? SUP_SIZE : r.style === 'symbol' ? SYMBOL_SIZE : 1)
 
 export const runsWidth = (runs: Run[], size: number) => runs.reduce((sum, r) => sum + runWidth(r, size), 0)
 

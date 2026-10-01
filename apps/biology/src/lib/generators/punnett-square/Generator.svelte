@@ -9,6 +9,7 @@
   import Section from '$shared/Section.svelte'
   import { generatorState } from '$shared/generatorState.svelte'
   import Alleles from './Alleles.svelte'
+  import CrossInput from './CrossInput.svelte'
   import { crossText, genotypeKey, parseCross, phenotypeCounts, type Cross, type Dominance } from './genetics'
   import { isBlank } from './layout'
   import PunnettFigure from './PunnettFigure.svelte'
@@ -49,11 +50,12 @@
     const parents = s.parents
     if (parents !== kept) typed = kept = parents
   })
-  const reading = $derived(parseCross(typed, s.cross, s.dominance))
+  /** The address keeps at most 60 characters of the cross. */
+  const read = (text: string) => (text.length > 60 ? ({ ok: false, error: 'That’s longer than a cross needs.' } as const) : parseCross(text, s.cross, s.dominance))
+  const reading = $derived(read(typed))
   function type(text: string) {
     typed = text
-    const r = parseCross(text, s.cross, s.dominance)
-    if (r.ok) s.parents = kept = text
+    if (read(text).ok) s.parents = kept = text
   }
   /** Tidied once the teacher leaves the box: "aA x Aa" becomes "Aa × Aa". */
   function tidyTyped() {
@@ -89,7 +91,7 @@
   ])
 
   const crossSummary = $derived(
-    `${CROSS_NAMES[t.cross]}${t.cross === 'dihybrid' || t.dominance === 'complete' ? '' : `, ${DOMINANCE_NAMES[t.dominance].toLowerCase()}`}: ${crossText(sq)}`.replace(/\^/g, ''),
+    `${CROSS_NAMES[t.cross]}${t.cross === 'dihybrid' || t.dominance === 'complete' ? '' : `, ${DOMINANCE_NAMES[t.dominance].toLowerCase()}`}: ${crossText(sq)}`.replace(/[\^_{}]/g, ''),
   )
   const namesSummary = $derived(classes.flat().map((c) => names.get(c.key) || plain(c.unnamed)).join(', '))
   const squareSummary = $derived(
@@ -140,15 +142,10 @@
       {/if}
 
       <label class="field-label" for="punnett-parents">Parents</label>
-      <input
+      <CrossInput
         id="punnett-parents"
-        type="text"
-        maxlength="60"
-        spellcheck="false"
-        autocomplete="off"
-        value={typed}
-        oninput={(e) => type(e.currentTarget.value)}
-        onblur={tidyTyped}
+        bind:value={() => typed, type}
+        onleave={tidyTyped}
         aria-invalid={!reading.ok}
         aria-describedby="punnett-parents-note"
       />
@@ -157,7 +154,7 @@
           {#if s.cross === 'x-linked'}
             Mother and father with an × between, each X with its allele: X^H X^h × X^H Y.
           {:else if s.dominance !== 'complete'}
-            Superscripts after a ^ or straight after the letter: C^R C^W, or IAi for Iᴬi.
+            Type ^ for a superscript and _ for a subscript, or Ctrl+. and Ctrl+, as in Google Docs: Cᴿ Cᵂ, R₁ R₂.
           {:else}
             The first parent goes across the top. Capitals are dominant.
           {/if}
@@ -234,7 +231,7 @@
                 class="pick"
                 class:blank
                 aria-pressed={blank}
-                aria-label="{genotypeKey(g).replace(/[\^{}]/g, '')}, row {r + 1}, column {c + 1}{blank ? ', blank' : ''}"
+                aria-label="{genotypeKey(g).replace(/[\^_{}]/g, '')}, row {r + 1}, column {c + 1}{blank ? ', blank' : ''}"
                 onclick={() => toggleCell(r, c)}
               >
                 {#if !blank}<Alleles runs={genotypeRuns(g)} />{/if}
@@ -299,8 +296,6 @@
   .field-label:first-child { margin-top: 0; }
   .note { margin: 0.45rem 0 0; font-size: 0.85rem; color: var(--muted); }
   .note.error { color: var(--red); }
-  input[aria-invalid='true'] { border-color: var(--red); }
-  #punnett-parents { font-size: 1.05rem; }
   .chip.small { padding: 0.35rem 0.7rem; font-size: 0.85rem; }
   .check { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.8rem; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
   .check input { width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--blue); }
