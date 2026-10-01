@@ -1,8 +1,8 @@
 <script lang="ts">
   // Pedigree: a random family for an inheritance mode, or a classic one, in
   // one click, then changed by hand by clicking anyone in it. The family is
-  // checked against every mode, so the teacher sees how students can tell
-  // which it is, and is warned when a change makes it impossible.
+  // checked against its mode, so the teacher is warned when a change makes
+  // it impossible.
   import { tick } from 'svelte'
   import { Dices, GitFork, Shapes, Tags, Type } from '@lucide/svelte'
   import GeneratorPage from '$shared/GeneratorPage.svelte'
@@ -10,7 +10,7 @@
   import { generatorState } from '$shared/generatorState.svelte'
   import FigureTextSettings from '$lib/shared/FigureTextSettings.svelte'
   import { CLASSICS, type Classic } from './classics'
-  import { verdicts, verdictText } from './clues'
+  import { verdicts } from './clues'
   import { formatFamily, personAt, refKey, type Member, type Ref } from './family'
   import { answerText, pedigreeFigure } from './figure'
   import { MODE_NAMES, MODES, type Mode } from './genetics'
@@ -30,8 +30,6 @@
   const mode = $derived(s.mode as Mode)
   const results = $derived(verdicts(family, (key) => names.get(key) ?? key, carriersShown))
   const own = $derived(results.find((v) => v.mode === mode)!)
-  const others = $derived(results.filter((v) => v.mode !== mode))
-  const clear = $derived(own.verdict !== 'ruled out' && others.every((v) => v.verdict !== 'fits'))
   const classic = $derived(CLASSICS.find((c) => c.family === s.family && c.mode === s.mode))
 
   let selected = $state<Ref | null>(null)
@@ -96,6 +94,16 @@
       <p class="summary">{familySummary}</p>
 
       <label class="field">
+        <span>Classic setups</span>
+        <select value={classic?.id ?? ''} onchange={(e) => {
+          const c = CLASSICS.find((x) => x.id === e.currentTarget.value)
+          if (c) startFrom(c)
+        }}>
+          <option value="" disabled>Choose one…</option>
+          {#each CLASSICS as c (c.id)}<option value={c.id}>{c.name}</option>{/each}
+        </select>
+      </label>
+      <label class="field">
         <span>Inheritance</span>
         <select bind:value={s.mode}>
           {#each MODES as m (m)}<option value={m}>{MODE_NAMES[m]}</option>{/each}
@@ -127,28 +135,12 @@
         </p>
       {/if}
 
-      <p class="field-label">Or start from a classic</p>
-      <div class="classics">
-        {#each CLASSICS as c (c.id)}
-          <button type="button" class="chip small" class:on={classic?.id === c.id} onclick={() => startFrom(c)}>{c.name}</button>
-        {/each}
-      </div>
-
       {#if own.verdict === 'ruled out'}
         <p class="warning" role="status">
           This family can’t be {MODE_NAMES[mode].toLowerCase()}.{own.reason ? ` ${own.reason}` : ''}
           {fig.labels.size === 0 && s.genotypes === 'answers' ? ' Genotypes are left off until it fits.' : ''}
         </p>
       {/if}
-      <details class="tells">
-        <summary>{clear ? 'Students can tell it’s ' : 'Students can’t be sure it’s '}{MODE_NAMES[mode].toLowerCase()}</summary>
-        <ul>
-          {#each others as v (v.mode)}<li class={v.verdict.replace(' ', '-')}>{verdictText(v)}</li>{/each}
-        </ul>
-        <p class="note">
-          Read from the shading{carriersShown ? ' and carriers' : ''} as drawn, with the trait rare among people who married in.
-        </p>
-      </details>
 
       {#if picked}
         <PersonEditor
@@ -206,10 +198,13 @@
             ? 'A line under each person for students to write the genotype.'
             : 'No genotypes.'}
       </p>
-      <label class="field letter">
-        <span>Allele letter</span>
-        <input type="text" maxlength="1" value={s.letter} oninput={(e) => /^[a-z]$/i.test(e.currentTarget.value) && (s.letter = e.currentTarget.value.toUpperCase())} />
-      </label>
+      {#if fig.labels.size > 0}
+        <!-- The letter is only drawn in the genotype answers. -->
+        <label class="field letter">
+          <span>Allele letter</span>
+          <input type="text" maxlength="1" value={s.letter} oninput={(e) => /^[a-z]$/i.test(e.currentTarget.value) && (s.letter = e.currentTarget.value.toUpperCase())} />
+        </label>
+      {/if}
       <label class="check"><input type="checkbox" bind:checked={s.numerals} /> <span><strong>Generation numerals</strong><small>I, II, III down the left.</small></span></label>
       <label class="check"><input type="checkbox" bind:checked={s.numbers} /> <span><strong>Individual numbers</strong><small>1, 2, 3 under each person, left to right.</small></span></label>
       <label class="check"><input type="checkbox" bind:checked={s.key} /> <span><strong>Key</strong><small>What each symbol means, below the pedigree.</small></span></label>
@@ -233,18 +228,11 @@
   .pair { display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; }
   .pair .segmented button { padding-inline: 0.55rem; }
   .new { width: 100%; }
-  .classics { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-  .small { padding: 0.35rem 0.7rem; font-size: 0.84rem; }
   .field-label { margin: 0.2rem 0 -0.35rem; font-weight: 700; font-size: 0.9rem; }
   .field-label.first { margin: 0.35rem 0 0.45rem; }
   .note { margin: 0; color: var(--muted); font-size: 0.82rem; }
   :global(.section) .note { margin-top: 0.5rem; }
   .warning { margin: 0; padding: 0.55rem 0.75rem; border-radius: 10px; background: var(--red-soft); color: #991b1b; font-size: 0.85rem; }
-  .tells { font-size: 0.86rem; border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 0.75rem; }
-  .tells summary { cursor: pointer; font-weight: 700; }
-  .tells ul { margin: 0.5rem 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.3rem; }
-  .tells .fits { color: #92400e; }
-  .tells .note { font-size: 0.78rem; }
   .letter { margin-top: 0.9rem; flex-direction: row; align-items: center; gap: 0.6rem; }
   .letter input { width: 3rem; text-align: center; }
   .check { display: flex; align-items: flex-start; gap: 0.6rem; margin-top: 0.9rem; cursor: pointer; }
