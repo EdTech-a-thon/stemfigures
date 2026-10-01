@@ -159,7 +159,7 @@
         </HelpTip>
       </div>
       <label class="field">
-        <span>Default setups</span>
+        <span>Classic setups</span>
         <select value={setupId} onchange={(e) => chooseSetup(e.currentTarget.value)}>
           <option value="" disabled>Choose one…</option>
           {#each SETUPS as setup}<option value={setup.id}>{setup.name}</option>{/each}
@@ -227,7 +227,7 @@
     </Section>
 
     <Section title="Curve" icon={Spline} summary={curveSummary}>
-      <label class="check"><input type="checkbox" bind:checked={s.curve} /> <span>Draw the curve <span class="hint">untick to leave the axes blank</span></span></label>
+      <label class="check"><input type="checkbox" bind:checked={s.curve} /> <span>Draw the curve</span></label>
       {#if s.curve}
         <div class="field setting">
           <span>{clean.model === 'both' ? 'Logistic curve color' : 'Color'}</span>
@@ -278,46 +278,45 @@
       {/if}
     </Section>
 
-    <Section title="Marked on the graph" icon={MapPin} summary={markSummary}>
-      {#if hasK(clean.model)}
+    <!-- Only growth with a carrying capacity has anything to mark, so the
+         section is left out for exponential growth and boom and crash. -->
+    {#if hasK(clean.model)}
+      <Section title="Marked on the graph" icon={MapPin} summary={markSummary}>
         <label class="check"><input type="checkbox" bind:checked={s.kLine} /> <span>Carrying capacity, K <span class="hint">dashed line</span></span></label>
         {#if s.kLine}
           <div class="field setting">
             <LabelField name="Carrying capacity label" placeholder="Carrying capacity (K)" bind:mode={s.kLabelMode} bind:text={s.kLabel} />
           </div>
         {/if}
-      {/if}
-      {#if hasLogistic(clean.model)}
-        <label class="check"><input type="checkbox" bind:checked={s.inflection} /> <span>Inflection point <span class="hint">where growth is fastest</span></span></label>
-        {#if s.inflection}
-          <div class="field setting">
-            <span>On the population graph</span>
-            <LabelField name="Inflection point label" placeholder="Inflection point (N = K/2)" bind:mode={s.inflLabelMode} bind:text={s.inflLabel} />
-          </div>
-          <div class="field setting">
-            <span>On the growth rate graph</span>
-            <LabelField name="Fastest growth label" placeholder="Fastest growth (N = K/2)" bind:mode={s.peakLabelMode} bind:text={s.peakLabel} />
-          </div>
-        {/if}
-        {#if againstOf(clean) === 'time'}
-          <label class="check"><input type="checkbox" bind:checked={s.phases} /> <span>Growth phases <span class="hint">above the graph</span></span></label>
-          {#if s.phases}
+        {#if hasLogistic(clean.model)}
+          <label class="check"><input type="checkbox" bind:checked={s.inflection} /> <span>Inflection point <span class="hint">where growth is fastest</span></span></label>
+          {#if s.inflection}
             <div class="field setting">
-              <LabelField name="Lag phase label" placeholder="Lag phase" bind:mode={s.lagLabelMode} bind:text={s.lagLabel} />
+              <span>On the population graph</span>
+              <LabelField name="Inflection point label" placeholder="Inflection point (N = K/2)" bind:mode={s.inflLabelMode} bind:text={s.inflLabel} />
             </div>
             <div class="field setting">
-              <LabelField name="Exponential phase label" placeholder="Exponential phase" bind:mode={s.expPhaseLabelMode} bind:text={s.expPhaseLabel} />
-            </div>
-            <div class="field setting">
-              <LabelField name="Stationary phase label" placeholder="Stationary phase" bind:mode={s.statLabelMode} bind:text={s.statLabel} />
+              <span>On the growth rate graph</span>
+              <LabelField name="Fastest growth label" placeholder="Fastest growth (N = K/2)" bind:mode={s.peakLabelMode} bind:text={s.peakLabel} />
             </div>
           {/if}
+          {#if againstOf(clean) === 'time'}
+            <label class="check"><input type="checkbox" bind:checked={s.phases} /> <span>Growth phases <span class="hint">above the graph</span></span></label>
+            {#if s.phases}
+              <div class="field setting">
+                <LabelField name="Lag phase label" placeholder="Lag phase" bind:mode={s.lagLabelMode} bind:text={s.lagLabel} />
+              </div>
+              <div class="field setting">
+                <LabelField name="Exponential phase label" placeholder="Exponential phase" bind:mode={s.expPhaseLabelMode} bind:text={s.expPhaseLabel} />
+              </div>
+              <div class="field setting">
+                <LabelField name="Stationary phase label" placeholder="Stationary phase" bind:mode={s.statLabelMode} bind:text={s.statLabel} />
+              </div>
+            {/if}
+          {/if}
         {/if}
-      {/if}
-      {#if !hasK(clean.model) && !hasLogistic(clean.model)}
-        <p class="help">The carrying capacity, inflection point and phases are marked on logistic growth.</p>
-      {/if}
-    </Section>
+      </Section>
+    {/if}
 
     <TitleSettings {s} />
     <AxisSettings
