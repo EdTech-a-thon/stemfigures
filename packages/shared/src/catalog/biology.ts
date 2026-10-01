@@ -89,11 +89,10 @@ export const BIOLOGY: CatalogEntry[] = [
     site: 'biology',
     name: 'Micropipette Reading',
     path: '/micropipette-reading',
-    blurb: 'A micropipette’s dial showing the volume you type.',
+    blurb: 'A micropipette’s volume display, set to the volume you type.',
     description:
-      'Make printable micropipette figures for biology tests. Pick a P20, P200 or P1000 and type a volume, and students read it from the dial.',
-    keywords: ['micropipette', 'pipette', 'pipettor', 'dial', 'microliter', 'volume', 'measurement', 'lab', 'printable'],
-    off: true,
+      'Make printable micropipette figures for biology tests. Pick a P2 to P1000 and type a volume, and students read it from the three digits in its display, magnified.',
+    keywords: ['micropipette', 'pipette', 'pipettor', 'pipetman', 'p20', 'p200', 'p1000', 'dial', 'display', 'microliter', 'volume', 'measurement', 'parts', 'lab', 'printable'],
   },
   {
     id: 'microscope-field-of-view',
