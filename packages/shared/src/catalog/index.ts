@@ -18,6 +18,7 @@
 // preview to that app's src/lib/generators/index.ts, and a preview snapshot
 // (see previews.ts).
 
+import { BIOLOGY } from './biology'
 import { CHEMISTRY } from './chemistry'
 import { MATH } from './math'
 import { PHYSICS } from './physics'
@@ -58,7 +59,7 @@ export interface CatalogEntry {
   off?: true
 }
 
-export const CATALOG: CatalogEntry[] = [...MATH, ...PHYSICS, ...CHEMISTRY].filter((g) => !g.off)
+export const CATALOG: CatalogEntry[] = [...MATH, ...PHYSICS, ...CHEMISTRY, ...BIOLOGY].filter((g) => !g.off)
 
 /** The generators living on `site`, each with its preview component from
  *  `previews` (keyed by id). A generator without one fails the build. */
