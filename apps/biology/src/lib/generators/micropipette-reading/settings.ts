@@ -20,7 +20,7 @@ export const pipetteSettings = defineSettings(
     color: bool(true),
     /** a line across the window where the red wheels start */
     decimalLine: bool(true),
-    /** the model printed above the window */
+    /** the size printed above the window */
     showModel: bool(true),
     view: choice(MAGNIFIER_VIEWS, 'both'),
     parts: choice(PART_LABELS, 'none'),
@@ -46,13 +46,3 @@ export function underLine(s: PipetteSettings) {
   if (s.writeIn) return 'Volume: ____________ µL'
   return ''
 }
-
-/** Starting points for common lessons, each a pipette and a volume. */
-export const QUICK_PICKS = [
-  { model: 'P20', volume: 12.5 },
-  { model: 'P200', volume: 125 },
-  { model: 'P1000', volume: 750 },
-  { model: 'P20', volume: 2.5 },
-  { model: 'P200', volume: 95 },
-  { model: 'P1000', volume: 1000 },
-] as const

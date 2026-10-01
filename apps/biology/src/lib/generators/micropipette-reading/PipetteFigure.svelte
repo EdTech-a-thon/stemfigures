@@ -30,10 +30,10 @@
     return parts.map((part, i) => ({ part, y: ys[i], to: { x: shift + anchors[i].x - 2, y: anchors[i].y } }))
   })
 
-  // The magnifier takes in the window and the model printed above it.
+  // The magnifier takes in the window and the size printed above it.
   const source = $derived({ x: shift + at.cx, y: (at.modelY - 10 + at.window.bottom) / 2, r: (at.window.bottom - at.modelY + 10) / 2 + 8 })
   const layout = $derived(magnifierLayout(settings.view, width, at.height, source))
-  const label = $derived(`A ${p.model} micropipette set to ${volumeText(p, settings.volume)}: its volume display reads ${digitsText(settings)}, top to bottom`)
+  const label = $derived(`A ${p.name} micropipette set to ${volumeText(p, settings.volume)}: its volume display reads ${digitsText(settings)}, top to bottom`)
 </script>
 
 {#snippet drawing(zoom: number)}

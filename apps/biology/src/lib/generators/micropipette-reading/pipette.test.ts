@@ -88,13 +88,13 @@ describe('typing a volume', () => {
   })
 
   it('says why it can’t take one outside its range', () => {
-    expect(readVolume(P('P20'), '25').error).toBe('A P20 is set from 2 to 20 µL, so it can’t be set to 25 µL.')
-    expect(readVolume(P('P1000'), '50').error).toBe('A P1000 is set from 100 to 1000 µL, so it can’t be set to 50 µL.')
+    expect(readVolume(P('P20'), '25').error).toBe('A 20 µL pipette is set from 2 to 20 µL, so it can’t be set to 25 µL.')
+    expect(readVolume(P('P1000'), '50').error).toBe('A 1000 µL pipette is set from 100 to 1000 µL, so it can’t be set to 50 µL.')
   })
 
   it('says why it can’t take one between steps, and the nearest it can', () => {
-    expect(readVolume(P('P20'), '12.53').error).toBe('A P20 is set in steps of 0.1 µL, so 12.53 µL can’t be dialed. The nearest is 12.5 µL.')
-    expect(readVolume(P('P1000'), '755').error).toBe('A P1000 is set in steps of 10 µL, so 755 µL can’t be dialed. The nearest is 760 µL.')
+    expect(readVolume(P('P20'), '12.53').error).toBe('A 20 µL pipette is set in steps of 0.1 µL, so 12.53 µL can’t be dialed. The nearest is 12.5 µL.')
+    expect(readVolume(P('P1000'), '755').error).toBe('A 1000 µL pipette is set in steps of 10 µL, so 755 µL can’t be dialed. The nearest is 760 µL.')
     expect(readVolume(P('P200'), '99.5').error).toContain('The nearest is 100 µL.')
   })
 

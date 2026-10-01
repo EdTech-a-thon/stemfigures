@@ -60,7 +60,7 @@
   {#if error}
     <p class="error" id="{id}-hint" role="alert">{error} The figure still shows {volume.toFixed(p.decimals)} µL.</p>
   {:else}
-    <p class="hint" id="{id}-hint">A {p.model} is set from {p.min} to {p.max} µL, in steps of {p.places[2]} µL.</p>
+    <p class="hint" id="{id}-hint">A {p.name} pipette is set from {p.min} to {p.max} µL, in steps of {p.places[2]} µL.</p>
   {/if}
 </div>
 

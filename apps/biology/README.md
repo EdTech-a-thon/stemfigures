@@ -63,13 +63,12 @@ and `docs/adr/` for decisions.
   separate run as one. Printable, blue-stained or glowing, with ladder
   sizes, lane names, electrodes and a ruler shown or blanked, and sample
   lanes left blank for students to draw.
-- `/micropipette-reading` **Micropipette Reading**: a Pipetman-style P2,
-  P10, P20, P100, P200 or P1000 set to the volume typed, which is checked
-  against the model's range and steps. Its display shows three digit wheels
-  read top to bottom, red where the decimal point goes (Gilson's convention),
-  with a line there too for black and white copies, and a magnifier on the
-  display. Parts can be named or left blank, and the volume printed as an
-  answer key or a write-in line.
+- `/micropipette-reading` **Micropipette Reading**: a 2, 10, 20, 100,
+  200 or 1000 µL micropipette (Gilson's P2 to P1000), labeled with its size
+  and set to the volume typed, which is checked against its range and steps.
+  Its display shows three digit wheels read top to bottom, red where the
+  decimal point goes (Gilson's convention), with a line there too for black
+  and white copies, and a magnifier on the display.
 - `/microscope-field-of-view` **Microscope Field of View**: the circle seen
   down a compound microscope, drawn to scale: onion or Elodea cells, cheek or
   red blood cells, paramecia, simple cells or circles, or the letter e, at

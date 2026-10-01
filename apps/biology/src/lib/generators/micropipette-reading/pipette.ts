@@ -12,12 +12,14 @@
 // Each is used from a tenth of its largest volume up to it, as lab manuals
 // teach (P20: 2 to 20 µL).
 
-/** Models, as the address writes them. */
+/** Models, as the address writes them. Each is shown by its largest volume: "20 µL". */
 export const MODELS = ['P2', 'P10', 'P20', 'P100', 'P200', 'P1000'] as const
 export type Model = (typeof MODELS)[number]
 
 export interface Pipette {
   model: Model
+  /** what it's called on the page and printed on it: its largest volume, "20 µL" */
+  name: string
   /** the largest volume it's set to, in µL */
   max: number
   /** the smallest, in µL */
@@ -39,7 +41,7 @@ export interface Pipette {
 const R = true
 const B = false
 
-const PIPETTES: Record<Model, Omit<Pipette, 'model' | 'min' | 'decimals'>> = {
+const PIPETTES: Record<Model, Omit<Pipette, 'model' | 'name' | 'min' | 'decimals'>> = {
   P2: { max: 2, places: [1, 0.1, 0.01], red: [B, R, R], example: 1.25, shaft: 'slim', tip: 'clear' },
   P10: { max: 10, places: [10, 1, 0.1], red: [B, B, R], example: 7.5, shaft: 'slim', tip: 'clear' },
   P20: { max: 20, places: [10, 1, 0.1], red: [B, B, R], example: 12.5, shaft: 'medium', tip: 'yellow' },
@@ -51,7 +53,7 @@ const PIPETTES: Record<Model, Omit<Pipette, 'model' | 'min' | 'decimals'>> = {
 export function pipette(model: Model): Pipette {
   const p = PIPETTES[model]
   const decimals = Math.max(0, Math.round(-Math.log10(p.places[2])))
-  return { ...p, model, min: p.max / 10, decimals }
+  return { ...p, model, name: `${p.max} µL`, min: p.max / 10, decimals }
 }
 
 /** The smallest step a volume can take on it, in µL: one on the bottom wheel. */
@@ -114,10 +116,10 @@ export function readVolume(p: Pipette, typed: string): { volume: number; error?:
   if (!/^\d*\.?\d+$|^\d+\.$/.test(text)) return { error: `“${typed.trim()}” isn’t a volume. Type it in µL, like ${plain(p.example)}.` }
   const v = Number(text)
   if (v < p.min - 1e-9 || v > p.max + 1e-9)
-    return { error: `A ${p.model} is set from ${plain(p.min)} to ${plain(p.max)} µL, so it can’t be set to ${plain(v)} µL.` }
+    return { error: `A ${p.name} pipette is set from ${plain(p.min)} to ${plain(p.max)} µL, so it can’t be set to ${plain(v)} µL.` }
   if (!canSet(p, v)) {
     const near = tidyVolume(p, v)
-    return { error: `A ${p.model} is set in steps of ${stepText(p)}, so ${plain(v)} µL can’t be dialed. The nearest is ${plain(near)} µL.` }
+    return { error: `A ${p.name} pipette is set in steps of ${stepText(p)}, so ${plain(v)} µL can’t be dialed. The nearest is ${plain(near)} µL.` }
   }
   return { volume: roundTo(v, p.decimals) }
 }

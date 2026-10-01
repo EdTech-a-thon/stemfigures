@@ -1,9 +1,12 @@
 // Where the parts of the drawn micropipette sit, in drawing units, and where
-// their labels go. It stands upright: the plunger button on top, the tip
-// ejector button beside it, the handle with its finger rest and volume
-// display, then the shaft with the tip ejector around it and the tip on its
-// end. The display is drawn large for the handle, so its digits stay easy to
-// read in a printed figure.
+// their labels go. It stands upright: the plunger button on top of its neck,
+// the tip ejector button beside it, the handle with its finger rest and
+// volume display, then the shaft with the tip ejector around it and the tip
+// on its end. It's modeled on the common single-channel kind (Eppendorf's
+// Research plus): the finger rest a hook swept back from the handle's top,
+// and the tip ejector a cone around the shaft's top, just below the handle.
+// The display is drawn large for the handle, so its digits stay easy to read
+// in a printed figure.
 
 import type { Pipette } from './pipette'
 
@@ -35,8 +38,8 @@ export const DIGIT_SIZE = 20
 export function pipetteLayout(p: Pipette, withTip: boolean) {
   const cx = 40
   const shaft = SHAFTS[p.shaft]
-  const handle = { top: 64, bottom: 336, half: 30, bottomHalf: 22 }
-  const window = { top: 112, half: 17 }
+  const handle = { top: 46, bottom: 318, half: 30, bottomHalf: 22 }
+  const window = { top: 94, half: 17 }
   const wheelsTop = window.top + 5
   const wheelsBottom = wheelsTop + 3 * WHEEL_H
   const windowBottom = wheelsBottom + 5
@@ -44,24 +47,23 @@ export function pipetteLayout(p: Pipette, withTip: boolean) {
   const shaftTop = nut.bottom
   const shaftBottom = shaftTop + 170
   const halfAt = (y: number) => shaft.top / 2 + ((shaft.bottom - shaft.top) / 2) * ((y - shaftTop) / (shaftBottom - shaftTop))
-  const sleeve = { top: shaftTop + 64, bottom: shaftTop + 104 }
+  const sleeve = { top: shaftTop - 2, bottom: shaftTop + 50 }
   // The tip covers the shaft's last stretch.
   const tip = { top: shaftBottom - 22, bottom: shaftBottom - 22 + shaft.tipLength, topHalf: shaft.bottom / 2 + 4, bottomHalf: 1.5 }
   const bottom = withTip ? tip.bottom : shaftBottom
   return {
     cx,
-    width: cx + 58,
+    width: cx + 66,
     height: bottom + 2,
-    button: { top: 0, bottom: 22, half: 15 },
-    rod: { top: 22, bottom: 44, half: 5 },
-    /** the knurled wheel for setting the volume, between the button and the handle */
-    wheel: { top: 44, bottom: handle.top, half: 20 },
-    /** the tip ejector button and the stem it pushes down */
-    ejectorButton: { top: 30, bottom: 44, left: cx - 36, right: cx - 22 },
-    ejectorStem: { left: cx - 32, right: cx - 26 },
+    /** the plunger's colored cap, on a wide neck down into the handle */
+    button: { top: 0, bottom: 12, half: 13 },
+    rod: { top: 12, bottom: handle.top, half: 11 },
+    /** the tip ejector button, beside the plunger, and the stem it pushes down */
+    ejectorButton: { top: 18, bottom: 30, left: cx - 29, right: cx - 17 },
+    ejectorStem: { left: cx - 25, right: cx - 21 },
     handle,
-    /** the finger rest: a hook out of the handle's back */
-    hook: { top: handle.top + 10, bottom: handle.top + 58, out: cx + 56 },
+    /** the finger rest: a hook swept back from the handle's top, its end this low and far out */
+    hook: { bottom: handle.top + 74, out: cx + 64 },
     modelY: window.top - 14,
     window: { top: window.top, bottom: windowBottom, left: cx - window.half, right: cx + window.half },
     wheels: { top: wheelsTop, bottom: wheelsBottom, left: cx - window.half + 4, right: cx + window.half - 4 },
@@ -69,9 +71,8 @@ export function pipetteLayout(p: Pipette, withTip: boolean) {
     wheelY: (i: number) => wheelsTop + (i + 0.5) * WHEEL_H,
     nut,
     shaft: { top: shaftTop, bottom: shaftBottom, halfAt },
-    /** the tip ejector: an arm from the nut down the shaft's left side, a little way
-     *  out from it, bending in to a sleeve around it */
-    ejector: { armLeft: cx - shaft.top / 2 - 11, armRight: cx - shaft.top / 2 - 5, sleeve, sleeveHalf: halfAt(sleeve.bottom) + 5 },
+    /** the tip ejector: a sleeve around the shaft's top, narrowing from the nut */
+    ejector: { sleeve, topHalf: nut.half - 3, sleeveHalf: halfAt(sleeve.bottom) + 3 },
     tip,
     withTip,
   }
@@ -92,7 +93,7 @@ export function anchorOf(at: PipetteLayout, part: Part) {
       return { x: at.cx - at.handle.half, y: (at.window.bottom + at.handle.bottom) / 2 + 10 }
     case 'ejector': {
       const y = (at.ejector.sleeve.top + at.ejector.sleeve.bottom) / 2
-      return { x: at.cx - at.ejector.sleeveHalf, y }
+      return { x: at.cx - (at.ejector.topHalf + at.ejector.sleeveHalf) / 2, y }
     }
     case 'shaft': {
       const y = (at.ejector.sleeve.bottom + (at.withTip ? at.tip.top : at.shaft.bottom)) / 2
