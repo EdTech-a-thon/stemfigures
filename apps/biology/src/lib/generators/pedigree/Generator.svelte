@@ -1,8 +1,9 @@
 <script lang="ts">
   // Pedigree: a random family for an inheritance mode, or a classic one, in
   // one click, then changed by hand by clicking anyone in it. The family is
-  // checked against its mode, so the teacher is warned when a change makes
-  // it impossible.
+  // checked against its mode, and the clues against it are listed when a
+  // change makes it impossible. Another inheritance shades the same family
+  // again to fit it.
   import { tick } from 'svelte'
   import { Dices, GitFork, Shapes, Tags, Type } from '@lucide/svelte'
   import GeneratorPage from '$shared/GeneratorPage.svelte'
@@ -16,7 +17,7 @@
   import { MODE_NAMES, MODES, type Mode } from './genetics'
   import PedigreeFigure from './PedigreeFigure.svelte'
   import PersonEditor from './PersonEditor.svelte'
-  import { SIZES, type Size } from './random'
+  import { shadeFamily, SIZES, type Size } from './random'
   import { familyOf, newSeed, pedigreeSettings, type CarrierStyle, type GenotypeRow } from './settings'
 
   const gen = generatorState(pedigreeSettings, 'pedigree')
@@ -51,6 +52,20 @@
     change()
     s.family = ''
     selected = null
+  }
+
+  /** A random family is drawn anew for the inheritance; one kept (a classic
+   *  or changed by hand) keeps its people and is shaded again to fit. A
+   *  classic's own title goes with it. */
+  function chooseMode(next: Mode) {
+    if (s.family) {
+      if (classic && s.titleMode === 'text' && s.title === classic.title) {
+        s.titleMode = 'none'
+        s.title = ''
+      }
+      s.family = formatFamily(shadeFamily(family, next, s.seed))
+    }
+    s.mode = next
   }
 
   function startFrom(c: Classic) {
@@ -105,7 +120,7 @@
       </label>
       <label class="field">
         <span>Inheritance</span>
-        <select bind:value={s.mode}>
+        <select value={s.mode} onchange={(e) => chooseMode(e.currentTarget.value as Mode)}>
           {#each MODES as m (m)}<option value={m}>{MODE_NAMES[m]}</option>{/each}
         </select>
       </label>
@@ -131,14 +146,7 @@
       {#if s.family}
         <p class="note">
           {classic ? `The ${classic.name.toLowerCase()} family.` : 'Changed by hand.'} New pedigree, or a change of generations or size,
-          starts a random family; changing the inheritance keeps this one.
-        </p>
-      {/if}
-
-      {#if own.verdict === 'ruled out'}
-        <p class="warning" role="status">
-          This family can’t be {MODE_NAMES[mode].toLowerCase()}.{own.reason ? ` ${own.reason}` : ''}
-          {fig.labels.size === 0 && s.genotypes === 'answers' ? ' Genotypes are left off until it fits.' : ''}
+          starts a random family; changing the inheritance shades this one again to fit it.
         </p>
       {/if}
 
@@ -164,6 +172,18 @@
             {/each}
           </select>
         </label>
+      {/if}
+
+      {#if own.verdict === 'ruled out'}
+        <div class="conflicts" role="status">
+          <p class="conflicts-head">Why this family can’t be {MODE_NAMES[mode].toLowerCase()}</p>
+          {#if own.reasons.length}
+            <ul>{#each own.reasons as reason (reason)}<li>{reason}</li>{/each}</ul>
+          {:else}
+            <p class="note">None of the usual clues, but no genotypes fit everyone as drawn{carriersShown ? ', carriers included' : ''}.</p>
+          {/if}
+          {#if fig.labels.size === 0 && s.genotypes === 'answers'}<p class="note">Genotypes are left off until it fits.</p>{/if}
+        </div>
       {/if}
     </div>
   {/snippet}
@@ -232,7 +252,9 @@
   .field-label.first { margin: 0.35rem 0 0.45rem; }
   .note { margin: 0; color: var(--muted); font-size: 0.82rem; }
   :global(.section) .note { margin-top: 0.5rem; }
-  .warning { margin: 0; padding: 0.55rem 0.75rem; border-radius: 10px; background: var(--red-soft); color: #991b1b; font-size: 0.85rem; }
+  .conflicts { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.86rem; }
+  .conflicts-head { margin: 0; font-weight: 700; font-size: 0.9rem; }
+  .conflicts ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.25rem; }
   .letter { margin-top: 0.9rem; flex-direction: row; align-items: center; gap: 0.6rem; }
   .letter input { width: 3rem; text-align: center; }
   .check { display: flex; align-items: flex-start; gap: 0.6rem; margin-top: 0.9rem; cursor: pointer; }

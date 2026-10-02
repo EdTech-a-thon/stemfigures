@@ -1,18 +1,18 @@
 // How students can tell a pedigree's inheritance mode: for each mode,
-// whether the family fits it, and the textbook clue that rules it out, as a
-// sentence naming the people ("II-3 and II-4 are unaffected but have an
-// affected child, III-2"). The verdict comes from the genetics; the clue is
-// the first of the usual reasons found in the family.
+// whether the family fits it, and the textbook clues that rule it out, each
+// a sentence naming the people ("II-3 and II-4 are unaffected but have an
+// affected child, III-2"). The verdict comes from the genetics; the clues
+// are every one of the usual reasons found in the family.
 
 import { refKey, type Member, type Person } from './family'
-import { CLEAR_ODDS, compareModes, MODE_NAMES, type Mode } from './genetics'
+import { CLEAR_ODDS, compareModes, type Mode } from './genetics'
 
 export interface Verdict {
   mode: Mode
   /** fits, fits but is far less likely than another, or can't happen */
   verdict: 'fits' | 'unlikely' | 'ruled out'
-  /** the clue, when one of the usual ones is found */
-  reason?: string
+  /** the clues against it, oldest generation first: any of the usual ones found */
+  reasons: string[]
 }
 
 interface Family {
@@ -38,10 +38,14 @@ function familiesOf(root: Member): Family[] {
   return out.sort((a, b) => a.depth - b.depth)
 }
 
-/** The first clue in the family that rules out `mode`, written with `name`
- *  for each person's number. */
-function clueAgainst(mode: Mode, root: Member, name: (key: string) => string, carriersShown: boolean): string | undefined {
+/** Every clue in the family that rules out `mode`, written with `name` for
+ *  each person's number. */
+function cluesAgainst(mode: Mode, root: Member, name: (key: string) => string, carriersShown: boolean): string[] {
   const families = familiesOf(root)
+  const out: string[] = []
+  const clue = (text: string) => {
+    if (!out.includes(text)) out.push(text)
+  }
   const kid = (p: Person) => (p.sex === 'm' ? 'son' : p.sex === 'f' ? 'daughter' : 'child')
   for (const f of families) {
     const parents = `${name(f.father.key)} and ${name(f.mother.key)}`
@@ -49,56 +53,42 @@ function clueAgainst(mode: Mode, root: Member, name: (key: string) => string, ca
     const neither = !f.father.p.affected && !f.mother.p.affected
     for (const c of f.children) {
       const child = name(c.key)
+      // One clue a child: the first of these that fits them.
       if ((mode === 'ad' || mode === 'xd') && neither && c.p.affected) {
-        return `${parents} are unaffected but have an affected ${kid(c.p)}, ${child}.`
-      }
-      if ((mode === 'ar' || mode === 'xr') && both && !c.p.affected) {
-        return `${parents} are both affected but have an unaffected ${kid(c.p)}, ${child}.`
-      }
-      if (mode === 'xr' && c.p.sex === 'f' && c.p.affected && !f.father.p.affected) {
-        return `${child} is an affected daughter of an unaffected father, ${name(f.father.key)}.`
-      }
-      if (mode === 'xr' && c.p.sex === 'm' && !c.p.affected && f.mother.p.affected) {
-        return `${name(f.mother.key)} is affected but her son ${child} isn’t.`
-      }
-      if (mode === 'xr' && carriersShown && c.p.sex === 'm' && c.p.affected && !f.mother.p.affected && !f.mother.p.carrier) {
-        return `${child} is affected, but his mother, ${name(f.mother.key)}, isn’t affected or a carrier.`
-      }
-      if (mode === 'xd' && c.p.sex === 'f' && !c.p.affected && f.father.p.affected) {
-        return `${name(f.father.key)} is affected but his daughter ${child} isn’t.`
-      }
-      if (mode === 'xd' && c.p.sex === 'm' && c.p.affected && !f.mother.p.affected) {
-        return `${child} is affected, but his mother, ${name(f.mother.key)}, isn’t.`
-      }
-      if (mode === 'y' && c.p.sex === 'm' && c.p.affected !== f.father.p.affected) {
-        return c.p.affected
+        clue(`${parents} are unaffected but have an affected ${kid(c.p)}, ${child}.`)
+      } else if ((mode === 'ar' || mode === 'xr') && both && !c.p.affected) {
+        clue(`${parents} are both affected but have an unaffected ${kid(c.p)}, ${child}.`)
+      } else if (mode === 'xr' && c.p.sex === 'f' && c.p.affected && !f.father.p.affected) {
+        clue(`${child} is an affected daughter of an unaffected father, ${name(f.father.key)}.`)
+      } else if (mode === 'xr' && c.p.sex === 'm' && !c.p.affected && f.mother.p.affected) {
+        clue(`${name(f.mother.key)} is affected but her son ${child} isn’t.`)
+      } else if (mode === 'xr' && carriersShown && c.p.sex === 'm' && c.p.affected && !f.mother.p.affected && !f.mother.p.carrier) {
+        clue(`${child} is affected, but his mother, ${name(f.mother.key)}, isn’t affected or a carrier.`)
+      } else if (mode === 'xd' && c.p.sex === 'f' && !c.p.affected && f.father.p.affected) {
+        clue(`${name(f.father.key)} is affected but his daughter ${child} isn’t.`)
+      } else if (mode === 'xd' && c.p.sex === 'm' && c.p.affected && !f.mother.p.affected) {
+        clue(`${child} is affected, but his mother, ${name(f.mother.key)}, isn’t.`)
+      } else if (mode === 'y' && c.p.sex === 'm' && c.p.affected !== f.father.p.affected) {
+        clue(c.p.affected
           ? `${child} is affected, but his father, ${name(f.father.key)}, isn’t.`
-          : `${name(f.father.key)} is affected but his son ${child} isn’t.`
+          : `${name(f.father.key)} is affected but his son ${child} isn’t.`)
       }
     }
   }
   if (mode === 'y') {
     for (const f of families) {
       for (const who of [f.father, f.mother, ...f.children]) {
-        if (who.p.affected && who.p.sex === 'f') return `${name(who.key)} is an affected woman, and women have no Y.`
+        if (who.p.affected && who.p.sex === 'f') clue(`${name(who.key)} is an affected woman, and women have no Y.`)
       }
     }
   }
-  return undefined
+  return out
 }
 
 /** Every mode's verdict for the drawn family. */
 export function verdicts(root: Member, name: (key: string) => string, carriersShown: boolean): Verdict[] {
   return compareModes(root, carriersShown).map(({ mode, fits, odds }) => {
-    if (!fits) return { mode, verdict: 'ruled out', reason: clueAgainst(mode, root, name, carriersShown) }
-    return { mode, verdict: odds >= CLEAR_ODDS ? 'unlikely' : 'fits' }
+    if (!fits) return { mode, verdict: 'ruled out', reasons: cluesAgainst(mode, root, name, carriersShown) }
+    return { mode, verdict: odds >= CLEAR_ODDS ? 'unlikely' : 'fits', reasons: [] }
   })
-}
-
-/** A verdict as a line of the teacher's notes. */
-export function verdictText(v: Verdict) {
-  const name = MODE_NAMES[v.mode]
-  if (v.verdict === 'fits') return `${name}: fits.`
-  if (v.verdict === 'unlikely') return `${name}: possible, but much less likely.`
-  return `${name}: ruled out.${v.reason ? ` ${v.reason}` : ''}`
 }

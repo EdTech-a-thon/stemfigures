@@ -3,7 +3,7 @@ import { CLASSICS } from './classics'
 import { verdicts } from './clues'
 import { depthOf, everyone, formatFamily, parseFamily } from './family'
 import { fitsMode, MODES, tellsMode } from './genetics'
-import { randomFamily, SIZES } from './random'
+import { randomFamily, shadeFamily, SIZES } from './random'
 
 const SEEDS = Array.from({ length: 25 }, (_, i) => i * 7919 + 3)
 
@@ -60,7 +60,7 @@ describe('random families', () => {
         const names = (key: string) => key
         const dominant = verdicts(f, names, false).find((v) => v.mode === 'ad')!
         expect(dominant.verdict).toBe('ruled out')
-        expect(dominant.reason).toMatch(/are unaffected but have an affected/)
+        expect(dominant.reasons[0]).toMatch(/are unaffected but have an affected/)
       }
     }
   })
@@ -110,5 +110,27 @@ describe('classic families', () => {
     expect(proband).toHaveLength(1)
     expect(proband[0].person).toMatchObject({ sex: 'm', affected: true })
     expect(proband[0].ref.path).toHaveLength(3)
+  })
+})
+
+describe('shading a family again for another mode', () => {
+  /** Everyone as drawn, with who's affected and a carrier left out. */
+  const people = (text: string) => text.replace(/[A-Z]/g, (c) => c.toLowerCase()).replace(/c/g, '')
+
+  it('keeps the people, and fits the new mode', () => {
+    for (const c of CLASSICS) {
+      for (const mode of MODES) {
+        const f = shadeFamily(parseFamily(c.family)!, mode, 5)
+        expect(people(formatFamily(f)), `${c.id} as ${mode}`).toBe(people(c.family))
+        expect(fitsMode(f, mode, false), `${c.id} as ${mode}`).toBe(true)
+        expect(fitsMode(f, mode, true), `${c.id} as ${mode}, with carriers`).toBe(true)
+        expect([...everyone(f)].some((e) => e.person.affected), `${c.id} as ${mode}`).toBe(true)
+      }
+    }
+  })
+
+  it('can usually be diagnosed', () => {
+    const told = CLASSICS.flatMap((c) => MODES.map((mode) => tellsMode(shadeFamily(parseFamily(c.family)!, mode, 5), mode)))
+    expect(told.filter(Boolean).length).toBeGreaterThan(told.length * 0.6)
   })
 })

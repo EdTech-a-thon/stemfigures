@@ -41,13 +41,13 @@ describe('how students can tell', () => {
   const verdict = (text: string, mode: string) => verdicts(read(text), names, false).find((v) => v.mode === mode)!
 
   it('names the clue that rules each mode out', () => {
-    expect(verdict('m-f2Fm', 'ad').reason).toBe('founder and p are unaffected but have an affected daughter, 0.')
-    expect(verdict('m-f2Fm', 'xr').reason).toBe('0 is an affected daughter of an unaffected father, founder.')
-    expect(verdict('M-F2mF', 'ar').reason).toBe('founder and p are both affected but have an unaffected son, 0.')
-    expect(verdict('m-F2mF', 'xr').reason).toBe('p is affected but her son 0 isn’t.')
-    expect(verdict('M-f2fM', 'xd').reason).toBe('founder is affected but his daughter 0 isn’t.')
-    expect(verdict('M-f2MM', 'xd').reason).toBe('0 is affected, but his mother, p, isn’t.')
-    expect(verdict('M-f2mM', 'y').reason).toBe('founder is affected but his son 0 isn’t.')
+    expect(verdict('m-f2Fm', 'ad').reasons[0]).toBe('founder and p are unaffected but have an affected daughter, 0.')
+    expect(verdict('m-f2Fm', 'xr').reasons[0]).toBe('0 is an affected daughter of an unaffected father, founder.')
+    expect(verdict('M-F2mF', 'ar').reasons[0]).toBe('founder and p are both affected but have an unaffected son, 0.')
+    expect(verdict('m-F2mF', 'xr').reasons[0]).toBe('p is affected but her son 0 isn’t.')
+    expect(verdict('M-f2fM', 'xd').reasons[0]).toBe('founder is affected but his daughter 0 isn’t.')
+    expect(verdict('M-f2MM', 'xd').reasons[0]).toBe('0 is affected, but his mother, p, isn’t.')
+    expect(verdict('M-f2mM', 'y').reasons[0]).toBe('founder is affected but his son 0 isn’t.')
   })
 
   it('calls a mode that fits but is far less likely unlikely', () => {

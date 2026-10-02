@@ -5,8 +5,11 @@
 // student could diagnose is kept: one where every other mode is ruled out
 // or far less likely (see tellsMode). Most seeds give one within a few
 // tries; if none does, the first with the trait showing is kept.
+//
+// A family already drawn can be shaded again for another mode the same way:
+// its people stay, and only who is affected (or a carrier) changes.
 
-import { MAX_CHILDREN, member, person, type Member, type Person, type Sex } from './family'
+import { depthOf, MAX_CHILDREN, member, person, type Member, type Person, type Sex } from './family'
 import { genotypesFor, inherit, phenotypeOf, tellsMode, type Genotype, type Mode } from './genetics'
 
 export const SIZES = ['small', 'medium', 'large'] as const
@@ -184,4 +187,58 @@ export function randomFamily(mode: Mode, generations: number, size: Size, seed: 
     if (tellsMode(family, mode)) return family
   }
   return fallback ?? tryFamily(randomFrom(seed), mode, generations, size)
+}
+
+/** One try at shading a family already drawn: genotypes passed down its own
+ *  people, the founding couple carrying the trait as a random family's do.
+ *  Everything but who's affected or a carrier is kept. */
+function tryShading(rand: Rand, mode: Mode, family: Member): Member {
+  const founders = FOUNDERS[mode]
+  let r = rand() * founders.reduce((s, f) => s + f.weight, 0)
+  const start = founders.find((f) => (r -= f.weight) < 0) ?? founders[0]
+  // Someone of unknown sex is given one for their genotype.
+  const as = (sex: Sex): 'm' | 'f' => (sex === 'u' ? (rand() < 0.5 ? 'm' : 'f') : sex)
+  const marriedIn = (sex: 'm' | 'f') => {
+    const chance = MARRIED_IN[mode][sex]
+    return code(mode, sex, chance && rand() < chance ? 1 : 0)
+  }
+  const shade = (p: Person, g: Genotype) => {
+    const { affected, carrier } = drawn(mode, p.sex, g)
+    return { affected, carrier }
+  }
+
+  const build = (m: Member, g: Genotype, partnerG?: Genotype): Member => {
+    const out: Member = { ...m, ...shade(m, g), children: [] }
+    if (!m.partner) return out
+    const pg = partnerG ?? marriedIn(as(m.partner.sex))
+    out.partner = { ...m.partner, ...shade(m.partner, pg) }
+    const [father, mother] = m.sex === 'm' ? [g, pg] : [pg, g]
+    let last: Genotype | undefined
+    out.children = m.children.map((c, i) => {
+      // An identical twin has their twin's genotype.
+      const prev = m.children[i - 1]
+      last = prev?.twin === 'mz' && prev.sex === c.sex && last ? last : childOf(rand, mode, father, mother, c.sex)
+      return build(c, last)
+    })
+    return out
+  }
+  const rootSex = as(family.sex)
+  const partnerSex = family.partner && as(family.partner.sex)
+  return build(family, code(mode, rootSex, start[rootSex]), partnerSex && code(mode, partnerSex, start[partnerSex]))
+}
+
+/** The family shaded for `mode`, from `seed`: the first try a student could
+ *  diagnose, or else the first with the trait showing. */
+export function shadeFamily(family: Member, mode: Mode, seed: number): Member {
+  const rand = randomFrom(seed)
+  const least = depthOf(family) > 2 ? 3 : 2
+  let fallback: Member | undefined
+  for (let i = 0; i < TRIES; i++) {
+    const shaded = tryShading(rand, mode, family)
+    const { all, affected } = affectedShare(shaded)
+    if (!affected) continue
+    fallback ??= shaded
+    if (affected >= Math.min(least, all) && affected <= Math.max(1, all * 0.6) && tellsMode(shaded, mode)) return shaded
+  }
+  return fallback ?? tryShading(randomFrom(seed), mode, family)
 }
