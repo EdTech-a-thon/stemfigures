@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { buildSpectrum, energyAxis, peakGroups } from './figure'
 import { answerLines, pesSettings, type PesSettings } from './settings'
+import { peaksOf } from './spectrum'
 
 const build = (changes: Partial<PesSettings> = {}) => buildSpectrum(pesSettings.tidy({ ...pesSettings.defaults, ...changes }))
 
@@ -28,6 +29,18 @@ describe('the energy axis', () => {
   it('numbers each stretch of a broken axis inside it', () => {
     const axis = energyAxis('broken', [104, 6.84, 3.67, 0.5])
     for (const st of axis.stretches) expect(axis.numbers.filter((n) => n.x > st.x0 && n.x < st.x1).length).toBeGreaterThan(0)
+  })
+
+  it('puts each peak in its own stretch of a broken axis, which never overlap', () => {
+    // Iodine's 5s (1.99 MJ/mol) once fell inside the 4s–4d stretch's padding.
+    for (const zs of [[53], [3, 37], [5, 49], [2, 26]]) {
+      const es = zs.flatMap((z) => peaksOf(z, 'MJ/mol').map((p) => p.energy))
+      const axis = energyAxis('broken', es)
+      const groups = peakGroups(es)
+      for (const e of es)
+        expect(axis.stretches.findIndex((s) => e <= s.top && e >= s.bottom), `${zs} ${e}`).toBe(groups.findIndex((g) => e <= g.high && e >= g.low))
+      for (let i = 1; i < axis.stretches.length; i++) expect(axis.stretches[i].top).toBeLessThan(axis.stretches[i - 1].bottom)
+    }
   })
 
   it('starts at 0 on a linear scale', () => {

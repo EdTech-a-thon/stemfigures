@@ -502,7 +502,7 @@ export const COPY: Record<string, GeneratorCopy> = {
       },
       {
         q: 'Where do the wavelengths come from?',
-        a: 'The NIST Atomic Spectra Database, for neutral atoms, as wavelengths in air rounded to 0.1 nm. Some lines of potassium and helium are past 700 nm, so widen the range to see them.',
+        a: 'The NIST Atomic Spectra Database, for neutral atoms, as wavelengths in air rounded to 0.1 nm. Some lines of helium, potassium, strontium, neon and argon are past 700 nm, so widen the range to see them.',
       },
     ],
     imageAlt: 'Printable bright-line emission spectra of several elements and an unknown mixture on one wavelength scale, made with Line Spectrum',
@@ -533,7 +533,7 @@ export const COPY: Record<string, GeneratorCopy> = {
       },
       {
         q: 'Why do one element’s peaks sit to the left of another’s?',
-        a: 'An element with more protons pulls every sublevel’s electrons more tightly, so each of its peaks is at a higher binding energy, further left. Compare magnesium with sodium to show it.',
+        a: 'An element with more protons pulls its electrons more tightly, so its core peaks are always at a higher binding energy, further left. Compare magnesium with sodium to show it. A valence peak can go the other way: oxygen’s 2p peak sits just right of nitrogen’s, because oxygen’s fourth 2p electron shares an orbital and is pushed away by its partner.',
       },
       {
         q: 'Why is the axis logarithmic or broken?',

@@ -9,15 +9,15 @@ Components and helpers used by more than one STEM Figures site, imported as
 | `request.svelte.ts`                                                                         | math, physics, chemistry, biology, engineering |
 | `Modal`                                                                                     | math, chemistry, physics, biology, engineering |
 | `LabelField`                                                                                | math, chemistry, biology, engineering     |
-| `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics |
-| `labelSize`                                                                                 | math, chemistry (Titration Curve)         |
-| `graph/`: `Grid`, `grid`, `axes`, `AxisSettings`, `TitleSettings`, `GridlineSettings`       | math (Coordinate Grid), chemistry (Titration Curve) |
-| `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve)         |
-| `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve) |
-| `HelpTip`                                                                                   | math                                      |
-| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading) |
-| `Magnifier`, `MagnifierSettings`, `magnify`                                                 | physics (Spring Scale), math (Length Reading) |
-| `marks`, `ReadingField`                                                                     | physics (Spring Scale)                    |
+| `GeneratorPage`, `generatorState`, and through them `FigureCanvas`, `Presets`, `presetStore`, `history`, `exporting` | math, chemistry, physics, biology |
+| `labelSize`                                                                                 | math, chemistry (Titration Curve), biology (Cell Diagram, Population Growth, Punnett Square, Mitosis & Meiosis, Predator–Prey Cycles) |
+| `graph/`: `Grid`, `grid`, `axes`, `AxisSettings`, `TitleSettings`, `GridlineSettings`       | math (Coordinate Grid), chemistry (Titration Curve), biology (Population Growth, Predator–Prey Cycles) |
+| `graph/`: `numbering`, `caps`, `CapPicker`, `colors`                                        | math, chemistry (Titration Curve), biology (Population Growth, Predator–Prey Cycles) |
+| `Section`                                                                                   | math, physics (Spring Scale), chemistry (Titration Curve), biology (every generator) |
+| `HelpTip`                                                                                   | math, biology (Population Growth, Predator–Prey Cycles) |
+| `FigureFrame`, `figureAlign`, `settings`, `figureText`, `FigureTextSettings`                | physics (Spring Scale), math (Length Reading), biology (`settings` in every generator, `FigureFrame` in all but the two graphs, `FigureTextSettings` in Micropipette Reading) |
+| `Magnifier`, `MagnifierSettings`, `magnify`                                                 | physics (Spring Scale), math (Length Reading), biology (Micropipette Reading: `Magnifier`, `magnify`) |
+| `marks`, `ReadingField`                                                                     | physics (Spring Scale), biology (Microscope Field of View: `ReadingField`) |
 
 `catalog/` lists every generator on every site. Each lives on one site
 (`site`), the only address it has; `alsoOn` names other sites whose
@@ -75,8 +75,9 @@ generator's own marks as its children. `AxisSettings`, `TitleSettings` and
 the range boxes (a plain text box unless given) and children for fields of the
 generator's own. `clipPath` cuts a line to the grid.
 
-Every site keeps the rest in its own `src/lib/`, except Physics' Spring Scale
-and Math's Length Reading, which use the instrument-reading pieces above.
+Every site keeps the rest in its own `src/lib/`, except Physics' Spring Scale,
+Math's Length Reading and Biology's Micropipette Reading, which use the
+instrument-reading pieces above.
 Chemistry keeps its own copies of those reading pieces (the magnifier, marks,
 reading box, figure frame and title settings) for now; they started as copies
 of its files and match them. When changing a file here, run `npm run check`

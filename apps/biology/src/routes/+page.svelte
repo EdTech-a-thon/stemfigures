@@ -4,13 +4,14 @@
   import { PREVIEWS } from '$lib/generators/index'
   import { SITE_ID } from '$lib/site/config'
   import Seo from '$lib/site/Seo.svelte'
+  import { homeJsonLd } from '$lib/site/structuredData'
   import GeneratorDirectory from '$shared/GeneratorDirectory.svelte'
+
+  const description =
+    'Free generators for clean, printable biology figures. Make one to fit your lesson, then copy it straight into a test, worksheet or slide.'
 </script>
 
-<Seo
-  description="Free generators for clean, printable biology figures. Make one to fit your lesson, then copy it straight into a test, worksheet or slide."
-  path="/"
-/>
+<Seo {description} path="/" jsonLd={homeJsonLd(description)} />
 
 <div class="page">
   <header class="hero">
@@ -18,7 +19,7 @@
     <p>Make one to fit your lesson, then copy it straight into your document. Free, with no sign-up.</p>
   </header>
 
-  <GeneratorDirectory site={SITE_ID} previews={PREVIEWS} placeholder="Search figures, like “cell diagram”" />
+  <GeneratorDirectory site={SITE_ID} previews={PREVIEWS} placeholder="Search figures, like “punnett square”" />
 </div>
 
 <style>

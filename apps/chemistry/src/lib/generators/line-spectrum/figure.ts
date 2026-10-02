@@ -58,16 +58,21 @@ function labelOf(strip: Strip, labels: SpectrumSettings['labels']): DrawnStrip['
   return name ? { text: name } : null
 }
 
+const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a)
+const isMultiple = (nm: number, of: number) => Math.abs(nm / of - Math.round(nm / of)) < 1e-9
+
 /** Tick marks every `ticks` nm and numbers every `numbers` nm, at their
- *  multiples inside the range. */
+ *  multiples inside the range, even where one isn't a multiple of the
+ *  other (ticks every 10 and numbers every 25, say). */
 function ticksFor(s: SpectrumSettings, x: (nm: number) => number): Tick[] {
   const every = Number(s.numbers)
-  const step = s.ticks === 'none' ? every : Math.min(Number(s.ticks), every)
+  const tick = s.ticks === 'none' ? every : Number(s.ticks)
+  const step = gcd(tick, every)
   const out: Tick[] = []
   for (let k = Math.ceil(s.from / step - 1e-9); k * step <= s.to + 1e-9; k++) {
     const nm = Math.round(k * step * 1000) / 1000
-    const major = Math.abs(nm / every - Math.round(nm / every)) < 1e-9
-    if (!major && s.ticks === 'none') continue
+    const major = isMultiple(nm, every)
+    if (!major && !isMultiple(nm, tick)) continue
     out.push({ x: x(nm), major, ...(major ? { number: String(nm) } : {}) })
   }
   return out

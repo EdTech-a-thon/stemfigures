@@ -6,10 +6,28 @@
 import type { Component } from 'svelte'
 import { generatorsOn } from '$shared/catalog/index'
 import { SITE_ID } from '$lib/site/config'
+import CellDiagramPreview from './cell-diagram/Preview.svelte'
+import PopulationGrowthPreview from './population-growth/Preview.svelte'
+import PunnettSquarePreview from './punnett-square/Preview.svelte'
+import PedigreePreview from './pedigree/Preview.svelte'
+import CellDivisionPreview from './cell-division/Preview.svelte'
+import PredatorPreyPreview from './predator-prey/Preview.svelte'
+import GelElectrophoresisPreview from './gel-electrophoresis/Preview.svelte'
+import MicropipetteReadingPreview from './micropipette-reading/Preview.svelte'
+import MicroscopeFieldOfViewPreview from './microscope-field-of-view/Preview.svelte'
 
-// None of its own yet; the directory shows those it lists from other sites
-// and the card for requesting one.
-export const PREVIEWS: Record<string, Component> = {}
+/** Each generator's directory preview, by id. */
+export const PREVIEWS: Record<string, Component> = {
+  'cell-diagram': CellDiagramPreview,
+  'population-growth': PopulationGrowthPreview,
+  'punnett-square': PunnettSquarePreview,
+  pedigree: PedigreePreview,
+  'cell-division': CellDivisionPreview,
+  'predator-prey': PredatorPreyPreview,
+  'gel-electrophoresis': GelElectrophoresisPreview,
+  'micropipette-reading': MicropipetteReadingPreview,
+  'microscope-field-of-view': MicroscopeFieldOfViewPreview,
+}
 
 export const GENERATORS = generatorsOn(SITE_ID, PREVIEWS)
 
