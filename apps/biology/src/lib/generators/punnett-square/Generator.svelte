@@ -167,7 +167,7 @@
           {#if s.cross === 'x-linked'}
             Mother and father with an × between, each X with its allele: X^H X^h × X^H Y.
           {:else if s.dominance !== 'complete'}
-            Type ^ for a superscript and _ for a subscript, or Ctrl+. and Ctrl+, as in Google Docs: Cᴿ Cᵂ, R₁ R₂.
+            Type ^ for a superscript and _ for a subscript.
           {:else}
             The first parent goes across the top. Capitals are dominant.
           {/if}
